@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">LoginKariti</string>
+    <string name="buttonvoltarTela">VOLTAR</string>
+    <string name="nomeCompleto">Nome Completo</string>
+    <string name="email">E-mail</string>
+    <string name="sexo">Sexo</string>
+    <string name="cpf">CPF</string>
+    <string name="acessoSenha">Somente números</string>
+    <string name="textViewsenha">Senha de Acesso</string>
+    <string name="textViewconfirmar">Confirmar Senha</string>
+    <string name="buttonCadastrar">Cadastrar</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="textViewKariti">Kariti</string>
+    <string name="buttonCadastroEscola">Cadastrar Escola</string>
+    <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
+    <string name="buttonConfig">Configurações</string>
+    <string name="buttonValidar">Validar</string>
+    <string name="textViewReenviar">Reenviar o Código</string>
+    <string name="textViewOutroMetodo">Usar outro Método</string>
+    <string name="textViewbemVindo">SEJA BEM VINDO AO</string>
+    <string name="textViewkariti">KARITI</string>
+    <string name="buttonCadastreSe">Cadastre-se</string>
+    <string name="buttonLogin">Login</string>
+    <string name="buttonEsqueciSenha">Esqueci minha Senha.</string>
+    <string name="textViewLoginEntrar">Entre com seu Login</string>
+    <string name="textViewInformeSenha">Informe sua Senha</string>
+    <string name="btnEntrar">Entrar</string>
+</resources>

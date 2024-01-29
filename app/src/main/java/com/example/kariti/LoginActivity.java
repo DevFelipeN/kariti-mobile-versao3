@@ -35,13 +35,18 @@ public class LoginActivity extends AppCompatActivity {
                 if(user.equals("")||pass.equals(""))
                     Toast.makeText(LoginActivity.this, "Por favor preencher todos os campos", Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean checkuserpass = bancoDados.checkuser(user); //Verificando no banco de Dados se Nome e senhas existem
-                    if(checkuserpass==true){
-                        Toast.makeText(LoginActivity.this, "Login Realizado com Sucesso! ", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(new Intent(getApplicationContext(), InicioActivity.class));
-                        startActivity(intent);
+                    Boolean checkuser = bancoDados.checkuser(user); //Verificando no banco de Dados se Nome e senha existem
+                    if(checkuser==true){
+                        Boolean checkuserpass = bancoDados.checkuserpassword(user, pass);
+                        if(checkuserpass==true) {
+                            Toast.makeText(LoginActivity.this, "Login Realizado com Sucesso! ", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(new Intent(getApplicationContext(), InicioActivity.class));
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Senha Inválida! ", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
-                        Toast.makeText(LoginActivity.this, "Usuário e senha Inválidos! ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Usuário não existe!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

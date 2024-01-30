@@ -107,9 +107,19 @@ public class MainActivity extends AppCompatActivity {
                 voltarTelaWelcome();
             }
         });
+        cadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mudarParaTelaSenha();
+            }
+        });
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+    }
+    public void mudarParaTelaSenha(){
+        Intent intent = new Intent(this, CodSenhaActivity.class);
         startActivity(intent);
     }
 }

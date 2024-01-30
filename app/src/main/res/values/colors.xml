@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="cinzaClaro">#D8A6A5A5</color>
     <color name="tranparente">#00FAF6F6</color>
+    <color name="corLinks">#007FFF</color>
+    <color name="corErroRed">#FF0000</color>
 </resources>

@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    EditText nome, email, sexo, cpf, senha, confirmSenha;
+    EditText nome, email, senha, confirmSenha;
     Button voltar, cadastro;
     ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
     BancoDados bancoDados;
@@ -107,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
                 voltarTelaWelcome();
             }
         });
-        cadastro.setOnClickListener(new View.OnClickListener() {
+        /*cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mudarParaTelaSenha();
             }
-        });
+        });*/
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);

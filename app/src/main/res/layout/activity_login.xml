@@ -13,7 +13,7 @@
         android:layout_marginBottom="50dp"
         android:background="@color/tranparente"
         android:text="@string/buttonEsqueciSenha"
-        android:textColor="@color/corLinks"
+        android:textColor="#03A9F4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -22,13 +22,19 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:text="@string/textViewInformeSenha"
         android:textColor="@color/cinzaClaro"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextCampPassword"
         app:layout_constraintTop_toBottomOf="@+id/editTextCampLogin" />
+=======
+        app:layout_constraintHorizontal_bias="0.343"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
+>>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
 
     <ImageView
         android:id="@+id/imageView3"
@@ -44,37 +50,42 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="@string/textViewLoginEntrar"
         android:textColor="@color/cinzaClaro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextCampLogin"
+        app:layout_constraintHorizontal_bias="0.371"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
+<<<<<<< HEAD
         android:id="@+id/editTextCampLogin"
+=======
+        android:id="@+id/editTextLogin"
+>>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/borda_botao"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:ems="10"
+        android:hint="E-mail"
         android:inputType="text"
-        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
+<<<<<<< HEAD
         android:id="@+id/editTextCampPassword"
+=======
+        android:id="@+id/editTextSenha"
+>>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/borda_botao"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="********"
         android:inputType="text"
-        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -83,12 +94,13 @@
         android:id="@+id/buttonEntrarL"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_selector"
         android:text="@string/btnEntrar"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/editTextCampPassword" />
 
     <TextView
@@ -103,4 +115,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextCampPassword"
         app:layout_constraintVertical_bias="0.0" />
+=======
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
+>>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
 </androidx.constraintlayout.widget.ConstraintLayout>

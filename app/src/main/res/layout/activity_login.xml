@@ -26,9 +26,15 @@
         android:text="@string/textViewInformeSenha"
         android:textColor="@color/cinzaClaro"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextCampPassword"
         app:layout_constraintTop_toBottomOf="@+id/editTextCampLogin" />
+=======
+        app:layout_constraintHorizontal_bias="0.343"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
+>>>>>>> b8f3217f8a7ee2ce0ba8db3c0e916812673f3ccb
 
     <ImageView
         android:id="@+id/imageView3"
@@ -53,7 +59,11 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
+<<<<<<< HEAD
         android:id="@+id/editTextCampLogin"
+=======
+        android:id="@+id/editTextLogin"
+>>>>>>> b8f3217f8a7ee2ce0ba8db3c0e916812673f3ccb
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
@@ -66,7 +76,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
+<<<<<<< HEAD
         android:id="@+id/editTextCampPassword"
+=======
+        android:id="@+id/editTextSenha"
+>>>>>>> b8f3217f8a7ee2ce0ba8db3c0e916812673f3ccb
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
@@ -89,6 +103,7 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/editTextCampPassword" />
 
     <TextView
@@ -103,4 +118,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextCampPassword"
         app:layout_constraintVertical_bias="0.0" />
+=======
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
+>>>>>>> b8f3217f8a7ee2ce0ba8db3c0e916812673f3ccb
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText nome, email, sexo, cpf, senha, confirmSenha;
     Button voltar, cadastro;
     ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
+    BancoDados bancoDados;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -28,6 +30,40 @@ public class MainActivity extends AppCompatActivity {
         confirmSenha = findViewById(R.id.editTextConfirmPassword);
         voltar = findViewById(R.id.buttonVoltar);
         cadastro = findViewById(R.id.buttonCadastrar);
+
+        bancoDados = new BancoDados(this); //--Conectando ao banco de dadoas
+
+        cadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String usernome = nome.getText().toString();
+                String password = senha.getText().toString();
+                String repassword = confirmSenha.getText().toString();
+
+                if(usernome.equals("")||password.equals("")||repassword.equals(""))
+                    Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                else{
+                    if(password.equals(repassword)){
+                        Boolean checkuser = bancoDados.checkuser(usernome);
+                        if(checkuser==false){
+                            Boolean insert = bancoDados.insertData(usernome, password);
+                            if(insert==true){
+                                Toast.makeText(MainActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(MainActivity.this, "Usuário não Registrado! ",Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(MainActivity.this, "Usuário já cadastrado, favor realizar Login", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else{
+                        Toast.makeText(MainActivity.this, "Senhas não são iguais nos dois campos! ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
 
         ocultarSenha = findViewById(R.id.senhaoculta);
         senha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);

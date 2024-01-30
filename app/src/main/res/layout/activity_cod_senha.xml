@@ -54,10 +54,10 @@
         app:layout_constraintVertical_bias="0.384" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonValidarSenhaw"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/borda_botao"
+        android:background="@drawable/button_selector"
         android:text="@string/buttonValidar"
         android:textColor="@color/cinzaClaro"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -89,10 +89,10 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="72dp"
         android:text="@string/textViewReenviar"
-        android:textColor="#03A9F4"
+        android:textColor="@color/corLinks"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
+        app:layout_constraintTop_toBottomOf="@+id/buttonValidarSenhaw"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -102,10 +102,10 @@
         android:layout_marginTop="72dp"
         android:layout_marginEnd="40dp"
         android:text="@string/textViewOutroMetodo"
-        android:textColor="#03A9F4"
+        android:textColor="@color/corLinks"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
+        app:layout_constraintTop_toBottomOf="@+id/buttonValidarSenhaw"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

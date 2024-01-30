@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    //Funções de mudança de Tela
     public void mudarTelaInicio(){
         Intent intent = new Intent(this, InicioActivity.class);
         startActivity(intent);

@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         nome = findViewById(R.id.editTextNome);
         email = findViewById(R.id.editTextEmail);
-        sexo = findViewById(R.id.editTextSexo);
-        cpf = findViewById(R.id.editTextCpf);
         senha = findViewById(R.id.editTextPassword);
         confirmSenha = findViewById(R.id.editTextConfirmPassword);
         voltar = findViewById(R.id.buttonVoltar);
@@ -72,9 +70,19 @@ public class MainActivity extends AppCompatActivity {
                 voltarTelaWelcome();
             }
         });
+        cadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mudarParaTelaSenha();
+            }
+        });
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+    }
+    public void mudarParaTelaSenha(){
+        Intent intent = new Intent(this, CodSenhaActivity.class);
         startActivity(intent);
     }
 }

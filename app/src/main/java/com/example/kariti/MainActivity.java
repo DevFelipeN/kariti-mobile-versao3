@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     if(password.equals(repassword)){
                         Boolean checkuser = bancoDados.checkuser(usernome);
-                        if(checkuser==false){
+                        Boolean checkemail = bancoDados.checkemail(emails);
+                        if(checkuser==false && checkemail==false){
                             Boolean insert = bancoDados.insertData(usernome, password, emails);
                             if(insert==true){
                                 Toast.makeText(MainActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();

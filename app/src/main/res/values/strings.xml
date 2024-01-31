@@ -34,4 +34,6 @@
     <string name="textViewInformeSenha">Informe sua Senha</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
+    <string name="nomeSchool">Nome da Escola</string>
+    <string name="bairroSchool">Bairro</string>
 </resources>

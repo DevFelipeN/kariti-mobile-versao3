@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(checkemail==true){
                         Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
                         if(checkemailpass==true) {
-                            Toast.makeText(LoginActivity.this, "Login Realizado com Sucesso! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(new Intent(getApplicationContext(), InicioActivity.class));
                             startActivity(intent);
                         } else {

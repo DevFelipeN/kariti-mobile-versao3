@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VisualEscolaActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/appbar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-16dp" />
+
+    <Button
+        android:id="@+id/buttonListSchool"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/button_selector"
+        android:padding="5dp"
+        android:text="Escola Teste"
+        android:textColor="@color/cinzaClaro"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include" />
+
+    <Button
+        android:id="@+id/buttonListSchool2"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_selector"
+        android:padding="5dp"
+        android:text="Escola Teste"
+        android:textColor="@color/cinzaClaro"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonListSchool" />
+
+    <Button
+        android:id="@+id/buttonListSchool3"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_selector"
+        android:padding="5dp"
+        android:text="Escola Teste"
+        android:textColor="@color/cinzaClaro"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonListSchool2" />
+
+    <Button
+        android:id="@+id/buttonListSchool4"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_selector"
+        android:padding="5dp"
+        android:text="Escola Teste"
+        android:textColor="@color/cinzaClaro"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonListSchool3"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonListSchool"
+        app:layout_constraintEnd_toEndOf="@+id/buttonListSchool"
+        app:layout_constraintTop_toTopOf="@+id/buttonListSchool"
+        app:srcCompat="@mipmap/ic_arrownext" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonListSchool2"
+        app:layout_constraintEnd_toEndOf="@+id/buttonListSchool2"
+        app:layout_constraintTop_toTopOf="@+id/buttonListSchool2"
+        app:layout_constraintVertical_bias="0.481"
+        app:srcCompat="@mipmap/ic_arrownext" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonListSchool3"
+        app:layout_constraintEnd_toEndOf="@+id/buttonListSchool3"
+        app:layout_constraintTop_toTopOf="@+id/buttonListSchool3"
+        app:layout_constraintVertical_bias="0.555"
+        app:srcCompat="@mipmap/ic_arrownext" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonListSchool4"
+        app:layout_constraintEnd_toEndOf="@+id/buttonListSchool4"
+        app:layout_constraintTop_toTopOf="@+id/buttonListSchool4"
+        app:layout_constraintVertical_bias="0.518"
+        app:srcCompat="@mipmap/ic_arrownext" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

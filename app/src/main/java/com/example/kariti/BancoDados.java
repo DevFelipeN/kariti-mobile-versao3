@@ -14,7 +14,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "data_base.db";
 
     public BancoDados(Context context) {
-        super(context, "data_base", null, 5);
+        super(context, "data_base", null, 7);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BancoDados extends SQLiteOpenHelper {
         }
 
     }
-    //------Metodo para inserir dados no Banco de Dados-----------
+    //Metodo para inserir dados no Banco de Dados
     public Boolean insertData(String user, String password, String email){
             SQLiteDatabase data_base = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -49,7 +49,8 @@ public class BancoDados extends SQLiteOpenHelper {
                 return true;
             }
     }
-    //--- Verificando se Usuario que esta sendo informado já existe na tabela------------
+
+
     public Boolean checkuser(String user) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from usuario where user =?", new String[]{user});
@@ -58,10 +59,20 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-    //------Verifica se a senha Ligada ao Nome é mesma informada-----------
-    public Boolean checkuserpassword(String user, String password){
+
+    //Verificando se Usuario que esta sendo informado já existe na tabela
+    public Boolean checkemail(String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where user =? and password = ?", new String[] {user, password});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where email =?", new String[]{email});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+    //Verifica se a senha Ligada ao email é a mesma informada
+    public Boolean checkemailpass(String email, String password){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from usuario where email =? and password = ?", new String[] {email, password});
         if (cursor.getCount() > 0)
             return true;
         else

@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText nome, email, senha, confirmarSenha;
     Button voltar, cadastro;
     ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
+    BancoDados bancoDados;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -30,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         voltar = findViewById(R.id.buttonVoltar);
         cadastro = findViewById(R.id.buttonCadastrar);
 
-<<<<<<< HEAD
-=======
         bancoDados = new BancoDados(this); //--Conectando ao banco de dados
 
         cadastro.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
         ocultarSenha = findViewById(R.id.senhaoculta);
         senha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
 

@@ -2,18 +2,20 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
-<<<<<<< HEAD
-=======
 
     EditText username, email, password;
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
     Button entrar, esqueciSenha;
+    BancoDados bancoDados;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,19 +23,13 @@ public class LoginActivity extends AppCompatActivity {
 
         entrar = findViewById(R.id.buttonEntrarL);
         esqueciSenha = findViewById(R.id.buttonEsqueciSenhaL);
-<<<<<<< HEAD
-=======
         email = findViewById(R.id.editTextLogin);
         password = findViewById(R.id.editTextSenha);
         bancoDados = new BancoDados(this);
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
 
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-<<<<<<< HEAD
-                mudarTelaInicio();
-=======
                 String emailConf = email.getText().toString();
                 String pass = password.getText().toString();
                 if(emailConf.equals("")||pass.equals(""))
@@ -53,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Usuário não existe!", Toast.LENGTH_SHORT).show();
                     }
                 }
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
             }
         });
         esqueciSenha.setOnClickListener(new View.OnClickListener() {

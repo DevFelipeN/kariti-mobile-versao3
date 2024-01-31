@@ -26,15 +26,9 @@
         android:text="@string/textViewInformeSenha"
         android:textColor="@color/cinzaClaro"
         app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextCampPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCampLogin" />
-=======
         app:layout_constraintHorizontal_bias="0.343"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
 
     <ImageView
         android:id="@+id/imageView3"
@@ -59,11 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
-<<<<<<< HEAD
-        android:id="@+id/editTextCampLogin"
-=======
         android:id="@+id/editTextLogin"
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -75,11 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
-<<<<<<< HEAD
-        android:id="@+id/editTextCampPassword"
-=======
         android:id="@+id/editTextSenha"
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -100,22 +86,5 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-<<<<<<< HEAD
-        app:layout_constraintTop_toBottomOf="@+id/editTextCampPassword" />
-
-    <TextView
-        android:id="@+id/error_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:text="@string/msg_erro"
-        android:textColor="@color/corErroRed"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/buttonEntrarL"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCampPassword"
-        app:layout_constraintVertical_bias="0.0" />
-=======
         app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
->>>>>>> e9a3947cb742eadcbe75f010dac36271213b0e2d
 </androidx.constraintlayout.widget.ConstraintLayout>

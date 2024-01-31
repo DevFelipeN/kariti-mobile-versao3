@@ -23,7 +23,7 @@
         app:srcCompat="@mipmap/escola" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editTextNameScool"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="100dp"
@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/editTextBairro"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
@@ -53,10 +53,10 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNameScool" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonCad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBairro"
         app:layout_constraintVertical_bias="0.094" />
 
     <ImageView
@@ -75,9 +75,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextText"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
-        app:layout_constraintTop_toTopOf="@+id/editTextText"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNameScool"
+        app:layout_constraintStart_toStartOf="@+id/editTextNameScool"
+        app:layout_constraintTop_toTopOf="@+id/editTextNameScool"
         app:srcCompat="@mipmap/usuario" />
 
     <ImageView
@@ -85,9 +85,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextText2"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-        app:layout_constraintTop_toTopOf="@+id/editTextText2"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextBairro"
+        app:layout_constraintStart_toStartOf="@+id/editTextBairro"
+        app:layout_constraintTop_toTopOf="@+id/editTextBairro"
         app:srcCompat="@mipmap/usuario" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

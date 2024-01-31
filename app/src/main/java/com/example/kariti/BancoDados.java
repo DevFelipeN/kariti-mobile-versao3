@@ -9,18 +9,22 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 public class BancoDados extends SQLiteOpenHelper {
 
     public static final String DBNAME = "data_base.db";
 
     public BancoDados(Context context) {
-        super(context, "data_base", null, 7);
+        super(context, "data_base", null, 8);
     }
 
     @Override
     public void onCreate(SQLiteDatabase data_base) {
         try {
-            data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, user TEXT, email TEXT, password TEXT)");
+            data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, user TEXT, email TEXT UNIQUE, password varchar(256))");
+            data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -41,7 +45,7 @@ public class BancoDados extends SQLiteOpenHelper {
             SQLiteDatabase data_base = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put("user", user);
-            contentValues.put("password", password);
+            contentValues.put("password", to256(password));
             contentValues.put("email", email);
             long inserir = data_base.insert("usuario", null, contentValues);
             if (inserir == -1) return false;
@@ -50,6 +54,31 @@ public class BancoDados extends SQLiteOpenHelper {
             }
     }
 
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+
+    public String to256(String text){
+        try {
+
+            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            final byte[] hashbytes = digest.digest(
+                    text.getBytes(StandardCharsets.UTF_8));
+            String sha3Hex = bytesToHex(hashbytes);
+            return sha3Hex;
+        }catch(Exception e){
+            return "ERROR";
+        }
+    }
 
     public Boolean checkuser(String user) {
         SQLiteDatabase data_base = this.getWritableDatabase();
@@ -72,7 +101,7 @@ public class BancoDados extends SQLiteOpenHelper {
     //Verifica se a senha Ligada ao email é a mesma informada
     public Boolean checkemailpass(String email, String password){
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where email =? and password = ?", new String[] {email, password});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where email =? and password = ?", new String[] {email, to256(password)});
         if (cursor.getCount() > 0)
             return true;
         else

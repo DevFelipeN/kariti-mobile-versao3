@@ -1,5 +1,5 @@
 package com.example.kariti;
-
+import java.util.Random;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -36,20 +36,21 @@ public class LoginActivity extends AppCompatActivity {
                 String emailConf = email.getText().toString();
                 String pass = password.getText().toString();
                 if(emailConf.equals("")||pass.equals(""))
-                    Toast.makeText(LoginActivity.this, "Por favor preencher todos os campos", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "Por favor preencher todos os campos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Code: " + LoginActivity.gerarVerificador(), Toast.LENGTH_SHORT).show();
                 else{
                     Boolean checkemail = bancoDados.checkemail(emailConf); //Verificando no banco se existe email
                     if(checkemail==true){
                         Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
                         if(checkemailpass==true) {
                             Toast.makeText(LoginActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(new Intent(getApplicationContext(), InicioActivity.class));
+                            Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(LoginActivity.this, "Senha Inválida! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        Toast.makeText(LoginActivity.this, "Usuário não existe!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -58,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         esqueciSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 mudarTelaSenhaEsquecida();
             }
         });
@@ -70,5 +72,14 @@ public class LoginActivity extends AppCompatActivity {
     public void mudarTelaSenhaEsquecida(){
         Intent intent = new Intent(this, CodSenhaActivity.class);
         startActivity(intent);
+    }
+
+    public static String gerarVerificador(){
+        Random r = new Random();
+        String saida = "";
+        for(int i = 0; i < 4; i++) {
+            saida += "" + r.nextInt(10);
+        }
+        return saida;
     }
 }

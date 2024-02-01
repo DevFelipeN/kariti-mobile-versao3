@@ -7,27 +7,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class InicioActivity extends AppCompatActivity {
     ImageButton imageButtonInicio;
-    Button cadEscola, visuEscool;
+    Button cadastrarEscola, visualizarEscola;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
         imageButtonInicio = (ImageButton) findViewById(R.id.imageButtonInicio);
-        cadEscola = (Button) findViewById(R.id.buttonCadSchooli);
+        cadastrarEscola = (Button) findViewById(R.id.buttonCadEscola);
+        visualizarEscola = (Button) findViewById(R.id.buttonVisualizarEscola);
 
-        cadEscola.setOnClickListener(new View.OnClickListener() {
+
+        cadastrarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               Intent intencion = new Intent(getApplicationContext(), CadEscolaActivity.class);
-               startActivity(intencion);
-               Toast.makeText(InicioActivity.this, "Casdastro Escola", Toast.LENGTH_SHORT).show();
-            }
+            public void onClick(View view) { mudarParaTelaCadEscola();}
         });
     }
 
+    public void mudarParaTelaCadEscola(){
+        Intent intent = new Intent(this, CadEscolaActivity.class);
+        startActivity(intent);
+    }
 }

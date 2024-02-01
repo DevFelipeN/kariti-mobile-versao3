@@ -9,19 +9,25 @@ import android.widget.EditText;
 
 public class CadEscolaActivity extends AppCompatActivity {
 
-    EditText nScool;
-    EditText bairro;
-    Button cadScool;
+    EditText nomeEscola, bairro;
+    Button cadastrarEscola;
+    BancoDados bancoDados;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cad_escola);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_launcher);
 
-        nScool = (EditText) findViewById(R.id.editTextNameScool);
-        bairro = (EditText) findViewById(R.id.editTextBairro);
-        cadScool = (Button) findViewById(R.id.buttonCad);
+        nomeEscola = findViewById(R.id.editTextNomeEscola);
+        bairro = findViewById(R.id.editTextBairro);
+        cadastrarEscola = findViewById(R.id.buttonCad);
+
+        cadastrarEscola.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 }

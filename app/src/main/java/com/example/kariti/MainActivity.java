@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         nome = findViewById(R.id.editTextNome);
         email = findViewById(R.id.editTextEmail);
         senha = findViewById(R.id.editTextPassword);
@@ -33,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         voltar = findViewById(R.id.buttonVoltar);
         cadastro = findViewById(R.id.buttonCadastrar);
 
-
         bancoDados = new BancoDados(this); //--Conectando ao banco de dados
+
 
         cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 voltarTelaWelcome();
             }
         });
-        /*cadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mudarParaTelaSenha();
-            }
-        });*/
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);

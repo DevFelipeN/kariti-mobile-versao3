@@ -40,7 +40,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonCadSchooli"
+        android:id="@+id/buttonCadEscola"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
@@ -52,16 +52,16 @@
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <Button
-        android:id="@+id/buttonVisuSchooli"
+        android:id="@+id/buttonVisualizarEscola"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="70dp"
         android:background="@drawable/button_selector"
-        android:text="@string/buttonVisualizarEscolas"
+        android:text="Selecionar Escola"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCadSchooli" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCadEscola" />
 
     <Button
         android:id="@+id/buttonConfii"
@@ -74,7 +74,7 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonVisuSchooli"
+        app:layout_constraintTop_toBottomOf="@+id/buttonVisualizarEscola"
         app:layout_constraintVertical_bias="0.005" />
 
     <ImageButton
@@ -97,7 +97,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="150dp"
         android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/buttonCadSchooli"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCadEscola"
         app:layout_constraintHorizontal_bias="0.762"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
@@ -109,7 +109,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:background="#03FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/buttonVisuSchooli"
+        app:layout_constraintEnd_toStartOf="@+id/buttonVisualizarEscola"
         app:layout_constraintHorizontal_bias="0.762"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton3"

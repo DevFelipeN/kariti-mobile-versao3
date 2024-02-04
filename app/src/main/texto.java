@@ -1,6 +1,4 @@
-Batata
-Abobrinha
-Xuxa Menegel
 Sorvete
 Cachorro-quente
-Sanduiche
+Sayury kato
+ola mundo

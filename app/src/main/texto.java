@@ -1,7 +1,4 @@
-Batata
-Abobrinha
-BANANA
-BOMBOM
 Sorvete
 Cachorro-quente
-Sanduiche
+Sayury kato
+ola mundo

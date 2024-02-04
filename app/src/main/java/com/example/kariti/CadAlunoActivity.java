@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,18 +9,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class DetalhesEscolaActivity extends AppCompatActivity {
+public class CadAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
-    Button btnAluno;
+    Button btnCadAluno;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_escola);
+        setContentView(R.layout.activity_cad_aluno);
+
+        toolbar = findViewById(R.id.myToolBarMenu);
+        setSupportActionBar(toolbar);
 
         btnVoltar = findViewById(R.id.btn_voltar_left);
-        btnVoltar.setVisibility(View.VISIBLE);
+        btnCadAluno = findViewById(R.id.buttonCadAluno);
 
-        btnAluno = findViewById(R.id.buttonAluno);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,16 +31,17 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        btnAluno.setOnClickListener(new View.OnClickListener() {
+
+        btnCadAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                irTelaAluno();
+                mudarParaTelaCadastroAluno();
             }
         });
+
     }
-    public void irTelaAluno(){
-        Intent intent = new Intent(this, CadAlunoActivity.class);
+    public void mudarParaTelaCadastroAluno(){
+        Intent intent = new Intent(this, FormCadAlunoActivity.class);
         startActivity(intent);
     }
-
 }

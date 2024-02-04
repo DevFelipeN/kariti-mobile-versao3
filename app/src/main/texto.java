@@ -4,3 +4,4 @@ BANANA
 BOMBOM
 Sorvete
 Cachorro-quente
+Sanduiche

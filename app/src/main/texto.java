@@ -1,5 +1,7 @@
 Batata
-Abobrnha
+Abobrinha
+BANANA
+BOMBOM
 Sorvete
 Cachorro-quente
 Sanduiche

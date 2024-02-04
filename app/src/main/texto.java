@@ -1,4 +1,3 @@
 Batata
 Abobrinha
-Pepino
-Laranja
+BANANA

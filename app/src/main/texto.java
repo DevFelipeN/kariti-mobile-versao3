@@ -1,7 +1,6 @@
 Batata
 Abobrinha
-BANANA
-BOMBOM
+Xuxa Menegel
 Sorvete
 Cachorro-quente
 Sanduiche

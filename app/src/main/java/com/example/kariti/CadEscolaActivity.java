@@ -37,7 +37,7 @@ public class CadEscolaActivity extends AppCompatActivity {
         cadastrarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(CadEscolaActivity.this, "Teste " + nomeEscola.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CadEscolaActivity.this, "Cadastrado com sucesso! " + nomeEscola.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 

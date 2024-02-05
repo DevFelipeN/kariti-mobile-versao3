@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
 
     BancoDados bancoDados;
+    LoginActivity loginActivity;
+    EnviarEmail enviarEmail;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         cadastro = findViewById(R.id.buttonCadastrar);
 
         bancoDados = new BancoDados(this); //--Conectando ao banco de dados
+        loginActivity = new LoginActivity();
+        enviarEmail = new EnviarEmail();
 
 
         cadastro.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
                         Boolean checkuser = bancoDados.checkuser(usernome);
                         Boolean checkemail = bancoDados.checkemail(emails);
                         if(checkuser==false && checkemail==false){
+                            String cod = LoginActivity.gerarVerificador();
+
+
+                            //Continua amanha................
+
+
+                            Toast.makeText(MainActivity.this, "Code: " +cod, Toast.LENGTH_SHORT).show();
                             Boolean insert = bancoDados.insertData(usernome, password, emails);
                             if(insert==true){
                                 Toast.makeText(MainActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();

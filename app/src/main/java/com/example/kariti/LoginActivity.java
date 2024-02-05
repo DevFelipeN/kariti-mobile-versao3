@@ -30,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.editTextSenha);
         bancoDados = new BancoDados(this);
 
+        enviarEmail = new EnviarEmail();
+
 
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,28 +68,18 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     Boolean verBanco = bancoDados.checkemail(confEmail);
                     if(verBanco==true){
-                        Toast.makeText(LoginActivity.this, "Code: " + LoginActivity.gerarVerificador(), Toast.LENGTH_SHORT).show();
-                        Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                        startActivity(intencion);
-                        /*Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
+                        String cod = gerarVerificador();
+                        Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
                         if(mandaEmail==true)
-                            Toast.makeText(LoginActivity.this, "Em Desenvolvimento!!!", Toast.LENGTH_SHORT).show();*/
+                            Toast.makeText(LoginActivity.this, "Em Desenvolvimento!!!", Toast.LENGTH_SHORT).show();
+                            Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                            startActivity(intencion);
                     }
 
                 }
             }
         });
     }
-    //Funções de mudança de Tela
-    /*public void mudarTelaInicio(){
-        Intent intent = new Intent(this, InicioActivity.class);
-        startActivity(intent);
-    }*/
-    public void mudarTelaSenhaEsquecida(){
-        Intent intent = new Intent(this, CodSenhaActivity.class);
-        startActivity(intent);
-    }
-
     public static String gerarVerificador(){
         Random r = new Random();
         String saida = "";

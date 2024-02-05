@@ -36,4 +36,19 @@
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="nomeSchool">Nome da Escola</string>
     <string name="bairroSchool">Bairro</string>
+
+    <string name="textViewAluno">Aluno</string>
+    <string name="textViewTurma">Turma</string>
+    <string name="textViewCalendar">Calendário</string>
+    <string name="textViewProva">Prova</string>
+    <string name="buttonCadAluno">Cadastrar Aluno</string>
+    <string name="buttonVisuAluno">Visualizar Aluno</string>
+    <string name="EditTextIdAluno">ID do aluno</string>
+
+
+    <string name="btnVoltar">Button Voltar</string>
+    <string name="btnHome">Button Home</string>
+    <string name="btnMenuPontos">Button Menu</string>
+
+
 </resources>

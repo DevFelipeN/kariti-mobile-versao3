@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     EditText nome, email, senha, confirmarSenha;
     Button voltar, cadastro;
     ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
+
     BancoDados bancoDados;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
@@ -33,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         confirmarSenha = findViewById(R.id.editTextConfirmPassword);
         voltar = findViewById(R.id.buttonVoltar);
         cadastro = findViewById(R.id.buttonCadastrar);
-
-
 
         bancoDados = new BancoDados(this); //--Conectando ao banco de dados
 
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         ocultarSenha = findViewById(R.id.senhaoculta);
         senha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
@@ -114,12 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 voltarTelaWelcome();
             }
         });
-        /*cadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mudarParaTelaSenha();
-            }
-        });*/
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);

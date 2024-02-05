@@ -11,16 +11,29 @@ import android.widget.Toast;
 
 public class InicioActivity extends AppCompatActivity {
     ImageButton imageButtonInicio;
-    Button cadEscola, visuEscool;
+
+    Button cadastrarEscola, visualizarEscola;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
-        imageButtonInicio = (ImageButton) findViewById(R.id.imageButtonInicio);
-        cadEscola = (Button) findViewById(R.id.buttonCadSchooli);
+        imageButtonInicio = findViewById(R.id.imageButtonInicio);
+        cadastrarEscola = findViewById(R.id.buttonCadEscola);
+        visualizarEscola = findViewById(R.id.buttonVisualizarEscola);
 
-        cadEscola.setOnClickListener(new View.OnClickListener() {
+        imageButtonInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                voltarTelaIncial();
+            }
+        });
+        cadastrarEscola.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { mudarParaTelaCadEscola();}
+        });
+        visualizarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(InicioActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
@@ -31,8 +44,20 @@ public class InicioActivity extends AppCompatActivity {
                 Intent intencion = new Intent(getApplicationContext(), CadEscolaActivity.class);
                 startActivity(intencion);
                 Toast.makeText(InicioActivity.this, "Casdastro Escola", Toast.LENGTH_SHORT).show();
+                mudarParaTelaVisulEscola();
             }
         });
     }
-
+    public void voltarTelaIncial(){
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+    }
+    public void mudarParaTelaCadEscola(){
+        Intent intent = new Intent(this, CadEscolaActivity.class);
+        startActivity(intent);
+    }
+    public void mudarParaTelaVisulEscola(){
+        Intent intent = new Intent(this, VisualEscolaActivity.class);
+        startActivity(intent);
+    }
 }

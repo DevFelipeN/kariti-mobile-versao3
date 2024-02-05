@@ -1,18 +1,26 @@
 package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class CadEscolaActivity extends AppCompatActivity {
+import android.widget.ImageButton;
 
-    EditText nScool;
-    EditText bairro;
-    Button cadScool;
+
+public class CadEscolaActivity extends AppCompatActivity {
+    ImageButton btnVoltar, btnHome;
+    private Toolbar toolbar;
+    EditText nomeEscola, bairro;
+    Button cadastrarEscola;
+    BancoDados bancoDados;
+
 
 
     @Override
@@ -22,15 +30,52 @@ public class CadEscolaActivity extends AppCompatActivity {
 
 
 
-        nScool = (EditText) findViewById(R.id.editTextNameScool);
+
+        nomeEscola = (EditText) findViewById(R.id.editTextNomeEscola);
         bairro = (EditText) findViewById(R.id.editTextBairro);
-        cadScool = (Button) findViewById(R.id.buttonCad);
-        cadScool.setOnClickListener(new View.OnClickListener() {
+        cadastrarEscola = (Button) findViewById(R.id.button);
+        cadastrarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(CadEscolaActivity.this, "Teste " + nScool.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CadEscolaActivity.this, "Teste " + nomeEscola.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        btnVoltar = findViewById(R.id.btn_voltar_left);
+        btnVoltar.setVisibility(View.VISIBLE);
+
+        btnHome = findViewById(R.id.home_icon);
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                voltarTelaIncial();
+            }
+        });
+
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+    }
+    public void voltarTelaIncial(){
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+
+        nomeEscola = findViewById(R.id.editTextNomeEscola);
+        bairro = findViewById(R.id.editTextBairro);
+        cadastrarEscola = findViewById(R.id.buttonCadastrar);
+
+        cadastrarEscola.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 }

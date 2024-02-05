@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:id="@+id/myToolBarMenu"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <ImageButton
+            android:id="@+id/btn_voltar_left"
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:background="@color/tranparente"
+            android:textColor="@android:color/black"
+            android:src="@mipmap/setaleft"
+            android:contentDescription="@string/btnVoltar"/>
+
+        <!-- Ícone do home -->
+        <ImageView
+            android:id="@+id/menu_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="end"
+            android:contentDescription="@string/btnMenuPontos"
+            android:padding="8dp"
+            android:src="@mipmap/menuptn" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/cinzaClaro"
+            android:layout_gravity="bottom"/>
+
+</androidx.appcompat.widget.Toolbar>

@@ -11,11 +11,13 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText username, email, password;
+    EditText email, password;
 
     Button entrar, esqueciSenha;
 
     BancoDados bancoDados;
+
+    EnviarEmail enviarEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +38,7 @@ public class LoginActivity extends AppCompatActivity {
                 String emailConf = email.getText().toString();
                 String pass = password.getText().toString();
                 if(emailConf.equals("")||pass.equals(""))
-                    //Toast.makeText(LoginActivity.this, "Por favor preencher todos os campos", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(LoginActivity.this, "Code: " + LoginActivity.gerarVerificador(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
                 else{
                     Boolean checkemail = bancoDados.checkemail(emailConf); //Verificando no banco se existe email
                     if(checkemail==true){
@@ -59,8 +60,21 @@ public class LoginActivity extends AppCompatActivity {
         esqueciSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String confEmail = email.getText().toString();
+                if(confEmail.equals(""))
+                    Toast.makeText(LoginActivity.this, "Favor Informar Email", Toast.LENGTH_SHORT).show();
+                else{
+                    Boolean verBanco = bancoDados.checkemail(confEmail);
+                    if(verBanco==true){
+                        Toast.makeText(LoginActivity.this, "Code: " + LoginActivity.gerarVerificador(), Toast.LENGTH_SHORT).show();
+                        Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                        startActivity(intencion);
+                        /*Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
+                        if(mandaEmail==true)
+                            Toast.makeText(LoginActivity.this, "Em Desenvolvimento!!!", Toast.LENGTH_SHORT).show();*/
+                    }
 
-                mudarTelaSenhaEsquecida();
+                }
             }
         });
     }

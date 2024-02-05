@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 public class CadEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar, btnHome;
     private Toolbar toolbar;
-    EditText nomeEscola, bairro;
+    EditText nomeEscola, bairr0;
     Button cadastrarEscola;
     BancoDados bancoDados;
 
@@ -28,15 +28,17 @@ public class CadEscolaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cad_escola);
 
+        nomeEscola = findViewById(R.id.editTextNomeEscola);
+        bairr0 = findViewById(R.id.editTextBairro);
+        cadastrarEscola = findViewById(R.id.button);
 
-
-
-        nomeEscola = (EditText) findViewById(R.id.editTextNomeEscola);
-        bairro = (EditText) findViewById(R.id.editTextBairro);
-        cadastrarEscola = (Button) findViewById(R.id.button);
+        bancoDados = new BancoDados(this); // --> Conexão com o banco de dados.
         cadastrarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String nome = nomeEscola.getText().toString();
+                String bairro = bairr0.getText().toString();
+
                 Toast.makeText(CadEscolaActivity.this, "Cadastrado com sucesso! " + nomeEscola.getText(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -68,7 +70,7 @@ public class CadEscolaActivity extends AppCompatActivity {
         startActivity(intent);
 
         nomeEscola = findViewById(R.id.editTextNomeEscola);
-        bairro = findViewById(R.id.editTextBairro);
+        bairr0 = findViewById(R.id.editTextBairro);
         cadastrarEscola = findViewById(R.id.buttonCadastrar);
 
         cadastrarEscola.setOnClickListener(new View.OnClickListener(){

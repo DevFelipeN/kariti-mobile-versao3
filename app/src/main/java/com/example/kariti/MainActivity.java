@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         nome = findViewById(R.id.editTextNome);
         email = findViewById(R.id.editTextEmail);
         senha = findViewById(R.id.editTextPassword);

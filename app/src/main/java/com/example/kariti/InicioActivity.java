@@ -23,9 +23,14 @@ public class InicioActivity extends AppCompatActivity {
         cadEscola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent intencion = new Intent(getApplicationContext(), CadEscolaActivity.class);
-               startActivity(intencion);
-               Toast.makeText(InicioActivity.this, "Casdastro Escola", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InicioActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), CadEscolaActivity.class);
+                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+
+                Intent intencion = new Intent(getApplicationContext(), CadEscolaActivity.class);
+                startActivity(intencion);
+                Toast.makeText(InicioActivity.this, "Casdastro Escola", Toast.LENGTH_SHORT).show();
             }
         });
     }

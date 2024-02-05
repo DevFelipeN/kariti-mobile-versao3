@@ -35,16 +35,11 @@ public class InicioActivity extends AppCompatActivity {
         });
         visualizarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Local modificado
             public void onClick(View view) {
-                Toast.makeText(InicioActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), CadEscolaActivity.class);
-                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-
-                Intent intencion = new Intent(getApplicationContext(), CadEscolaActivity.class);
+                Intent intencion = new Intent(getApplicationContext(), VisualEscolaActivity.class);
                 startActivity(intencion);
-                Toast.makeText(InicioActivity.this, "Casdastro Escola", Toast.LENGTH_SHORT).show();
-                mudarParaTelaVisulEscola();
+                Toast.makeText(InicioActivity.this, "Selecione uma Escola", Toast.LENGTH_SHORT).show();
             }
         });
     }

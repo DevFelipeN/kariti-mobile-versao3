@@ -25,6 +25,7 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, user TEXT, email TEXT UNIQUE, password varchar(256))");
             data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
+            data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairr0 TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -34,6 +35,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase data_base, int oldVersion, int newVersion) {
         try {
             data_base.execSQL("drop Table if exists usuario");
+            data_base.execSQL("drop Table if exists escola");
             onCreate(data_base);
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());

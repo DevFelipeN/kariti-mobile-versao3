@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     BancoDados bancoDados;
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
+    CodSenhaActivity codSenha;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
+        codSenha = new CodSenhaActivity();
 
 
         cadastro.setOnClickListener(new View.OnClickListener() {
@@ -57,20 +59,18 @@ public class MainActivity extends AppCompatActivity {
                         if(checkuserMail==false){
                             String cod = gerarCodigo.gerarVerificador();
                             Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
+                            Toast.makeText(MainActivity.this, "Resultado: " +mandaEmail, Toast.LENGTH_SHORT).show();
                             if(mandaEmail==true) {
-                                Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                startActivity(intencion);
+                                Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                proxima.putExtra("nome",usernome);
+                                proxima.putExtra("email", emails);
+                                proxima.putExtra("senha", password);
+
+                            }else{
+                                Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
                             }
 
-                            Toast.makeText(MainActivity.this, "Code: " +cod, Toast.LENGTH_SHORT).show();
-                            Boolean insert = bancoDados.insertData(usernome, password, emails);
-                            if(insert==true){
-                                Toast.makeText(MainActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(MainActivity.this, "Erro: Usuário não Registrado! ",Toast.LENGTH_SHORT).show();
-                            }
+
                         }else{
                             Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();
                         }

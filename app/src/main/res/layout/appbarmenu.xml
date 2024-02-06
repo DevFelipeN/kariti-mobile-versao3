@@ -25,10 +25,5 @@
             android:contentDescription="@string/btnMenuPontos"
             android:padding="8dp"
             android:src="@mipmap/menuptn" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/cinzaClaro"
-            android:layout_gravity="bottom"/>
 
 </androidx.appcompat.widget.Toolbar>

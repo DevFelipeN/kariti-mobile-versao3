@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Kariti"
         tools:targetApi="31">
         <activity
-            android:name=".EsqueciSenha"
+            android:name=".VisualAlunoActivity"
             android:exported="false" />
         <activity
             android:name=".FormCadAlunoActivity"

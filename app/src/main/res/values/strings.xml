@@ -36,6 +36,7 @@
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="nomeSchool">Nome da Escola</string>
     <string name="bairroSchool">Bairro</string>
+    <string name="buscNameAluno">Digite o nome do aluno</string>
 
     <string name="textViewAluno">Aluno</string>
     <string name="textViewTurma">Turma</string>

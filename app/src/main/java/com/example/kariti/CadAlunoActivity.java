@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 
 public class CadAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
-    Button btnCadAluno;
+    Button btnCadAluno, btnVisualizarAluno;
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class CadAlunoActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.btn_voltar_left);
         btnCadAluno = findViewById(R.id.buttonCadAluno);
+        btnVisualizarAluno = findViewById(R.id.buttonVisuAluno);
 
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
@@ -38,10 +39,20 @@ public class CadAlunoActivity extends AppCompatActivity {
                 mudarParaTelaCadastroAluno();
             }
         });
+        btnVisualizarAluno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mudarParaTelaVisulaizarAluno();
+            }
+        });
 
     }
     public void mudarParaTelaCadastroAluno(){
         Intent intent = new Intent(this, FormCadAlunoActivity.class);
+        startActivity(intent);
+    }
+    public void mudarParaTelaVisulaizarAluno(){
+        Intent intent = new Intent(this, VisualAlunoActivity.class);
         startActivity(intent);
     }
 }

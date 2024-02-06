@@ -91,19 +91,17 @@ public class BancoDados extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean checkuser(String user) {
+    public Boolean checkuser(String user, String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where user =?", new String[]{user});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where user =? and email = ?", new String[]{user, email});
         if (cursor.getCount() > 0)
             return true;
         else
             return false;
     }
-
-    //Verificando se Usuario que esta sendo informado já existe na tabela
     public Boolean checkemail(String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where email =?", new String[]{email});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where email = ?", new String[]{email});
         if (cursor.getCount() > 0)
             return true;
         else

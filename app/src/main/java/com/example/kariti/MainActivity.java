@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
 
     BancoDados bancoDados;
-    LoginActivity loginActivity;
     EnviarEmail enviarEmail;
+    GerarCodigoValidacao gerarCodigo;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
         voltar = findViewById(R.id.buttonVoltar);
         cadastro = findViewById(R.id.buttonCadastrar);
 
-        bancoDados = new BancoDados(this); //--Conectando ao banco de dados
-        loginActivity = new LoginActivity();
+        bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
+        gerarCodigo = new GerarCodigoValidacao();
 
 
         cadastro.setOnClickListener(new View.OnClickListener() {
@@ -53,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 else{
                     if(password.equals(repassword)){
-                        Boolean checkuser = bancoDados.checkuser(usernome);
-                        Boolean checkemail = bancoDados.checkemail(emails);
-                        if(checkuser==false && checkemail==false){
-                            String cod = LoginActivity.gerarVerificador();
-
-
-                            //Continua amanha................
-
+                        Boolean checkuserMail = bancoDados.checkuser(usernome, emails);
+                        if(checkuserMail==false){
+                            String cod = gerarCodigo.gerarVerificador();
+                            Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
+                            if(mandaEmail==true) {
+                                Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                startActivity(intencion);
+                            }
 
                             Toast.makeText(MainActivity.this, "Code: " +cod, Toast.LENGTH_SHORT).show();
                             Boolean insert = bancoDados.insertData(usernome, password, emails);
@@ -69,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(intent);
                             }else{
-                                Toast.makeText(MainActivity.this, "Usuário não Registrado! ",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Erro: Usuário não Registrado! ",Toast.LENGTH_SHORT).show();
                             }
                         }else{
-                            Toast.makeText(MainActivity.this, "Usuário já cadastrado, favor realizar Login", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();
                         }
 
                     }else{
-                        Toast.makeText(MainActivity.this, "Senhas não são iguais nos dois campos! ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

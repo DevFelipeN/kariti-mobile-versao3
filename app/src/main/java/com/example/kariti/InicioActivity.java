@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class InicioActivity extends AppCompatActivity {
     ImageButton imageButtonInicio;
@@ -34,8 +35,11 @@ public class InicioActivity extends AppCompatActivity {
         });
         visualizarEscola.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Local modificado
             public void onClick(View view) {
-                mudarParaTelaVisulEscola();
+                Intent intencion = new Intent(getApplicationContext(), VisualEscolaActivity.class);
+                startActivity(intencion);
+                Toast.makeText(InicioActivity.this, "Selecione uma Escola", Toast.LENGTH_SHORT).show();
             }
         });
     }

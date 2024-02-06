@@ -1,5 +1,4 @@
 package com.example.kariti;
-import java.util.Random;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     BancoDados bancoDados;
 
     EnviarEmail enviarEmail;
+    GerarCodigoValidacao gerarCodigo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         enviarEmail = new EnviarEmail();
+        gerarCodigo = new GerarCodigoValidacao();
 
 
         entrar.setOnClickListener(new View.OnClickListener() {
@@ -42,18 +43,13 @@ public class LoginActivity extends AppCompatActivity {
                 if(emailConf.equals("")||pass.equals(""))
                     Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean checkemail = bancoDados.checkemail(emailConf); //Verificando no banco se existe email
-                    if(checkemail==true){
-                        Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
-                        if(checkemailpass==true) {
-                            Toast.makeText(LoginActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
-                        }
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos!", Toast.LENGTH_SHORT).show();
+                    Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
+                    if(checkemailpass==true) {
+                        Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -68,24 +64,16 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     Boolean verBanco = bancoDados.checkemail(confEmail);
                     if(verBanco==true){
-                        String cod = gerarVerificador();
+                        String cod = gerarCodigo.gerarVerificador();
                         Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
-                        if(mandaEmail==true)
-                            Toast.makeText(LoginActivity.this, "Em Desenvolvimento!!!", Toast.LENGTH_SHORT).show();
+                        if(mandaEmail==true) {
                             Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
                             startActivity(intencion);
+                        }
                     }
 
                 }
             }
         });
-    }
-    public static String gerarVerificador(){
-        Random r = new Random();
-        String saida = "";
-        for(int i = 0; i < 4; i++) {
-            saida += "" + r.nextInt(10);
-        }
-        return saida;
     }
 }

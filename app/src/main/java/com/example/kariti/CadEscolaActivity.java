@@ -39,7 +39,27 @@ public class CadEscolaActivity extends AppCompatActivity {
                 String nome = nomeEscola.getText().toString();
                 String bairro = bairr0.getText().toString();
 
-                Toast.makeText(CadEscolaActivity.this, "Cadastrado com sucesso! " + nomeEscola.getText(), Toast.LENGTH_SHORT).show();
+                if (nomeEscola.equals("") || bairro.equals("")) {
+                    Toast.makeText(CadEscolaActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Boolean checkEscola = bancoDados.checkEscola(nome);
+
+                    if (!checkEscola) {
+                        Boolean insertEscola = bancoDados.inserirDadosEscola(nome, bairro);
+
+                        if (insertEscola) {
+                            Toast.makeText(CadEscolaActivity.this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(CadEscolaActivity.this, "Falha no cadastro da escola!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(CadEscolaActivity.this, "Escola já cadastrada!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
             }
         });
 

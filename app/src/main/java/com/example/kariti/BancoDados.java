@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -17,7 +15,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "data_base.db";
 
     public BancoDados(Context context) {
-        super(context, "data_base", null, 9);
+        super(context, "data_base", null, 12);
     }
 
     @Override
@@ -25,7 +23,7 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, user TEXT, email TEXT UNIQUE, password varchar(256))");
             data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
-            data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairr0 TEXT)");
+            data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -54,6 +52,17 @@ public class BancoDados extends SQLiteOpenHelper {
             else {
                 return true;
             }
+    }
+    public Boolean inserirDadosEscola(String nomeEscola, String bairro){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeEscola", nomeEscola);
+        contentValues.put("bairro", bairro);
+        long inserir = data_base.insert("escola", null, contentValues);
+        if (inserir == -1) return false;
+        else {
+            return true;
+        }
     }
 
     private static String bytesToHex(byte[] hash) {
@@ -108,5 +117,15 @@ public class BancoDados extends SQLiteOpenHelper {
             return true;
         else
             return false;
+    }
+    public Boolean checkEscola(String nomeEscola){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM escola WHERE nomeEscola = ?", new String[]{nomeEscola});
+
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
     }
 }

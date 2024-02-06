@@ -7,17 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 
 import android.widget.ImageButton;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar, btnHome;
-
-    Button detalhesEscola;
-
-
     private Toolbar toolbar;
 
     @Override
@@ -32,8 +33,17 @@ public class VisualEscolaActivity extends AppCompatActivity {
         btnVoltar.setVisibility(View.VISIBLE);
         btnHome = findViewById(R.id.home_icon);
 
-        detalhesEscola = findViewById(R.id.buttonListSchool);
+        ArrayList<String> escolas = new ArrayList<>();
+        escolas.add("Escola 1");
+        escolas.add("Escola 2");
+        escolas.add("Escola 3");
+        escolas.add("Escola 4");
 
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, escolas);
+
+        ListView listView = findViewById(R.id.listView);
+        listView.setAdapter(adapter);
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,13 +59,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
             }
         });
 
-        detalhesEscola.setOnClickListener(new View.OnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 telaDetalheEscola();
+
             }
         });
-
     }
 
     public void voltarTelaIncial() {

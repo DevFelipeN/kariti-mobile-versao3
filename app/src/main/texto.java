@@ -1,4 +1,0 @@
-Batata
-Abobrinha
-Pepino
-Laranja

@@ -59,29 +59,19 @@ public class MainActivity extends AppCompatActivity {
                         if(checkuserMail==false){
                             String cod = gerarCodigo.gerarVerificador();
                             Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
-                            Toast.makeText(MainActivity.this, "Resultado: " +mandaEmail, Toast.LENGTH_SHORT).show();
                             if(mandaEmail==true) {
                                 Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
                                 proxima.putExtra("nome",usernome);
                                 proxima.putExtra("email", emails);
                                 proxima.putExtra("senha", password);
-
-                            }else{
-                                Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        }else{
-                            Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }else{
-                        Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();
-                    }
+                                proxima.putExtra("cod", cod);
+                                startActivity(proxima);
+                            }else{Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
+                        }else{Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
+                    }else{Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
                 }
             }
         });
-
 
         ocultarSenha = findViewById(R.id.senhaoculta);
         senha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);

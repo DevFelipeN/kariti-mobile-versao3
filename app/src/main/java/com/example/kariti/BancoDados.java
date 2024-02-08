@@ -22,7 +22,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase data_base) {
         try {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, user TEXT, email TEXT UNIQUE, password varchar(256))");
-            data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
+            //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());

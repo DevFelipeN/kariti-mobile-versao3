@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     BancoDados bancoDados;
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
+    CodSenhaActivity codSenha;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
+        codSenha = new CodSenhaActivity();
 
 
         cadastro.setOnClickListener(new View.OnClickListener() {
@@ -58,30 +60,18 @@ public class MainActivity extends AppCompatActivity {
                             String cod = gerarCodigo.gerarVerificador();
                             Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
                             if(mandaEmail==true) {
-                                Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                startActivity(intencion);
-                            }
-
-                            Toast.makeText(MainActivity.this, "Code: " +cod, Toast.LENGTH_SHORT).show();
-                            Boolean insert = bancoDados.insertData(usernome, password, emails);
-                            if(insert==true){
-                                Toast.makeText(MainActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(MainActivity.this, "Erro: Usuário não Registrado! ",Toast.LENGTH_SHORT).show();
-                            }
-                        }else{
-                            Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }else{
-                        Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();
-                    }
+                                Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                proxima.putExtra("nome",usernome);
+                                proxima.putExtra("email", emails);
+                                proxima.putExtra("senha", password);
+                                proxima.putExtra("cod", cod);
+                                startActivity(proxima);
+                            }else{Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
+                        }else{Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
+                    }else{Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
                 }
             }
         });
-
 
         ocultarSenha = findViewById(R.id.senhaoculta);
         senha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);

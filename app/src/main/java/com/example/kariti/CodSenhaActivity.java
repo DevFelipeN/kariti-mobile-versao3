@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class CodSenhaActivity extends AppCompatActivity {
-
     EditText n1, n2, n3, n4;
     Button buttonValidarSenha;
     BancoDados bancoDados;
@@ -26,18 +25,13 @@ public class CodSenhaActivity extends AppCompatActivity {
         n3 = (EditText) findViewById(R.id.editTextNumber3);
         n4 = (EditText) findViewById(R.id.editTextNumber4);
 
+        addTextWatcher(n1, n2);
+        addTextWatcher(n2, n3);
+        addTextWatcher(n3, n4);
+
         bancoDados = new BancoDados(this);
 
         buttonValidarSenha = findViewById(R.id.buttonValidarSenhaw);
-        codNum1 = findViewById(R.id.editTextNum1);
-        codNum2 = findViewById(R.id.editTextNum2);
-        codNum3 = findViewById(R.id.editTextNum3);
-        codNum4 = findViewById(R.id.editTextNum4);
-
-        addTextWatcher(codNum1, codNum2);
-        addTextWatcher(codNum2, codNum3);
-        addTextWatcher(codNum3, codNum4);
-
         buttonValidarSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,10 +74,5 @@ public class CodSenhaActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public void mudarParaTelaLogin(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 }

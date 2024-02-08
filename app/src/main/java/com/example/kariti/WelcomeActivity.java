@@ -30,12 +30,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 mudarParaTelaLogin();
             }
         });
-        esqueciSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mudarParaTelaEsquciSenha();
-            }
-        });
     }
 
     public void mudarParaTelaWelcome(){
@@ -44,10 +38,6 @@ public class WelcomeActivity extends AppCompatActivity {
     }
     public void mudarParaTelaLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-    public void mudarParaTelaEsquciSenha(){
-        Intent intent = new Intent(this, CodSenhaActivity.class);
         startActivity(intent);
     }
 }

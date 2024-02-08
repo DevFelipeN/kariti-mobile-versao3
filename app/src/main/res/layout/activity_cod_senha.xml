@@ -7,7 +7,7 @@
     tools:context=".CodSenhaActivity">
 
     <EditText
-        android:id="@+id/editTextNum2"
+        android:id="@+id/editTextNumber2"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -18,12 +18,12 @@
         android:textSize="34sp"
         android:maxLength="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextNum1"
+        app:layout_constraintStart_toEndOf="@+id/editTextNumber"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.384" />
 
     <EditText
-        android:id="@+id/editTextNum4"
+        android:id="@+id/editTextNumber4"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -36,12 +36,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextNum3"
+        app:layout_constraintStart_toEndOf="@+id/editTextNumber3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.384" />
 
     <EditText
-        android:id="@+id/editTextNum1"
+        android:id="@+id/editTextNumber"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -72,7 +72,7 @@
         app:layout_constraintVertical_bias="0.534" />
 
     <EditText
-        android:id="@+id/editTextNum3"
+        android:id="@+id/editTextNumber3"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -83,7 +83,7 @@
         android:textSize="34sp"
         android:maxLength="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextNum2"
+        app:layout_constraintStart_toEndOf="@+id/editTextNumber2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.384" />
 

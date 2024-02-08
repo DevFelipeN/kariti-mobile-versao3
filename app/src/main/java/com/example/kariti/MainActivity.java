@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText nome, email, senha, confirmarSenha;
     Button voltar, cadastro;
-    ImageButton mostrarSenha, ocultarSenha, ocultarSenha2;
+    ImageButton ocultarSenha, ocultarSenha2;
 
     BancoDados bancoDados;
 
@@ -74,35 +74,35 @@ public class MainActivity extends AppCompatActivity {
 
 
         ocultarSenha = findViewById(R.id.senhaoculta);
-        senha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        senha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         ocultarSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Verifica se a senha está visivel ou oculta.
-                if(senha.getInputType() == InputType.TYPE_NUMBER_VARIATION_PASSWORD){
+                if(senha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
 //                  Se a senha está visivel ou oculta.
-                    senha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    senha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     ocultarSenha.setImageResource(R.mipmap.senhaoff);
                 } else {
-                    senha.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    senha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     ocultarSenha.setImageResource(R.mipmap.senhaon);
                 }
                 senha.setSelection(senha.getText().length());
             }
         });
         ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
-        confirmarSenha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        confirmarSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         ocultarSenha2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Verifica se a senha está visivel ou oculta.
-                if(confirmarSenha.getInputType() == InputType.TYPE_NUMBER_VARIATION_PASSWORD){
+                if(confirmarSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
 //                  Se a senha está visivel ou oculta.
-                    confirmarSenha.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    confirmarSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     ocultarSenha2.setImageResource(R.mipmap.senhaoff);
                 } else {
-                    confirmarSenha.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    confirmarSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     ocultarSenha2.setImageResource(R.mipmap.senhaon);
                 }
                 confirmarSenha.setSelection(confirmarSenha.getText().length());

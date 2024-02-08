@@ -37,6 +37,7 @@
     <string name="nomeSchool">Nome da Escola</string>
     <string name="bairroSchool">Bairro</string>
     <string name="buscNameAluno">Digite o nome do aluno</string>
+    <string name="senhahint">********</string>
 
     <string name="textViewAluno">Aluno</string>
     <string name="textViewTurma">Turma</string>
@@ -50,6 +51,7 @@
     <string name="btnVoltar">Button Voltar</string>
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>
+    <string name="imgProfessor">ImagemProfessor</string>
 
 
 </resources>

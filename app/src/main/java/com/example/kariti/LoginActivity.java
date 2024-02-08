@@ -67,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                         String cod = gerarCodigo.gerarVerificador();
                         Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
                         if(mandaEmail==true) {
-                            Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                            startActivity(intencion);
+                            Toast.makeText(LoginActivity.this, "Em Desenvolvimento!!!", Toast.LENGTH_SHORT).show();
+                            //Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                            //startActivity(intencion);
                         }
                     }
 

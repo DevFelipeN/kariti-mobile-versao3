@@ -1,5 +1,4 @@
 package com.example.kariti;
-import java.util.Random;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,12 +12,15 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText username, email, password;
+    EditText email, password;
 
     Button entrar, esqueciSenha;
     ImageButton ocultarSenha;
 
     BancoDados bancoDados;
+
+    EnviarEmail enviarEmail;
+    GerarCodigoValidacao gerarCodigo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,9 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.editTextSenha);
         bancoDados = new BancoDados(this);
 
+        enviarEmail = new EnviarEmail();
+        gerarCodigo = new GerarCodigoValidacao();
+
 
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,21 +44,15 @@ public class LoginActivity extends AppCompatActivity {
                 String emailConf = email.getText().toString();
                 String pass = password.getText().toString();
                 if(emailConf.equals("")||pass.equals(""))
-                    //Toast.makeText(LoginActivity.this, "Por favor preencher todos os campos", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(LoginActivity.this, "Code: " + LoginActivity.gerarVerificador(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean checkemail = bancoDados.checkemail(emailConf); //Verificando no banco se existe email
-                    if(checkemail==true){
-                        Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
-                        if(checkemailpass==true) {
-                            Toast.makeText(LoginActivity.this, "Bem Vindo ao Kariti", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
-                        }
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos!", Toast.LENGTH_SHORT).show();
+                    Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
+                    if(checkemailpass==true) {
+                        Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -62,8 +61,21 @@ public class LoginActivity extends AppCompatActivity {
         esqueciSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String confEmail = email.getText().toString();
+                if(confEmail.equals(""))
+                    Toast.makeText(LoginActivity.this, "Favor Informar Email", Toast.LENGTH_SHORT).show();
+                else{
+                    Boolean verBanco = bancoDados.checkemail(confEmail);
+                    if(verBanco==true){
+                        String cod = gerarCodigo.gerarVerificador();
+                        Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
+                        if(mandaEmail==true) {
+                            Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                            startActivity(intencion);
+                        }
+                    }
 
-                mudarTelaSenhaEsquecida();
+                }
             }
         });
 
@@ -85,23 +97,5 @@ public class LoginActivity extends AppCompatActivity {
                 password.setSelection(password.getText().length());
             }
         });
-    }
-    //Funções de mudança de Tela
-    /*public void mudarTelaInicio(){
-        Intent intent = new Intent(this, InicioActivity.class);
-        startActivity(intent);
-    }*/
-    public void mudarTelaSenhaEsquecida(){
-        Intent intent = new Intent(this, CodSenhaActivity.class);
-        startActivity(intent);
-    }
-
-    public static String gerarVerificador(){
-        Random r = new Random();
-        String saida = "";
-        for(int i = 0; i < 4; i++) {
-            saida += "" + r.nextInt(10);
-        }
-        return saida;
     }
 }

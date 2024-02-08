@@ -31,7 +31,8 @@ public class CodSenhaActivity extends AppCompatActivity {
         buttonValidarSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mudarParaTelaLogin();
+                Intent intencion = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intencion);
             }
 
         });

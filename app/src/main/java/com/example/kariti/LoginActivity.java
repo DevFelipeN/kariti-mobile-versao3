@@ -3,9 +3,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
@@ -13,6 +15,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText email, password;
 
     Button entrar, esqueciSenha;
+    ImageButton ocultarSenha;
 
     BancoDados bancoDados;
 
@@ -74,6 +77,25 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 }
+            }
+        });
+
+        ocultarSenha = findViewById(R.id.senhaoculta);
+        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        ocultarSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Verifica se a senha está visivel ou oculta.
+                if(password.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+//                  Se a senha está visivel ou oculta.
+                    password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ocultarSenha.setImageResource(R.mipmap.senhaoff);
+                } else {
+                    password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ocultarSenha.setImageResource(R.mipmap.senhaon);
+                }
+                password.setSelection(password.getText().length());
             }
         });
     }

@@ -4,13 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class CodSenhaActivity extends AppCompatActivity {
-
     EditText n1, n2, n3, n4;
     Button buttonValidarSenha;
     BancoDados bancoDados;
@@ -23,6 +24,10 @@ public class CodSenhaActivity extends AppCompatActivity {
         n2 = (EditText) findViewById(R.id.editTextNumber2);
         n3 = (EditText) findViewById(R.id.editTextNumber3);
         n4 = (EditText) findViewById(R.id.editTextNumber4);
+
+        addTextWatcher(n1, n2);
+        addTextWatcher(n2, n3);
+        addTextWatcher(n3, n4);
 
         bancoDados = new BancoDados(this);
 
@@ -48,6 +53,24 @@ public class CodSenhaActivity extends AppCompatActivity {
                     } else {Toast.makeText(CodSenhaActivity.this, "Erro: Usuário não Registrado! ", Toast.LENGTH_SHORT).show();}
                 }else{
                     Toast.makeText(CodSenhaActivity.this, "Código Inválido!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void addTextWatcher(final EditText currentEditText, final EditText nextEditText) {
+        currentEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() > 0) {
+                    nextEditText.requestFocus();
                 }
             }
         });

@@ -22,7 +22,7 @@ public class BancoDados extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase data_base) {
         try {
-            data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, user TEXT, email TEXT UNIQUE, password varchar(256))");
+            data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
             //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT)");
         }catch(Exception e){
@@ -42,10 +42,10 @@ public class BancoDados extends SQLiteOpenHelper {
 
     }
     //Metodo para inserir dados no Banco de Dados
-    public Boolean insertData(String user, String password, String email){
+    public Boolean insertData(String nome, String password, String email){
             SQLiteDatabase data_base = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put("user", user);
+            contentValues.put("nome", nome);
             contentValues.put("password", to256(password));
             contentValues.put("email", email);
             long inserir = data_base.insert("usuario", null, contentValues);
@@ -67,7 +67,7 @@ public class BancoDados extends SQLiteOpenHelper {
             SQLiteDatabase data_base = this.getWritableDatabase();
             String altera = "UPDATE usuario SET password=? WHERE id=?";
             SQLiteStatement stmt = data_base.compileStatement(altera);
-            stmt.bindString(1, password);
+            stmt.bindString(1, to256(password));
             stmt.bindLong(2, id);
             stmt.executeUpdateDelete();
             data_base.close();
@@ -103,9 +103,9 @@ public class BancoDados extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean checkuser(String user, String email) {
+    public Boolean checkNome(String nome, String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where user =? and email = ?", new String[]{user, email});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where nome =? and email = ?", new String[]{nome, email});
         if (cursor.getCount() > 0)
             return true;
         else

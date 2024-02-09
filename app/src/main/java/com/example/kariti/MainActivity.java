@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 else{
                     if(password.equals(repassword)){
-                        Boolean checkuserMail = bancoDados.checkuser(usernome, emails);
+                        Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
                         if(checkuserMail==false){
                             String cod = gerarCodigo.gerarVerificador();
                             Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import java.nio.charset.StandardCharsets;
@@ -49,9 +50,7 @@ public class BancoDados extends SQLiteOpenHelper {
             contentValues.put("email", email);
             long inserir = data_base.insert("usuario", null, contentValues);
             if (inserir == -1) return false;
-            else {
-                return true;
-            }
+            else {return true;}
     }
     public Boolean inserirDadosEscola(String nomeEscola, String bairro){
         SQLiteDatabase data_base = this.getWritableDatabase();
@@ -60,9 +59,22 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("bairro", bairro);
         long inserir = data_base.insert("escola", null, contentValues);
         if (inserir == -1) return false;
-        else {
-            return true;
-        }
+        else {return true;}
+    }
+
+    public Boolean upadateSenha(String password, Integer id){
+        try {
+            SQLiteDatabase data_base = this.getWritableDatabase();
+            String altera = "UPDATE usuario SET password=? WHERE id=?";
+            SQLiteStatement stmt = data_base.compileStatement(altera);
+            stmt.bindString(1, password);
+            stmt.bindLong(2, id);
+            stmt.executeUpdateDelete();
+            data_base.close();
+
+
+        }catch (Exception e){e.printStackTrace();}
+       return true;
     }
 
     private static String bytesToHex(byte[] hash) {
@@ -99,14 +111,22 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-    public Boolean checkemail(String email) {
+    public Integer checkemail(String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from usuario where email = ?", new String[]{email});
         if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+            cursor.moveToFirst();
+        return cursor.getInt(0);
     }
+
+    public String pegaNome(String id) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from usuario where id = ?", new String[]{id});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(1);
+    }
+
     //Verifica se a senha Ligada ao email é a mesma informada
     public Boolean checkemailpass(String email, String password){
         SQLiteDatabase data_base = this.getWritableDatabase();

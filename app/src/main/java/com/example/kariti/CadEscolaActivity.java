@@ -91,7 +91,7 @@ public class CadEscolaActivity extends AppCompatActivity {
 
         nomeEscola = findViewById(R.id.editTextNomeEscola);
         bairr0 = findViewById(R.id.editTextBairro);
-        cadastrarEscola = findViewById(R.id.buttonCadastrar);
+        cadastrarEscola = findViewById(R.id.buttonAlterar);
 
         cadastrarEscola.setOnClickListener(new View.OnClickListener(){
             @Override

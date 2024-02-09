@@ -40,20 +40,32 @@ public class CodSenhaActivity extends AppCompatActivity {
                 String v3 = n3.getText().toString();
                 String v4 = n4.getText().toString();
                 String codigitado = v1+v2+v3+v4;
+                String identificacao = getIntent().getExtras().getString("identificador");
                 String usernome = getIntent().getExtras().getString("nome");
                 String password = getIntent().getExtras().getString("senha");
                 String emails = getIntent().getExtras().getString("email");
                 String codorigin = getIntent().getExtras().getString("cod");
                 if(codigitado.equals(codorigin)) {
-                    Boolean insert = bancoDados.insertData(usernome, password, emails);
-                    if (insert == true) {
-                        Toast.makeText(CodSenhaActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
-                    } else {Toast.makeText(CodSenhaActivity.this, "Erro: Usuário não Registrado! ", Toast.LENGTH_SHORT).show();}
-                }else{
-                    Toast.makeText(CodSenhaActivity.this, "Código Inválido!", Toast.LENGTH_SHORT).show();
-                }
+                    if(identificacao=="0") {
+                        Boolean insert = bancoDados.insertData(usernome, password, emails);
+                        if (insert == true) {
+                            Toast.makeText(CodSenhaActivity.this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(CodSenhaActivity.this, "Erro: Usuário não Registrado! ", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Integer id = getIntent().getExtras().getInt("id");
+                        String ids = Integer.toString(id);
+                        String nome = bancoDados.pegaNome(ids);
+                        Intent proxima = new Intent(getApplicationContext(), AtualizarSenha.class);
+                        proxima.putExtra("id", id);
+                        proxima.putExtra("nome", nome);
+                        proxima.putExtra("email", emails);
+                        startActivity(proxima);
+                    }
+               }else{Toast.makeText(CodSenhaActivity.this, "Código Inválido!", Toast.LENGTH_SHORT).show();}
             }
         });
     }

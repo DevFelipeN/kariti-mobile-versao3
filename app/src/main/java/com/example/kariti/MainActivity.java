@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,12 +29,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nome = findViewById(R.id.editTextNome);
-        email = findViewById(R.id.editTextEmail);
-        senha = findViewById(R.id.editTextPassword);
-        confirmarSenha = findViewById(R.id.editTextConfirmPassword);
+        nome = findViewById(R.id.editTextNomeCad);
+        email = findViewById(R.id.editTextEmailCad);
+        senha = findViewById(R.id.editTextPasswordNova);
+        confirmarSenha = findViewById(R.id.editTextConfirmPasswordNova);
         voltar = findViewById(R.id.buttonVoltar);
-        cadastro = findViewById(R.id.buttonCadastrar);
+        cadastro = findViewById(R.id.buttonAlterar);
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                             Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
                             if(mandaEmail==true) {
                                 Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                proxima.putExtra("identificador","0");
                                 proxima.putExtra("nome",usernome);
                                 proxima.putExtra("email", emails);
                                 proxima.putExtra("senha", password);
@@ -117,10 +117,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);
-        startActivity(intent);
-    }
-    public void mudarParaTelaSenha(){
-        Intent intent = new Intent(this, CodSenhaActivity.class);
         startActivity(intent);
     }
 }

@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                         Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
                         if(mandaEmail==true) {
                             Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                            proxima.putExtra("identificador","1");
+                            proxima.putExtra("identificador",1);
                             proxima.putExtra("id", id);
                             proxima.putExtra("email", confEmail);
                             proxima.putExtra("cod", cod);

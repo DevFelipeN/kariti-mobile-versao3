@@ -19,6 +19,8 @@ public class LoginActivity extends AppCompatActivity {
 
     BancoDados bancoDados;
 
+    CodSenhaActivity codSenhaActivity;
+
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
     @Override
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
+        codSenhaActivity = new CodSenhaActivity();
 
 
         entrar.setOnClickListener(new View.OnClickListener() {
@@ -65,17 +68,21 @@ public class LoginActivity extends AppCompatActivity {
                 if(confEmail.equals(""))
                     Toast.makeText(LoginActivity.this, "Favor Informar Email", Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean verBanco = bancoDados.checkemail(confEmail);
-                    if(verBanco==true){
+                    Integer id = bancoDados.checkemail(confEmail);
+                    if(id>0){
                         String cod = gerarCodigo.gerarVerificador();
                         Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
                         if(mandaEmail==true) {
-                            Toast.makeText(LoginActivity.this, "Em Desenvolvimento!!!", Toast.LENGTH_SHORT).show();
-                            //Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                            //startActivity(intencion);
+                            Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                            proxima.putExtra("identificador","1");
+                            proxima.putExtra("id", id);
+                            proxima.putExtra("email", confEmail);
+                            proxima.putExtra("cod", cod);
+                            startActivity(proxima);
                         }
+                    }else{
+                        Toast.makeText(LoginActivity.this, "E-mail não cadastrado!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         });

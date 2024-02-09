@@ -1,6 +1,9 @@
 package com.example.kariti;
 
 
+import android.util.Patterns;
+import android.widget.Toast;
+
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -14,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 public class EnviarEmail {
 
-    public Boolean enviaCodigo(String email, String codigo){
+    public Boolean enviaCodigo(String email, String codigo) {
         Properties prop = System.getProperties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "465");
@@ -29,20 +32,20 @@ public class EnviarEmail {
         try {
             MimeMessage m = new MimeMessage(session);
             m.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            m.setSubject("Código de verificação do KARITI ("+codigo+")");
+            m.setSubject("Código de verificação do KARITI (" + codigo + ")");
             m.setContent("<p>Insira do código de 4 dígitos abaixo para confirmar sua identidade no aplicativo Kariti:</p><br><b>" + codigo + "</b><br><p>Obrigado por nos ajudar a proteger sua conta.</p><br><p><b>Equipe Kariti</b></p>", "text/html; charset=utf-8");
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Transport.send(m);
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
                 }
             });
             t.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 

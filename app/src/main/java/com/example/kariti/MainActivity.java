@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,22 +54,24 @@ public class MainActivity extends AppCompatActivity {
                 if(usernome.equals("")||password.equals("")||repassword.equals("")||emails.equals(""))
                     Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 else{
-                    if(password.equals(repassword)){
-                        Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
-                        if(checkuserMail==false){
-                            String cod = gerarCodigo.gerarVerificador();
-                            Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
-                            if(mandaEmail==true) {
-                                Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                proxima.putExtra("identificador","0");
-                                proxima.putExtra("nome",usernome);
-                                proxima.putExtra("email", emails);
-                                proxima.putExtra("senha", password);
-                                proxima.putExtra("cod", cod);
-                                startActivity(proxima);
-                            }else{Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
-                        }else{Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
-                    }else{Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
+                    if(!emails.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emails).matches())
+                        if (password.equals(repassword)) {
+                            Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
+                            if (checkuserMail == false) {
+                                String cod = gerarCodigo.gerarVerificador();
+                                Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
+                                if (mandaEmail == true) {
+                                    Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                    proxima.putExtra("identificador", "0");
+                                    proxima.putExtra("nome", usernome);
+                                    proxima.putExtra("email", emails);
+                                    proxima.putExtra("senha", password);
+                                    proxima.putExtra("cod", cod);
+                                    startActivity(proxima);
+                                } else {Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
+                            } else {Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
+                        } else {Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
+                    else{Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();}
                 }
             }
         });

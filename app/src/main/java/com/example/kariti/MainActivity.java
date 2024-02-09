@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                                 Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
                                 if (mandaEmail == true) {
                                     Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                    proxima.putExtra("identificador", "0");
+                                    proxima.putExtra("identificador", 0);
                                     proxima.putExtra("nome", usernome);
                                     proxima.putExtra("email", emails);
                                     proxima.putExtra("senha", password);

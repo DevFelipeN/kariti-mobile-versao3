@@ -59,6 +59,7 @@ public class CodSenhaActivity extends AppCompatActivity {
                         Integer id = getIntent().getExtras().getInt("id");
                         String ids = Integer.toString(id);
                         String nome = bancoDados.pegaNome(ids);
+                        Toast.makeText(CodSenhaActivity.this, "To aqui: "+nome, Toast.LENGTH_SHORT).show();
                         Intent proxima = new Intent(getApplicationContext(), AtualizarSenha.class);
                         proxima.putExtra("id", id);
                         proxima.putExtra("nome", nome);

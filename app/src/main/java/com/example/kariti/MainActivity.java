@@ -6,7 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nome = findViewById(R.id.editTextNome);
-        email = findViewById(R.id.editTextEmail);
-        senha = findViewById(R.id.editTextPassword);
-        confirmarSenha = findViewById(R.id.editTextConfirmPassword);
+        nome = findViewById(R.id.editTextNomeCad);
+        email = findViewById(R.id.editTextEmailCad);
+        senha = findViewById(R.id.editTextPasswordNova);
+        confirmarSenha = findViewById(R.id.editTextConfirmPasswordNova);
         voltar = findViewById(R.id.buttonVoltar);
-        cadastro = findViewById(R.id.buttonCadastrar);
+        cadastro = findViewById(R.id.buttonAlterar);
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
@@ -54,21 +54,24 @@ public class MainActivity extends AppCompatActivity {
                 if(usernome.equals("")||password.equals("")||repassword.equals("")||emails.equals(""))
                     Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 else{
-                    if(password.equals(repassword)){
-                        Boolean checkuserMail = bancoDados.checkuser(usernome, emails);
-                        if(checkuserMail==false){
-                            String cod = gerarCodigo.gerarVerificador();
-                            Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
-                            if(mandaEmail==true) {
-                                Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                proxima.putExtra("nome",usernome);
-                                proxima.putExtra("email", emails);
-                                proxima.putExtra("senha", password);
-                                proxima.putExtra("cod", cod);
-                                startActivity(proxima);
-                            }else{Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
-                        }else{Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
-                    }else{Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
+                    if(!emails.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emails).matches())
+                        if (password.equals(repassword)) {
+                            Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
+                            if (checkuserMail == false) {
+                                String cod = gerarCodigo.gerarVerificador();
+                                Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
+                                if (mandaEmail == true) {
+                                    Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                    proxima.putExtra("identificador", 0);
+                                    proxima.putExtra("nome", usernome);
+                                    proxima.putExtra("email", emails);
+                                    proxima.putExtra("senha", password);
+                                    proxima.putExtra("cod", cod);
+                                    startActivity(proxima);
+                                } else {Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
+                            } else {Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
+                        } else {Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
+                    else{Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();}
                 }
             }
         });
@@ -117,10 +120,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void voltarTelaWelcome(){
         Intent intent = new Intent(this, WelcomeActivity.class);
-        startActivity(intent);
-    }
-    public void mudarParaTelaSenha(){
-        Intent intent = new Intent(this, CodSenhaActivity.class);
         startActivity(intent);
     }
 }

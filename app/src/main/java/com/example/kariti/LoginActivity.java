@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ public class LoginActivity extends AppCompatActivity {
     ImageButton ocultarSenha;
 
     BancoDados bancoDados;
+
+    CodSenhaActivity codSenhaActivity;
 
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
@@ -35,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
+        codSenhaActivity = new CodSenhaActivity();
 
 
         entrar.setOnClickListener(new View.OnClickListener() {
@@ -46,16 +50,15 @@ public class LoginActivity extends AppCompatActivity {
                 if(emailConf.equals("")||pass.equals(""))
                     Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
-                    if(checkemailpass==true) {
-                        Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
-                    }
+                    if(!emailConf.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailConf).matches()) {
+                        Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
+                        if (checkemailpass == true) {
+                            Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                            startActivity(intent);
+                        } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
+                    }else{Toast.makeText(LoginActivity.this, "E-mail Inválido", Toast.LENGTH_SHORT).show();}
                 }
-
             }
         });
         esqueciSenha.setOnClickListener(new View.OnClickListener() {
@@ -65,16 +68,21 @@ public class LoginActivity extends AppCompatActivity {
                 if(confEmail.equals(""))
                     Toast.makeText(LoginActivity.this, "Favor Informar Email", Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean verBanco = bancoDados.checkemail(confEmail);
-                    if(verBanco==true){
+                    Integer id = bancoDados.checkemail(confEmail);
+                    if(id>0){
                         String cod = gerarCodigo.gerarVerificador();
                         Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
                         if(mandaEmail==true) {
-                            Intent intencion = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                            startActivity(intencion);
+                            Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                            proxima.putExtra("identificador",1);
+                            proxima.putExtra("id", id);
+                            proxima.putExtra("email", confEmail);
+                            proxima.putExtra("cod", cod);
+                            startActivity(proxima);
                         }
+                    }else{
+                        Toast.makeText(LoginActivity.this, "E-mail não cadastrado!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         });

@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
-        android:id="@+id/editTextNome"
+        android:id="@+id/editTextNomeCad"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
@@ -58,14 +58,14 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailCad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
-        android:id="@+id/editTextEmail"
+        android:id="@+id/editTextEmailCad"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -80,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNome" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomeCad" />
 
     <TextView
         android:id="@+id/textViewSenhaConfirma"
@@ -90,8 +90,8 @@
         android:text="@string/textViewconfirmar"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/editTextConfirmPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmPasswordNova"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordNova"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -103,12 +103,12 @@
         android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@+id/editTextPasswordNova"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editTextConfirmPassword"
+        android:id="@+id/editTextConfirmPasswordNova"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
@@ -126,7 +126,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
 
     <Button
-        android:id="@+id/buttonCadastrar"
+        android:id="@+id/buttonAlterar"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -138,16 +138,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPasswordNova" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNome"
-        app:layout_constraintStart_toStartOf="@+id/editTextNome"
-        app:layout_constraintTop_toTopOf="@+id/editTextNome"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNomeCad"
+        app:layout_constraintStart_toStartOf="@+id/editTextNomeCad"
+        app:layout_constraintTop_toTopOf="@+id/editTextNomeCad"
         app:srcCompat="@mipmap/usuario"
         tools:ignore="MissingConstraints" />
 
@@ -156,9 +156,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextEmail"
-        app:layout_constraintStart_toStartOf="@+id/editTextEmail"
-        app:layout_constraintTop_toTopOf="@+id/editTextEmail"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextEmailCad"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmailCad"
+        app:layout_constraintTop_toTopOf="@+id/editTextEmailCad"
         app:srcCompat="@mipmap/email"
         tools:ignore="MissingConstraints" />
 
@@ -171,11 +171,11 @@
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextConfirmPassword"
+        app:layout_constraintTop_toTopOf="@+id/editTextConfirmPasswordNova"
         app:srcCompat="@mipmap/senhaoff" />
 
     <EditText
-        android:id="@+id/editTextPassword"
+        android:id="@+id/editTextPasswordNova"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
@@ -200,7 +200,7 @@
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextPassword"
+        app:layout_constraintTop_toTopOf="@+id/editTextPasswordNova"
         app:srcCompat="@mipmap/senhaoff" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

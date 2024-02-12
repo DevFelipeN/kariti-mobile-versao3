@@ -16,7 +16,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "data_base.db";
 
     public BancoDados(Context context) {
-        super(context, "data_base", null, 13);
+        super(context, "data_base", null, 14);
     }
 
     @Override

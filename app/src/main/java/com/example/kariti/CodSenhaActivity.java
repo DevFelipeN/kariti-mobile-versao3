@@ -9,12 +9,14 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CodSenhaActivity extends AppCompatActivity {
     EditText n1, n2, n3, n4;
     Button buttonValidarSenha;
     BancoDados bancoDados;
+    TextView msgValidacao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,10 @@ public class CodSenhaActivity extends AppCompatActivity {
                }else{Toast.makeText(CodSenhaActivity.this, "Código Inválido!", Toast.LENGTH_SHORT).show();}
             }
         });
+        String emails = getIntent().getExtras().getString("email");
+        String frase = "Código de validação ENVIADO para " + emails;
+        msgValidacao = findViewById(R.id.textViewMsgValidacao);
+        msgValidacao.setText(frase);
     }
     private void addTextWatcher(final EditText currentEditText, final EditText nextEditText) {
         currentEditText.addTextChangedListener(new TextWatcher() {

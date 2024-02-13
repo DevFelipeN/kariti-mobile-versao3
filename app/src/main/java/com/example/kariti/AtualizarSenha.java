@@ -14,8 +14,9 @@ import android.widget.Toast;
 public class AtualizarSenha extends AppCompatActivity {
 
     EditText editTextNome, editTextEmail, novaSenha, confNovaSenha;
-    Button alterar, voltar;
+    Button alterar;
     BancoDados bancoDados;
+    ImageButton ocultarSenha, ocultarSenha2, voltar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class AtualizarSenha extends AppCompatActivity {
         novaSenha = (EditText) findViewById(R.id.editTextPasswordNova);
         confNovaSenha = (EditText) findViewById(R.id.editTextConfirmPasswordNova);
         alterar = (Button) findViewById(R.id.buttonAlterar);
-        voltar = (Button) findViewById(R.id.buttonVoltar);
+        voltar = (ImageButton) findViewById(R.id.btn_voltar_left);
 
         Integer id = getIntent().getExtras().getInt("id");
         String nome = getIntent().getExtras().getString("nome");
@@ -54,6 +55,41 @@ public class AtualizarSenha extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
                 startActivity(intent);
+            }
+        });
+        ocultarSenha = findViewById(R.id.senhaoculta);
+        novaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        ocultarSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Verifica se a senha está visivel ou oculta.
+                if(novaSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+//                  Se a senha está visivel ou oculta.
+                    novaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ocultarSenha.setImageResource(R.mipmap.senhaoff);
+                } else {
+                    novaSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ocultarSenha.setImageResource(R.mipmap.senhaon);
+                }
+                novaSenha.setSelection(novaSenha.getText().length());
+            }
+        });
+        ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
+        confNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        ocultarSenha2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Verifica se a senha está visivel ou oculta.
+                if(confNovaSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+//                  Se a senha está visivel ou oculta.
+                    confNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ocultarSenha2.setImageResource(R.mipmap.senhaoff);
+                } else {
+                    confNovaSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ocultarSenha2.setImageResource(R.mipmap.senhaon);
+                }
+                confNovaSenha.setSelection(confNovaSenha.getText().length());
             }
         });
     }

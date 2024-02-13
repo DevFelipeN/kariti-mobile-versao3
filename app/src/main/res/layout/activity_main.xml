@@ -7,22 +7,6 @@
     android:background="@color/tranparente"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/buttonVoltar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/tranparente"
-        android:fontFamily="sans-serif"
-        android:text="@string/buttonvoltarTela"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="2dp"
-        tools:text="@string/buttonvoltarTela" />
-
     <ImageView
         android:id="@+id/imageViewPerson"
         android:layout_width="144dp"
@@ -114,16 +98,33 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="@string/acessoSenha"
+        android:hint="@string/repetirSenha"
         android:inputType="textPassword"
+        android:maxLength="8"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:maxLength="8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
+
+    <ImageButton
+        android:id="@+id/btn_voltar_left"
+        android:layout_width="48dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:background="@color/tranparente"
+        android:contentDescription="@string/btnVoltar"
+        android:src="@mipmap/setaleft"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/buttonAlterar"
@@ -166,12 +167,16 @@
         android:id="@+id/imgButtonSenhaOFF"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextConfirmPasswordNova"
+        app:layout_constraintEnd_toEndOf="@+id/editTextConfirmPasswordNova"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmPasswordNova"
         app:layout_constraintTop_toTopOf="@+id/editTextConfirmPasswordNova"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@mipmap/senhaoff" />
 
     <EditText
@@ -195,12 +200,16 @@
         android:id="@+id/senhaoculta"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextPasswordNova"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPasswordNova"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextPasswordNova"
         app:layout_constraintTop_toTopOf="@+id/editTextPasswordNova"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@mipmap/senhaoff" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

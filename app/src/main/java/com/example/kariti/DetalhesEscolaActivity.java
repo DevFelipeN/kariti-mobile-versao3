@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class DetalhesEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
-    Button btnAluno;
+    Button btnTurma, btnAluno, btnProva, btnCalendario;
+    TextView nomeEscola;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,12 +21,21 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.btn_voltar_left);
         btnVoltar.setVisibility(View.VISIBLE);
 
+        btnTurma = findViewById(R.id.btnTurma);
         btnAluno = findViewById(R.id.buttonAluno);
+        btnProva = findViewById(R.id.btnProva);
+        btnCalendario = findViewById(R.id.btnCalendar);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        btnTurma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                irTelaTurma();
             }
         });
         btnAluno.setOnClickListener(new View.OnClickListener() {
@@ -33,9 +44,23 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
                 irTelaAluno();
             }
         });
+        btnProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                irTelaProva();
+            }
+        });
+    }
+    public void irTelaTurma(){
+        Intent intent = new Intent(this, TurmaActivity.class);
+        startActivity(intent);
     }
     public void irTelaAluno(){
-        Intent intent = new Intent(this, CadAlunoActivity.class);
+        Intent intent = new Intent(this, AlunoActivity.class);
+        startActivity(intent);
+    }
+    public void irTelaProva(){
+        Intent intent = new Intent(this, ProvaActivity.class);
         startActivity(intent);
     }
 

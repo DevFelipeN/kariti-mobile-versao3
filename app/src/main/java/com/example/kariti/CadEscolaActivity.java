@@ -39,7 +39,7 @@ public class CadEscolaActivity extends AppCompatActivity {
                 String nome = nomeEscola.getText().toString();
                 String bairro = bairr0.getText().toString();
 
-                if (nomeEscola.equals("") || bairro.equals("")) {
+                if (nome.equals("") || bairro.equals("")) {
                     Toast.makeText(CadEscolaActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean checkEscola = bancoDados.checkEscola(nome);

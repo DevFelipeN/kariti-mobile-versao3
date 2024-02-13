@@ -16,7 +16,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "data_base.db";
 
     public BancoDados(Context context) {
-        super(context, "data_base", null, 14);
+        super(context, "data_base", null, 16);
     }
 
     @Override
@@ -25,6 +25,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
             //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT)");
+            data_base.execSQL("create Table aluno (id Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, cpf TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -35,6 +36,7 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             data_base.execSQL("drop Table if exists usuario");
             data_base.execSQL("drop Table if exists escola");
+            data_base.execSQL("drop Table if exists aluno");
             onCreate(data_base);
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
@@ -60,6 +62,16 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = data_base.insert("escola", null, contentValues);
         if (inserir == -1) return false;
         else {return true;}
+    }
+    public Boolean inserirDadosAluno(String nomeAluno, String email, String cpf){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nome", nomeAluno);
+        contentValues.put("email", email);
+        contentValues.put("cpf", cpf);
+
+        long inserir = database.insert("aluno", null, contentValues);
+        return inserir != -1;
     }
 
     public Boolean upadateSenha(String password, Integer id){
@@ -145,5 +157,12 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
 
+    }
+    public Boolean checkAluno(String cpf){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE cpf = ?", new String[]{cpf});
+
+        if (cursor.getCount() > 0) return true;
+        else return false;
     }
 }

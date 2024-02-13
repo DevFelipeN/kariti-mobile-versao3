@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
-        android:id="@+id/editTextNomeCad"
+        android:id="@+id/editTextNomeAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
@@ -60,14 +60,14 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:focusable="false"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmailCad"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAluno"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
-        android:id="@+id/editTextEmailCad"
+        android:id="@+id/editTextEmailAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNomeCad" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomeAluno" />
 
     <TextView
         android:id="@+id/textViewSenhaConfirma"
@@ -94,7 +94,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/editTextConfirmPasswordNova"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordNova"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCpfAluno"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -106,8 +106,8 @@
         android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/editTextPasswordNova"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
+        app:layout_constraintStart_toStartOf="@+id/editTextCpfAluno"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailAluno"
         tools:ignore="MissingConstraints" />
 
     <EditText
@@ -160,7 +160,7 @@
         app:srcCompat="@mipmap/senhaoff" />
 
     <EditText
-        android:id="@+id/editTextPasswordNova"
+        android:id="@+id/editTextCpfAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"

@@ -27,6 +27,27 @@ public class CadAlunoActivity extends AppCompatActivity {
         });
         Spinner spinnerTurma = findViewById(R.id.spinner_turma);
 
+        btnCadAluno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mudarParaTelaFormCadAluno();
+            }
+        });
+        btnVisualizarAluno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mudarParaTelaVisulaizarAluno();
+            }
+        });
+
+    }
+    public void mudarParaTelaFormCadAluno(){
+        Intent intent = new Intent(this, FormCadAlunoActivity.class);
+        startActivity(intent);
+    }
+    public void mudarParaTelaVisulaizarAluno(){
+        Intent intent = new Intent(this, VisualAlunoActivity.class);
+        startActivity(intent);
         List<String> turmas = new ArrayList<>();
         turmas.add("Turma");
         turmas.add("Turma 1");

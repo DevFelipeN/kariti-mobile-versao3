@@ -16,8 +16,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     EditText nome, email, senha, confirmarSenha;
-    Button voltar, cadastro;
-    ImageButton ocultarSenha, ocultarSenha2;
+    Button cadastro;
+    ImageButton ocultarSenha, ocultarSenha2, voltar;
 
     BancoDados bancoDados;
     EnviarEmail enviarEmail;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextEmailAluno);
         senha = findViewById(R.id.editTextCpfAluno);
         confirmarSenha = findViewById(R.id.editTextConfirmPasswordNova);
-        voltar = findViewById(R.id.buttonVoltar);
+        voltar = findViewById(R.id.btn_voltar_left);
         cadastro = findViewById(R.id.buttonAlterar);
 
         bancoDados = new BancoDados(this);

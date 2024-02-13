@@ -5,7 +5,8 @@
     <string name="email">E-mail</string>
     <string name="sexo">Sexo</string>
     <string name="cpf">CPF</string>
-    <string name="acessoSenha">Somente números</string>
+    <string name="acessoSenha">Digite sua senha</string>
+    <string name="repetirSenha">Repita a senha</string>
     <string name="textViewsenha">Senha de Acesso</string>
     <string name="textViewconfirmar">Confirmar Senha</string>
     <string name="buttonCadastrar">Cadastrar</string>
@@ -38,6 +39,7 @@
     <string name="bairroSchool">Bairro</string>
     <string name="buscNameAluno">Digite o nome do aluno</string>
     <string name="senhahint">********</string>
+    <string name="btnAlterarSenha">Alterar Senha</string>
 
     <string name="textViewAluno">Aluno</string>
     <string name="textViewTurma">Turma</string>
@@ -47,11 +49,21 @@
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
 
+    <string name="buttonCadTurma">Cadastrar Turma</string>
+    <string name="buttonVisuTurma">Visualizar Turma</string>
+
+    <string name="buttonCadProva">Cadastrar Prova</string>
+    <string name="buttonGerarCartao">Gerar Cartões</string>
+    <string name="buttonVisuProva">Visualizar Prova</string>
+    <string name="buttonCorrigirProva">Corrigir Prova</string>
+
 
     <string name="btnVoltar">Button Voltar</string>
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>
     <string name="imgProfessor">ImagemProfessor</string>
+    <string name="imgBtnSeta">ImagemSetaProx</string>
+    <string name="msgCodigo">Código de validação ENVIADO para</string>
 
 
 </resources>

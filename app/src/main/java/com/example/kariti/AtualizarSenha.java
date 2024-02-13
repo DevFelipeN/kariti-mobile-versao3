@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class AtualizarSenha extends AppCompatActivity {
@@ -22,9 +20,9 @@ public class AtualizarSenha extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atualizar_senha);
 
-        editTextNome = (EditText) findViewById(R.id.editTextNomeCad);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmailCad);
-        novaSenha = (EditText) findViewById(R.id.editTextPasswordNova);
+        editTextNome = (EditText) findViewById(R.id.editTextNomeAluno);
+        editTextEmail = (EditText) findViewById(R.id.editTextEmailAluno);
+        novaSenha = (EditText) findViewById(R.id.editTextCpfAluno);
         confNovaSenha = (EditText) findViewById(R.id.editTextConfirmPasswordNova);
         alterar = (Button) findViewById(R.id.buttonAlterar);
         voltar = (Button) findViewById(R.id.buttonVoltar);

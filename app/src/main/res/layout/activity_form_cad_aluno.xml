@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
-        android:id="@+id/editTextNomeCad"
+        android:id="@+id/editTextNomeAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
@@ -58,14 +58,14 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmailCad"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAluno"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
-        android:id="@+id/editTextEmailCad"
+        android:id="@+id/editTextEmailAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -80,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNomeCad" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomeAluno" />
 
     <Button
         android:id="@+id/buttonAlterar"
@@ -105,9 +105,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNomeCad"
-        app:layout_constraintStart_toStartOf="@+id/editTextNomeCad"
-        app:layout_constraintTop_toTopOf="@+id/editTextNomeCad"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNomeAluno"
+        app:layout_constraintStart_toStartOf="@+id/editTextNomeAluno"
+        app:layout_constraintTop_toTopOf="@+id/editTextNomeAluno"
         app:srcCompat="@mipmap/usuario"
         tools:ignore="MissingConstraints" />
 
@@ -117,14 +117,14 @@
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
         android:contentDescription="@string/email"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextEmailCad"
-        app:layout_constraintStart_toStartOf="@+id/editTextEmailCad"
-        app:layout_constraintTop_toTopOf="@+id/editTextEmailCad"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextEmailAluno"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmailAluno"
+        app:layout_constraintTop_toTopOf="@+id/editTextEmailAluno"
         app:srcCompat="@mipmap/email"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editTextPasswordNova"
+        android:id="@+id/editTextCpfAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -137,7 +137,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailAluno"
         tools:ignore="Autofill,MissingConstraints,TextFields" />
 
     <Spinner
@@ -148,7 +148,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordNova"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCpfAluno"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

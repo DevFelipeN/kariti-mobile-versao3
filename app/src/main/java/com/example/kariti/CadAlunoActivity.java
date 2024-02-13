@@ -36,7 +36,7 @@ public class CadAlunoActivity extends AppCompatActivity {
         btnCadAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mudarParaTelaCadastroAluno();
+                mudarParaTelaFormCadAluno();
             }
         });
         btnVisualizarAluno.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +47,7 @@ public class CadAlunoActivity extends AppCompatActivity {
         });
 
     }
-    public void mudarParaTelaCadastroAluno(){
+    public void mudarParaTelaFormCadAluno(){
         Intent intent = new Intent(this, FormCadAlunoActivity.class);
         startActivity(intent);
     }

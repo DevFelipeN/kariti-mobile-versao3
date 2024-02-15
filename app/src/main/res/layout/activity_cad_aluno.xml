@@ -84,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextNomeCad" />
 
     <Button
-        android:id="@+id/buttonAlterar"
+        android:id="@+id/buttonCadastrar"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -125,7 +125,7 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editTextPasswordNova"
+        android:id="@+id/editTextNumberIdAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -149,7 +149,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordNova"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberIdAluno"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

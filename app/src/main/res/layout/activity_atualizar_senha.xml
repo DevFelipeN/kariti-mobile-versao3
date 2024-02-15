@@ -129,7 +129,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
 
     <Button
-        android:id="@+id/buttonAlterar"
+        android:id="@+id/buttonCadastrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -184,11 +184,11 @@
         android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextPasswordNova"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPasswordNova"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNumberIdAluno"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNumberIdAluno"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextPasswordNova"
-        app:layout_constraintTop_toTopOf="@+id/editTextPasswordNova"
+        app:layout_constraintStart_toStartOf="@+id/editTextNumberIdAluno"
+        app:layout_constraintTop_toTopOf="@+id/editTextNumberIdAluno"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@mipmap/senhaoff" />
 

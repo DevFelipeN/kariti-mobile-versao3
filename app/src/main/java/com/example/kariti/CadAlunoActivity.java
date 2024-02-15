@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +47,13 @@ public class CadAlunoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nome = nomeAluno.getText().toString();
                 String email = emailAluno.getText().toString();
-                String cpf = cpfAluno.getText().toString();
 
-                if (nome.equals("")|| email.equals("")||cpf.equals("")){
-                    Toast.makeText(CadAlunoActivity.this, "Preecha todos os campos!", Toast.LENGTH_SHORT).show();
+                if (nome.equals("")|| email.equals("")){
+                    Toast.makeText(CadAlunoActivity.this, "Os campos 'Nome' e 'Email' são obrigatórios!", Toast.LENGTH_SHORT).show();
                 }else {
                     Boolean checkAluno = bancoDados.checkAluno(nome);
                     if (!checkAluno) {
-                        Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, cpf);
+                        Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email);
                         if (insertAluno) {
                             Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);

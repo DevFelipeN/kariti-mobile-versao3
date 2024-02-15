@@ -78,8 +78,9 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCadastrar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNomeCad" />
 
@@ -87,7 +88,8 @@
         android:id="@+id/buttonCadastrar"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="272dp"
         android:background="@drawable/button_selector"
         android:text="@string/buttonCadastrar"
         android:textAlignment="center"
@@ -95,10 +97,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_turma"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
         tools:ignore="MissingConstraints" />
 
     <ImageView
@@ -122,34 +123,6 @@
         app:layout_constraintStart_toStartOf="@+id/editTextEmailCad"
         app:layout_constraintTop_toTopOf="@+id/editTextEmailCad"
         app:srcCompat="@mipmap/email"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/editTextNumberIdAluno"
-        android:layout_width="320dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/borda_botao"
-        android:ems="10"
-        android:hint="@string/EditTextIdAluno"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
-        tools:ignore="Autofill,MissingConstraints,TextFields" />
-
-    <Spinner
-        android:id="@+id/spinner_turma"
-        android:layout_width="320dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberIdAluno"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

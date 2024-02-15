@@ -33,7 +33,20 @@ public class CadAlunoActivity extends AppCompatActivity {
         cpfAluno = findViewById(R.id.editTextNumberIdAluno);
         voltar = findViewById(R.id.btn_voltar_left);
         cadastrar = findViewById(R.id.buttonCadastrar);
+        spinnerTurma = findViewById(R.id.spinner_turma);
 
+        // Criação da lista de turmas
+        List<String> turmas = new ArrayList<>();
+        turmas.add("Turma");
+        turmas.add("Turma 1");
+        turmas.add("Turma 2");
+        turmas.add("Turma 3");
+
+        // Configuração do Spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, turmas);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTurma.setAdapter(adapter);
+        spinnerTurma.setSelection(0);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +66,7 @@ public class CadAlunoActivity extends AppCompatActivity {
                 }else {
                     Boolean checkAluno = bancoDados.checkAluno(nome);
                     if (!checkAluno) {
-                        Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email);
+                        Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, spinnerTurma.getSelectedItem().toString());
                         if (insertAluno) {
                             Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
@@ -68,24 +81,15 @@ public class CadAlunoActivity extends AppCompatActivity {
                 }
         });
     }
+
     public void mudarParaTelaFormCadAluno(){
         Intent intent = new Intent(this, CadAlunoActivity.class);
         startActivity(intent);
     }
-    public void mudarParaTelaVisulAluno(){
+    public void mudarParaTelaVisulAluno() {
+
+        // Inicia a nova atividade após a configuração do Spinner
         Intent intent = new Intent(this, VisualAlunoActivity.class);
         startActivity(intent);
-        List<String> turmas = new ArrayList<>();
-        turmas.add("Turma");
-        turmas.add("Turma 1");
-        turmas.add("Turma 2");
-        turmas.add("Turma 3");
-
-        Spinner spinnerTurma = findViewById(R.id.spinner_turma);
-        // Criação do ArrayAdapter e configuração do Spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, turmas);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTurma.setAdapter(adapter);
-        spinnerTurma.setSelection(0);
     }
 }

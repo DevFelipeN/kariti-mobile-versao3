@@ -16,7 +16,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "data_base.db";
 
     public BancoDados(Context context) {
-        super(context, "data_base", null, 17);
+        super(context, "data_base", null, 18);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
             //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT)");
-            data_base.execSQL("create Table aluno (id Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, cpf TEXT)");
+            data_base.execSQL("create Table aluno (id Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, turma TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -63,11 +63,12 @@ public class BancoDados extends SQLiteOpenHelper {
         if (inserir == -1) return false;
         else {return true;}
     }
-    public Boolean inserirDadosAluno(String nomeAluno, String email){
+    public Boolean inserirDadosAluno(String nomeAluno, String email, String turma){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nome", nomeAluno);
         contentValues.put("email", email);
+        contentValues.put("turma", turma);
 
         long inserir = database.insert("aluno", null, contentValues);
         return inserir != -1;

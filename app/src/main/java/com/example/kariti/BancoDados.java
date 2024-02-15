@@ -63,12 +63,11 @@ public class BancoDados extends SQLiteOpenHelper {
         if (inserir == -1) return false;
         else {return true;}
     }
-    public Boolean inserirDadosAluno(String nomeAluno, String email, String cpf){
+    public Boolean inserirDadosAluno(String nomeAluno, String email){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nome", nomeAluno);
         contentValues.put("email", email);
-        contentValues.put("cpf", cpf);
 
         long inserir = database.insert("aluno", null, contentValues);
         return inserir != -1;

@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetalhesEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
     Button btnTurma, btnAluno, btnProva;
     TextView nomeEscola;
+
+    BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +27,12 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         btnTurma = findViewById(R.id.btnTurma);
         btnAluno = findViewById(R.id.buttonAluno);
         btnProva = findViewById(R.id.btnProva);
+        nomeEscola = findViewById(R.id.textViewNomeEscola);
+        bancoDados = new BancoDados(this);
+
+
+        String escola = getIntent().getExtras().getString("escola");
+        nomeEscola.setText(escola);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override

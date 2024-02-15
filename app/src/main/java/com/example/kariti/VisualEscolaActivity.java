@@ -17,12 +17,15 @@ import android.widget.Button;
 
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar, btnHome;
     private Toolbar toolbar;
+
+    BancoDados bancoDados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.btn_voltar_left);
         btnVoltar.setVisibility(View.VISIBLE);
         btnHome = findViewById(R.id.home_icon);
+        bancoDados = new BancoDados(this);
 
         BancoDados bancoDados = new BancoDados(this);
         SQLiteDatabase database = bancoDados.getReadableDatabase();
@@ -74,7 +78,12 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                telaDetalheEscola();
+                Toast.makeText(VisualEscolaActivity.this, "Id: "+id, Toast.LENGTH_SHORT).show();
+                String ids = Long.toString(id+1);
+                String escola = bancoDados.pegaEscola(ids);
+                Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
+                intent.putExtra("escola", escola);
+                startActivity(intent);
 
             }
         });
@@ -82,11 +91,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
     public void voltarTelaIncial() {
         Intent intent = new Intent(this, WelcomeActivity.class);
-        startActivity(intent);
-    }
-
-    public void telaDetalheEscola() {
-        Intent intent = new Intent(this, DetalhesEscolaActivity.class);
         startActivity(intent);
     }
 }

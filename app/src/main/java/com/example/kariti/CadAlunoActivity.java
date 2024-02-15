@@ -2,27 +2,39 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CadAlunoActivity extends AppCompatActivity {
     ImageButton voltar;
-    Button btnCadAluno;
+    EditText nomeCad, emailCad, idAluno;
+    Spinner spinnerTurma;
+    Button cadastrar;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cad_aluno);
 
+
+        nomeCad = findViewById(R.id.editTextNomeCad);
+        emailCad = findViewById(R.id.editTextEmailCad);
+        idAluno = findViewById(R.id.editTextNumberIdAluno);
+        cadastrar = findViewById(R.id.buttonCadastrar);
         voltar = findViewById(R.id.btn_voltar_left);
+
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,7 +42,7 @@ public class CadAlunoActivity extends AppCompatActivity {
             }
         });
 
-        btnCadAluno.setOnClickListener(new View.OnClickListener() {
+        cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mudarParaTelaVisulAluno();

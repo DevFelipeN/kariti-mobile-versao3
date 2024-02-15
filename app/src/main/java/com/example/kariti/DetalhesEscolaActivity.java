@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class DetalhesEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
-    Button btnTurma, btnAluno, btnProva, btnCalendario;
+    Button btnTurma, btnAluno, btnProva;
     TextView nomeEscola;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,6 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         btnTurma = findViewById(R.id.btnTurma);
         btnAluno = findViewById(R.id.buttonAluno);
         btnProva = findViewById(R.id.btnProva);
-        btnCalendario = findViewById(R.id.btnCalendar);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override

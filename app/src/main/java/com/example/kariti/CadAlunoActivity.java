@@ -17,22 +17,21 @@ import java.util.List;
 
 public class CadAlunoActivity extends AppCompatActivity {
     ImageButton voltar;
-    EditText nomeCad, emailCad, idAluno;
+    EditText nomeAluno, emailAluno, cpfAluno;
     Spinner spinnerTurma;
     Button cadastrar;
+    BancoDados bancoDados;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cad_aluno);
 
-
-        nomeCad = findViewById(R.id.editTextNomeCad);
-        emailCad = findViewById(R.id.editTextEmailCad);
-        idAluno = findViewById(R.id.editTextNumberIdAluno);
-        cadastrar = findViewById(R.id.buttonCadastrar);
+        nomeAluno = findViewById(R.id.editTextNomeCad);
+        emailAluno = findViewById(R.id.editTextEmailCad);
+        cpfAluno = findViewById(R.id.editTextNumberIdAluno);
         voltar = findViewById(R.id.btn_voltar_left);
-
+        cadastrar = findViewById(R.id.buttonCadastrar);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,13 +40,33 @@ public class CadAlunoActivity extends AppCompatActivity {
             }
         });
 
+        bancoDados = new BancoDados(this);
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mudarParaTelaVisulAluno();
-            }
-        });
+                String nome = nomeAluno.getText().toString();
+                String email = emailAluno.getText().toString();
+                String cpf = cpfAluno.getText().toString();
 
+                if (nome.equals("")|| email.equals("")||cpf.equals("")){
+                    Toast.makeText(CadAlunoActivity.this, "Preecha todos os campos!", Toast.LENGTH_SHORT).show();
+                }else {
+                    Boolean checkAluno = bancoDados.checkAluno(nome);
+                    if (!checkAluno) {
+                        Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, cpf);
+                        if (insertAluno) {
+                            Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(CadAlunoActivity.this, "Falha no cadastro do aluno!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                            Toast.makeText(CadAlunoActivity.this, "Escola já cadastrada!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        });
     }
     public void mudarParaTelaFormCadAluno(){
         Intent intent = new Intent(this, CadAlunoActivity.class);

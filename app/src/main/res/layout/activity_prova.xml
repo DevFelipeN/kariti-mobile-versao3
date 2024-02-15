@@ -56,40 +56,42 @@
         android:text="@string/buttonGerarCartao"
         android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCorrigirProva"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCadProva" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCadProva"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/buttonVisuProva"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="232dp"
         android:background="@drawable/button_selector"
         android:padding="5dp"
         android:text="@string/buttonVisuProva"
         android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGerarCatao" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonCorrigirProva"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/button_selector"
         android:padding="5dp"
         android:text="@string/buttonCorrigirProva"
         android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonVisuProva"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonVisuProva" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView8"

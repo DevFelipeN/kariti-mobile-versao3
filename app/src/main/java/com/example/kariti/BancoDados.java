@@ -139,6 +139,14 @@ public class BancoDados extends SQLiteOpenHelper {
         return cursor.getString(1);
     }
 
+    public String pegaEscola(String id) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from escola where id = ?", new String[]{id});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(1);
+    }
+
     //Verifica se a senha Ligada ao email é a mesma informada
     public Boolean checkemailpass(String email, String password){
         SQLiteDatabase data_base = this.getWritableDatabase();

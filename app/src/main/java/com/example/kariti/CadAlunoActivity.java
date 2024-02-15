@@ -33,7 +33,6 @@ public class CadAlunoActivity extends AppCompatActivity {
         cpfAluno = findViewById(R.id.editTextNumberIdAluno);
         voltar = findViewById(R.id.btn_voltar_left);
         cadastrar = findViewById(R.id.buttonCadastrar);
-        spinnerTurma = findViewById(R.id.spinner_turma);
 
         // Criação da lista de turmas
         List<String> turmas = new ArrayList<>();

@@ -198,18 +198,16 @@
 
     <ImageButton
         android:id="@+id/senhaoculta"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="3dp"
+        android:layout_width="43dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="32dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberIdAluno"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextCpfAluno"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCpfAluno"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintTop_toTopOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextCpfAluno"
+        app:layout_constraintTop_toTopOf="@+id/editTextCpfAluno"
         app:srcCompat="@mipmap/senhaoff" />
 
 

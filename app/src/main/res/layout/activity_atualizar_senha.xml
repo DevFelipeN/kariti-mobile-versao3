@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
-        android:id="@+id/editTextNomeAluno"
+        android:id="@+id/editTextNome"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
@@ -60,14 +60,14 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:focusable="false"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAluno"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
-        android:id="@+id/editTextEmailAluno"
+        android:id="@+id/editTextEmail"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNomeAluno" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNome" />
 
     <TextView
         android:id="@+id/textViewSenhaConfirma"
@@ -93,8 +93,8 @@
         android:text="@string/textViewconfirmar"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/editTextConfirmPasswordNova"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCpfAluno"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmNovaSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNovaSenha"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -106,12 +106,12 @@
         android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/editTextCpfAluno"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmailAluno"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editTextConfirmPasswordNova"
+        android:id="@+id/editTextConfirmNovaSenha"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
@@ -129,7 +129,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
 
     <Button
-        android:id="@+id/buttonCadastrar"
+        android:id="@+id/buttonAlterar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -141,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPasswordNova" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmNovaSenha" />
 
     <ImageButton
         android:id="@+id/imgButtonSenhaOFF"
@@ -151,16 +151,16 @@
         android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextConfirmPasswordNova"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextConfirmNovaSenha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.861"
-        app:layout_constraintStart_toStartOf="@+id/editTextConfirmPasswordNova"
-        app:layout_constraintTop_toTopOf="@+id/editTextConfirmPasswordNova"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmNovaSenha"
+        app:layout_constraintTop_toTopOf="@+id/editTextConfirmNovaSenha"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@mipmap/senhaoff" />
 
     <EditText
-        android:id="@+id/editTextCpfAluno"
+        android:id="@+id/editTextNovaSenha"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
@@ -173,6 +173,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAcessoSenha" />
 
@@ -180,16 +181,15 @@
         android:id="@+id/senhaoculta"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintTop_toTopOf="@+id/editTextNumberIdAluno"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@mipmap/senhaoff" />
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNovaSenha"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovaSenha"
+        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaSenha"
+        app:layout_constraintTop_toTopOf="@+id/editTextNovaSenha"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@mipmap/senhaoff"
+        tools:ignore="UnknownId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

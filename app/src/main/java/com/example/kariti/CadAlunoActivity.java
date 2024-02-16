@@ -6,15 +6,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CadAlunoActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -31,7 +26,7 @@ public class CadAlunoActivity extends AppCompatActivity {
         nomeAluno = findViewById(R.id.editTextNomeCad);
         emailAluno = findViewById(R.id.editTextEmailCad);
         voltar = findViewById(R.id.btn_voltar_left);
-        cadastrar = findViewById(R.id.buttonCadastrar);
+        cadastrar = findViewById(R.id.buttonAlterar);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2,6 +2,7 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -18,16 +19,17 @@ public class AtualizarSenha extends AppCompatActivity {
     BancoDados bancoDados;
     ImageButton ocultarSenha, ocultarSenha2, voltar;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atualizar_senha);
 
-        editTextNome = (EditText) findViewById(R.id.editTextNomeAluno);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmailAluno);
-        novaSenha = (EditText) findViewById(R.id.editTextCpfAluno);
-        confNovaSenha = (EditText) findViewById(R.id.editTextConfirmPasswordNova);
-        alterar = (Button) findViewById(R.id.buttonCadastrar);
+        editTextNome = (EditText) findViewById(R.id.editTextNome);
+        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        novaSenha = (EditText) findViewById(R.id.editTextNovaSenha);
+        confNovaSenha = (EditText) findViewById(R.id.editTextConfirmNovaSenha);
+        alterar = (Button) findViewById(R.id.buttonAlterar);
         voltar = (ImageButton) findViewById(R.id.btn_voltar_left);
 
         Integer id = getIntent().getExtras().getInt("id");

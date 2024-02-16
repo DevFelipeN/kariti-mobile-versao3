@@ -12,17 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import android.widget.ImageButton;
-
-
 public class CadEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar, btnHome;
     private Toolbar toolbar;
     EditText nomeEscola, bairr0;
     Button cadastrarEscola;
     BancoDados bancoDados;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +35,11 @@ public class CadEscolaActivity extends AppCompatActivity {
                 String bairro = bairr0.getText().toString();
 
                 if (nome.equals("") || bairro.equals("")) {
-                    Toast.makeText(CadEscolaActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadEscolaActivity.this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean checkEscola = bancoDados.checkEscola(nome);
-
                     if (!checkEscola) {
                         Boolean insertEscola = bancoDados.inserirDadosEscola(nome, bairro);
-
                         if (insertEscola) {
                             Toast.makeText(CadEscolaActivity.this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
@@ -58,8 +51,6 @@ public class CadEscolaActivity extends AppCompatActivity {
                         Toast.makeText(CadEscolaActivity.this, "Escola já cadastrada!", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-
             }
         });
 
@@ -70,7 +61,6 @@ public class CadEscolaActivity extends AppCompatActivity {
         btnVoltar.setVisibility(View.VISIBLE);
 
         btnHome = findViewById(R.id.home_icon);
-
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +86,6 @@ public class CadEscolaActivity extends AppCompatActivity {
         cadastrarEscola.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
             }
         });
     }

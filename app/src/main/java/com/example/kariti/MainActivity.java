@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nome = findViewById(R.id.editTextNomeAluno);
-        email = findViewById(R.id.editTextEmailAluno);
-        senha = findViewById(R.id.editTextCpfAluno);
-        confirmarSenha = findViewById(R.id.editTextConfirmPasswordNova);
+        nome = findViewById(R.id.editTextNome);
+        email = findViewById(R.id.editTextEmail);
+        senha = findViewById(R.id.editTextNovaSenha);
+        confirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
         voltar = findViewById(R.id.btn_voltar_left);
-        cadastro = findViewById(R.id.buttonCadastrar);
+        cadastro = findViewById(R.id.buttonAlterar);
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();

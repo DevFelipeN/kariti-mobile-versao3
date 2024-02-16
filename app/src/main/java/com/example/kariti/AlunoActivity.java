@@ -42,7 +42,7 @@ public class AlunoActivity extends AppCompatActivity {
         btnVisualizarAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mudarParaTelaVisulaizarAluno();
+                mudarParaTelaVisualizarAluno();
             }
         });
 
@@ -51,7 +51,7 @@ public class AlunoActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CadAlunoActivity.class);
         startActivity(intent);
     }
-    public void mudarParaTelaVisulaizarAluno(){
+    public void mudarParaTelaVisualizarAluno(){
         Intent intent = new Intent(this, VisualAlunoActivity.class);
         startActivity(intent);
     }

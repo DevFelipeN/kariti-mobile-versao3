@@ -1,8 +1,10 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar, btnHome;
+    Button btnEscDesativada;
     private Toolbar toolbar;
 
     BancoDados bancoDados;
@@ -36,8 +39,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         btnVoltar = findViewById(R.id.btn_voltar_left);
-        btnVoltar.setVisibility(View.VISIBLE);
         btnHome = findViewById(R.id.home_icon);
+        btnEscDesativada = findViewById(R.id.buttonEscDesativada);
         bancoDados = new BancoDados(this);
 
         BancoDados bancoDados = new BancoDados(this);
@@ -57,14 +60,17 @@ public class VisualEscolaActivity extends AppCompatActivity {
         cursor.close();
         database.close();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, escolas);
         ListView listView = findViewById(R.id.listView);
+        EscolaAdapter adapter = new EscolaAdapter(this, escolas);
         listView.setAdapter(adapter);
 
-        btnHome.setOnClickListener(new View.OnClickListener() {
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, escolas);
+        //listView.setAdapter(adapter);
+
+        btnEscDesativada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                voltarTelaIncial();
+                telaEscolaDesativada();
             }
         });
 
@@ -86,10 +92,38 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // Exibir a caixa de diálogo
+                AlertDialog.Builder builder = new AlertDialog.Builder(VisualEscolaActivity.this);
+                builder.setTitle("Atenção!")
+                        .setMessage("Deseja desativar a escola?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Código para lidar com o clique no botão OK, se necessário
+                            }
+                        })
+                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Código para lidar com o clique no botão Cancelar, se necessário
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                // Retorna true para indicar que o evento de long press foi consumido
+                return true;
+            }
+        });
+
     }
 
-    public void voltarTelaIncial() {
-        Intent intent = new Intent(this, WelcomeActivity.class);
+    public void telaEscolaDesativada() {
+        Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivity(intent);
     }
 }

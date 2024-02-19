@@ -55,7 +55,7 @@
         android:background="@drawable/borda_botao"
         android:ems="10"
         android:hint="@string/nomeCompleto"
-        android:inputType="text"
+        android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"

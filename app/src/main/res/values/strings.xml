@@ -40,6 +40,7 @@
     <string name="buscNameAluno">Digite o nome do aluno</string>
     <string name="senhahint">********</string>
     <string name="btnAlterarSenha">Alterar Senha</string>
+    <string name="btnEscolaDesativada">Escolas Desativadas</string>
 
     <string name="textViewAluno">Aluno</string>
     <string name="textViewTurma">Turma</string>

@@ -84,7 +84,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(VisualEscolaActivity.this, "Id: "+id, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(VisualEscolaActivity.this, "Id: "+id, Toast.LENGTH_SHORT).show();//
                 String ids = Long.toString(id+1);
                 String escola = bancoDados.pegaEscola(ids);
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);

@@ -42,6 +42,8 @@ public class CadEscolaActivity extends AppCompatActivity {
                         Boolean insertEscola = bancoDados.inserirDadosEscola(nome, bairro);
                         if (insertEscola) {
                             Toast.makeText(CadEscolaActivity.this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                            nomeEscola.setText("");
+                            bairr0.setText("");
                             Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
                             startActivity(intent);
                         } else {

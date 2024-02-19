@@ -49,6 +49,8 @@ public class CadAlunoActivity extends AppCompatActivity {
                         Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email);
                         if (insertAluno) {
                             Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                            nomeAluno.setText("");
+                            emailAluno.setText("");
                             Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
                             startActivity(intent);
                         } else {

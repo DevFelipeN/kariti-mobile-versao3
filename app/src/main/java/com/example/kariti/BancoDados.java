@@ -156,9 +156,9 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-    public Boolean checkAluno(String cpf){
+    public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE cpf = ?", new String[]{cpf});
+        Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE nome = ?", new String[]{nome});
 
         if (cursor.getCount() > 0) return true;
         else return false;

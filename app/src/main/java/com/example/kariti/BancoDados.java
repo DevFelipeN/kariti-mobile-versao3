@@ -14,9 +14,9 @@ import java.security.MessageDigest;
 public class BancoDados extends SQLiteOpenHelper {
 
     public static final String DBNAME = "data_base.db";
-
+    public static Integer USER_ID;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 19);
+        super(context, "data_base", null, 24);
     }
 
     @Override
@@ -24,10 +24,17 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
             //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
-            data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT)");
+            data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table aluno (id Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
+        }
+    }
+    @Override
+    public void onOpen(SQLiteDatabase data_base){
+        super.onOpen(data_base);
+        if (!data_base.isReadOnly()){
+            data_base.execSQL("PRAGMA foreign_keys=ON;");
         }
     }
 
@@ -43,7 +50,6 @@ public class BancoDados extends SQLiteOpenHelper {
         }
 
     }
-    //Metodo para inserir dados no Banco de Dados
     public Boolean insertData(String nome, String password, String email){
             SQLiteDatabase data_base = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -59,6 +65,7 @@ public class BancoDados extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeEscola", nomeEscola);
         contentValues.put("bairro", bairro);
+        contentValues.put("id_usuario", BancoDados.USER_ID);
         long inserir = data_base.insert("escola", null, contentValues);
         return inserir != -1;
     }
@@ -139,13 +146,14 @@ public class BancoDados extends SQLiteOpenHelper {
         return cursor.getString(1);
     }
     //Verifica se a senha Ligada ao email é a mesma informada
-    public Boolean checkemailpass(String email, String password){
+    public Integer checkemailpass(String email, String password){
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from usuario where email =? and password = ?", new String[] {email, to256(password)});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        }else
+            return null;
     }
     public Boolean checkEscola(String nomeEscola){
         SQLiteDatabase database = this.getWritableDatabase();

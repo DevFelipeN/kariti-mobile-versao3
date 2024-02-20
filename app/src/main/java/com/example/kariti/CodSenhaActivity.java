@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class CodSenhaActivity extends AppCompatActivity {
     EditText n1, n2, n3, n4;
     Button buttonValidarSenha;
@@ -21,6 +24,7 @@ public class CodSenhaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cod_senha);
+
 
         n1 = (EditText) findViewById(R.id.editTextNumber);
         n2 = (EditText) findViewById(R.id.editTextNumber2);

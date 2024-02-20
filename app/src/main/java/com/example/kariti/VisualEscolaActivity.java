@@ -45,14 +45,17 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         BancoDados bancoDados = new BancoDados(this);
         SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeEscola"};
-        Cursor cursor = database.query("escola", projection, null, null, null, null, null);
-        ArrayList<String> escolas = new ArrayList<>();
+        String [] projection = {"nomeEscola", "id"};
+        Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
+        ArrayList<String> nomesEscolas = new ArrayList<>();
+        ArrayList<String> idsEscolas = new ArrayList<>();
         int nomeColumIndex = cursor.getColumnIndex("nomeEscola");
         if (nomeColumIndex != -1){
             while (cursor.moveToNext()){
-                String nomeEscola = cursor.getString(nomeColumIndex);
-                escolas.add(nomeEscola);
+                String nomeEscola = cursor.getString(0);
+                String idEscola = cursor.getString(1);
+                nomesEscolas.add(nomeEscola);
+                idsEscolas.add(idEscola);
             }
         }else{
             Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");
@@ -61,7 +64,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         database.close();
 
         ListView listView = findViewById(R.id.listView);
-        EscolaAdapter adapter = new EscolaAdapter(this, escolas);
+        EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, escolas);
@@ -85,7 +88,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(VisualEscolaActivity.this, "Id: "+id, Toast.LENGTH_SHORT).show();//
-                String ids = Long.toString(id+1);
+                //String ids = Long.toString(id+1);
+                String ids = idsEscolas.get(position);
                 String escola = bancoDados.pegaEscola(ids);
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
                 intent.putExtra("escola", escola);

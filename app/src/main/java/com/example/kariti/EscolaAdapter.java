@@ -17,13 +17,14 @@ import java.util.ArrayList;
 
 public class EscolaAdapter extends ArrayAdapter<String> {
 
-    private ArrayList<String> escolas;
+    private ArrayList<String> escolas, ids;
     private Context context;
 
-    public EscolaAdapter(Context context, ArrayList<String> escolas) {
+    public EscolaAdapter(Context context, ArrayList<String> escolas, ArrayList<String> ids) {
         super(context, R.layout.list_escola, escolas);
         this.context = context;
         this.escolas = escolas;
+        this.ids = ids;
     }
 
     @NonNull
@@ -39,6 +40,7 @@ public class EscolaAdapter extends ArrayAdapter<String> {
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
 
         String nomeEscola = escolas.get(position);
+        String idEscola = ids.get(position);
         textViewNome.setText(nomeEscola);
 
 

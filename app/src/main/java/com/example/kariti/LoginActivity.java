@@ -51,8 +51,9 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
                 else{
                     if(!emailConf.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailConf).matches()) {
-                        Boolean checkemailpass = bancoDados.checkemailpass(emailConf, pass);
-                        if (checkemailpass == true) {
+                        Integer checkemailpass = bancoDados.checkemailpass(emailConf, pass);
+                        if (checkemailpass!=null) {
+                            BancoDados.USER_ID = checkemailpass;
                             Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
                             startActivity(intent);

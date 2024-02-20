@@ -8,7 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
-    Button botaoCadastro, botaoLogin, esqueciSenha;
+    Button botaoCadastro, botaoLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +16,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         botaoCadastro = findViewById(R.id.buttonCadastroW);
         botaoLogin = findViewById(R.id.buttonLoginW);
-        esqueciSenha = findViewById(R.id.buttonEsqueciSenhaW);
 
         botaoCadastro.setOnClickListener(new View.OnClickListener() {
             @Override

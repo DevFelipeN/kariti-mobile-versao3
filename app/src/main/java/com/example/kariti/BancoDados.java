@@ -16,7 +16,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "data_base.db";
     public static Integer USER_ID;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 24);
+        super(context, "data_base", null, 25);
     }
 
     @Override
@@ -24,26 +24,20 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
             //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
-            data_base.execSQL("create Table escola( id INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
+            data_base.execSQL("create Table escola( id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
+            data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table aluno (id Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
     }
     @Override
-    public void onOpen(SQLiteDatabase data_base){
-        super.onOpen(data_base);
-        if (!data_base.isReadOnly()){
-            data_base.execSQL("PRAGMA foreign_keys=ON;");
-        }
-    }
-
-    @Override
     public void onUpgrade(SQLiteDatabase data_base, int oldVersion, int newVersion) {
         try {
             data_base.execSQL("drop Table if exists usuario");
             data_base.execSQL("drop Table if exists escola");
             data_base.execSQL("drop Table if exists aluno");
+            data_base.execSQL("drop Table if exists escolasDesativadas");
             onCreate(data_base);
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
@@ -68,6 +62,40 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("id_usuario", BancoDados.USER_ID);
         long inserir = data_base.insert("escola", null, contentValues);
         return inserir != -1;
+    }
+    public Boolean deletarDasAtivadas(String id_escola){
+        try {
+            SQLiteDatabase data_base = this.getWritableDatabase();
+            String deleta = "DELETE FROM escola WHERE id_escola=?";
+            SQLiteStatement stmt = data_base.compileStatement(deleta);
+            stmt.bindString(1, id_escola);
+            stmt.executeUpdateDelete();
+            data_base.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
+
+
+    public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeScolDesativada", scolDesativada);
+        contentValues.put("bairro", bairro);
+        contentValues.put("id_usuario", BancoDados.USER_ID);
+        long inserir = data_base.insert("escolasDesativadas", null, contentValues);
+        return inserir != -1;
+    }
+
+    public Boolean deletarEscola(String id_scolDesativadas){
+        try {
+            SQLiteDatabase data_base = this.getWritableDatabase();
+            String deleta = "DELETE FROM escolasDesativadas WHERE id_scolDesativadas=?";
+            SQLiteStatement stmt = data_base.compileStatement(deleta);
+            stmt.bindString(1, id_scolDesativadas);
+            stmt.executeUpdateDelete();
+            data_base.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
     }
     public Boolean inserirDadosAluno(String nomeAluno, String email){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -140,10 +168,18 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaEscola(String id) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from escola where id = ?", new String[]{id});
+        Cursor cursor = data_base.rawQuery("Select * from escola where id_escola = ?", new String[]{id});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
+    }
+
+    public String pegaBairro(String id) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from escola where id_escola = ?", new String[]{id});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(2);
     }
     //Verifica se a senha Ligada ao email é a mesma informada
     public Integer checkemailpass(String email, String password){

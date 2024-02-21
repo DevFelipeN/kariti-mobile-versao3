@@ -43,9 +43,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
         bancoDados = new BancoDados(this);
 
-        BancoDados bancoDados = new BancoDados(this);
         SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeEscola", "id"};
+        String [] projection = {"nomeEscola", "id_escola"};
         Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
         ArrayList<String> nomesEscolas = new ArrayList<>();
         ArrayList<String> idsEscolas = new ArrayList<>();
@@ -63,12 +62,10 @@ public class VisualEscolaActivity extends AppCompatActivity {
         cursor.close();
         database.close();
 
+
         ListView listView = findViewById(R.id.listView);
         EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, escolas);
-        //listView.setAdapter(adapter);
 
         btnEscDesativada.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,28 +73,22 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 telaEscolaDesativada();
             }
         });
-
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(VisualEscolaActivity.this, "Id: "+id, Toast.LENGTH_SHORT).show();//
-                //String ids = Long.toString(id+1);
                 String ids = idsEscolas.get(position);
                 String escola = bancoDados.pegaEscola(ids);
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
                 intent.putExtra("escola", escola);
                 startActivity(intent);
-
             }
         });
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,7 +99,17 @@ public class VisualEscolaActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // Código para lidar com o clique no botão OK, se necessário
+                                String ids = idsEscolas.get(position);
+                                String escola = bancoDados.pegaEscola(ids);
+                                String bairro = bancoDados.pegaBairro(ids);
+                                Boolean deletDativadas = bancoDados.deletarDasAtivadas(ids);
+                                Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
+                                if (deletDativadas)
+                                    if(inserSlcolDesativada)
+                                        Toast.makeText(VisualEscolaActivity.this, "Escola Desativada Com Sucesso", Toast.LENGTH_SHORT).show();
+                                finish();
+                                Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
+                                startActivity(intent);
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {

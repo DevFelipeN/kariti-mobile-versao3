@@ -35,9 +35,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity {
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
+            public void onClick(View view) {onBackPressed();}
         });
 
 
@@ -54,9 +52,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity {
                 nomesEscolasDesativadas.add(nomeEscola);
                 idsEscolasDesativadas.add(idEscola);
             }
-        }else{
-            Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");
-        }
+        }else{Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");}
         cursor.close();
         database.close();
 
@@ -73,7 +69,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = idsEscolasDesativadas.get(position);
+                                Integer ids = Integer.valueOf(idsEscolasDesativadas.get(position));
                                 Boolean deletaEscola = bancoDados.deletarEscola(ids);
                                 if (deletaEscola)
                                         Toast.makeText(EscolaDesativadaActivity.this, "Escola Excluida Com Sucesso", Toast.LENGTH_SHORT).show();

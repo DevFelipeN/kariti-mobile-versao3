@@ -54,10 +54,7 @@ public class AtualizarSenha extends AppCompatActivity {
         });
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                startActivity(intent);
-            }
+            public void onClick(View view) {onBackPressed(); }
         });
         ocultarSenha = findViewById(R.id.senhaoculta);
         novaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);

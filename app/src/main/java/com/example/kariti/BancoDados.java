@@ -63,6 +63,23 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = data_base.insert("escola", null, contentValues);
         return inserir != -1;
     }
+    public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeScolDesativada", scolDesativada);
+        contentValues.put("bairro", bairro);
+        contentValues.put("id_usuario", BancoDados.USER_ID);
+        long inserir = data_base.insert("escolasDesativadas", null, contentValues);
+        return inserir != -1;
+    }
+    public Boolean inserirDadosAluno(String nomeAluno, String email){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nome", nomeAluno);
+        contentValues.put("email", email);
+        long inserir = database.insert("aluno", null, contentValues);
+        return inserir != -1;
+    }
     public Boolean deletarDasAtivadas(String id_escola){
         try {
             SQLiteDatabase data_base = this.getWritableDatabase();
@@ -74,36 +91,16 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
-
-
-    public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){
-        SQLiteDatabase data_base = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeScolDesativada", scolDesativada);
-        contentValues.put("bairro", bairro);
-        contentValues.put("id_usuario", BancoDados.USER_ID);
-        long inserir = data_base.insert("escolasDesativadas", null, contentValues);
-        return inserir != -1;
-    }
-
-    public Boolean deletarEscola(String id_scolDesativadas){
+    public Boolean deletarEscola(Integer id_scolDesativadas){
         try {
             SQLiteDatabase data_base = this.getWritableDatabase();
             String deleta = "DELETE FROM escolasDesativadas WHERE id_scolDesativadas=?";
             SQLiteStatement stmt = data_base.compileStatement(deleta);
-            stmt.bindString(1, id_scolDesativadas);
+            stmt.bindLong(1, id_scolDesativadas);
             stmt.executeUpdateDelete();
             data_base.close();
         }catch (Exception e){e.printStackTrace();}
         return true;
-    }
-    public Boolean inserirDadosAluno(String nomeAluno, String email){
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nome", nomeAluno);
-        contentValues.put("email", email);
-        long inserir = database.insert("aluno", null, contentValues);
-        return inserir != -1;
     }
     public Boolean upadateSenha(String password, Integer id){
         try {
@@ -114,35 +111,8 @@ public class BancoDados extends SQLiteOpenHelper {
             stmt.bindLong(2, id);
             stmt.executeUpdateDelete();
             data_base.close();
-
-
         }catch (Exception e){e.printStackTrace();}
        return true;
-    }
-
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
-
-    public String to256(String text){
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            final byte[] hashbytes = digest.digest(
-                    text.getBytes(StandardCharsets.UTF_8));
-            String sha3Hex = bytesToHex(hashbytes);
-            return sha3Hex;
-        }catch(Exception e){
-            return "ERROR";
-        }
     }
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
@@ -200,11 +170,42 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
+    public Integer checkEscolaDesativada(String nomeScolDesativada){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM escolasDesativadas WHERE nomeScolDesativada = ?", new String[]{nomeScolDesativada});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        }else
+            return null;
+    }
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE nome = ?", new String[]{nome});
 
         if (cursor.getCount() > 0) return true;
         else return false;
+    }
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+    public String to256(String text){
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            final byte[] hashbytes = digest.digest(
+                    text.getBytes(StandardCharsets.UTF_8));
+            String sha3Hex = bytesToHex(hashbytes);
+            return sha3Hex;
+        }catch(Exception e){
+            return "ERROR";
+        }
     }
 }

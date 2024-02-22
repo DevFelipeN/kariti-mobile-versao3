@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                voltarTelaWelcome();
+                onBackPressed();
             }
         });
     }

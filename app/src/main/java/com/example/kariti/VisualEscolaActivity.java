@@ -37,7 +37,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnVoltar = findViewById(R.id.btn_voltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnHome = findViewById(R.id.home_icon);
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
         bancoDados = new BancoDados(this);

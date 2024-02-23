@@ -22,7 +22,7 @@
 
             <!-- Título da ActionBar -->
             <ImageButton
-                android:id="@+id/btn_voltar"
+                android:id="@+id/imgBtnVoltar"
                 android:layout_width="48dp"
                 android:layout_height="40dp"
                 android:background="@color/tranparente"

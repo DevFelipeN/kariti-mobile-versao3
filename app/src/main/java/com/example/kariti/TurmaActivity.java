@@ -10,14 +10,15 @@ import android.widget.ImageButton;
 
 public class TurmaActivity extends AppCompatActivity {
     ImageButton voltar;
-    Button cadTurma;
+    Button cadTurma, visuTurma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turma);
 
-        voltar = findViewById(R.id.btn_voltar);
+        voltar = findViewById(R.id.imgBtnVoltar);
         cadTurma = findViewById(R.id.buttonCadAluno);
+        visuTurma = findViewById(R.id.buttonVisuTurma);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,9 +31,20 @@ public class TurmaActivity extends AppCompatActivity {
                 telaCadTurma();
             }
         });
+        visuTurma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaVisualTurma();
+            }
+        });
     }
     public void telaCadTurma(){
         Intent intent = new Intent(this, CadTurmaActivity.class);
+        startActivity(intent);
+    }
+
+    public void telaVisualTurma(){
+        Intent intent = new Intent(this, VisualTurmaActivity.class);
         startActivity(intent);
     }
 }

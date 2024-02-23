@@ -30,7 +30,7 @@ public class AtualizarSenha extends AppCompatActivity {
         novaSenha = (EditText) findViewById(R.id.editTextNovaSenha);
         confNovaSenha = (EditText) findViewById(R.id.editTextConfirmNovaSenha);
         alterar = (Button) findViewById(R.id.buttonAlterar);
-        voltar = (ImageButton) findViewById(R.id.btn_voltar);
+        voltar = (ImageButton) findViewById(R.id.imgBtnVoltar);
 
         Integer id = getIntent().getExtras().getInt("id");
         String nome = getIntent().getExtras().getString("nome");

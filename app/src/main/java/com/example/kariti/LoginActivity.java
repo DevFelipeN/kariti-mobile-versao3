@@ -1,7 +1,9 @@
 package com.example.kariti;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -74,9 +76,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String confEmail = email.getText().toString();
-                if(confEmail.equals(""))
-                    Toast.makeText(LoginActivity.this, "Favor Informar Email", Toast.LENGTH_SHORT).show();
-                else{
+                if (confEmail.equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                    builder.setTitle("Esqueceu Sua Senha?")
+                        .setMessage("Por favor informe seu e-mail cadastrado no campo sugerido, em seguida pressione 'Esqueci Minha Senha'")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(LoginActivity.this, "Informe o E-mail! ", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }else{
                     Integer id = bancoDados.checkemail(confEmail);
                     if(id>0){
                         String cod = gerarCodigo.gerarVerificador();

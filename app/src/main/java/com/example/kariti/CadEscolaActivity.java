@@ -108,6 +108,7 @@ public class CadEscolaActivity extends AppCompatActivity {
         });
     }
     public void voltarTelaIncial(){
+        BancoDados.USER_ID = null;
         Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
 

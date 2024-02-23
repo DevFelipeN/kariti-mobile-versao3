@@ -51,7 +51,7 @@ public class CadAlunoActivity extends AppCompatActivity {
                             Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                             nomeAluno.setText("");
                             emailAluno.setText("");
-                            Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), AlunoActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(CadAlunoActivity.this, "Falha no cadastro do aluno!", Toast.LENGTH_SHORT).show();

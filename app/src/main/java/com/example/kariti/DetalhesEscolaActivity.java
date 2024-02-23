@@ -36,6 +36,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                BancoDados.ID_ESCOLA = null;
                 onBackPressed();
             }
         });

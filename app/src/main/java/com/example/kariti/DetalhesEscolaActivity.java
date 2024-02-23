@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DetalhesEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
@@ -21,7 +20,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_escola);
 
-        btnVoltar = findViewById(R.id.btn_voltar_left);
+        btnVoltar = findViewById(R.id.btn_voltar);
         btnVoltar.setVisibility(View.VISIBLE);
 
         btnTurma = findViewById(R.id.btnTurma);

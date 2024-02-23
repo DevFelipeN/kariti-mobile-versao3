@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 
@@ -38,7 +37,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnVoltar = findViewById(R.id.btn_voltar_left);
+        btnVoltar = findViewById(R.id.btn_voltar);
         btnHome = findViewById(R.id.home_icon);
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
         bancoDados = new BancoDados(this);

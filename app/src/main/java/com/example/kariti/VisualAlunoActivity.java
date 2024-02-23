@@ -29,7 +29,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_aluno);
-        btnVoltar = findViewById(R.id.btn_voltar_left);
+        btnVoltar = findViewById(R.id.btn_voltar);
         pesquisarAlunos = findViewById(R.id.editTextBuscarAluno);
         ListView listView = findViewById(R.id.listAluno);
         bancoDados = new BancoDados(this);

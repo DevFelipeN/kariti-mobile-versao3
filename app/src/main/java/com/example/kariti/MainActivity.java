@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextEmail);
         senha = findViewById(R.id.editTextNovaSenha);
         confirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
-        voltar = findViewById(R.id.btn_voltar_left);
+        voltar = findViewById(R.id.btn_voltar);
         cadastro = findViewById(R.id.buttonAlterar);
 
         bancoDados = new BancoDados(this);

@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/btn_voltar_left"
+        android:id="@+id/btn_voltar"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"

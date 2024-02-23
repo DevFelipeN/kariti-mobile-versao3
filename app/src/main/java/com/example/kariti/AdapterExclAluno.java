@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,17 +14,15 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class DesativadaAdapter extends ArrayAdapter<String> {
+public class AdapterExclAluno extends ArrayAdapter<String> {
 
-    private ArrayList<String> escolas, ids;
+    private ArrayList<String> alunos;
     private Context context;
 
-    public DesativadaAdapter(Context context, ArrayList<String> escolas, ArrayList<String> ids) {
-        super(context, R.layout.custom_escola_desativada, escolas);
+    public AdapterExclAluno(Context context, ArrayList<String> alunos) {
+        super(context, R.layout.list_alunos_delete, alunos);
         this.context = context;
-        this.escolas = escolas;
-        this.ids = ids;
-
+        this.alunos = alunos;
     }
 
     @NonNull
@@ -32,16 +31,14 @@ public class DesativadaAdapter extends ArrayAdapter<String> {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.custom_escola_desativada, null);
+            view = inflater.inflate(R.layout.list_alunos_delete, null);
         }
 
         TextView textViewNome = view.findViewById(R.id.textViewNome);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
 
-        String nomeEscola = escolas.get(position);
-        String idEscola = ids.get(position);
-        textViewNome.setText(nomeEscola);
-
+        String nomeAluno = alunos.get(position);
+        textViewNome.setText(nomeAluno);
 
         return view;
     }

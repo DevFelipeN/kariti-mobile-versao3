@@ -52,6 +52,13 @@
 
     <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
+    <string name="editTextNomeTurma">Nome da Turma</string>
+    <string name="textViewAlunos">Alunos</string>
+    <string name="editTextBuscAluno">Buscar Alunos</string>
+    <string name="btnIncluirAluno">Incluir Aluno</string>
+    <string name="textViewAlunoAnonim">Alunos Anônimos</string>
+    <string name="btnTranferirOutraTurma">Transf. de outra Turma</string>
+
 
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
@@ -65,6 +72,10 @@
     <string name="imgProfessor">ImagemProfessor</string>
     <string name="imgBtnSeta">ImagemSetaProx</string>
     <string name="msgCodigo">Código de validação ENVIADO para</string>
+    <string name="imgDelete">Botão de Deletar</string>
+
+    <string name="menuExcluir">Excluir Escola</string>
+    <string name="menuAtivar">Ativar Escola</string>
 
 
 </resources>

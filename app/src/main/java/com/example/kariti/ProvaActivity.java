@@ -13,7 +13,7 @@ public class ProvaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova);
 
-        voltar = findViewById(R.id.btn_voltar_left);
+        voltar = findViewById(R.id.btn_voltar);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2,6 +2,7 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,9 +10,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,25 +20,25 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class EscolaDesativadaActivity extends AppCompatActivity {
+public class EscolaDesativadaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton btnVoltar;
-    ImageView menu;
+    ImageView btnMenu, teste;
     BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escola_desativada);
 
-        btnVoltar = findViewById(R.id.btn_voltar_left);
-        menu = findViewById(R.id.imageViewIcon);
+        btnVoltar = findViewById(R.id.btn_voltar);
+        btnMenu = findViewById(R.id.imageViewIcon);
         ListView listView = findViewById(R.id.listView);
         bancoDados = new BancoDados(this);
+        teste = findViewById(R.id.teste);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {onBackPressed();}
         });
-
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeScolDesativada", "id_scolDesativadas"};
@@ -56,7 +57,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity {
         cursor.close();
         database.close();
 
-        EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolasDesativadas, idsEscolasDesativadas);
+        DesativadaAdapter adapter = new DesativadaAdapter(this, nomesEscolasDesativadas, idsEscolasDesativadas);
         listView.setAdapter(adapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -89,5 +90,25 @@ public class EscolaDesativadaActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    public void testeMain(View v){
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.activity_menuescola);
+        popupMenu.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menuExcluirEscola) {
+            Toast.makeText(EscolaDesativadaActivity.this, "Excluir Escola selecionado", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menuAtivarEscola) {
+            Toast.makeText(EscolaDesativadaActivity.this, "Ativar Escola selecionado", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

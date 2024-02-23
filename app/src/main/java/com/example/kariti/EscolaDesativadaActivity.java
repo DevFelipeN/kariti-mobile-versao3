@@ -41,7 +41,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity {
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeScolDesativada", "id_scolDesativadas"};
-        Cursor cursor = database.query("escolasDesativadas", projection, null, null, null, null, null);
+        Cursor cursor = database.query("escolasDesativadas", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
         ArrayList<String> nomesEscolasDesativadas = new ArrayList<>();
         ArrayList<String> idsEscolasDesativadas = new ArrayList<>();
         int nomeColumIndex = cursor.getColumnIndex("nomeScolDesativada");

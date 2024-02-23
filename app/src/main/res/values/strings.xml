@@ -3,6 +3,7 @@
     <string name="buttonvoltarTela">VOLTAR</string>
     <string name="nomeCompleto">Nome Completo</string>
     <string name="email">E-mail</string>
+    <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>
     <string name="cpf">CPF</string>
     <string name="acessoSenha">Digite sua senha</string>
@@ -30,9 +31,9 @@
     <string name="textViewkariti">KARITI</string>
     <string name="buttonCadastreSe">Cadastre-se</string>
     <string name="buttonLogin">Login</string>
-    <string name="buttonEsqueciSenha">Esqueci minha Senha</string>
+    <string name="buttonEsqueciSenha">Esqueci Minha Senha</string>
     <string name="textViewLoginEntrar">Entre com seu Login</string>
-    <string name="textViewInformeSenha">Informe sua Senha</string>
+    <string name="textViewInformeSenha">Informe Sua Senha</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="nomeSchool">Nome da Escola</string>

@@ -15,18 +15,19 @@ public class BancoDados extends SQLiteOpenHelper {
 
     public static final String DBNAME = "data_base.db";
     public static Integer USER_ID;
+    public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 25);
+        super(context, "data_base", null, 26);
     }
 
     @Override
     public void onCreate(SQLiteDatabase data_base) {
         try {
-            data_base.execSQL("create Table usuario( id INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
+            data_base.execSQL("create Table usuario( id_usuario INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
             //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
-            data_base.execSQL("create Table aluno (id Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT)");
+            data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, id_escola INTEGER)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -77,6 +78,7 @@ public class BancoDados extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("nome", nomeAluno);
         contentValues.put("email", email);
+        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
         long inserir = database.insert("aluno", null, contentValues);
         return inserir != -1;
     }
@@ -129,9 +131,9 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getInt(0);
     }
-    public String pegaNome(String id) {
+    public String pegaNome(String id_usuario) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where id = ?", new String[]{id});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where id_usuario = ?", new String[]{id_usuario});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);

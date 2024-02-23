@@ -1,7 +1,6 @@
 package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,25 +9,22 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class CadTurmaActivity extends AppCompatActivity {
-    ImageButton voltar;
-    private Toolbar toolbar;
+public class VisualTurmaActivity extends AppCompatActivity {
+    ImageButton btnVoltar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cad_turma);
+        setContentView(R.layout.activity_visual_turma);
 
-        toolbar = findViewById(R.id.myToolBarMenu);
-        setSupportActionBar(toolbar);
+        btnVoltar = findViewById(R.id.imgBtnVoltar);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
-
-        voltar.setOnClickListener(new View.OnClickListener() {
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
+
 
         ArrayList<String> teste = new ArrayList<>();
         teste.add("nome1");
@@ -40,7 +36,7 @@ public class CadTurmaActivity extends AppCompatActivity {
         teste.add("nome7");
         teste.add("nome8");
         ListView listView = findViewById(R.id.listView);
-        AdapterExclAluno adapter = new AdapterExclAluno(this, teste);
+        EscolaAdapter adapter = new EscolaAdapter(this, teste, teste);
         listView.setAdapter(adapter);
     }
 }

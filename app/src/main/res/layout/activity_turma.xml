@@ -15,7 +15,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <ImageButton
-        android:id="@+id/btn_voltar"
+        android:id="@+id/imgBtnVoltar"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Button
-        android:id="@+id/buttonVisuAluno"
+        android:id="@+id/buttonVisuTurma"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -76,9 +76,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonVisuAluno"
-        app:layout_constraintEnd_toEndOf="@+id/buttonVisuAluno"
-        app:layout_constraintTop_toTopOf="@+id/buttonVisuAluno"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonVisuTurma"
+        app:layout_constraintEnd_toEndOf="@+id/buttonVisuTurma"
+        app:layout_constraintTop_toTopOf="@+id/buttonVisuTurma"
         app:layout_constraintVertical_bias="0.481"
         app:srcCompat="@mipmap/ic_arrownext" />
 
@@ -98,9 +98,9 @@
         android:layout_height="24dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonVisuAluno"
-        app:layout_constraintStart_toStartOf="@+id/buttonVisuAluno"
-        app:layout_constraintTop_toTopOf="@+id/buttonVisuAluno"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonVisuTurma"
+        app:layout_constraintStart_toStartOf="@+id/buttonVisuTurma"
+        app:layout_constraintTop_toTopOf="@+id/buttonVisuTurma"
         app:layout_constraintVertical_bias="0.571"
         app:srcCompat="@mipmap/search" />
 

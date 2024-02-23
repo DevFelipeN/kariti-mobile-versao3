@@ -8,7 +8,7 @@
     tools:context=".AtualizarSenha">
 
     <ImageButton
-        android:id="@+id/btn_voltar"
+        android:id="@+id/imgBtnVoltar"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"

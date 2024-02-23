@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Kariti"
         tools:targetApi="31">
         <activity
+            android:name=".VisualTurmaActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadTurmaActivity"
             android:exported="false" />
         <activity

@@ -66,23 +66,33 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                 // Exibir a caixa de diálogo
                 AlertDialog.Builder builder = new AlertDialog.Builder(EscolaDesativadaActivity.this);
                 builder.setTitle("Atenção!")
-                        .setMessage("Deseja realmente excluir a escola?")
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        .setMessage("Qual operação deseja realizar")
+                        .setPositiveButton("Ativar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String ids = idsEscolasDesativadas.get(position);
+                                String pegaNome = bancoDados.pegaEscolaDesativada(ids);
+                                String pegaBairro = bancoDados.pegaBairroDesativado(ids);
+                                Integer id = Integer.valueOf(ids);
+                                Boolean deletaEscola = bancoDados.deletarEscola(id);
+                                Boolean reativa = bancoDados.inserirDadosEscola(pegaNome, pegaBairro);
+                                if (deletaEscola!=false && reativa!=false) {
+                                    Toast.makeText(EscolaDesativadaActivity.this, "Escola reativada com Sucesso!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }else
+                                    Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Integer ids = Integer.valueOf(idsEscolasDesativadas.get(position));
                                 Boolean deletaEscola = bancoDados.deletarEscola(ids);
                                 if (deletaEscola)
-                                        Toast.makeText(EscolaDesativadaActivity.this, "Escola Excluida Com Sucesso", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EscolaDesativadaActivity.this, "Escola Excluida Com Sucesso", Toast.LENGTH_SHORT).show();
                                 finish();
-                                Intent intent = new Intent(getApplicationContext(), EscolaDesativadaActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // cancelou
                             }
                         });
                 AlertDialog alertDialog = builder.create();

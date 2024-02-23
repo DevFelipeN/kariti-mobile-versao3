@@ -17,17 +17,18 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 26);
+        super(context, "data_base", null, 27);
     }
 
     @Override
     public void onCreate(SQLiteDatabase data_base) {
         try {
-            data_base.execSQL("create Table usuario( id_usuario INTEGER primary Key AUTOINCREMENT, nome TEXT, email TEXT UNIQUE, password varchar(256))");
-            //data_base.execSQL("create Table validacao_usuario( id INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
+            data_base.execSQL("create Table usuario( id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT, email TEXT UNIQUE, password varchar(256))");
+            //data_base.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
-            data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, id_escola INTEGER)");
+            data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
+            data_base.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, nomeTurma TEXT, id_escola INTEGER)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -38,6 +39,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("drop Table if exists usuario");
             data_base.execSQL("drop Table if exists escola");
             data_base.execSQL("drop Table if exists aluno");
+            data_base.execSQL("drop Table if exists turma");
             data_base.execSQL("drop Table if exists escolasDesativadas");
             onCreate(data_base);
         }catch(Exception e){
@@ -48,7 +50,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean insertData(String nome, String password, String email){
             SQLiteDatabase data_base = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nome", nome);
+            contentValues.put("nomeUsuario", nome);
             contentValues.put("password", to256(password));
             contentValues.put("email", email);
             long inserir = data_base.insert("usuario", null, contentValues);
@@ -64,6 +66,15 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = data_base.insert("escola", null, contentValues);
         return inserir != -1;
     }
+
+    public Boolean inserirTurma(String nomeTurma){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeTurma", nomeTurma);
+        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        long inserir = data_base.insert("turma", null, contentValues);
+        return inserir != -1;
+    }
     public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){
         SQLiteDatabase data_base = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -76,7 +87,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean inserirDadosAluno(String nomeAluno, String email){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("nome", nomeAluno);
+        contentValues.put("nomeAluno", nomeAluno);
         contentValues.put("email", email);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
         long inserir = database.insert("aluno", null, contentValues);
@@ -129,7 +140,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from usuario where nome =? and email = ?", new String[]{nome, email});
+        Cursor cursor = data_base.rawQuery("Select * from usuario where nomeUsuario =? and email = ?", new String[]{nome, email});
         if (cursor.getCount() > 0)
             return true;
         else
@@ -156,10 +167,24 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+    public String pegaEscolaDesativada(String id_scolDesativadas) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from escolasDesativadas where id_scolDesativadas = ?", new String[]{id_scolDesativadas});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(1);
+    }
 
     public String pegaBairro(String id) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from escola where id_escola = ?", new String[]{id});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(2);
+    }
+    public String pegaBairroDesativado(String id_scolDesativadas) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from escolasDesativadas where id_scolDesativadas = ?", new String[]{id_scolDesativadas});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(2);
@@ -194,7 +219,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE nome = ?", new String[]{nome});
+        Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE nomeAluno = ?", new String[]{nome});
 
         if (cursor.getCount() > 0) return true;
         else return false;

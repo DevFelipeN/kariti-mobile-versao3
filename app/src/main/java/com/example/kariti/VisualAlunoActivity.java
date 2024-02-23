@@ -35,11 +35,11 @@ public class VisualAlunoActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nome", "id_aluno"};
+        String [] projection = {"nomeAluno", "id_aluno"};
         Cursor cursor = database.query("aluno", projection, "id_escola="+BancoDados.ID_ESCOLA, null, null, null, null);
         ArrayList<String> alunos = new ArrayList<>();
         ArrayList<String> idsAlunos = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nome");
+        int nomeColumIndex = cursor.getColumnIndex("nomeAluno");
         if (nomeColumIndex != -1){
             while (cursor.moveToNext()){
                 String nome = cursor.getString(0);

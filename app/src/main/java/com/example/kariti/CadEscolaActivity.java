@@ -47,10 +47,7 @@ public class CadEscolaActivity extends AppCompatActivity {
                             Boolean insertEscola = bancoDados.inserirDadosEscola(nome, bairro);
                             if (insertEscola) {
                                 Toast.makeText(CadEscolaActivity.this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-                                nomeEscola.setText("");
-                                bairr0.setText("");
-                                Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                                startActivity(intent);
+                                finish();
                             } else {
                                 Toast.makeText(CadEscolaActivity.this, "Falha no cadastro da escola!", Toast.LENGTH_SHORT).show();
                             }
@@ -65,8 +62,6 @@ public class CadEscolaActivity extends AppCompatActivity {
                                             Boolean reativa = bancoDados.inserirDadosEscola(nome, bairro);
                                             if (deletaEscola!=false && reativa!=false) {
                                                 finish();
-                                                Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
-                                                startActivity(intent);
                                             }else
                                                 Toast.makeText(CadEscolaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
                                         }

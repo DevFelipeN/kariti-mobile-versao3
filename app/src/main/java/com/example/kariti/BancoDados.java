@@ -167,10 +167,24 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+    public String pegaEscolaDesativada(String id_scolDesativadas) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from escolasDesativadas where id_scolDesativadas = ?", new String[]{id_scolDesativadas});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(1);
+    }
 
     public String pegaBairro(String id) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from escola where id_escola = ?", new String[]{id});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(2);
+    }
+    public String pegaBairroDesativado(String id_scolDesativadas) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from escolasDesativadas where id_scolDesativadas = ?", new String[]{id_scolDesativadas});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(2);

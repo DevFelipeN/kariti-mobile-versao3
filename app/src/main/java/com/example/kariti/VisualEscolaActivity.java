@@ -131,5 +131,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
     public void telaEscolaDesativada() {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivity(intent);
+        finish();
     }
 }

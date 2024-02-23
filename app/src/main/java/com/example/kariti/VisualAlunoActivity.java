@@ -26,17 +26,20 @@ public class VisualAlunoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visual_aluno);
         btnVoltar = findViewById(R.id.btn_voltar_left);
         pesquisarAlunos = findViewById(R.id.editTextBuscarAluno);
-
         bancoDados = new BancoDados(this);
+
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nome"};
         Cursor cursor = database.query("aluno", projection, null, null, null, null, null);
         ArrayList<String> alunos = new ArrayList<>();
+        //ArrayList<String> idsalunos = new ArrayList<>();
         int nomeColumIndex = cursor.getColumnIndex("nome");
         if (nomeColumIndex != -1){
             while (cursor.moveToNext()){
                 String nome = cursor.getString(nomeColumIndex);
+                //String idAluno = cursor.getString(1);
                 alunos.add(nome);
+                //idsalunos.add(idAluno);
             }
         }else{
             Log.e("VisualAlunoActivity", "A coluna 'nome' não foi encontrada no cursor.");

@@ -82,6 +82,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BancoDados.ID_ESCOLA = Integer.valueOf(idsEscolas.get(position));
                 String ids = idsEscolas.get(position);
                 String escola = bancoDados.pegaEscola(ids);
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);

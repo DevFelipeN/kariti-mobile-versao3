@@ -16,6 +16,12 @@
         android:theme="@style/Theme.Kariti"
         tools:targetApi="31">
         <activity
+            android:name=".EditarTurmaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DadosTurmaActivity"
+            android:exported="false" />
+        <activity
             android:name=".VisualTurmaActivity"
             android:exported="false" />
         <activity

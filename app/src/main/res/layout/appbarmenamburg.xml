@@ -22,6 +22,7 @@
         android:layout_gravity="end"
         android:contentDescription="@string/btnMenuPontos"
         android:padding="8dp"
+        android:onClick="PopMenu"
         android:src="@mipmap/menuptn" />
 
 </androidx.appcompat.widget.Toolbar>

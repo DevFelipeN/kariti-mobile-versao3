@@ -74,6 +74,7 @@
     <string name="imgBtnSeta">ImagemSetaProx</string>
     <string name="msgCodigo">Código de validação ENVIADO para</string>
     <string name="imgDelete">Botão de Deletar</string>
+    <string name="txtViewNomeTurma">Nome da Turma</string>
 
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>

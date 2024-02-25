@@ -50,6 +50,9 @@
     <string name="buttonCadAluno">Cadastrar Aluno</string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
+    <string name="btnSalvaAluno">Salvar</string>
+    <string name="menuEditarAlun">Editar Aluno</string>
+    <string name="menuExclAlun">Excluir Aluno</string>
 
     <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>

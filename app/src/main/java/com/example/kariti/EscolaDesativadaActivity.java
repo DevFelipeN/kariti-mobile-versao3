@@ -33,7 +33,6 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         btnMenu = findViewById(R.id.imageViewIcon);
         ListView listView = findViewById(R.id.listView);
         bancoDados = new BancoDados(this);
-        teste = findViewById(R.id.teste);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,13 +100,12 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             }
         });
     }
-    public void testeMain(View v){
+    public void menuAtivaExcl(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
         popupMenu.inflate(R.menu.activity_menuescola);
         popupMenu.show();
     }
-
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();

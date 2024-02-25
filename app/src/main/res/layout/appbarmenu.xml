@@ -16,7 +16,6 @@
             android:src="@mipmap/setaleft"
             android:contentDescription="@string/btnVoltar"/>
 
-        <!-- Ícone do home -->
         <ImageView
             android:id="@+id/menu_icon"
             android:layout_width="45dp"
@@ -24,6 +23,7 @@
             android:layout_gravity="end"
             android:contentDescription="@string/btnMenuPontos"
             android:padding="8dp"
+            android:onClick="popMenuAluno"
             android:src="@mipmap/menuptn" />
 
 </androidx.appcompat.widget.Toolbar>

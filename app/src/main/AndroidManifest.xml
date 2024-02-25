@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Kariti"
         tools:targetApi="31">
         <activity
+            android:name=".EditarAlunoActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditarTurmaActivity"
             android:exported="false" />
         <activity

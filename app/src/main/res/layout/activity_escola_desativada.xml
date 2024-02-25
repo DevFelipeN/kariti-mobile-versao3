@@ -27,15 +27,4 @@
         app:layout_constraintVertical_bias="0.305"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
-        android:id="@+id/teste"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="testeMain"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:srcCompat="@mipmap/graduate" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

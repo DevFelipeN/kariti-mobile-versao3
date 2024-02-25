@@ -87,6 +87,13 @@ public class VisualAlunoActivity extends AppCompatActivity {
             }
         });
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                telaTeste();
+            }
+        });
+
         pesquisarAlunos.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -105,6 +112,12 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    public void telaTeste() {
+        Intent intent = new Intent(this, EditarAlunoActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

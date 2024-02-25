@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/appbarmenamburg"
+        layout="@layout/appbarmenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,35 +23,18 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageButton
-        android:id="@+id/imgBtnVoltar"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
-        android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.012"
-        tools:ignore="MissingConstraints" />
-
     <EditText
         android:id="@+id/editTextBuscarAluno"
         android:layout_width="320dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/border_radio"
         android:ems="10"
         android:hint="@string/buscNameAluno"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.67"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
@@ -72,7 +55,7 @@
         android:id="@+id/listAluno"
         android:layout_width="350dp"
         android:layout_height="500dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"

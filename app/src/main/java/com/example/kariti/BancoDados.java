@@ -10,6 +10,7 @@ import android.util.Log;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 
 public class BancoDados extends SQLiteOpenHelper {
 
@@ -17,7 +18,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 27);
+        super(context, "data_base", null, 28);
     }
 
     @Override

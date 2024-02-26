@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
-        android:id="@+id/editTextNomeCad"
+        android:id="@+id/editTextAlunoCad"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
@@ -70,10 +70,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNomeCad" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextAlunoCad" />
 
     <Button
-        android:id="@+id/buttonAlterar"
+        android:id="@+id/buttonSalvar"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -95,9 +95,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNomeCad"
-        app:layout_constraintStart_toStartOf="@+id/editTextNomeCad"
-        app:layout_constraintTop_toTopOf="@+id/editTextNomeCad"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextAlunoCad"
+        app:layout_constraintStart_toStartOf="@+id/editTextAlunoCad"
+        app:layout_constraintTop_toTopOf="@+id/editTextAlunoCad"
         app:srcCompat="@mipmap/usuario"
         tools:ignore="MissingConstraints" />
 

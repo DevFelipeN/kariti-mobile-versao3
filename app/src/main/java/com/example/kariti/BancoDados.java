@@ -160,6 +160,22 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+
+    public String pegaAluno(String id_aluno) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(1);
+    }
+
+    public String pegaEmailAluno(String id_aluno) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(2);
+    }
     public String pegaEscola(String id) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from escola where id_escola = ?", new String[]{id});

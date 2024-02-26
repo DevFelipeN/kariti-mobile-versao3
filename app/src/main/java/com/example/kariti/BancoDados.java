@@ -130,7 +130,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean upadateSenha(String password, Integer id){
         try {
             SQLiteDatabase data_base = this.getWritableDatabase();
-            String altera = "UPDATE usuario SET password=? WHERE id=?";
+            String altera = "UPDATE usuario SET password=? WHERE id_usuario=?";
             SQLiteStatement stmt = data_base.compileStatement(altera);
             stmt.bindString(1, to256(password));
             stmt.bindLong(2, id);
@@ -138,6 +138,20 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.close();
         }catch (Exception e){e.printStackTrace();}
        return true;
+    }
+
+    public Boolean upadateDadosAluno(String nomeAluno, String email, Integer id_aluno){
+        try {
+            SQLiteDatabase data_base = this.getWritableDatabase();
+            String altera = "UPDATE aluno SET nomeAluno=?, email=? WHERE id_aluno=?";
+            SQLiteStatement stmt = data_base.compileStatement(altera);
+            stmt.bindString(1, nomeAluno);
+            stmt.bindString(2, email);
+            stmt.bindLong(3, id_aluno);
+            stmt.executeUpdateDelete();
+            data_base.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
     }
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();

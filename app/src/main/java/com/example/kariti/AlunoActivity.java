@@ -30,6 +30,7 @@ public class AlunoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                finish();
             }
         });
 

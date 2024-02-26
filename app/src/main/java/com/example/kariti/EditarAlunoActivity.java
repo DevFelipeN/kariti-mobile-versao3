@@ -7,8 +7,10 @@ import androidx.appcompat.widget.PopupMenu;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
     EditText nomeAluno, emailAluno;
+    Button salvar;
     BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         nomeAluno = findViewById(R.id.editTextAlunoCad);
         emailAluno = findViewById(R.id.editTextEmailCad);
         voltar = findViewById(R.id.imgBtnVoltar);
+        salvar = findViewById(R.id.buttonSalvarEdit);
         bancoDados = new BancoDados(this);
 
         String id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
@@ -35,7 +39,28 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {onBackPressed();}
+            public void onClick(View view) {Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                startActivity(intent);
+            finish();}
+        });
+
+        salvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nomAtual = nomeAluno.getText().toString();
+                String emailAtual = emailAluno.getText().toString();
+                if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
+                    if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                        Integer id_aluno = getIntent().getExtras().getInt("id_aluno");
+                        Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, id_aluno);
+                        if (alteraDadoAluno.equals(true))
+                            Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                        finish();
+                        Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                        startActivity(intent);
+                    }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 

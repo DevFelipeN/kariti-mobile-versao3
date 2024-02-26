@@ -90,7 +90,11 @@ public class VisualAlunoActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                telaTeste();
+                Integer id = Integer.valueOf(idsAlunos.get(i));
+                Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
+                intent.putExtra("id_aluno", id);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -113,11 +117,4 @@ public class VisualAlunoActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void telaTeste() {
-        Intent intent = new Intent(this, EditarAlunoActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
 }

@@ -1,22 +1,37 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
+    EditText nomeAluno, emailAluno;
+    BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_aluno);
 
+        nomeAluno = findViewById(R.id.editTextAlunoCad);
+        emailAluno = findViewById(R.id.editTextEmailCad);
         voltar = findViewById(R.id.imgBtnVoltar);
+        bancoDados = new BancoDados(this);
+
+        String id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
+        String aluno = bancoDados.pegaAluno(id_aluno);
+        String email = bancoDados.pegaEmailAluno(id_aluno);
+        nomeAluno.setText(aluno);
+        emailAluno.setText(email);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,9 +49,36 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuEditarAluno) {
-            Toast.makeText(EditarAlunoActivity.this, "Editar Aluno selecionado", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(EditarAlunoActivity.this, "Editar Aluno selecionado: ", Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.menuExcluirAluno) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
+            builder.setTitle("Atenção!")
+                    .setMessage("Deseja Realmente Excluir Aluno?")
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Integer id_aluno = getIntent().getExtras().getInt("id_aluno");
+                            Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
+                            if (deletAluno)
+                                Toast.makeText(EditarAlunoActivity.this, "Aluno Excluido Com Sucesso", Toast.LENGTH_SHORT).show();
+                            finish();
+                            Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // cancelou
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+
             Toast.makeText(EditarAlunoActivity.this, "Excluir Aluno selecionado", Toast.LENGTH_SHORT).show();
             return true;
         } else {

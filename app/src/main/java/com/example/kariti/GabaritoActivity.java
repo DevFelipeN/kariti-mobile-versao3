@@ -2,9 +2,11 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva;
+    Button cadProva;
     ImageButton voltar;
 
     @Override
@@ -21,10 +24,17 @@ public class GabaritoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gabarito);
 
         voltar = findViewById(R.id.imgBtnVoltar);
+        cadProva = findViewById(R.id.btnCadProva);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        cadProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaConfim();
             }
         });
 
@@ -81,5 +91,11 @@ public class GabaritoActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void telaConfim() {
+        Intent intent = new Intent(this, ProvaCadConfirActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

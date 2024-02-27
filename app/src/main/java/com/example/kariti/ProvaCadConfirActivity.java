@@ -8,22 +8,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class ProvaActivity extends AppCompatActivity {
+public class ProvaCadConfirActivity extends AppCompatActivity {
     ImageButton voltar;
-    Button cadProva, gerarCartao, corrigirProva;
+    Button gerarCartao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prova);
+        setContentView(R.layout.activity_prova_cad_confir);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        cadProva = findViewById(R.id.buttonCadProva);
         gerarCartao = findViewById(R.id.buttonGerarCatao);
-        corrigirProva = findViewById(R.id.buttonCorrigirProva);
-        cadProva.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                telaCadastroProva();
+                telaProva();
             }
         });
         gerarCartao.setOnClickListener(new View.OnClickListener() {
@@ -32,32 +30,16 @@ public class ProvaActivity extends AppCompatActivity {
                 telaGerarCartao();
             }
         });
-
-        corrigirProva.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                telaCorrigirProva();
-            }
-        });
-
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
     }
 
-    public void telaCadastroProva(){
+    public void telaProva() {
         Intent intent = new Intent(this, CadProvaActivity.class);
         startActivity(intent);
+        finish();
     }
+
     public void telaGerarCartao(){
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
-        startActivity(intent);
-    }
-    public void telaCorrigirProva(){
-        Intent intent = new Intent(this, ProvaCorrigirActivity.class);
         startActivity(intent);
     }
 }

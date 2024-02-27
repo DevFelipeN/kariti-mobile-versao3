@@ -81,7 +81,7 @@
     <string name="txtViewTurma">Turma:</string>
     <string name="txtViewData">Data:</string>
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>
-
+    <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
 
 
     <string name="btnVoltar">Button Voltar</string>

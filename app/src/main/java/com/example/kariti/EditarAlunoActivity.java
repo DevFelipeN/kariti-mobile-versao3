@@ -81,7 +81,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
 
             AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
             builder.setTitle("Atenção!")
-                    .setMessage("Deseja Realmente Excluir Aluno?")
+                    .setMessage("Deseja realmente excluir o aluno?")
                     .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

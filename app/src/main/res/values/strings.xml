@@ -77,6 +77,11 @@
     <string name="buttonMenos">-</string>
     <string name="buttonQtd">1</string>
     <string name="buttonData">Selecionar Data</string>
+    <string name="txtViewProva">Prova:</string>
+    <string name="txtViewTurma">Turma:</string>
+    <string name="txtViewData">Data:</string>
+    <string name="txtViewNotaT">Nota total da prova X pontos.</string>
+
 
 
     <string name="btnVoltar">Button Voltar</string>

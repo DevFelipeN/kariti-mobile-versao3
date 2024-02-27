@@ -3,6 +3,7 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import java.util.Locale;
 public class CadProvaActivity extends AppCompatActivity {
     private Button datePickerButton;
     private Calendar calendar;
+    Button btnGerProva;
     ImageButton voltar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +25,18 @@ public class CadProvaActivity extends AppCompatActivity {
 
         datePickerButton = findViewById(R.id.datePickerButton);
         voltar = findViewById(R.id.imgBtnVoltar);
+        btnGerProva = findViewById(R.id.btnGerarProva);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        btnGerProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaGabarito();
             }
         });
 
@@ -61,5 +70,11 @@ public class CadProvaActivity extends AppCompatActivity {
         String dateFormat = "dd/MM/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    public void telaGabarito() {
+        Intent intent = new Intent(this, GabaritoActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

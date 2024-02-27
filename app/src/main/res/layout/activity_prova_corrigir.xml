@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProvaCadConfirActivity">
+    tools:context=".ProvaCorrigirActivity">
 
     <include
         android:id="@+id/include"
@@ -37,46 +37,34 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.0"/>
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="@string/txtConfimProva"
-        android:textColor="#4CAF50"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnGerarCartao"
-        app:layout_constraintEnd_toEndOf="@+id/btnGerarCartao"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toStartOf="@+id/btnGerarCartao"
-        app:layout_constraintTop_toTopOf="@+id/btnGerarCartao"
-        app:srcCompat="@mipmap/prova" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/btnGerarCartao"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/buttonGaleria"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="196dp"
         android:background="@drawable/button_selector"
-        android:text="@string/buttonGerarCartao"
-        android:textAlignment="textEnd"
+        android:text="@string/btnAbrirGaleria"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/btnAbrirCamera"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14"
-        app:layout_constraintVertical_bias="0.426" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonGaleria"
+        app:layout_constraintVertical_bias="0.125" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

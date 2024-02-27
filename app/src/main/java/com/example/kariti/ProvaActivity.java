@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 public class ProvaActivity extends AppCompatActivity {
     ImageButton voltar;
-    Button cadProva;
+    Button cadProva, gerarCartao, corrigirProva;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,12 +18,28 @@ public class ProvaActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltar);
         cadProva = findViewById(R.id.buttonCadProva);
+        gerarCartao = findViewById(R.id.buttonGerarCatao);
+        corrigirProva = findViewById(R.id.buttonCorrigirProva);
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 telaCadastroProva();
             }
         });
+        gerarCartao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaGerarCartao();
+            }
+        });
+
+        corrigirProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaCorrigirProva();
+            }
+        });
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,6 +50,14 @@ public class ProvaActivity extends AppCompatActivity {
 
     public void telaCadastroProva(){
         Intent intent = new Intent(this, CadProvaActivity.class);
+        startActivity(intent);
+    }
+    public void telaGerarCartao(){
+        Intent intent = new Intent(this, ProvaCartoesActivity.class);
+        startActivity(intent);
+    }
+    public void telaCorrigirProva(){
+        Intent intent = new Intent(this, ProvaCorrigirActivity.class);
         startActivity(intent);
     }
 }

@@ -68,6 +68,20 @@
     <string name="buttonGerarCartao">Gerar Cartões</string>
     <string name="buttonVisuProva">Visualizar Prova</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
+    <string name="editTextNomeProva">Digite o nome  da Prova</string>
+    <string name="textViewDataProva">Data da Prova</string>
+    <string name="textViewQuantQuestoes">Quant. de Questões</string>
+    <string name="textViewQuantAltern">Quant. de Alternativas</string>
+    <string name="buttonGerarProva">Gerar Prova</string>
+    <string name="buttonMais">+</string>
+    <string name="buttonMenos">-</string>
+    <string name="buttonQtd">1</string>
+    <string name="buttonData">Selecionar Data</string>
+    <string name="txtViewProva">Prova:</string>
+    <string name="txtViewTurma">Turma:</string>
+    <string name="txtViewData">Data:</string>
+    <string name="txtViewNotaT">Nota total da prova X pontos.</string>
+
 
 
     <string name="btnVoltar">Button Voltar</string>

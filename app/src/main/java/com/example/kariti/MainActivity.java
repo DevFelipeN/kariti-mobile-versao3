@@ -118,8 +118,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void voltarTelaWelcome(){
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        startActivity(intent);
-    }
 }

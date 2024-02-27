@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Kariti"
         tools:targetApi="31">
         <activity
+            android:name=".ProvaCartoesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProvaCadConfirActivity"
             android:exported="false" />
         <activity

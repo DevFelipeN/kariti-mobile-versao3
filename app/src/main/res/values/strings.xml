@@ -38,7 +38,7 @@
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="nomeSchool">Nome da Escola</string>
     <string name="bairroSchool">Bairro</string>
-    <string name="buscNameAluno">Digite o nome do aluno</string>
+    <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="senhahint">********</string>
     <string name="btnAlterarSenha">Alterar Senha</string>
     <string name="btnEscolaDesativada">Escolas Desativadas</string>
@@ -54,13 +54,14 @@
     <string name="menuEditarAlun">Editar Aluno</string>
     <string name="menuExclAlun">Excluir Aluno</string>
 
-    <string name="buttonCadTurma">Cadastrar Turma</string>
+    <string name="buttonCadTurma">Cadastrar</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
-    <string name="editTextNomeTurma">Nome da Turma</string>
+    <string name="editTextNomeTurma">Informe o Nome da Turma</string>
     <string name="textViewAlunos">Alunos</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
-    <string name="btnIncluirAluno">Incluir Aluno</string>
-    <string name="textViewAlunoAnonim">Alunos Anônimos</string>
+    <string name="btnIncluirAluno">Incluir Alunos</string>
+    <string name="btnIncluir">Incluir</string>
+    <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnTranferirOutraTurma">Transf. de outra Turma</string>
 
 

@@ -3,6 +3,7 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,6 +24,7 @@ public class CadTurmaActivity extends AppCompatActivity {
     private Toolbar toolbar;
     BancoDados bancoDados;
     EditText pesquisarAlunos;
+    Button incluirAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +36,20 @@ public class CadTurmaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         ListView listView = findViewById(R.id.listView);
         pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
+        incluirAluno = findViewById(R.id.buttonIncluirAluno);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+        incluirAluno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), IncluirAlunosEmTurma.class);
+                startActivity(intent);
             }
         });
 

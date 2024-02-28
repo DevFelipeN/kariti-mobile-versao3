@@ -124,7 +124,7 @@
         app:srcCompat="@mipmap/search" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonIncluirAluno"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="80dp"
@@ -185,7 +185,7 @@
             app:srcCompat="@mipmap/btnadicionar" />
 
         <EditText
-            android:id="@+id/editTextText3"
+            android:id="@+id/editTextTexto"
             android:layout_width="50dp"
             android:layout_height="38dp"
             android:layout_marginStart="5dp"
@@ -205,20 +205,6 @@
             android:background="@color/tranparente"
             app:srcCompat="@mipmap/subtract" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
-        android:text="@string/btnTranferirOutraTurma"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
-        app:layout_constraintVertical_bias="0.581" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

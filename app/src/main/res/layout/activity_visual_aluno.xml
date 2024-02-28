@@ -24,7 +24,7 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editTextBuscarAluno"
+        android:id="@+id/editTextBuscar"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
@@ -44,15 +44,15 @@
         android:layout_height="24dp"
         android:layout_marginStart="10dp"
         android:contentDescription="@string/buscNameAluno"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextBuscarAluno"
-        app:layout_constraintEnd_toEndOf="@+id/editTextBuscarAluno"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextBuscar"
+        app:layout_constraintEnd_toEndOf="@+id/editTextBuscar"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextBuscarAluno"
-        app:layout_constraintTop_toTopOf="@+id/editTextBuscarAluno"
+        app:layout_constraintStart_toStartOf="@+id/editTextBuscar"
+        app:layout_constraintTop_toTopOf="@+id/editTextBuscar"
         app:srcCompat="@mipmap/search" />
 
     <ListView
-        android:id="@+id/listAluno"
+        android:id="@+id/listSelecAluno"
         android:layout_width="350dp"
         android:layout_height="500dp"
         android:layout_marginTop="15dp"
@@ -60,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBuscarAluno"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBuscar"
         app:layout_constraintVertical_bias="0.058" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

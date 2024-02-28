@@ -30,8 +30,8 @@ public class VisualAlunoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_aluno);
         btnVoltar = findViewById(R.id.imgBtnVoltar);
-        pesquisarAlunos = findViewById(R.id.editTextBuscarAluno);
-        ListView listView = findViewById(R.id.listAluno);
+        pesquisarAlunos = findViewById(R.id.editTextBuscar);
+        ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();

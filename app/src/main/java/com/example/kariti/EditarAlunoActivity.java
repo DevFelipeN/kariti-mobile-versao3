@@ -59,7 +59,8 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                         Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
                         startActivity(intent);
                     }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
-                }
+                }else
+                    Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -78,7 +79,6 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
             Toast.makeText(EditarAlunoActivity.this, "Editar Aluno selecionado: ", Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.menuExcluirAluno) {
-
             AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
             builder.setTitle("Atenção!")
                     .setMessage("Deseja realmente excluir o aluno?")
@@ -102,9 +102,6 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-
-
-            Toast.makeText(EditarAlunoActivity.this, "Excluir Aluno selecionado", Toast.LENGTH_SHORT).show();
             return true;
         } else {
             return false;

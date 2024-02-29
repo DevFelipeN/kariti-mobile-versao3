@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProvaCartoesActivity">
+    tools:context=".VisualProvaActivity">
 
     <include
         android:id="@+id/include"
@@ -71,17 +71,16 @@
 
     <Button
         android:id="@+id/buttonVisualizarProva"
-        android:layout_width="150dp"
+        android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:background="@drawable/button_selector"
-        android:text="@string/btnEnvCartao"
+        android:text="@string/buttonVisuProva"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.626"
-        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
         app:layout_constraintVertical_bias="0.501" />
 
@@ -95,30 +94,5 @@
         app:layout_constraintStart_toStartOf="@+id/buttonVisualizarProva"
         app:layout_constraintTop_toTopOf="@+id/buttonVisualizarProva"
         app:srcCompat="@mipmap/prova" />
-
-    <ImageView
-        android:id="@+id/imageView15"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
-        app:layout_constraintHorizontal_bias="0.081"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="@+id/button2"
-        app:srcCompat="@mipmap/prova" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:background="@drawable/button_selector"
-        android:text="@string/btnBaixCartao"
-        android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
-        app:layout_constraintVertical_bias="0.572" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

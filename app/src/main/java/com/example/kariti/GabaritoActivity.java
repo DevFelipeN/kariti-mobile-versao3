@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class GabaritoActivity extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class GabaritoActivity extends AppCompatActivity {
             TextView textViewAlternativa = new TextView(this);
             textViewAlternativa.setText(String.valueOf(letra));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.setMargins(43, 0, 40, 0); // Adiciona margem esquerda e direita de 10 pixels
+            params.setMargins(43, 0, 40, 0);
             textViewAlternativa.setLayoutParams(params); // Aplica os parâmetros de layout ao TextView
             textViewAlternativa.setGravity(Gravity.CENTER); // Centraliza o texto
             layoutAlternativas.addView(textViewAlternativa); // Adiciona a alternativa ao layout das alternativas
@@ -62,7 +63,7 @@ public class GabaritoActivity extends AppCompatActivity {
         }
         layoutQuestoes.addView(layoutAlternativas);
 
-        //Questões e CheckBoxes
+        //Questões e Radio
         for (int i = 0; i < quantidadeQuestoes; i++) {
             LinearLayout layoutQuestao = new LinearLayout(this);
             layoutQuestao.setOrientation(LinearLayout.HORIZONTAL);
@@ -71,13 +72,14 @@ public class GabaritoActivity extends AppCompatActivity {
             textViewNumeroQuestao.setText((i + 1) + " ");
             layoutQuestao.addView(textViewNumeroQuestao);
 
-            // Loop para criar os CheckBoxes para as respostas
+            // Loop para criar Radio para as respostas
             for (int j = 0; j < quantidadeAlternativas; j++) {
-                CheckBox checkBoxAlternativa = new CheckBox(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 params.setMargins(0, 0, 40, 0);
+
+                CheckBox checkBoxAlternativa = new CheckBox(this);
                 checkBoxAlternativa.setLayoutParams(params);
-                layoutQuestao.addView(checkBoxAlternativa); // Adicionar o CheckBox ao layout da questão
+                layoutQuestao.addView(checkBoxAlternativa);
             }
 
             EditText editTextPontos = new EditText(this);

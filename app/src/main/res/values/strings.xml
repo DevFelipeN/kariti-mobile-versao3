@@ -87,6 +87,13 @@
     <string name="btnEnvCartao">Enviar Cartão</string>
     <string name="btnAbrirGaleria">Carregar da Galeria</string>
     <string name="btnAbrirCamera">Abrir Câmera</string>
+    <string name="txtProva1">Prova 1</string>
+    <string name="btnEnviarParaAluno">Enviar Para o Aluno</string>
+    <string name="btnBaixarProva">Baixar Prova</string>
+    <string name="btnCompartilhar">Compartilhar</string>
+
+
+
 
 
     <string name="btnVoltar">Button Voltar</string>

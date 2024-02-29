@@ -20,6 +20,12 @@
             android:name=".teste"
             android:exported="false" />
         <activity
+            android:name=".VisualProvaCorrigidaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VisualProvaActivity"
+            android:exported="false" />
+        <activity
             android:name=".IncluirAlunosEmTurma"
             android:exported="false" />
         <activity

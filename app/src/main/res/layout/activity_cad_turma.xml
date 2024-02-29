@@ -20,8 +20,8 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:layout_editor_absoluteX="2dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="2dp" />
 
     <ImageButton
         android:id="@+id/imgBtnVoltar"

@@ -2,12 +2,16 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,6 +20,8 @@ import java.util.Locale;
 public class CadProvaActivity extends AppCompatActivity {
     private Button datePickerButton;
     private Calendar calendar;
+    EditText nomeProva;
+    TextView qtdQuest, qtdAlter;
     Button btnGerProva;
     ImageButton voltar;
     @Override
@@ -26,6 +32,10 @@ public class CadProvaActivity extends AppCompatActivity {
         datePickerButton = findViewById(R.id.datePickerButton);
         voltar = findViewById(R.id.imgBtnVoltar);
         btnGerProva = findViewById(R.id.btnGerarProva);
+        nomeProva = findViewById(R.id.editTextNomeProva);
+        qtdQuest = findViewById(R.id.textViewQuantity);
+        qtdAlter = findViewById(R.id.textVieAlter);
+
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,7 +46,15 @@ public class CadProvaActivity extends AppCompatActivity {
         btnGerProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                telaGabarito();
+                String prova = nomeProva.getText().toString();
+                String quest = qtdQuest.getText().toString();
+                String alter = qtdAlter.getText().toString();
+                if (!prova.equals("")){
+                    Toast.makeText(CadProvaActivity.this, "Questão: "+quest, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadProvaActivity.this, "Alternativa: "+alter, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

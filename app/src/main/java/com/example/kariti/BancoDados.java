@@ -78,6 +78,17 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = data_base.insert("turma", null, contentValues);
         return inserir != -1;
     }
+
+    public Boolean inserirProva(String nomeProva, Integer qtdQuestoes, Integer qtdAlternativas){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeProva", nomeProva);
+        contentValues.put("qtdQuestoes", qtdQuestoes);
+        contentValues.put("qtdAlternativas", qtdAlternativas);
+        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        long inserir = data_base.insert("prova", null, contentValues);
+        return inserir != -1;
+    }
     public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){
         SQLiteDatabase data_base = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

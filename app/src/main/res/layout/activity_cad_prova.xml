@@ -40,14 +40,14 @@
         app:layout_constraintVertical_bias="0.0"/>
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/editTextNomeProva"
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
+        android:hint="Digite o nome da prova"
         android:inputType="text"
-        android:text="@string/editTextNomeProva"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomeProva" />
 
     <TextView
         android:id="@+id/textView8"

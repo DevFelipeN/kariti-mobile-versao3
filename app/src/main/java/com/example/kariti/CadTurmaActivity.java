@@ -45,13 +45,13 @@ public class CadTurmaActivity extends AppCompatActivity {
             }
         });
 
-        incluirAluno.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), IncluirAlunosEmTurma.class);
-                startActivity(intent);
-            }
-        });
+//        incluirAluno.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(), IncluirAlunosEmTurma.class);
+//                startActivity(intent);
+//            }
+//        });
 
         bancoDados = new BancoDados(this);
         SQLiteDatabase database = bancoDados.getReadableDatabase();

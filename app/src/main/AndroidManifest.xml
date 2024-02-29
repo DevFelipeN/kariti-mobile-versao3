@@ -17,6 +17,12 @@
         android:theme="@style/Theme.Kariti"
         tools:targetApi="31">
         <activity
+            android:name=".VisualProvaCorrigidaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VisualProvaActivity"
+            android:exported="false" />
+        <activity
             android:name=".IncluirAlunosEmTurma"
             android:exported="false" />
         <activity

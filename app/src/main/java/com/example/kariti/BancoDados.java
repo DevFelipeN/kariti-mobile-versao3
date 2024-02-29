@@ -18,7 +18,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 28);
+        super(context, "data_base", null, 29);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
             data_base.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, nomeTurma TEXT, id_escola INTEGER)");
-            //data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, , id_escola INTEGER)");
+            data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT,qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -42,6 +42,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("drop Table if exists escola");
             data_base.execSQL("drop Table if exists aluno");
             data_base.execSQL("drop Table if exists turma");
+            data_base.execSQL("drop Table if exists prova");
             data_base.execSQL("drop Table if exists escolasDesativadas");
             onCreate(data_base);
         }catch(Exception e){

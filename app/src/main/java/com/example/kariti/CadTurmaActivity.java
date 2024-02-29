@@ -4,27 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity {
     ImageButton voltar;
     private Toolbar toolbar;
-    BancoDados bancoDados;
-    EditText pesquisarAlunos;
-    Button incluirAluno;
+    EditText pesquisarAlunos, nomeTurma;
+    Button buttonIncluirAlunos, cadastrar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +24,11 @@ public class CadTurmaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        ListView listView = findViewById(R.id.listView);
+//        ListView listView = findViewById(R.id.listView);
         pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
-        incluirAluno = findViewById(R.id.buttonIncluirAluno);
-
+        buttonIncluirAlunos = findViewById(R.id.buttonIncluirAluno);
+        nomeTurma = findViewById(R.id.editTextTurma);
+        cadastrar = findViewById(R.id.buttonCadastrarTurma);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,47 +36,21 @@ public class CadTurmaActivity extends AppCompatActivity {
             }
         });
 
-//        incluirAluno.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getApplicationContext(), IncluirAlunosEmTurma.class);
-//                startActivity(intent);
-//            }
-//        });
+        buttonIncluirAlunos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {irParaVisualAluno();}
+        });
 
-        bancoDados = new BancoDados(this);
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeAluno", "id_aluno"};
-        Cursor cursor = database.query("aluno", projection, "id_escola="+BancoDados.ID_ESCOLA, null, null, null, null);
-        ArrayList<String> alunos = new ArrayList<>();
-        ArrayList<String> idAlunos = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeAluno");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nome = cursor.getString(0);
-                String idAluno = cursor.getString(1);
-                alunos.add(nome);
-                idAlunos.add(idAluno);
-            }
-        }else{
-            Log.e("CadTurmaActivity", "A coluna 'nome' não foi encontrada no cursor.");
-        }
-        cursor.close();
-        database.close();
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
-        listView.setAdapter(adapter);
-        pesquisarAlunos.addTextChangedListener(new TextWatcher() {
+        cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                adapter.getFilter().filter(charSequence);
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
+            public void onClick(View view) {
+                String nome = nomeTurma.getText().toString();
+                Button incluirAlunos = buttonIncluirAlunos;
             }
         });
+    }
+    public void irParaVisualAluno(){
+        Intent intent = new Intent(this, VisualAlunoActivity.class);
+        startActivity(intent);
     }
 }

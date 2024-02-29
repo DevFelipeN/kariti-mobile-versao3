@@ -24,7 +24,6 @@ public class CadTurmaActivity extends AppCompatActivity {
     private Toolbar toolbar;
     BancoDados bancoDados;
     EditText pesquisarAlunos;
-    Button incluirAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,20 +35,11 @@ public class CadTurmaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         ListView listView = findViewById(R.id.listView);
         pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
-        incluirAluno = findViewById(R.id.buttonIncluirAluno);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-            }
-        });
-
-        incluirAluno.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), IncluirAlunosEmTurma.class);
-                startActivity(intent);
             }
         });
 

@@ -18,7 +18,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 29);
+        super(context, "data_base", null, 30);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
             data_base.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, nomeTurma TEXT, id_escola INTEGER)");
-            data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT,qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER)");
+            data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -79,10 +79,11 @@ public class BancoDados extends SQLiteOpenHelper {
         return inserir != -1;
     }
 
-    public Boolean inserirProva(String nomeProva, Integer qtdQuestoes, Integer qtdAlternativas){
+    public Boolean inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas){
         SQLiteDatabase data_base = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeProva", nomeProva);
+        contentValues.put("dataProva", dataProva);
         contentValues.put("qtdQuestoes", qtdQuestoes);
         contentValues.put("qtdAlternativas", qtdAlternativas);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
@@ -169,6 +170,15 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from usuario where nomeUsuario =? and email = ?", new String[]{nome, email});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public Boolean checkProva(String nomeProva) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select nomeProva from prova where nomeProva =?", new String[]{nomeProva});
         if (cursor.getCount() > 0)
             return true;
         else

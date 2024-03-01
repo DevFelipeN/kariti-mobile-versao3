@@ -23,7 +23,8 @@ public class CadProvaActivity extends AppCompatActivity {
     EditText nomeProva;
     TextView qtdQuest, qtdAlter;
     Button btnGerProva;
-    ImageButton voltar;
+    BancoDados bancoDados;
+    ImageButton voltar, questMenos, questMais, altMais, altMenos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,26 +36,71 @@ public class CadProvaActivity extends AppCompatActivity {
         nomeProva = findViewById(R.id.editTextNomeProva);
         qtdQuest = findViewById(R.id.textViewQuantity);
         qtdAlter = findViewById(R.id.textVieAlter);
+        questMais = findViewById(R.id.imageButtonMaisQuest);
+        questMenos = findViewById(R.id.imageButtonMenosQuest);
+        altMais = findViewById(R.id.imgBtnMaisAlter);
+        altMenos = findViewById(R.id.imgBtnMenoAlter);
+        bancoDados = new BancoDados(this);
 
-
-        voltar.setOnClickListener(new View.OnClickListener() {
+        questMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Integer quest = Integer.valueOf(qtdQuest.getText().toString());
+                quest ++;
+                qtdQuest.setText(quest.toString());
             }
         });
+
+        questMenos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer quest = Integer.valueOf(qtdQuest.getText().toString());
+                if(quest > 0)
+                    quest --;
+                qtdQuest.setText(quest.toString());
+            }
+        });
+
+        altMais.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer alter = Integer.valueOf(qtdAlter.getText().toString());
+                alter ++;
+                qtdAlter.setText(alter.toString());
+            }
+        });
+
+        altMenos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer alter = Integer.valueOf(qtdAlter.getText().toString());
+                if(alter > 0)
+                    alter --;
+                qtdAlter.setText(alter.toString());
+            }
+        });
+
+
+
         btnGerProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String data = datePickerButton.getText().toString();
                 String prova = nomeProva.getText().toString();
-                String quest = qtdQuest.getText().toString();
-                String alter = qtdAlter.getText().toString();
+                Integer quest = Integer.valueOf(qtdQuest.getText().toString());
+                Integer alter = Integer.valueOf(qtdAlter.getText().toString());
                 if (!prova.equals("")){
-                    Toast.makeText(CadProvaActivity.this, "Questão: "+quest, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(CadProvaActivity.this, "Alternativa: "+alter, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
-                }
+                    Boolean exist = bancoDados.checkProva(prova);
+                    if (!exist) {
+                        if (!quest.equals(0)) {
+                            if (!alter.equals(0)) {
+                                Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
+                                if (insProva)
+                                    Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
+                            }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                        }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -80,6 +126,12 @@ public class CadProvaActivity extends AppCompatActivity {
 
                 // Exibe o DatePickerDialog
                 datePickerDialog.show();
+            }
+        });
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

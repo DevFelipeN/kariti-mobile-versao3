@@ -7,19 +7,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class ProvaActivity extends AppCompatActivity {
     ImageButton voltar;
-    Button cadProva, gerarCartao, corrigirProva;
+    Button cadProva, gerarCartao, corrigirProva, visuProva;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova);
 
+        TextView textView = findViewById(R.id.textViewConcluido); // Seu TextView
+
+        // Verificar se há uma mensagem extra no Intent
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra("mensagem")) {
+            String mensagem = intent.getStringExtra("mensagem");
+            textView.setText(mensagem); // Define o texto do TextView com a mensagem
+            textView.setVisibility(View.VISIBLE); // Exibe o TextView
+        } else {
+            textView.setVisibility(View.GONE); // Oculta o TextView se não houver mensagem
+        }
+
+
         voltar = findViewById(R.id.imgBtnVoltar);
         cadProva = findViewById(R.id.buttonCadProva);
         gerarCartao = findViewById(R.id.buttonGerarCatao);
         corrigirProva = findViewById(R.id.buttonCorrigirProva);
+        visuProva = findViewById(R.id.buttonVisuProva);
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,11 +47,16 @@ public class ProvaActivity extends AppCompatActivity {
                 telaGerarCartao();
             }
         });
-
         corrigirProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 telaCorrigirProva();
+            }
+        });
+        visuProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaVisuProva();
             }
         });
 
@@ -58,6 +78,10 @@ public class ProvaActivity extends AppCompatActivity {
     }
     public void telaCorrigirProva(){
         Intent intent = new Intent(this, ProvaCorrigirActivity.class);
+        startActivity(intent);
+    }
+    public void telaVisuProva(){
+        Intent intent = new Intent(this, VisualProvaActivity.class);
         startActivity(intent);
     }
 }

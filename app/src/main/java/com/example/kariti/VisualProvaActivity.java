@@ -2,28 +2,37 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProvaCartoesActivity extends AppCompatActivity {
+public class VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
+    Button visualProva;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prova_cartoes);
+        setContentView(R.layout.activity_visual_prova);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-
+        visualProva = findViewById(R.id.buttonVisualizarProva);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        visualProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                telaVisuProvaSelecionada();
             }
         });
 
@@ -57,5 +66,10 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterAluno = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionsAluno);
         adapterAluno.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAluno.setAdapter(adapterAluno);
+    }
+
+    public void telaVisuProvaSelecionada(){
+        Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
+        startActivity(intent);
     }
 }

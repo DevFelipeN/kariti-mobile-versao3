@@ -3,6 +3,7 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
@@ -33,15 +34,18 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         // Cria uma célula para a nova linha
         TextView cell1 = new TextView(this);
         cell1.setText("Romulo");
+        cell1.setGravity(Gravity.CENTER);
         row.addView(cell1);
 
         // Cria outra célula para a nova linha
         TextView cell2 = new TextView(this);
         cell2.setText("6");
+        cell2.setGravity(Gravity.CENTER);
         row.addView(cell2);
 
         TextView cell3 = new TextView(this);
         cell3.setText("6");
+        cell3.setGravity(Gravity.CENTER);
         row.addView(cell3);
 
         // Adiciona a nova linha à tabela

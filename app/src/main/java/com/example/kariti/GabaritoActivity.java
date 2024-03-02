@@ -77,9 +77,14 @@ public class GabaritoActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 params.setMargins(0, 0, 40, 0);
 
-                CheckBox checkBoxAlternativa = new CheckBox(this);
-                checkBoxAlternativa.setLayoutParams(params);
-                layoutQuestao.addView(checkBoxAlternativa);
+
+//                CheckBox checkBoxAlternativa = new CheckBox(this);
+//                checkBoxAlternativa.setLayoutParams(params);
+//                layoutQuestao.addView(checkBoxAlternativa);
+
+                RadioButton radioAlternativa = new RadioButton(this);
+                radioAlternativa.setLayoutParams(params);
+                layoutQuestao.addView(radioAlternativa);
             }
 
             EditText editTextPontos = new EditText(this);

@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva;
@@ -32,12 +33,14 @@ public class GabaritoActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        cadProva.setOnClickListener(new View.OnClickListener() {
+       /* cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 telaConfim();
             }
         });
+
+        */
 
         notaProva = findViewById(R.id.txtViewNotaProva);
 
@@ -98,6 +101,6 @@ public class GabaritoActivity extends AppCompatActivity {
     public void telaConfim() {
         Intent intent = new Intent(this, ProvaCadConfirActivity.class);
         startActivity(intent);
-        finish();
+        //finish();
     }
 }

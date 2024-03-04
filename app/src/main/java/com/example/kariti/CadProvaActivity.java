@@ -94,9 +94,10 @@ public class CadProvaActivity extends AppCompatActivity {
                     if (!exist) {
                         if (!quest.equals(0)) {
                             if (!alter.equals(0)) {
-                                Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
-                                if (insProva)
-                                    Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
+                                telaGabarito();
+                                //Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
+                                //if (insProva)
+                                 //   Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
                             }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();

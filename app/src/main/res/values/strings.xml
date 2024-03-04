@@ -54,16 +54,15 @@
     <string name="menuEditarAlun">Editar Aluno</string>
     <string name="menuExclAlun">Excluir Aluno</string>
 
-    <string name="buttonCadTurma">Cadastrar</string>
+    <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
-    <string name="editTextNomeTurma">Informe o Nome da Turma</string>
+    <string name="editTextNomeTurma">Nome da Turma</string>
     <string name="textViewAlunos">Alunos</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="btnIncluirAluno">Incluir Alunos</string>
     <string name="btnIncluir">Incluir</string>
     <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnTranferirOutraTurma">Transf. de outra Turma</string>
-
 
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
@@ -88,12 +87,10 @@
     <string name="btnAbrirGaleria">Carregar da Galeria</string>
     <string name="btnAbrirCamera">Abrir Câmera</string>
     <string name="txtProva1">Prova 1</string>
-    <string name="btnEnviarParaAluno">Enviar Para o Aluno</string>
+    <string name="btnEnviarParaAluno">Enviar Para Aluno</string>
+    <string name="btnEnviarParaProf">Enviar Para Professor</string>
     <string name="btnBaixarProva">Baixar Prova</string>
     <string name="btnCompartilhar">Compartilhar</string>
-
-
-
 
 
     <string name="btnVoltar">Button Voltar</string>

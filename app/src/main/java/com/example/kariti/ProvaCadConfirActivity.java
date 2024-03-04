@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class ProvaCadConfirActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -17,29 +18,30 @@ public class ProvaCadConfirActivity extends AppCompatActivity {
         setContentView(R.layout.activity_prova_cad_confir);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        gerarCartao = findViewById(R.id.buttonGerarCatao);
+        gerarCartao = findViewById(R.id.btnGerarCartao);
+        Toast.makeText(this, "Estou aqui!", Toast.LENGTH_SHORT).show();
+
+
+        gerarCartao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 Intent intent = new Intent(getApplicationContext(), ProvaCartoesActivity.class);
+                 startActivity(intent);
+            }
+        });
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 telaProva();
             }
         });
-        gerarCartao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                telaGerarCartao();
-            }
-        });
     }
+
 
     public void telaProva() {
         Intent intent = new Intent(this, CadProvaActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void telaGerarCartao(){
-        Intent intent = new Intent(this, ProvaCartoesActivity.class);
-        startActivity(intent);
     }
 }

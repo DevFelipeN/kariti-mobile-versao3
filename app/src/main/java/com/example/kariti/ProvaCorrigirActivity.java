@@ -1,7 +1,10 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +45,21 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     }
 
     public void telaProva(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCorrigirActivity.this);
+        builder.setTitle("Provas enviadas com sucesso")
+                .setMessage("Para acompanhar o andamento da correção, selecione a Opção 'Visualizar Prova'.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), ProvaActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
 //        String mensagem = "Provas enviadas com Sucesso! Para acompanhar o andamento da correção, vá em VERIFICAR PROVA.";
 //        Intent intent = new Intent(this, ProvaActivity.class);
 //        intent.putExtra("mensagem", mensagem);

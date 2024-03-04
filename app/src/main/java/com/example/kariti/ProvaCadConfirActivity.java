@@ -18,8 +18,17 @@ public class ProvaCadConfirActivity extends AppCompatActivity {
         setContentView(R.layout.activity_prova_cad_confir);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        gerarCartao = findViewById(R.id.buttonGerarCatao);
+        gerarCartao = findViewById(R.id.btnGerarCartao);
         Toast.makeText(this, "Estou aqui!", Toast.LENGTH_SHORT).show();
+
+
+        gerarCartao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 Intent intent = new Intent(getApplicationContext(), ProvaCartoesActivity.class);
+                 startActivity(intent);
+            }
+        });
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

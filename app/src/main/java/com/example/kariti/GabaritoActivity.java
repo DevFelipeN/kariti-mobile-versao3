@@ -16,10 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GabaritoActivity extends AppCompatActivity {
-    TextView notaProva;
+    TextView notaProva, nProva,nturma, ndata;
     Button cadProva;
-    ImageButton voltar;
 
+    ImageButton voltar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,25 +27,39 @@ public class GabaritoActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltar);
         cadProva = findViewById(R.id.btnCadProva);
+        nProva = findViewById(R.id.textViewProva);
+        nturma = findViewById(R.id.textViewTurma);
+        ndata = findViewById(R.id.textViewData);
+
+        String prova = getIntent().getExtras().getString("nomeProva");
+        String data = getIntent().getExtras().getString("data");
+        Integer quest = getIntent().getExtras().getInt("quest");
+        Integer alter = getIntent().getExtras().getInt("alter");
+        nProva.setText("Prova: "+prova);
+        nturma.setText("Turma: "+"Turma teste 123");
+        ndata.setText("Data: "+data);
+
+
+
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-       /* cadProva.setOnClickListener(new View.OnClickListener() {
+       cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 telaConfim();
             }
         });
 
-        */
 
         notaProva = findViewById(R.id.txtViewNotaProva);
 
-        int quantidadeQuestoes = 10;
-        int quantidadeAlternativas = 5;
+        int quantidadeQuestoes = quest;
+        int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
         // Layout das questões
         LinearLayout layoutQuestoes = findViewById(R.id.layoutQuestoes);
@@ -54,7 +68,7 @@ public class GabaritoActivity extends AppCompatActivity {
         layoutAlternativas.setOrientation(LinearLayout.HORIZONTAL);
 
         // Loop para criar as alternativas na primeira linha
-        for (char letra = 'A'; letra < 'A' + quantidadeAlternativas; letra++) {
+        for (char letra = 'A'; letra <  'A' + quantidadeAlternativas; letra++) {
             TextView textViewAlternativa = new TextView(this);
             textViewAlternativa.setText(String.valueOf(letra));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);

@@ -20,6 +20,7 @@ public class CadTurmaActivity extends AppCompatActivity {
     private Toolbar toolbar;
     EditText pesquisarAlunos, nomeTurma;
     Button buttonIncluirAlunos, cadastrar;
+    BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +60,24 @@ public class CadTurmaActivity extends AppCompatActivity {
         optionAlun.add("Marcos");
         optionAlun.add("Felipe");
 
-        SpinnerAdapter adapter = new SpinnerAdapter(this, optionAlun);
+        bancoDados = new BancoDados(this);
+        ArrayList<String> nomesAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
+//        ArrayList<String> optionAlun = new ArrayList<>();
+//        optionAlun.add("Selecionar todos os alunos");
+//        optionAlun.add("Francisco");
+//        optionAlun.add("Marcos");
+//        optionAlun.add("Felipe");
+
+
+        SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAlunos);
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionAlun);
 //        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerBuscAluno.setAdapter(adapter);
+
+
     }
-    public void irParaVisualAluno(){
-        Intent intent = new Intent(this, VisualAlunoActivity.class);
-        startActivity(intent);
-    }
+//    public void irParaVisualAluno(){
+//        Intent intent = new Intent(this, VisualAlunoActivity.class);
+//        startActivity(intent);
+//    }
 }

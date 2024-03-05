@@ -72,7 +72,7 @@ public class GabaritoActivity extends AppCompatActivity {
             TextView textViewAlternativa = new TextView(this);
             textViewAlternativa.setText(String.valueOf(letra));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.setMargins(43, 0, 40, 0);
+            params.setMargins(63, 0, 40, 0);
             textViewAlternativa.setLayoutParams(params); // Aplica os parâmetros de layout ao TextView
             textViewAlternativa.setGravity(Gravity.CENTER); // Centraliza o texto
             layoutAlternativas.addView(textViewAlternativa); // Adiciona a alternativa ao layout das alternativas

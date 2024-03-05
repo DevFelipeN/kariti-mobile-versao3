@@ -11,6 +11,7 @@ import android.util.Log;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BancoDados extends SQLiteOpenHelper {
 
@@ -300,4 +301,21 @@ public class BancoDados extends SQLiteOpenHelper {
             return "ERROR";
         }
     }
+    public List<String> obterNomesAlunos() {
+        List<String> nomesAlunos = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // O índice 0 corresponde à coluna 'nome' no exemplo
+                String nomeAluno = cursor.getString(0);
+                nomesAlunos.add(nomeAluno);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return nomesAlunos;
+    }
+
 }

@@ -47,8 +47,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     public void telaProva(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCorrigirActivity.this);
-        builder.setTitle("Provas enviadas com sucesso")
-                .setMessage("Para acompanhar o andamento da correção, selecione a Opção 'Visualizar Prova'.")
+        builder.setTitle("Provas enviadas para correção!")
+                .setMessage("Para acompanhar o andamento da correção, selecione a opção 'Visualizar Prova'.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

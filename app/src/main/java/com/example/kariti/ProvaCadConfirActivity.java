@@ -19,8 +19,6 @@ public class ProvaCadConfirActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltar);
         gerarCartao = findViewById(R.id.btnGerarCartao);
-        Toast.makeText(this, "Estou aqui!", Toast.LENGTH_SHORT).show();
-
 
         gerarCartao.setOnClickListener(new View.OnClickListener() {
             @Override

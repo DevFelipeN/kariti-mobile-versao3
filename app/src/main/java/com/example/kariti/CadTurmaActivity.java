@@ -54,6 +54,12 @@ public class CadTurmaActivity extends AppCompatActivity {
 //        });
 
         Spinner spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
+        ArrayList<String> optionAlun = new ArrayList<>();
+        optionAlun.add("Selecionar alunos");
+        optionAlun.add("Francisco");
+        optionAlun.add("Marcos");
+        optionAlun.add("Felipe");
+
         bancoDados = new BancoDados(this);
         ArrayList<String> nomesAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
 //        ArrayList<String> optionAlun = new ArrayList<>();

@@ -15,6 +15,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.Format;
+import java.util.ArrayList;
+
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva, nProva,nturma, ndata;
     Button cadProva;
@@ -53,14 +56,13 @@ public class GabaritoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 telaConfim();
             }
-        });
+       });
 
 
-        notaProva = findViewById(R.id.txtViewNotaProva);
+       notaProva = findViewById(R.id.txtViewNotaProva);
 
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
-        notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
         // Layout das questões
         LinearLayout layoutQuestoes = findViewById(R.id.layoutQuestoes);
 
@@ -78,9 +80,13 @@ public class GabaritoActivity extends AppCompatActivity {
             layoutAlternativas.addView(textViewAlternativa); // Adiciona a alternativa ao layout das alternativas
 
         }
+        EditText editTextNota = new EditText(this);
+        editTextNota.setText("Nota");
+        layoutAlternativas.addView(editTextNota);
         layoutQuestoes.addView(layoutAlternativas);
 
         //Questões e Radio
+        int notas = 0;
         for (int i = 0; i < quantidadeQuestoes; i++) {
             LinearLayout layoutQuestao = new LinearLayout(this);
             layoutQuestao.setOrientation(LinearLayout.HORIZONTAL);
@@ -108,9 +114,23 @@ public class GabaritoActivity extends AppCompatActivity {
             editTextPontos.setText("1");
             layoutQuestao.addView(editTextPontos);
 
+            String nt = editTextPontos.getText().toString();
+            Integer n = Integer.valueOf(nt);
+            notas = notas + n;
+
+
+            //ArrayList<String> notaQuest = new ArrayList<String>();
+
+
+
+            Toast.makeText(this, "Valor: "+n, Toast.LENGTH_SHORT).show();
+
             // Adicionar layout da questão ao layout principal
             layoutQuestoes.addView(layoutQuestao);
+            //notaQuest.add();
         }
+
+        notaProva.setText("Nota total da prova " + notas + " pontos.");
 
 
 

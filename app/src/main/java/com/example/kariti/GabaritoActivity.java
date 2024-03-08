@@ -43,8 +43,6 @@ public class GabaritoActivity extends AppCompatActivity {
         ndata.setText("Data: "+data);
 
 
-
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

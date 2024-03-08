@@ -40,11 +40,10 @@
         app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/textViewProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="@string/txtViewProva"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.092"
@@ -52,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imgBtnVoltar" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/textViewTurma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -61,10 +60,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewProva" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/textViewData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -73,18 +72,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTurma" />
 
+
+    <LinearLayout
+        android:id="@+id/layoutDasAlternativas"
+        android:layout_width="350dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewData"
+        android:orientation="horizontal">
+
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="25dp"
+        android:contentDescription="@string/descritionScroll"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13">
+        app:layout_constraintTop_toBottomOf="@+id/layoutDasAlternativas">
 
         <LinearLayout
             android:id="@+id/layoutQuestoes"

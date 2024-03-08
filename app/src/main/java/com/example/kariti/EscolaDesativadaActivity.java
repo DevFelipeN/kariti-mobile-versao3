@@ -110,7 +110,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuExcluirEscola) {
-            Toast.makeText(EscolaDesativadaActivity.this, "Excluir Escola selecionado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EscolaDesativadaActivity.this, "Excluir Escola selecionado: ", Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.menuAtivarEscola) {
             Toast.makeText(EscolaDesativadaActivity.this, "Ativar Escola selecionado", Toast.LENGTH_SHORT).show();

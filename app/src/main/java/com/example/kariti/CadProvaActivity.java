@@ -94,9 +94,15 @@ public class CadProvaActivity extends AppCompatActivity {
                     if (!exist) {
                         if (!quest.equals(0)) {
                             if (!alter.equals(0)) {
-                                Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
-                                if (insProva)
-                                    Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                                intent.putExtra("nomeProva", prova);
+                                intent.putExtra("data", data);
+                                intent.putExtra("quest", quest);
+                                intent.putExtra("alter", alter);
+                                startActivity(intent);
+                                //Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
+                                //if (insProva)
+                                 //   Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
                             }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();
@@ -140,11 +146,5 @@ public class CadProvaActivity extends AppCompatActivity {
         String dateFormat = "dd/MM/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
-    }
-
-    public void telaGabarito() {
-        Intent intent = new Intent(this, GabaritoActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

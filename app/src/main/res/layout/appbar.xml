@@ -50,6 +50,7 @@
                 android:background="@color/tranparente"
                 android:padding="10dp"
                 android:src="@mipmap/home"
+                android:visibility="invisible"
                 android:contentDescription="@string/btnHome" />
 
         </LinearLayout>

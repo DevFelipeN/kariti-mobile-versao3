@@ -23,7 +23,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class VisualEscolaActivity extends AppCompatActivity {
-    ImageButton btnVoltar, btnHome;
+    ImageButton btnVoltar;
     Button btnEscDesativada;
     private Toolbar toolbar;
 
@@ -38,7 +38,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
-        btnHome = findViewById(R.id.home_icon);
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
         bancoDados = new BancoDados(this);
 

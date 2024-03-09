@@ -87,14 +87,6 @@ public class CadEscolaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnVoltar.setVisibility(View.VISIBLE);
 
-        btnHome = findViewById(R.id.home_icon);
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                voltarTelaIncial();
-            }
-        });
-
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

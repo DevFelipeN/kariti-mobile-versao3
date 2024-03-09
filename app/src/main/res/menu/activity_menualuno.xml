@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menuEditarAluno"
-        android:title="@string/menuEditarAlun" />
-    <item
         android:id="@+id/menuExcluirAluno"
         android:title="@string/menuExclAlun" />
 

@@ -17,6 +17,7 @@ import android.widget.Button;
 
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
     Button btnEscDesativada;
+    ImageView iconHelp;
     private Toolbar toolbar;
 
     BancoDados bancoDados;
@@ -40,6 +42,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
         bancoDados = new BancoDados(this);
+        iconHelp = findViewById(R.id.iconHelp);
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeEscola", "id_escola"};
@@ -77,6 +80,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        iconHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelp();
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -125,6 +135,19 @@ public class VisualEscolaActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void dialogHelp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Para arquivar uma escola, basta pressionar sobre a escola desejada e confirmar a ação. " +
+                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas desativadas'.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     public void telaEscolaDesativada() {

@@ -28,22 +28,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         menuPnt = findViewById(R.id.menu_icon);
         ListView listView = findViewById(R.id.listView);
 
-//        menuPnt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                PopupMenu popupMenu = new PopupMenu(DadosTurmaActivity.this, view);
-//                popupMenu.getMenuInflater().inflate(R.menu.activity_menuescola, popupMenu.getMenu());
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        return onMenuItemClick(item);
-//                    }
-//                });
-//                popupMenu.show();
-//            }
-//        });
-
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

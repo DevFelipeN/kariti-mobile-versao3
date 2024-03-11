@@ -124,6 +124,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;
+                    //modificado
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
                         LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
                         EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);

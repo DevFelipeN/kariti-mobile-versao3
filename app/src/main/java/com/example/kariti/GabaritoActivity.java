@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,6 +95,7 @@ public class GabaritoActivity extends AppCompatActivity {
             layoutQuestao.addView(textViewNumeroQuestao);
 
             // Loop para criar Radio para as respostas
+            RadioGroup grupAlter = null;
             for (int j = 0; j < quantidadeAlternativas; j++) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 params.setMargins(0, 0, 40, 0);
@@ -105,6 +107,7 @@ public class GabaritoActivity extends AppCompatActivity {
 
                 RadioButton radioAlternativa = new RadioButton(this);
                 radioAlternativa.setLayoutParams(params);
+                //grupAlter.addView(radioAlternativa);
                 layoutQuestao.addView(radioAlternativa);
             }
 

@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/appbarmenamburg"
+        layout="@layout/appbarquestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,68 +23,86 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageButton
-        android:id="@+id/imgBtnVoltar"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
-        android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.0"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/imgBtnVoltar"-->
+<!--        android:layout_width="48dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:background="@color/tranparente"-->
+<!--        android:contentDescription="@string/btnVoltar"-->
+<!--        android:src="@mipmap/setaleft"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
+<!--        app:layout_constraintVertical_bias="0.0"/>-->
 
     <TextView
         android:id="@+id/textViewProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/textViewProva"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBtnVoltar" />
+        app:layout_constraintTop_toTopOf="@+id/divider4" />
 
     <TextView
         android:id="@+id/textViewTurma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
         android:text="@string/txtViewTurma"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.094"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewProva" />
+
 
     <TextView
         android:id="@+id/textViewData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
         android:text="@string/txtViewData"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTurma" />
 
+    <LinearLayout
+        android:id="@+id/layoutDasAlternativas"
+        android:layout_width="350dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewData">
+
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="8dp"
+        android:contentDescription="@string/descritionScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewData">
+        app:layout_constraintTop_toBottomOf="@+id/layoutDasAlternativas">
 
         <LinearLayout
             android:id="@+id/layoutQuestoes"
@@ -99,7 +117,7 @@
         android:id="@+id/txtViewNotaProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="60dp"
         android:text="@string/txtViewNotaT"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

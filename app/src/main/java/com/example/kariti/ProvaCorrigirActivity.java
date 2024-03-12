@@ -1,19 +1,27 @@
 package com.example.kariti;
 
+import androidx.activity.result.ActivityResult;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class ProvaCorrigirActivity extends AppCompatActivity {
     Button btnGaleria, btnCamera;
     ImageButton voltar;
+    ImageView teste;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +30,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnGaleria = findViewById(R.id.buttonGaleria);
         btnCamera = findViewById(R.id.buttonCamera);
         voltar = findViewById(R.id.imgBtnVoltar);
+        teste = findViewById(R.id.imageView20);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,16 +42,45 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                telaProva();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Selecione as imagens"), 1);
+
             }
         });
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                telaProva();
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 2);
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                // Se a imagem foi selecionada da galeria
+                if (data != null) {
+                    Uri selectedImageUri = data.getData();
+                    if (selectedImageUri != null) {
+                        teste.setImageURI(selectedImageUri);
+                        Toast.makeText(ProvaCorrigirActivity.this, "Imagem da galeria enviada!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            } else if (requestCode == 2) {
+                // Se a imagem foi capturada pela câmera
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                if (photo != null) {
+                    teste.setImageBitmap(photo);
+                    Toast.makeText(ProvaCorrigirActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
 
     public void telaProva(){
 

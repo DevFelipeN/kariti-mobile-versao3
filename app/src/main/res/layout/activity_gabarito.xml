@@ -96,7 +96,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="350dp"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:layout_marginStart="40dp"
         android:contentDescription="@string/descritionScroll"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +117,7 @@
         android:id="@+id/txtViewNotaProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:text="@string/txtViewNotaT"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -143,6 +143,11 @@ public class GabaritoActivity extends AppCompatActivity {
                     int notas = 0;
                     ArrayList<Integer> nPquest = new ArrayList<>();
                     info.put("notaQuest", nPquest);
+
+                    //modificado
+
+
+
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
                         LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
                         EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);

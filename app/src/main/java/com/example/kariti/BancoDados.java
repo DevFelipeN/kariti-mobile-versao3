@@ -19,7 +19,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 33);
+        super(context, "data_base", null, 34);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
             data_base.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, nomeTurma TEXT, id_escola INTEGER)");
             data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER)");
-            data_base.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer)");
+            data_base.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer, nota Integer)");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -90,6 +90,17 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("qtdQuestoes", qtdQuestoes);
         contentValues.put("qtdAlternativas", qtdAlternativas);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        long inserir = data_base.insert("prova", null, contentValues);
+        return inserir != -1;
+    }
+
+    public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Integer nota){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id_prova", id_prova);
+        contentValues.put("questao", questao);
+        contentValues.put("resposta", resposta);
+        contentValues.put("nota", nota);
         long inserir = data_base.insert("prova", null, contentValues);
         return inserir != -1;
     }
@@ -208,6 +219,14 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
+    }
+
+    public Integer pegaIdProva(String provacad) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from prova where nomeProva = ?", new String[]{provacad});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 
     public String pegaEmailAluno(String id_aluno) {

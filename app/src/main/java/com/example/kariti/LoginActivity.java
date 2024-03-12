@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText email, password;
@@ -42,6 +44,27 @@ public class LoginActivity extends AppCompatActivity {
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
         codSenhaActivity = new CodSenhaActivity();
+        String text = "";
+
+        try {
+            text += "Z:" ;
+            for (String x : new File("/sdcard/Download/").list()){
+                text += x;
+                Log.e("KARITI", x);
+            }
+            text+= "A:" + new File("/sdcard/Download/senha.png").exists();
+            text+= "B:" + new File("/sdcard/Download/apagar.png").exists();
+            //text += Compactador.testar();
+            //Compactador.copiar("/storage/emulated/0/Download/apagar.png", "/data/user/0/com.example.kariti/files/apagar.png");
+            //Compactador.copiar("/storage/emulated/0/Download/senha.png", "/data/user/0/com.example.kariti/files/senha.png");
+            //text+= "C:" + new File("/data/user/0/com.example.kariti/files/senha.png").exists();
+            //text+= "D:" + new File("/data/user/0/com.example.kariti/files/apagar.png").exists();
+        }catch(Exception e) {
+            text = text + "ERRO1" + e;
+        }
+        Toast.makeText(LoginActivity.this, "text; "+text, Toast.LENGTH_SHORT).show();
+
+
 
 
         entrar.setOnClickListener(new View.OnClickListener() {

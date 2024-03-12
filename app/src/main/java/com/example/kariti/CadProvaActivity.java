@@ -110,13 +110,11 @@ public class CadProvaActivity extends AppCompatActivity {
                             if (!alter.equals(0)) {
                                 Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
                                 intent.putExtra("nomeProva", prova);
+                                intent.putExtra("Turma", "Turma teste");
                                 intent.putExtra("data", data);
                                 intent.putExtra("quest", quest);
                                 intent.putExtra("alter", alter);
                                 startActivity(intent);
-                                //Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
-                                //if (insProva)
-                                 //   Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
                             }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();

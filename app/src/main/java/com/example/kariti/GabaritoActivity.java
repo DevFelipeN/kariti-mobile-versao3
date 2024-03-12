@@ -20,12 +20,16 @@ import android.widget.Toast;
 
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva, nProva,nturma, ndata;
     Button cadProva;
 
     ImageButton voltar;
+    BancoDados bancoDados;
+    Map<String, Object> info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +40,17 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
+        notaProva = findViewById(R.id.txtViewNotaProva);
+        bancoDados = new BancoDados(this);
 
-        String prova = getIntent().getExtras().getString("nomeProva");
+        String provacad = getIntent().getExtras().getString("nomeProva");
         String data = getIntent().getExtras().getString("data");
         Integer quest = getIntent().getExtras().getInt("quest");
         Integer alter = getIntent().getExtras().getInt("alter");
-        nProva.setText(String.format("Prova: %s", prova));
+        nProva.setText(String.format("Prova: %s", provacad));
         nturma.setText("Turma: "+"Turma teste 123");
         ndata.setText("Data: "+data);
+        info = new HashMap<>();
 
 
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -52,15 +59,25 @@ public class GabaritoActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-       cadProva.setOnClickListener(new View.OnClickListener() {
+
+        //Estou trabalhando aqui
+        cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                telaConfim();
-            }
-       });
+                Boolean insProva = bancoDados.inserirProva(provacad, data, quest, alter);
+                if(insProva) {
+                    Integer id_prova = bancoDados.pegaIdProva(provacad);
+                    Toast.makeText(GabaritoActivity.this, "Id da sua prova: "+id_prova, Toast.LENGTH_SHORT).show();
+                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
 
-       //sayury
-       notaProva = findViewById(R.id.txtViewNotaProva);
+
+                    //Boolean insGabarito = bancoDados.inserirGabarito(id_prova, questao, resposta, nota);
+                    telaConfim();
+                }
+            }
+        });
+
+        //sayury
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
         LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
@@ -124,7 +141,11 @@ public class GabaritoActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;
+                    ArrayList<Integer> nPquest = new ArrayList<>();
+                    info.put("notaQuest", nPquest);
+
                     //modificado
+
 
 
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
@@ -134,9 +155,10 @@ public class GabaritoActivity extends AppCompatActivity {
                         if (!nt.isEmpty()) {
                             Integer n = Integer.valueOf(nt);
                             notas += n;
+                            nPquest.add(n);
                         }
                     }
-                    notaProva.setText("Nota total da prova " + notas + " pontos.");
+                    notaProva.setText("Nota total da prova " + notas + " pontos. Valores Vetor: "+nPquest);
                 }
             });
             layoutQuestoesGabarito.addView(layoutQuestao);
@@ -161,32 +183,3 @@ public class GabaritoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
-//            String nt = editTextPontos.getText().toString();
-//            Integer n = Integer.valueOf(nt);
-//            notas = notas + n;
-//
-//
-//            //ArrayList<String> notaQuest = new ArrayList<String>();
-//
-//
-//
-//            Toast.makeText(this, "Valor: "+n, Toast.LENGTH_SHORT).show();
-//
-//            // Adicionar layout da questão ao layout principal
-//            layoutQuestoes.addView(layoutQuestao);
-//            //notaQuest.add();
-//        }
-//
-//        notaProva.setText("Nota total da prova " + notas + " pontos.");
-//
-//
-//
-//
-//    }
-
-//    public void telaConfim() {
-//        Intent intent = new Intent(this, ProvaCadConfirActivity.class);
-//        startActivity(intent);
-//        //finish();
-//    }
-//}

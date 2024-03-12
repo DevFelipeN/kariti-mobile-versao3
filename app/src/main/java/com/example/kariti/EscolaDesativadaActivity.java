@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class EscolaDesativadaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton btnVoltar;
-    ImageView btnMenu, teste;
+    ImageView btnMenu, iconHelp;
     BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,14 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         btnMenu = findViewById(R.id.imageViewIcon);
         ListView listView = findViewById(R.id.listView);
         bancoDados = new BancoDados(this);
+        iconHelp = findViewById(R.id.iconHelp);
+
+        iconHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelp();
+            }
+        });
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +108,19 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             }
         });
     }
+
+    public void dialogHelp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Para ATIVAR ou EXCLUIR uma escola, basta pressionar sobre a escola desejada e seleconar a ação. ");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
     public void menuAtivaExcl(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);

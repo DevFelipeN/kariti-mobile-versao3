@@ -7,14 +7,18 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class CadProvaActivity extends AppCompatActivity {
@@ -41,6 +45,16 @@ public class CadProvaActivity extends AppCompatActivity {
         altMais = findViewById(R.id.imgBtnMaisAlter);
         altMenos = findViewById(R.id.imgBtnMenoAlter);
         bancoDados = new BancoDados(this);
+
+        Spinner spinner = findViewById(R.id.spinnerTurma);
+        List<String> options = new ArrayList<>();
+        options.add("Turma:"); // Item fixo
+        options.add("Turma 1");
+        options.add("Turma 2");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         questMais.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,13 +110,11 @@ public class CadProvaActivity extends AppCompatActivity {
                             if (!alter.equals(0)) {
                                 Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
                                 intent.putExtra("nomeProva", prova);
+                                intent.putExtra("Turma", "Turma teste");
                                 intent.putExtra("data", data);
                                 intent.putExtra("quest", quest);
                                 intent.putExtra("alter", alter);
                                 startActivity(intent);
-                                //Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
-                                //if (insProva)
-                                 //   Toast.makeText(CadProvaActivity.this, "Teste: Prova Cadastrada!", Toast.LENGTH_SHORT).show();
                             }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();

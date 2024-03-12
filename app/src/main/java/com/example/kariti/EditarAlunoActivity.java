@@ -74,11 +74,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.menuEditarAluno) {
-
-            Toast.makeText(EditarAlunoActivity.this, "Editar Aluno selecionado: ", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (id == R.id.menuExcluirAluno) {
+        if (id == R.id.menuExcluirAluno) {
             AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
             builder.setTitle("Atenção!")
                     .setMessage("Deseja realmente excluir o aluno?")

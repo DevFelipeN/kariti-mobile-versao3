@@ -35,7 +35,7 @@
 
         <!-- Componente alinhado à direita -->
         <ImageView
-            android:id="@+id/menu_icon"
+            android:id="@+id/iconHelp"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="8dp"

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
@@ -61,19 +62,18 @@ public class GabaritoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 telaConfim();
-                Boolean insProva = bancoDados.inserirProva(provacad, data, quest, alter);
-                if(insProva) {
-                    Integer id_prova = bancoDados.pegaIdProva(provacad);
-                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
-                    if(!nPquest.isEmpty()){
-                        for(int i = 0; i < quest; i++){
-                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
-
-                        }
-                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-                        telaConfim();
-                    }
-                }
+//                Boolean insProva = bancoDados.inserirProva(provacad, data, quest, alter);
+//                if(insProva) {
+//                    Integer id_prova = bancoDados.pegaIdProva(provacad);
+//                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
+//                    if(!nPquest.isEmpty()){
+//                        for(int i = 0; i < quest; i++){
+//                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
+//                        }
+//                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+//                        telaConfim();
+//                    }
+//                }
             }
        });
 
@@ -150,7 +150,8 @@ public class GabaritoActivity extends AppCompatActivity {
             //Toast.makeText(this, " Resp: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
 
             EditText editTextPontos = new EditText(this);
-            editTextPontos.setText("0");
+            editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editTextPontos.setText("1");
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {
@@ -166,7 +167,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;
                     ArrayList<Integer> nPquest = new ArrayList<>();
-                    info.put("notaQuest", nPquest);
+//                    info.put("notaQuest", nPquest);
 
                     //modificado
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {

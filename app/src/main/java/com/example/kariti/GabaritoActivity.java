@@ -67,12 +67,15 @@ public class GabaritoActivity extends AppCompatActivity {
                 Boolean insProva = bancoDados.inserirProva(provacad, data, quest, alter);
                 if(insProva) {
                     Integer id_prova = bancoDados.pegaIdProva(provacad);
-                    Toast.makeText(GabaritoActivity.this, "Id da sua prova: "+id_prova, Toast.LENGTH_SHORT).show();
                     ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
+                    if(!nPquest.isEmpty()){
+                        for(int i = 0; i < quest; i++){
+                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
 
-
-                    //Boolean insGabarito = bancoDados.inserirGabarito(id_prova, questao, resposta, nota);
-                    telaConfim();
+                        }
+                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                        telaConfim();
+                    }
                 }
             }
         });
@@ -100,6 +103,7 @@ public class GabaritoActivity extends AppCompatActivity {
         layoutAlternativas.addView(TextNota);
 
         //Questões e Radio
+
         for (int i = 0; i < quantidadeQuestoes; i++) {
             LinearLayout layoutQuestao = new LinearLayout(this);
             layoutQuestao.setOrientation(LinearLayout.HORIZONTAL);
@@ -120,13 +124,13 @@ public class GabaritoActivity extends AppCompatActivity {
                 RadioButton radioAlternativa = new RadioButton(this);
                 radioAlternativa.setLayoutParams(params);
                 radioGroupAlternativas.addView(radioAlternativa);
-//                layoutQuestao.addView(radioAlternativa);
             }
 
             layoutQuestao.addView(radioGroupAlternativas);
+            //Toast.makeText(this, " Resp: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
 
             EditText editTextPontos = new EditText(this);
-            editTextPontos.setText("1");
+            editTextPontos.setText("0");
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {
@@ -145,9 +149,6 @@ public class GabaritoActivity extends AppCompatActivity {
                     info.put("notaQuest", nPquest);
 
                     //modificado
-
-
-
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
                         LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
                         EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
@@ -162,6 +163,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
             });
             layoutQuestoesGabarito.addView(layoutQuestao);
+            Toast.makeText(this, "Value: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
         }
 
         // Calcular a nota inicial

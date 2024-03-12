@@ -69,7 +69,6 @@ public class GabaritoActivity extends AppCompatActivity {
                     ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
 
 
-
                     //Boolean insGabarito = bancoDados.inserirGabarito(id_prova, questao, resposta, nota);
                     telaConfim();
                 }

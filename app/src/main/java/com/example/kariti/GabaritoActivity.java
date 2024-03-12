@@ -175,6 +175,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 notas += n;
             }
         }
+        //+55 35 98322119
         notaProva.setText("Nota total da prova " + notas + " pontos.");
     }
 

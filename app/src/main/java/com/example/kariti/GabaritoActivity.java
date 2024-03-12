@@ -22,11 +22,15 @@ import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva, nProva,nturma, ndata, txtTeste;
     Button cadProva;
     ImageButton voltar;
+    BancoDados bancoDados;
+
+    Map<String, Object> info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +65,9 @@ public class GabaritoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 telaConfim();
-                Boolean insProva = bancoDados.inserirProva(provacad, data, quest, alter);
+                Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
                 if(insProva) {
-                    Integer id_prova = bancoDados.pegaIdProva(provacad);
+                    Integer id_prova = bancoDados.pegaIdProva(prova);
                     ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
                     if(!nPquest.isEmpty()){
                         for(int i = 0; i < quest; i++){
@@ -140,7 +144,7 @@ public class GabaritoActivity extends AppCompatActivity {
                             alternativasEscolhidas.put(positionDaQuestao, position);
                             txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
-                    }
+                        }
                     }
 
                 }
@@ -175,6 +179,7 @@ public class GabaritoActivity extends AppCompatActivity {
                         String nt = pontosEditText.getText().toString();
                         if (!nt.isEmpty()) {
                             Integer n = Integer.valueOf(nt);
+                            nPquest.add(n);
                             notas += n;
                         }
                     }
@@ -182,7 +187,6 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
             });
             layoutQuestoesGabarito.addView(layoutQuestao);
-            Toast.makeText(this, "Value: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
         }
 
         // Calcular a nota inicial

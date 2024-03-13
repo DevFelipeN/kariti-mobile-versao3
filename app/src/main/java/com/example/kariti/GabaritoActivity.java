@@ -1,15 +1,17 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,7 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,6 @@ public class GabaritoActivity extends AppCompatActivity {
     Button cadProva;
     ImageButton voltar;
     BancoDados bancoDados;
-
     Map<String, Object> info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,11 @@ public class GabaritoActivity extends AppCompatActivity {
         LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
         LinearLayout layoutAlternativas = findViewById(R.id.layoutDasAlternativas); // Layout das alternativas
 
+        bancoDados = new BancoDados(this);
+        info = new HashMap<>();
+        List<RadioGroup> listRadioGroups = new ArrayList<>();
+        HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
+
         String prova = getIntent().getExtras().getString("nomeProva");
         String data = getIntent().getExtras().getString("data");
         Integer quest = getIntent().getExtras().getInt("quest");
@@ -52,30 +57,19 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva.setText(String.format("Prova: %s", prova));
         nturma.setText("Turma: "+"Turma teste 123");
         ndata.setText("Data: "+data);
-
-
-
-        voltar.setOnClickListener(new View.OnClickListener() {
+        cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-       cadProva.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                telaConfim();
                 Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
                 if(insProva) {
                     Integer id_prova = bancoDados.pegaIdProva(prova);
                     ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
-                    if(!nPquest.isEmpty()){
+                    if(!nPquest.isEmpty() && !id_prova.equals(null)){
                         for(int i = 0; i < quest; i++){
-                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
-
+                            Integer resp = alternativasEscolhidas.get(i);
+                            bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
                         }
-                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-                        telaConfim();
+                        dialogProvaSucess();
                     }
                 }
             }
@@ -98,13 +92,9 @@ public class GabaritoActivity extends AppCompatActivity {
             textViewAlternativa.setGravity(Gravity.CENTER); // Centraliza o texto
             layoutAlternativas.addView(textViewAlternativa); // Adiciona a alternativa ao layout das alternativas
         }
-
         TextView TextNota = new TextView(this);
         TextNota.setText("Nota");
         layoutAlternativas.addView(TextNota);
-
-        List<RadioGroup> listRadioGroups = new ArrayList<>();
-        HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
         //Questões e Radio
 
         for (int i = 0; i < quantidadeQuestoes; i++) {
@@ -136,15 +126,14 @@ public class GabaritoActivity extends AppCompatActivity {
                     for (int i = 0; i < listRadioGroups.size(); i++) {
                         if (listRadioGroups.get(i) == group) {
                             int positionDaQuestao = i;
-
                             int selectedRadioButtonId = group.getCheckedRadioButtonId();
                             RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                             int position = group.indexOfChild(selectedRadioButton);
-
                             alternativasEscolhidas.put(positionDaQuestao, position);
                             txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
                         }
+
                     }
 
                 }
@@ -154,7 +143,8 @@ public class GabaritoActivity extends AppCompatActivity {
             //Toast.makeText(this, " Resp: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
 
             EditText editTextPontos = new EditText(this);
-            editTextPontos.setText("0");
+            editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editTextPontos.setText("1");
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {
@@ -190,6 +180,18 @@ public class GabaritoActivity extends AppCompatActivity {
         }
 
         // Calcular a nota inicial
+        int notas = 0;
+        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
+            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
+            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+            String nt = pontosEditText.getText().toString();
+            if (!nt.isEmpty()) {
+                Integer n = Integer.valueOf(nt);
+                notas += n;
+            }
+        }
+
+        notaProva.setText("Nota total da prova " + notas + " pontos.");
 //        int notas = 0;
 //        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
 //            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
@@ -201,10 +203,30 @@ public class GabaritoActivity extends AppCompatActivity {
 //            }
 //        }
 //        notaProva.setText("Nota total da prova " + notas + " pontos.");
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                finish();
+            }
+        });
     }
-
+    public void dialogProvaSucess(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+        builder.setTitle("Prova cadastrada com sucesso!")
+                .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        telaConfim();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
     public void telaConfim() {
-        Intent intent = new Intent(this, ProvaCadConfirActivity.class);
+        Intent intent = new Intent(this, ProvaCartoesActivity.class);
         startActivity(intent);
     }
 }

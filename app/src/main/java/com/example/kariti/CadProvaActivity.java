@@ -121,10 +121,8 @@ public class CadProvaActivity extends AppCompatActivity {
                 }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
             }
         });
-
         // Obtém a instância do calendário com a data atual
         calendar = Calendar.getInstance();
-
         datePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

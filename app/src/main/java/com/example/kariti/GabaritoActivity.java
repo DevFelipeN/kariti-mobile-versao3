@@ -1,7 +1,9 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,9 +29,8 @@ public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva, nProva,nturma, ndata, txtTeste;
     Button cadProva;
     ImageButton voltar;
-
     BancoDados bancoDados;
-    Map<String, ArrayList<Integer>> info;
+    Map<String, Object> info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +44,11 @@ public class GabaritoActivity extends AppCompatActivity {
         txtTeste = findViewById(R.id.textViewTeste);
         LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
         LinearLayout layoutAlternativas = findViewById(R.id.layoutDasAlternativas); // Layout das alternativas
+
         bancoDados = new BancoDados(this);
-        info = new HashMap<String, ArrayList<Integer>>();
+        info = new HashMap<>();
+        List<RadioGroup> listRadioGroups = new ArrayList<>();
+        HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
 
         String prova = getIntent().getExtras().getString("nomeProva");
         String data = getIntent().getExtras().getString("data");
@@ -53,29 +57,19 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva.setText(String.format("Prova: %s", prova));
         nturma.setText("Turma: "+"Turma teste 123");
         ndata.setText("Data: "+data);
-
-
-
-        voltar.setOnClickListener(new View.OnClickListener() {
+        cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-       cadProva.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                telaConfim();
                 Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
                 if(insProva) {
                     Integer id_prova = bancoDados.pegaIdProva(prova);
                     ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
-                    if(!nPquest.isEmpty()){
+                    if(!nPquest.isEmpty() && !id_prova.equals(null)){
                         for(int i = 0; i < quest; i++){
-                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
+                            Integer resp = alternativasEscolhidas.get(i);
+                            bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
                         }
-                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-                        telaConfim();
+                        dialogProvaSucess();
                     }
                 }
             }
@@ -98,13 +92,9 @@ public class GabaritoActivity extends AppCompatActivity {
             textViewAlternativa.setGravity(Gravity.CENTER); // Centraliza o texto
             layoutAlternativas.addView(textViewAlternativa); // Adiciona a alternativa ao layout das alternativas
         }
-
         TextView TextNota = new TextView(this);
         TextNota.setText("Nota");
         layoutAlternativas.addView(TextNota);
-
-        List<RadioGroup> listRadioGroups = new ArrayList<>();
-        HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
         //Questões e Radio
 
         for (int i = 0; i < quantidadeQuestoes; i++) {
@@ -136,15 +126,14 @@ public class GabaritoActivity extends AppCompatActivity {
                     for (int i = 0; i < listRadioGroups.size(); i++) {
                         if (listRadioGroups.get(i) == group) {
                             int positionDaQuestao = i;
-
                             int selectedRadioButtonId = group.getCheckedRadioButtonId();
                             RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                             int position = group.indexOfChild(selectedRadioButton);
-
                             alternativasEscolhidas.put(positionDaQuestao, position);
                             txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
-                    }
+                        }
+
                     }
 
                 }
@@ -188,7 +177,6 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
             });
             layoutQuestoesGabarito.addView(layoutQuestao);
-            Toast.makeText(this, "Value: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
         }
 
         // Calcular a nota inicial
@@ -215,10 +203,30 @@ public class GabaritoActivity extends AppCompatActivity {
 //            }
 //        }
 //        notaProva.setText("Nota total da prova " + notas + " pontos.");
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                finish();
+            }
+        });
     }
-
+    public void dialogProvaSucess(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+        builder.setTitle("Prova cadastrada com sucesso!")
+                .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        telaConfim();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
     public void telaConfim() {
-        Intent intent = new Intent(this, ProvaCadConfirActivity.class);
+        Intent intent = new Intent(this, ProvaCartoesActivity.class);
         startActivity(intent);
     }
 }

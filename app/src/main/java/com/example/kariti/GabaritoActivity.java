@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -19,15 +18,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva, nProva,nturma, ndata, txtTeste;
     Button cadProva;
     ImageButton voltar;
+
+    BancoDados bancoDados;
+    Map<String, ArrayList<Integer>> info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,8 @@ public class GabaritoActivity extends AppCompatActivity {
         txtTeste = findViewById(R.id.textViewTeste);
         LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
         LinearLayout layoutAlternativas = findViewById(R.id.layoutDasAlternativas); // Layout das alternativas
+        bancoDados = new BancoDados(this);
+        info = new HashMap<String, ArrayList<Integer>>();
 
         String prova = getIntent().getExtras().getString("nomeProva");
         String data = getIntent().getExtras().getString("data");
@@ -62,18 +66,18 @@ public class GabaritoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 telaConfim();
-//                Boolean insProva = bancoDados.inserirProva(provacad, data, quest, alter);
-//                if(insProva) {
-//                    Integer id_prova = bancoDados.pegaIdProva(provacad);
-//                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
-//                    if(!nPquest.isEmpty()){
-//                        for(int i = 0; i < quest; i++){
-//                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
-//                        }
-//                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-//                        telaConfim();
-//                    }
-//                }
+                Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
+                if(insProva) {
+                    Integer id_prova = bancoDados.pegaIdProva(prova);
+                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
+                    if(!nPquest.isEmpty()){
+                        for(int i = 0; i < quest; i++){
+                            bancoDados.inserirGabarito(id_prova, i+1, 5, nPquest.get(i));
+                        }
+                        Toast.makeText(GabaritoActivity.this, "Prova Cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                        telaConfim();
+                    }
+                }
             }
        });
 
@@ -167,7 +171,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;
                     ArrayList<Integer> nPquest = new ArrayList<>();
-//                    info.put("notaQuest", nPquest);
+                    info.put("notaQuest", nPquest);
 
                     //modificado
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
@@ -176,6 +180,7 @@ public class GabaritoActivity extends AppCompatActivity {
                         String nt = pontosEditText.getText().toString();
                         if (!nt.isEmpty()) {
                             Integer n = Integer.valueOf(nt);
+                            nPquest.add(n);
                             notas += n;
                         }
                     }
@@ -187,6 +192,18 @@ public class GabaritoActivity extends AppCompatActivity {
         }
 
         // Calcular a nota inicial
+        int notas = 0;
+        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
+            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
+            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+            String nt = pontosEditText.getText().toString();
+            if (!nt.isEmpty()) {
+                Integer n = Integer.valueOf(nt);
+                notas += n;
+            }
+        }
+
+        notaProva.setText("Nota total da prova " + notas + " pontos.");
 //        int notas = 0;
 //        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
 //            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);

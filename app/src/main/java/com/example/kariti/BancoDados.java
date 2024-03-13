@@ -101,7 +101,7 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("questao", questao);
         contentValues.put("resposta", resposta);
         contentValues.put("nota", nota);
-        long inserir = data_base.insert("prova", null, contentValues);
+        long inserir = data_base.insert("gabarito", null, contentValues);
         return inserir != -1;
     }
     public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){

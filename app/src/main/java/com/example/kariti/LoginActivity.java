@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         }catch(Exception e) {
             text = text + "ERRO1" + e;
         }
-        Toast.makeText(LoginActivity.this, "text; "+text, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LoginActivity.this, "text; "+text, Toast.LENGTH_SHORT).show();
 
 
 

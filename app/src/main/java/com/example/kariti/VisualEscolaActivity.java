@@ -141,7 +141,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("Para arquivar uma escola, basta pressionar sobre a escola desejada e confirmar a ação. " +
-                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas desativadas'.");
+                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas Desativadas'.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

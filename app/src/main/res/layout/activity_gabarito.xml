@@ -96,7 +96,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="350dp"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:layout_marginStart="40dp"
         android:contentDescription="@string/descritionScroll"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +117,7 @@
         android:id="@+id/txtViewNotaProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:text="@string/txtViewNotaT"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -126,13 +126,22 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/btnCadProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonCadProva"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewNotaProva" />
+
+    <TextView
+        android:id="@+id/textViewTeste"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/btnCadProva"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtViewNotaProva" />

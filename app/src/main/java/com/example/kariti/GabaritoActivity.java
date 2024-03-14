@@ -144,7 +144,7 @@ public class GabaritoActivity extends AppCompatActivity {
 
             EditText editTextPontos = new EditText(this);
             editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
-            editTextPontos.setText("1");
+            editTextPontos.setText(String.valueOf(1));
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {
@@ -178,31 +178,6 @@ public class GabaritoActivity extends AppCompatActivity {
             });
             layoutQuestoesGabarito.addView(layoutQuestao);
         }
-
-        // Calcular a nota inicial
-        int notas = 0;
-        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
-            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
-            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-            String nt = pontosEditText.getText().toString();
-            if (!nt.isEmpty()) {
-                Integer n = Integer.valueOf(nt);
-                notas += n;
-            }
-        }
-
-        notaProva.setText("Nota total da prova " + notas + " pontos.");
-//        int notas = 0;
-//        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
-//            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
-//            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-//            String nt = pontosEditText.getText().toString();
-//            if (!nt.isEmpty()) {
-//                Integer n = Integer.valueOf(nt);
-//                notas += n;
-//            }
-//        }
-//        notaProva.setText("Nota total da prova " + notas + " pontos.");
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -19,7 +19,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 33);
+        super(context, "data_base", null, 34);
     }
 
     @Override

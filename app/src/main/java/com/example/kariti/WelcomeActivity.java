@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 public class WelcomeActivity extends AppCompatActivity {
-    Button botaoCadastro, botaoLogin;
+    AppCompatButton botaoCadastro, botaoLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

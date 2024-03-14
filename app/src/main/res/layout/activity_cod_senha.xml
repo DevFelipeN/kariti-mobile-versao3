@@ -57,12 +57,11 @@
         app:layout_constraintVertical_bias="0.384" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonValidarSenhaw"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonValidar"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

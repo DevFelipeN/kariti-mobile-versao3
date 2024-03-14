@@ -107,15 +107,14 @@
         app:srcCompat="@mipmap/search" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonIncluir"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="90dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnIncluirAluno"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.807"
@@ -123,13 +122,12 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonCadastrarTurma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonCadTurma"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

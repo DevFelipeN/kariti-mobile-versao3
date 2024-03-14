@@ -106,12 +106,11 @@
         app:layout_constraintVertical_bias="0.739" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonCadastrarTurma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonCadTurma"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

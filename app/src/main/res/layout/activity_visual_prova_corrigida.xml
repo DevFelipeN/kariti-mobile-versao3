@@ -85,38 +85,35 @@
     </TableLayout>
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/button4"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="84dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnEnviarParaAluno"
-        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonEnviarProf"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnEnviarParaProf"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toEndOf="@+id/button4"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/button7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
         android:text="@string/btnCompartilhar"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button6"
@@ -124,13 +121,12 @@
         app:layout_constraintVertical_bias="0.462" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnBaixarProva"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button4"

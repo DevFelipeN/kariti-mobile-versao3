@@ -3,24 +3,29 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CadTurmaActivity extends AppCompatActivity {
-    ImageButton voltar;
+    private ImageButton voltar;
+
+    private ArrayAdapter<String> listViewAdapter;
     private Toolbar toolbar;
-    EditText pesquisarAlunos, nomeTurma;
-    Button buttonIncluirAlunos, cadastrar;
-    BancoDados bancoDados;
+    private EditText pesquisarAlunos, nomeTurma;
+    private Button buttonIncluirAlunos, cadastrar;
+    private BancoDados bancoDados;
+    ListView listarAlunos;
+    private List<String> selectedAlunos = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +35,7 @@ public class CadTurmaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-//        ListView listView = findViewById(R.id.listView);
+        listarAlunos = findViewById(R.id.listView);
         pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
         nomeTurma = findViewById(R.id.editTextTurma);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
@@ -40,44 +45,30 @@ public class CadTurmaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-//        buttonIncluirAlunos.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {irParaVisualAluno();}
-//        });
-//
-//        cadastrar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String nome = nomeTurma.getText().toString();
-//                Button incluirAlunos = buttonIncluirAlunos;
-//            }
-//        });
-
         Spinner spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
-        ArrayList<String> optionAlun = new ArrayList<>();
-        optionAlun.add("Selecionar alunos");
-        optionAlun.add("Francisco");
-        optionAlun.add("Marcos");
-        optionAlun.add("Felipe");
-
         bancoDados = new BancoDados(this);
-        ArrayList<String> nomesAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
-//        ArrayList<String> optionAlun = new ArrayList<>();
-//        optionAlun.add("Selecionar todos os alunos");
-//        optionAlun.add("Francisco");
-//        optionAlun.add("Marcos");
-//        optionAlun.add("Felipe");
-
-
-        SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAlunos);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionAlun);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayList<String> nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
         spinnerBuscAluno.setAdapter(adapter);
-
-
+        spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String alunoSelecionado = (String) parent.getItemAtPosition(position);
+                if (!selectedAlunos.contains(alunoSelecionado)) {
+                    selectedAlunos.add(alunoSelecionado);
+                    listViewAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        listViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        listarAlunos.setAdapter(listViewAdapter);
+        cadastrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
-//    public void irParaVisualAluno(){
-//        Intent intent = new Intent(this, VisualAlunoActivity.class);
-//        startActivity(intent);
-//    }
 }

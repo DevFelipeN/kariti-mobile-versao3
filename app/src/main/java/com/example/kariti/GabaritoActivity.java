@@ -139,7 +139,7 @@ public class GabaritoActivity extends AppCompatActivity {
             layoutQuestao.addView(radioGroupAlternativas);
             EditText editTextPontos = new EditText(this);
             editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
-            editTextPontos.setText("1");
+            editTextPontos.setText(String.valueOf(1));
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {

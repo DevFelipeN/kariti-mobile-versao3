@@ -48,6 +48,7 @@ public class InicioActivity extends AppCompatActivity {
         BancoDados.USER_ID = null;
         Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
+        finish();
         Toast.makeText(InicioActivity.this, "Usuário desconectado", Toast.LENGTH_SHORT).show();
     }
     public void mudarParaTelaCadEscola(){

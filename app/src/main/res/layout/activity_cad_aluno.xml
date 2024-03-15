@@ -56,7 +56,6 @@
         android:hint="@string/nomeCompleto"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -74,7 +73,6 @@
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
@@ -82,15 +80,14 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextAlunoCad" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonSalvarEdit"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="272dp"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonCadastrar"
         android:textAlignment="center"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

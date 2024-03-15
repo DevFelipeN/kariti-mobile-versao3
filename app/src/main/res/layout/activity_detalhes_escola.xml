@@ -40,41 +40,38 @@
         tools:ignore="MissingConstraints" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonAluno"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="60dp"
-        android:background="@drawable/button_selector"
         android:text="@string/textViewAluno"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnTurma"
         tools:ignore="MissingConstraints" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/btnTurma"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="148dp"
         android:layout_marginEnd="60dp"
-        android:background="@drawable/button_selector"
         android:text="@string/textViewTurma"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/btnProva"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="60dp"
-        android:background="@drawable/button_selector"
         android:text="@string/textViewProva"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonAluno"

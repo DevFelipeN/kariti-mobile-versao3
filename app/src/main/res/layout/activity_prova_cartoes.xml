@@ -70,14 +70,13 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerProva" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonVisualizarProva"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnEnvCartao"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.626"
@@ -108,14 +107,13 @@
         app:srcCompat="@mipmap/prova" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/button2"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnBaixCartao"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"

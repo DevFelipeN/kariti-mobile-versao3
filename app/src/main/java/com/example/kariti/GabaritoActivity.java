@@ -41,7 +41,7 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
-        txtTeste = findViewById(R.id.textViewTeste);
+//        txtTeste = findViewById(R.id.textViewTeste);
         LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
         LinearLayout layoutAlternativas = findViewById(R.id.layoutDasAlternativas); // Layout das alternativas
 
@@ -113,7 +113,7 @@ public class GabaritoActivity extends AppCompatActivity {
             // Loop para criar Radio para as respostas
             for (int j = 0; j < quantidadeAlternativas; j++) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0, 25, 40, 0);
+                params.setMargins(0, 25, 35, 0);
 
                 RadioButton radioAlternativa = new RadioButton(this);
                 radioAlternativa.setLayoutParams(params);
@@ -130,7 +130,7 @@ public class GabaritoActivity extends AppCompatActivity {
                             RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                             int position = group.indexOfChild(selectedRadioButton);
                             alternativasEscolhidas.put(positionDaQuestao, position);
-                            txtTeste.setText("HASH:" + alternativasEscolhidas);
+//                            txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
                         }
 

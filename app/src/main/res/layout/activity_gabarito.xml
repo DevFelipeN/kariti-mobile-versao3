@@ -20,24 +20,7 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:layout_editor_absoluteX="2dp"
-        tools:ignore="MissingConstraints" />
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/imgBtnVoltar"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:background="@color/tranparente"-->
-<!--        android:contentDescription="@string/btnVoltar"-->
-<!--        android:src="@mipmap/setaleft"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-<!--        app:layout_constraintVertical_bias="0.0"/>-->
+        tools:layout_editor_absoluteX="2dp"/>
 
     <TextView
         android:id="@+id/textViewProva"
@@ -96,7 +79,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="350dp"
-        android:layout_height="300dp"
+        android:layout_height="290dp"
         android:layout_marginStart="40dp"
         android:contentDescription="@string/descritionScroll"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +100,7 @@
         android:id="@+id/txtViewNotaProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:text="@string/txtViewNotaT"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -132,16 +115,6 @@
         android:layout_height="wrap_content"
         android:text="@string/buttonCadProva"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewNotaProva" />
-
-    <TextView
-        android:id="@+id/textViewTeste"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/btnCadProva"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtViewNotaProva" />

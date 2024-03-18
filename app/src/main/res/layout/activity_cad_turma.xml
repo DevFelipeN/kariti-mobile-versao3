@@ -23,22 +23,22 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="2dp" />
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imgBtnVoltar"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:background="@color/tranparente"-->
-<!--        android:contentDescription="@string/btnVoltar"-->
-<!--        android:src="@mipmap/setaleft"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:ignore="MissingConstraints" />-->
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/imgBtnVoltar"-->
+    <!--        android:layout_width="48dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="5dp"-->
+    <!--        android:background="@color/tranparente"-->
+    <!--        android:contentDescription="@string/btnVoltar"-->
+    <!--        android:src="@mipmap/setaleft"-->
+    <!--        android:textColor="@android:color/black"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.0"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
+    <!--        app:layout_constraintVertical_bias="0.0"-->
+    <!--        tools:ignore="MissingConstraints" />-->
 
     <EditText
         android:id="@+id/editTextTurma"
@@ -70,40 +70,39 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="350dp"
-        android:layout_height="230dp"
+        android:layout_width="319dp"
+        android:layout_height="226dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno">
 
+
         <ListView
-            android:id="@+id/listView"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/listViewAlTurma"
+            android:layout_width="320dp"
+            android:layout_height="237dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTurma"
-            app:layout_constraintVertical_bias="0.16" />
-
+            app:layout_constraintVertical_bias="0.363" />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="312dp"
         android:text="@string/textViewAlunos"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/listViewAlTurma"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
-        app:layout_constraintVertical_bias="0.739" />
+        app:layout_constraintVertical_bias="0.541" />
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -121,24 +120,22 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="132dp"
         android:text="@string/textViewAlunoAnonim"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.239" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="124dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.224"
-        android:gravity="center">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView4">
 
         <ImageView
             android:id="@+id/imageView19"

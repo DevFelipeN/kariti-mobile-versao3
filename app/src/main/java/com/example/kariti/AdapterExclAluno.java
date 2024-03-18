@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,11 +35,9 @@ public class AdapterExclAluno extends ArrayAdapter<String> {
             view = inflater.inflate(R.layout.list_alunos_delete, null);
         }
 
-        TextView textViewNome = view.findViewById(R.id.textViewNome);
+        TextView textViewNome = view.findViewById(R.id.textViewNomeAluno);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
-
-        String nomeAluno = alunos.get(position);
-        textViewNome.setText(nomeAluno);
+        textViewNome.setText(alunos.get(position));
 
         return view;
     }

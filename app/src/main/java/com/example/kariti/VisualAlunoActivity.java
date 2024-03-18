@@ -55,7 +55,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
 
 
         EscolaAdapter adapter = new EscolaAdapter(this, alunos, idsAlunos);
-//        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
         listView.setAdapter(adapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

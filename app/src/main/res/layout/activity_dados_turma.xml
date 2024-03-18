@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7">
 
         <ListView
-            android:id="@+id/listView"
+            android:id="@+id/listViewEscolas"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

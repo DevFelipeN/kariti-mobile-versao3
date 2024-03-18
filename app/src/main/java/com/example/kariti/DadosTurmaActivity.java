@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,7 +25,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         voltar = findViewById(R.id.imgBtnVoltar);
         menuPnt = findViewById(R.id.menu_icon);
-        ListView listView = findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listViewEscolas);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

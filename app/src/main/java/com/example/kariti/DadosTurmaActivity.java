@@ -25,7 +25,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         voltar = findViewById(R.id.imgBtnVoltar);
         menuPnt = findViewById(R.id.menu_icon);
-        ListView listView = findViewById(R.id.listViewAlTurma);
+        ListView listView = findViewById(R.id.listViewEscolas);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

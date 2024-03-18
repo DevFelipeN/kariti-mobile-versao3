@@ -70,19 +70,17 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerProva" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonVisualizarProva"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:text="@string/btnEnvCartao"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.626"
         app:layout_constraintStart_toEndOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
-        app:layout_constraintVertical_bias="0.501" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -107,8 +105,8 @@
         app:srcCompat="@mipmap/prova" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/button2"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -116,7 +114,6 @@
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
-        app:layout_constraintVertical_bias="0.572" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

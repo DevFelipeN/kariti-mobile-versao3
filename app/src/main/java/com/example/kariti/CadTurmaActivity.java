@@ -10,21 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity {
     private ImageButton voltar;
-
-    private ArrayAdapter<String> listViewAdapter;
     private Toolbar toolbar;
     private EditText pesquisarAlunos, nomeTurma;
     private Button buttonIncluirAlunos, cadastrar;
     BancoDados bancoDados;
-    ListView listarAlunos;
     Spinner spinnerBuscAluno;
     private ArrayList<String> selectedAlunos = new ArrayList<>();
     @Override
@@ -35,7 +31,7 @@ public class CadTurmaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
         voltar = findViewById(R.id.imgBtnVoltar);
-        listarAlunos = findViewById(R.id.listViewAlTurma);
+        ListView listarAlunos = findViewById(R.id.listViewAlTurma);
         pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
         nomeTurma = findViewById(R.id.editTextTurma);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
@@ -43,7 +39,7 @@ public class CadTurmaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         ArrayList<String> nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
-        Toast.makeText(CadTurmaActivity.this, "alunos: "+nomesAluno, Toast.LENGTH_SHORT).show();
+        ArrayList<String> aluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
         spinnerBuscAluno.setAdapter(adapter);
         AdapterExclAluno al = new AdapterExclAluno(this, nomesAluno);
@@ -54,24 +50,12 @@ public class CadTurmaActivity extends AppCompatActivity {
                 String alunoSelecionado = (String) parent.getItemAtPosition(position);
                 if (!selectedAlunos.contains(alunoSelecionado)) {
                     selectedAlunos.add(alunoSelecionado);
-                    //listViewAdapter.notifyDataSetChanged();
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-        //AdapterExclAluno adapterListAluno = new AdapterExclAluno(this, selectedAlunos);
-
-
-
-
-
-
-
-        listViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
-        listarAlunos.setAdapter(listViewAdapter);
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

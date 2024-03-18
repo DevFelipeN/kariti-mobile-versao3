@@ -76,7 +76,7 @@ public class GabaritoActivity extends AppCompatActivity {
        });
 
        //sayury
-       notaProva = findViewById(R.id.txtViewNotaProva);
+        notaProva = findViewById(R.id.txtViewNotaProva);
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
@@ -131,9 +131,7 @@ public class GabaritoActivity extends AppCompatActivity {
                             alternativasEscolhidas.put(positionDaQuestao, position);
                             break;
                         }
-
                     }
-
                 }
             });
             layoutQuestao.addView(radioGroupAlternativas);
@@ -147,11 +145,9 @@ public class GabaritoActivity extends AppCompatActivity {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-
                 @Override
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;

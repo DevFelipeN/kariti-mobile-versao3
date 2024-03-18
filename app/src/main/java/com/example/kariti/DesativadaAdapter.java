@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class DesativadaAdapter extends ArrayAdapter<String> {
 
     private ArrayList<String> escolas, ids;
+
     private Context context;
 
     public DesativadaAdapter(Context context, ArrayList<String> escolas, ArrayList<String> ids) {

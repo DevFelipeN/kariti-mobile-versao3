@@ -39,6 +39,7 @@ public class EscolaAdapter extends ArrayAdapter<String> {
 
         TextView textViewNome = view.findViewById(R.id.textViewNomeScol);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
+        Toast.makeText(context, "Estou aquii.............................", Toast.LENGTH_SHORT).show();
 
         String nomeEscola = escolas.get(position);
         String idEscola = ids.get(position);

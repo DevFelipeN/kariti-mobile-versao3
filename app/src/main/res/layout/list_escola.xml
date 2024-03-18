@@ -10,9 +10,9 @@
         android:padding="10dp"
         android:layout_marginTop="16dp">
 
-        <TextView
+            <TextView
             style="@style/COLORTEXT"
-            android:id="@+id/textViewNome"
+            android:id="@+id/textViewNomeScol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

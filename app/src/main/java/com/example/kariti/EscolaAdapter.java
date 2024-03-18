@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +37,7 @@ public class EscolaAdapter extends ArrayAdapter<String> {
             view = inflater.inflate(R.layout.list_escola, null);
         }
 
-        TextView textViewNome = view.findViewById(R.id.textViewNome);
+        TextView textViewNome = view.findViewById(R.id.textViewNomeScol);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
 
         String nomeEscola = escolas.get(position);

@@ -37,7 +37,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
         teste.add("nome6");
         teste.add("nome7");
         teste.add("nome8");
-        ListView listView = findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listViewAlTurma);
         EscolaAdapter adapter = new EscolaAdapter(this, teste, teste);
         listView.setAdapter(adapter);
 

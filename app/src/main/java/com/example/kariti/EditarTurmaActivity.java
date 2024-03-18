@@ -17,7 +17,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_turma);
 
-        ListView listView = findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listViewAlTurma);
         voltar = findViewById(R.id.imgBtnVoltar);
 
         voltar.setOnClickListener(new View.OnClickListener() {

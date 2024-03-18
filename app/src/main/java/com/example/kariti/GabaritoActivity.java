@@ -119,7 +119,6 @@ public class GabaritoActivity extends AppCompatActivity {
                 radioAlternativa.setLayoutParams(params);
                 radioGroupAlternativas.addView(radioAlternativa);
             }
-//            HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
             radioGroupAlternativas.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -130,7 +129,6 @@ public class GabaritoActivity extends AppCompatActivity {
                             RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                             int position = group.indexOfChild(selectedRadioButton);
                             alternativasEscolhidas.put(positionDaQuestao, position);
-                            txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
                         }
 
@@ -138,9 +136,7 @@ public class GabaritoActivity extends AppCompatActivity {
 
                 }
             });
-
             layoutQuestao.addView(radioGroupAlternativas);
-            //Toast.makeText(this, " Resp: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
 
             EditText editTextPontos = new EditText(this);
             editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -161,8 +157,6 @@ public class GabaritoActivity extends AppCompatActivity {
                     int notas = 0;
                     ArrayList<Integer> nPquest = new ArrayList<>();
                     info.put("notaQuest", nPquest);
-
-                    //modificado
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
                         LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
                         EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);

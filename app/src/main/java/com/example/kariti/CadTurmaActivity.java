@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CadTurmaActivity extends AppCompatActivity {
     private ImageButton voltar;
@@ -23,9 +23,10 @@ public class CadTurmaActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private EditText pesquisarAlunos, nomeTurma;
     private Button buttonIncluirAlunos, cadastrar;
-    private BancoDados bancoDados;
+    BancoDados bancoDados;
     ListView listarAlunos;
-    private List<String> selectedAlunos = new ArrayList<>();
+    Spinner spinnerBuscAluno;
+    private ArrayList<String> selectedAlunos = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,41 +34,53 @@ public class CadTurmaActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
-
         voltar = findViewById(R.id.imgBtnVoltar);
-        listarAlunos = findViewById(R.id.listView);
+        listarAlunos = findViewById(R.id.listViewAlTurma);
         pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
         nomeTurma = findViewById(R.id.editTextTurma);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        Spinner spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
+        spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
         bancoDados = new BancoDados(this);
+
         ArrayList<String> nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
-        SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
-        spinnerBuscAluno.setAdapter(adapter);
+        Toast.makeText(CadTurmaActivity.this, "alunos: "+nomesAluno, Toast.LENGTH_SHORT).show();
+        //SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
+        //spinnerBuscAluno.setAdapter(adapter);
+        AdapterExclAluno adapter = new AdapterExclAluno(this, nomesAluno);
+        listarAlunos.setAdapter(adapter);
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String alunoSelecionado = (String) parent.getItemAtPosition(position);
                 if (!selectedAlunos.contains(alunoSelecionado)) {
                     selectedAlunos.add(alunoSelecionado);
-                    listViewAdapter.notifyDataSetChanged();
+                    //listViewAdapter.notifyDataSetChanged();
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        //AdapterExclAluno adapterListAluno = new AdapterExclAluno(this, selectedAlunos);
+
+
+
+
+
+
+
         listViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
         listarAlunos.setAdapter(listViewAdapter);
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            }
+        });
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

@@ -44,10 +44,10 @@ public class CadTurmaActivity extends AppCompatActivity {
 
         ArrayList<String> nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
         Toast.makeText(CadTurmaActivity.this, "alunos: "+nomesAluno, Toast.LENGTH_SHORT).show();
-        //SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
-        //spinnerBuscAluno.setAdapter(adapter);
-        AdapterExclAluno adapter = new AdapterExclAluno(this, nomesAluno);
-        listarAlunos.setAdapter(adapter);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
+        spinnerBuscAluno.setAdapter(adapter);
+        AdapterExclAluno al = new AdapterExclAluno(this, nomesAluno);
+        listarAlunos.setAdapter(al);
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

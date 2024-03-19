@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -33,6 +34,7 @@ public class GabaritoActivity extends AppCompatActivity {
     ImageButton voltar;
     BancoDados bancoDados;
     Map<String, Object> info;
+    LinearLayout layoutHorizontal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class GabaritoActivity extends AppCompatActivity {
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
 //        txtTeste = findViewById(R.id.textViewTeste);
-        LinearLayout layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
+        layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         bancoDados = new BancoDados(this);
         info = new HashMap<>();
@@ -61,6 +63,17 @@ public class GabaritoActivity extends AppCompatActivity {
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean respostaSelecionada = false;
+                for (RadioGroup radioGroup : listRadioGroups) {
+                    if (radioGroup.getCheckedRadioButtonId() == -1) {
+                        Toast.makeText(GabaritoActivity.this, "Por favor, selecione uma resposta para todas as questões.", Toast.LENGTH_SHORT).show();
+                        respostaSelecionada = false;
+                        break;
+                    } else {
+                        respostaSelecionada = true;
+                    }
+                }
+                if (respostaSelecionada) {
                 Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
                 if(insProva) {
                     Integer id_prova = bancoDados.pegaIdProva(prova);
@@ -73,6 +86,7 @@ public class GabaritoActivity extends AppCompatActivity {
                         dialogProvaSucess();
                     }
                 }
+            }
             }
        });
 
@@ -156,25 +170,13 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    int notas = 0;
-                    ArrayList<Integer> nPquest = new ArrayList<>();
-                    info.put("notaQuest", nPquest);
-
-                    //modificado
-                    for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
-                        LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
-                        EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-                        String nt = pontosEditText.getText().toString();
-                        if (!nt.isEmpty()) {
-                            Integer n = Integer.valueOf(nt);
-                            nPquest.add(n);
-                            notas += n;
-                        }
-                    }
-                    notaProva.setText("Nota total da prova " + notas + " pontos.");
+                    calcularNotaTotal();
                 }
             });
+
             layoutHorizontal.addView(layoutQuestao);
+            calcularNotaTotal();
+
         }
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,5 +203,24 @@ public class GabaritoActivity extends AppCompatActivity {
     public void telaConfim() {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
         startActivity(intent);
+    }
+    private void calcularNotaTotal() {
+        int notas = 0;
+        ArrayList<Integer> nPquest = new ArrayList<>();
+        info.put("notaQuest", nPquest);
+
+        //modificado
+        for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+            LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
+            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+            String nt = pontosEditText.getText().toString();
+            if (!nt.isEmpty()) {
+                Integer n = Integer.valueOf(nt);
+                nPquest.add(n);
+                notas += n;
+            }
+        }
+
+        notaProva.setText("Nota total da prova " + notas + " pontos.");
     }
 }

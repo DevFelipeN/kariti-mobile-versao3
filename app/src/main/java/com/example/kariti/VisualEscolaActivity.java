@@ -64,7 +64,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         database.close();
 
 
-        ListView listView = findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listViewEscolas);
         EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
 
@@ -153,6 +153,5 @@ public class VisualEscolaActivity extends AppCompatActivity {
     public void telaEscolaDesativada() {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivity(intent);
-        finish();
     }
 }

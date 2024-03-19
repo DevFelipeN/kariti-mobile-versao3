@@ -40,5 +40,6 @@ public class WelcomeActivity extends AppCompatActivity {
     public void mudarParaTelaLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 }

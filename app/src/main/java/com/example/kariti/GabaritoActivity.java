@@ -41,7 +41,7 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
-        txtTeste = findViewById(R.id.textViewTeste);
+//        txtTeste = findViewById(R.id.textViewTeste);
         LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
         LinearLayout layoutAlternativas = findViewById(R.id.layoutDasAlternativas); // Layout das alternativas
 
@@ -76,7 +76,7 @@ public class GabaritoActivity extends AppCompatActivity {
        });
 
        //sayury
-       notaProva = findViewById(R.id.txtViewNotaProva);
+        notaProva = findViewById(R.id.txtViewNotaProva);
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
@@ -86,7 +86,7 @@ public class GabaritoActivity extends AppCompatActivity {
             TextView textViewAlternativa = new TextView(this);
             textViewAlternativa.setText(String.valueOf(letra));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.setMargins(42, 0, 42, 0);
+            params.setMargins(40, 0, 25, 0);
 
             textViewAlternativa.setLayoutParams(params); // Aplica os parâmetros de layout ao TextView
             textViewAlternativa.setGravity(Gravity.CENTER); // Centraliza o texto
@@ -113,13 +113,12 @@ public class GabaritoActivity extends AppCompatActivity {
             // Loop para criar Radio para as respostas
             for (int j = 0; j < quantidadeAlternativas; j++) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0, 25, 40, 0);
+                params.setMargins(0, 20, 20, 0);
 
                 RadioButton radioAlternativa = new RadioButton(this);
                 radioAlternativa.setLayoutParams(params);
                 radioGroupAlternativas.addView(radioAlternativa);
             }
-//            HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
             radioGroupAlternativas.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -130,39 +129,30 @@ public class GabaritoActivity extends AppCompatActivity {
                             RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                             int position = group.indexOfChild(selectedRadioButton);
                             alternativasEscolhidas.put(positionDaQuestao, position);
-                            txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
                         }
-
                     }
-
                 }
             });
-
             layoutQuestao.addView(radioGroupAlternativas);
-            //Toast.makeText(this, " Resp: "+radioGroupAlternativas.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
 
             EditText editTextPontos = new EditText(this);
             editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
-            editTextPontos.setText("1");
+            editTextPontos.setText(String.valueOf(1));
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-
                 @Override
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;
                     ArrayList<Integer> nPquest = new ArrayList<>();
                     info.put("notaQuest", nPquest);
-
-                    //modificado
                     for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
                         LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
                         EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
@@ -178,31 +168,6 @@ public class GabaritoActivity extends AppCompatActivity {
             });
             layoutQuestoesGabarito.addView(layoutQuestao);
         }
-
-        // Calcular a nota inicial
-        int notas = 0;
-        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
-            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
-            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-            String nt = pontosEditText.getText().toString();
-            if (!nt.isEmpty()) {
-                Integer n = Integer.valueOf(nt);
-                notas += n;
-            }
-        }
-
-        notaProva.setText("Nota total da prova " + notas + " pontos.");
-//        int notas = 0;
-//        for (int i = 0; i < layoutQuestoesGabarito.getChildCount(); i++) {
-//            LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(i);
-//            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-//            String nt = pontosEditText.getText().toString();
-//            if (!nt.isEmpty()) {
-//                Integer n = Integer.valueOf(nt);
-//                notas += n;
-//            }
-//        }
-//        notaProva.setText("Nota total da prova " + notas + " pontos.");
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

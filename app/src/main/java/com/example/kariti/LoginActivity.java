@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
                     }else{Toast.makeText(LoginActivity.this, "E-mail Inválido", Toast.LENGTH_SHORT).show();}
                 }

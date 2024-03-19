@@ -115,6 +115,7 @@ public class CadProvaActivity extends AppCompatActivity {
                                 intent.putExtra("quest", quest);
                                 intent.putExtra("alter", alter);
                                 startActivity(intent);
+                                finish();
                             }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();
@@ -151,7 +152,6 @@ public class CadProvaActivity extends AppCompatActivity {
             }
         });
     }
-
     private String formatDate(Calendar calendar) {
         String dateFormat = "dd/MM/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());

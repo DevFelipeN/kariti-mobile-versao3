@@ -44,7 +44,6 @@ public class GabaritoActivity extends AppCompatActivity {
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
 //        txtTeste = findViewById(R.id.textViewTeste);
-        LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
         LinearLayout layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         bancoDados = new BancoDados(this);
@@ -160,8 +159,10 @@ public class GabaritoActivity extends AppCompatActivity {
                     int notas = 0;
                     ArrayList<Integer> nPquest = new ArrayList<>();
                     info.put("notaQuest", nPquest);
-                    for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
-                        LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
+
+                    //modificado
+                    for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+                        LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
                         EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
                         String nt = pontosEditText.getText().toString();
                         if (!nt.isEmpty()) {

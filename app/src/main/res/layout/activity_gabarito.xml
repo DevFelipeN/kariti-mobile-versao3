@@ -110,26 +110,6 @@
         </LinearLayout>
     </ScrollView>
 
-<!--    <ScrollView-->
-<!--        android:id="@+id/scrollView2"-->
-<!--        android:layout_width="350dp"-->
-<!--        android:layout_height="290dp"-->
-<!--        android:layout_marginStart="30dp"-->
-<!--        android:contentDescription="@string/descritionScroll"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/layoutDasAlternativas">-->
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/layoutQuestoes"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
-
-<!--        </LinearLayout>-->
-<!--    </ScrollView>-->
-
     <TextView
         android:id="@+id/txtViewNotaProva"
         android:layout_width="wrap_content"
@@ -152,5 +132,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtViewNotaProva" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/textViewTeste"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/scrollView2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider4" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

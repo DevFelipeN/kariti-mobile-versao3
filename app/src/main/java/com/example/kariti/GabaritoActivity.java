@@ -2,13 +2,16 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +34,7 @@ public class GabaritoActivity extends AppCompatActivity {
     ImageButton voltar;
     BancoDados bancoDados;
     Map<String, Object> info;
+    LinearLayout layoutHorizontal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +46,7 @@ public class GabaritoActivity extends AppCompatActivity {
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
 //        txtTeste = findViewById(R.id.textViewTeste);
-        LinearLayout layoutQuestoesGabarito = findViewById(R.id.layoutQuestoes); // Layout das questões
-        LinearLayout layoutAlternativas = findViewById(R.id.layoutDasAlternativas); // Layout das alternativas
+        layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         bancoDados = new BancoDados(this);
         info = new HashMap<>();
@@ -60,6 +63,17 @@ public class GabaritoActivity extends AppCompatActivity {
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean respostaSelecionada = false;
+                for (RadioGroup radioGroup : listRadioGroups) {
+                    if (radioGroup.getCheckedRadioButtonId() == -1) {
+                        Toast.makeText(GabaritoActivity.this, "Por favor, selecione uma resposta para todas as questões.", Toast.LENGTH_SHORT).show();
+                        respostaSelecionada = false;
+                        break;
+                    } else {
+                        respostaSelecionada = true;
+                    }
+                }
+                if (respostaSelecionada) {
                 Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
                 if(insProva) {
                     Integer id_prova = bancoDados.pegaIdProva(prova);
@@ -73,6 +87,7 @@ public class GabaritoActivity extends AppCompatActivity {
                     }
                 }
             }
+            }
        });
 
        //sayury
@@ -81,21 +96,15 @@ public class GabaritoActivity extends AppCompatActivity {
         int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
 
-        // Loop para criar as alternativas na primeira linha
-        for (char letra = 'A'; letra <  'A' + quantidadeAlternativas; letra++) {
-            TextView textViewAlternativa = new TextView(this);
-            textViewAlternativa.setText(String.valueOf(letra));
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.setMargins(40, 0, 25, 0);
 
-            textViewAlternativa.setLayoutParams(params); // Aplica os parâmetros de layout ao TextView
-            textViewAlternativa.setGravity(Gravity.CENTER); // Centraliza o texto
-            layoutAlternativas.addView(textViewAlternativa); // Adiciona a alternativa ao layout das alternativas
+        String[] letras = new String[quantidadeAlternativas];
+        for (int i = 0; i < quantidadeAlternativas; i++) {
+            char letra = (char)('A' + i);
+            letras[i] = String.valueOf(letra);
         }
-        TextView TextNota = new TextView(this);
-        TextNota.setText("Nota");
-        layoutAlternativas.addView(TextNota);
+
         //Questões e Radio
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         for (int i = 0; i < quantidadeQuestoes; i++) {
             LinearLayout layoutQuestao = new LinearLayout(this);
@@ -112,11 +121,11 @@ public class GabaritoActivity extends AppCompatActivity {
 
             // Loop para criar Radio para as respostas
             for (int j = 0; j < quantidadeAlternativas; j++) {
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, 20, 20, 0);
 
                 RadioButton radioAlternativa = new RadioButton(this);
                 radioAlternativa.setLayoutParams(params);
+                radioAlternativa.setText(letras[j]);
                 radioGroupAlternativas.addView(radioAlternativa);
             }
             radioGroupAlternativas.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -136,9 +145,20 @@ public class GabaritoActivity extends AppCompatActivity {
             });
             layoutQuestao.addView(radioGroupAlternativas);
 
+            LinearLayout.LayoutParams paramsText = new LinearLayout.LayoutParams(
+                    150,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
             EditText editTextPontos = new EditText(this);
             editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
             editTextPontos.setText(String.valueOf(1));
+            editTextPontos.setGravity(Gravity.CENTER);
+            editTextPontos.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            editTextPontos.setBackground(ContextCompat.getDrawable(this, R.drawable.borda_fina));
+            paramsText.setMargins(5, 15, 0, 0);
+
+            editTextPontos.setLayoutParams(paramsText);
+
             layoutQuestao.addView(editTextPontos);
 
             editTextPontos.addTextChangedListener(new TextWatcher() {
@@ -150,23 +170,13 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    int notas = 0;
-                    ArrayList<Integer> nPquest = new ArrayList<>();
-                    info.put("notaQuest", nPquest);
-                    for (int j = 0; j < layoutQuestoesGabarito.getChildCount(); j++) {
-                        LinearLayout questaoLayout = (LinearLayout) layoutQuestoesGabarito.getChildAt(j);
-                        EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-                        String nt = pontosEditText.getText().toString();
-                        if (!nt.isEmpty()) {
-                            Integer n = Integer.valueOf(nt);
-                            nPquest.add(n);
-                            notas += n;
-                        }
-                    }
-                    notaProva.setText("Nota total da prova " + notas + " pontos.");
+                    calcularNotaTotal();
                 }
             });
-            layoutQuestoesGabarito.addView(layoutQuestao);
+
+            layoutHorizontal.addView(layoutQuestao);
+            calcularNotaTotal();
+
         }
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,5 +203,24 @@ public class GabaritoActivity extends AppCompatActivity {
     public void telaConfim() {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
         startActivity(intent);
+    }
+    private void calcularNotaTotal() {
+        int notas = 0;
+        ArrayList<Integer> nPquest = new ArrayList<>();
+        info.put("notaQuest", nPquest);
+
+        //modificado
+        for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+            LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
+            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+            String nt = pontosEditText.getText().toString();
+            if (!nt.isEmpty()) {
+                Integer n = Integer.valueOf(nt);
+                nPquest.add(n);
+                notas += n;
+            }
+        }
+
+        notaProva.setText("Nota total da prova " + notas + " pontos.");
     }
 }

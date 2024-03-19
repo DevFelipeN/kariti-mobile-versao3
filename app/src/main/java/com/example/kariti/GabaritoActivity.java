@@ -77,7 +77,7 @@ public class GabaritoActivity extends AppCompatActivity {
        });
 
        //sayury
-       notaProva = findViewById(R.id.txtViewNotaProva);
+        notaProva = findViewById(R.id.txtViewNotaProva);
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
@@ -114,7 +114,6 @@ public class GabaritoActivity extends AppCompatActivity {
                 radioAlternativa.setText(letras[j]);
                 radioGroupAlternativas.addView(radioAlternativa);
             }
-//            HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
             radioGroupAlternativas.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -125,12 +124,9 @@ public class GabaritoActivity extends AppCompatActivity {
                             RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                             int position = group.indexOfChild(selectedRadioButton);
                             alternativasEscolhidas.put(positionDaQuestao, position);
-//                            txtTeste.setText("HASH:" + alternativasEscolhidas);
                             break;
                         }
-
                     }
-
                 }
             });
             layoutQuestao.addView(radioGroupAlternativas);
@@ -155,11 +151,9 @@ public class GabaritoActivity extends AppCompatActivity {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-
                 @Override
                 public void afterTextChanged(Editable editable) {
                     int notas = 0;

@@ -3,7 +3,9 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,15 +20,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class CadTurmaActivity extends AppCompatActivity {
+public class CadTurmaActivity extends AppCompatActivity{
     private ImageButton voltar;
     private Toolbar toolbar;
-    private EditText pesquisarAlunos, nomeTurma, alunosAnonimos;
+    private EditText nomeTurma, alunosAnonimos;
     ImageView menosAnonimos, maisAnonimos;
-    private Button buttonIncluirAlunos, cadastrar;
+    ListView listarAlunos;
+    private Button cadastrar;
     BancoDados bancoDados;
     Spinner spinnerBuscAluno;
+    String alunoSelecionado;
+    AdapterExclAluno al;
     private ArrayList<String> selectedAlunos = new ArrayList<>();
+    ArrayList<String> nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +41,7 @@ public class CadTurmaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
         voltar = findViewById(R.id.imgBtnVoltar);
-        ListView listarAlunos = findViewById(R.id.listViewAlTurma);
-        pesquisarAlunos = findViewById(R.id.editTextPesquisarAlunos);
+        listarAlunos = findViewById(R.id.listViewAlTurma);
         nomeTurma = findViewById(R.id.editTextTurma);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
         spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
@@ -45,24 +50,30 @@ public class CadTurmaActivity extends AppCompatActivity {
         maisAnonimos = findViewById(R.id.imageViewMaisAnonimos);
         bancoDados = new BancoDados(this);
 
-        ArrayList<String> nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
         spinnerBuscAluno.setAdapter(adapter);
-        AdapterExclAluno al = new AdapterExclAluno(this, nomesAluno);
-        listarAlunos.setAdapter(al);
+
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String alunoSelecionado = (String) parent.getItemAtPosition(position);
-                Toast.makeText(CadTurmaActivity.this, "Clicado: "+position, Toast.LENGTH_SHORT).show();
-                if (!selectedAlunos.contains(alunoSelecionado)) {
-                    selectedAlunos.add(alunoSelecionado);
-                }
+                alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
+                selectedAlunos.add(alunoSelecionado);
+                al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
+                listarAlunos.setAdapter(al);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        listarAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               //Em desenvolvimento......
+           }
+        });
+
 
         menosAnonimos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +96,9 @@ public class CadTurmaActivity extends AppCompatActivity {
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), TurmaActivity.class);
+                startActivity(intent);
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

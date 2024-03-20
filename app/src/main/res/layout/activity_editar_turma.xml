@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTurma">
 
         <ListView
-            android:id="@+id/listViewEscolas"
+            android:id="@+id/listViewAlunosTurma"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -13,13 +13,18 @@ import java.util.ArrayList;
 
 public class VisualTurmaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
+    ListView listView;
     BancoDados bancoDados;
+    ArrayList<String> listarTurma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_turma);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
+        listView = findViewById(R.id.listViewAlunosTurma);
+
+        bancoDados = new BancoDados(this);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,31 +32,28 @@ public class VisualTurmaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-
-        ArrayList<String> teste = new ArrayList<>();
-        teste.add("nome1");
-        teste.add("nome2");
-        teste.add("nome3");
-        teste.add("nome4");
-        teste.add("nome5");
-        teste.add("nome6");
-        teste.add("nome7");
-        teste.add("nome8");
-        ListView listView = findViewById(R.id.listViewEscolas);
-        EscolaAdapter adapter = new EscolaAdapter(this, teste, teste);
+        listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        EscolaAdapter adapter = new EscolaAdapter(this, listarTurma, listarTurma);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                telaTeste();
+                String qTurma = listarTurma.get(position);
+                Integer idTurma = bancoDados.pegaIdTurma(qTurma);
+                telaTeste(idTurma);
+            }
+        });
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
-    public void telaTeste() {
+    public void telaTeste(Integer idTurma) {
         Intent intent = new Intent(this, DadosTurmaActivity.class);
+        intent.putExtra("idTurma", idTurma);
         startActivity(intent);
-        finish();
     }
 }

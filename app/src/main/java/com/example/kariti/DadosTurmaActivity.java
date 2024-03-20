@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,6 +19,10 @@ import java.util.ArrayList;
 public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
     ImageView menuPnt;
+    TextView turmaCad;
+    ArrayList<String> listAlTurma;
+    BancoDados bancoDados;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +30,14 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         voltar = findViewById(R.id.imgBtnVoltar);
         menuPnt = findViewById(R.id.menu_icon);
-        ListView listView = findViewById(R.id.listViewEscolas);
+        listView = findViewById(R.id.listViewAlunosTurma);
+        turmaCad = findViewById(R.id.textViewTurmaCad);
+
+        String id_turma = String.valueOf(getIntent().getExtras().getInt("idTurma"));
+        Toast.makeText(this, "Item: "+id_turma, Toast.LENGTH_SHORT).show();
+        //String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        //turmaCad.setText(pegaTurma);
+
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

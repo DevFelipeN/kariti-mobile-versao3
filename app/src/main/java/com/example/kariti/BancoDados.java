@@ -19,7 +19,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 35);
+        super(context, "data_base", null, 36);
     }
 
     @Override
@@ -31,6 +31,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
             data_base.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, nomeTurma TEXT, id_escola INTEGER)");
+            data_base.execSQL("create Table alunos_da_turma (id_alunos_da_turma Integer PRIMARY KEY AUTOINCREMENT, alunoTurma TEXT, id_turma Integer)");
             data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER)");
             data_base.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer, nota Integer)");
             data_base.execSQL("create Table galeria(id INTEGER PRIMARY KEY AUTOINCREMENT, foto BLOB)");
@@ -49,6 +50,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("drop Table if exists escolasDesativadas");
             data_base.execSQL("drop Table if exists gabarito");
             data_base.execSQL("drop Table if exists galeria");
+            data_base.execSQL("drop Table if exists alunos_da_turma");
             onCreate(data_base);
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
@@ -81,6 +83,14 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("nomeTurma", nomeTurma);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
         long inserir = data_base.insert("turma", null, contentValues);
+        return inserir != -1;
+    }
+    public Boolean inserirAlunosNaTurma(String alunoTurma, Integer id_turma){
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("alunoTurma", alunoTurma);
+        contentValues.put("id_turma", id_turma);
+        long inserir = data_base.insert("alunos_da_turma", null, contentValues);
         return inserir != -1;
     }
 
@@ -230,6 +240,13 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getInt(0);
     }
+    public Integer pegaIdTurma(String nomeTurma) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from turma where nomeTurma = ?", new String[]{nomeTurma});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
 
     public String pegaEmailAluno(String id_aluno) {
         SQLiteDatabase data_base = this.getWritableDatabase();
@@ -298,7 +315,6 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE nomeAluno = ?", new String[]{nome});
-
         if (cursor.getCount() > 0) return true;
         else return false;
     }
@@ -326,7 +342,6 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public List<String> obterNomesAlunos() {
         List<String> nomesAlunos = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno", null);
         if (cursor != null && cursor.moveToFirst()) {

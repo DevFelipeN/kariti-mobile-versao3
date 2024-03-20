@@ -32,7 +32,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     String alunoSelecionado;
     AdapterExclAluno al;
     private ArrayList<String> selectedAlunos = new ArrayList<>();
-    ArrayList<String> nomesAluno;
+    ArrayList<String> nomesAluno, selecionados;;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +70,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         listarAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               //Em desenvolvimento......
+               Toast.makeText(CadTurmaActivity.this, "Implementar ação para apagar! ", Toast.LENGTH_SHORT).show();
            }
         });
 
@@ -90,15 +90,27 @@ public class CadTurmaActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Integer mais = Integer.valueOf(alunosAnonimos.getText().toString());
                 mais ++;
+                selectedAlunos.add("Aluno "+mais);
                 alunosAnonimos.setText(mais.toString());
+                listarAlunos.setAdapter(al);
             }
         });
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), TurmaActivity.class);
-                startActivity(intent);
+                Integer id_turma = 0;
+                String turma = nomeTurma.getText().toString();
+                Boolean cadTurma = bancoDados.inserirTurma(turma);
+                if(cadTurma){
+                    id_turma = bancoDados.pegaIdTurma(turma);
+                }else Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
+                int num = listarAlunos.getAdapter().getCount();
+                selecionados = (ArrayList<String>) selectedAlunos;
+                for(int i = 0; i < num; i++) {
+                    bancoDados.inserirAlunosNaTurma(selecionados.get(i), id_turma);
+                }
+                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

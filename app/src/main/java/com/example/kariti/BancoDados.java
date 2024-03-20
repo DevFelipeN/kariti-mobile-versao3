@@ -224,6 +224,13 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+    public String pegaNomeTurma(String id_turma) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(1);
+    }
 
     public String pegaAluno(String id_aluno) {
         SQLiteDatabase data_base = this.getWritableDatabase();
@@ -354,6 +361,21 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return nomesAlunos;
+    }
+    public List<String> obterNomeTurmas() {
+        List<String>  nomesTurma = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nomeTurma FROM turma", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // O índice 0 corresponde à coluna 'nome' no exemplo
+                String nomeTurma = cursor.getString(0);
+                nomesTurma.add(nomeTurma);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return nomesTurma;
     }
 
 }

@@ -41,7 +41,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/textViewTurmaCad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -62,10 +62,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7">
+        app:layout_constraintTop_toBottomOf="@+id/textViewTurmaCad">
 
         <ListView
-            android:id="@+id/listViewEscolas"
+            android:id="@+id/listViewAlunosTurma"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

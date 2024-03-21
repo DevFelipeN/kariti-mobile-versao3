@@ -2,12 +2,15 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,8 +37,18 @@ public class EditarTurmaActivity extends AppCompatActivity {
         editTurma.setText(pegaTurma);
 
         editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
-        EscolaAdapter adapter = new EscolaAdapter(this, editAlTurma, editAlTurma);
+        AdapterExclAluno adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Boolean remove = bancoDados.deletarAlunoDturma(i);
+                Intent intent = new Intent(getApplicationContext(), EditarTurmaActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
 

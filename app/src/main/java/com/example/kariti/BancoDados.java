@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -321,7 +322,14 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM aluno WHERE nomeAluno = ?", new String[]{nome});
+        Cursor cursor = database.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ?", new String[]{nome});
+        if (cursor.getCount() > 0) return true;
+        else return false;
+    }
+
+    public Boolean checkTurma(String turma){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT nomeTurma FROM turma WHERE nomeTurma = ?", new String[]{turma});
         if (cursor.getCount() > 0) return true;
         else return false;
     }
@@ -376,6 +384,21 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return nomesTurma;
+    }
+    public List<String> listAlunosDturma(String id_turma) {
+        List<String>  alDturma = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT alunoTurma FROM alunos_da_turma where id_turma = ?", new String[]{id_turma});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // O índice 0 corresponde à coluna 'nome' no exemplo
+                String alTurmas = cursor.getString(0);
+                alDturma.add(alTurmas);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return alDturma;
     }
 
 }

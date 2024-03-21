@@ -23,6 +23,8 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     ArrayList<String> listAlTurma;
     BancoDados bancoDados;
     ListView listView;
+    ArrayList<String> listAlunosDturma;
+    String id_turma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +34,15 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         menuPnt = findViewById(R.id.menu_icon);
         listView = findViewById(R.id.listViewAlunosTurma);
         turmaCad = findViewById(R.id.textViewTurmaCad);
+        bancoDados = new BancoDados(this);
 
-        String id_turma = String.valueOf(getIntent().getExtras().getInt("idTurma"));
-        Toast.makeText(this, "Item: "+id_turma, Toast.LENGTH_SHORT).show();
-        //String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
-        //turmaCad.setText(pegaTurma);
+        id_turma = String.valueOf(getIntent().getExtras().getInt("idTurma"));
+        String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        turmaCad.setText(pegaTurma);
+
+        listAlunosDturma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
+        EscolaAdapter adapter = new EscolaAdapter(this, listAlunosDturma, listAlunosDturma);
+        listView.setAdapter(adapter);
 
 
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -45,18 +51,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
                 onBackPressed();
             }
         });
-
-        ArrayList<String> teste = new ArrayList<>();
-        teste.add("Antonio");
-        teste.add("Carlos");
-        teste.add("Gil");
-        teste.add("Guilherme");
-        teste.add("Miguel");
-        teste.add("Paulo");
-        teste.add("Toji");
-        teste.add("Via");
-        ArrayAdapter<String> adapterAlunos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teste);
-        listView.setAdapter(adapterAlunos);
     }
 
     public void PopMenu(View v){
@@ -86,6 +80,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
     public void telaEditar(){
         Intent intent = new Intent(this, EditarTurmaActivity.class);
+        intent.putExtra("id_turma", id_turma);
         startActivity(intent);
     }
 }

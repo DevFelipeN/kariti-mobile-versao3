@@ -3,17 +3,13 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,7 +38,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         voltar = findViewById(R.id.imgBtnVoltar);
         listarAlunos = findViewById(R.id.listViewAlTurma);
-        nomeTurma = findViewById(R.id.editTextTurma);
+        nomeTurma = findViewById(R.id.editTextEditTurma);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
         spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
         alunosAnonimos = findViewById(R.id.editTextAlunosAnonimos);
@@ -98,19 +94,24 @@ public class CadTurmaActivity extends AppCompatActivity{
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer id_turma = 0;
                 String turma = nomeTurma.getText().toString();
-                Boolean cadTurma = bancoDados.inserirTurma(turma);
-                if(cadTurma){
-                    id_turma = bancoDados.pegaIdTurma(turma);
-                }else Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
-                int num = listarAlunos.getAdapter().getCount();
-                selecionados = (ArrayList<String>) selectedAlunos;
-                for(int i = 0; i < num; i++) {
-                    bancoDados.inserirAlunosNaTurma(selecionados.get(i), id_turma);
-                }
-                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
-                finish();
+                Boolean checkTurma = bancoDados.checkTurma(turma);
+                if(!checkTurma) {
+                    Integer id_turma = 0;
+                    Boolean cadTurma = bancoDados.inserirTurma(turma);
+                    if (cadTurma) {
+                        id_turma = bancoDados.pegaIdTurma(turma);
+                    } else
+                        Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
+                    int num = listarAlunos.getAdapter().getCount();
+                    selecionados = (ArrayList<String>) selectedAlunos;
+                    for (int i = 0; i < num; i++) {
+                        bancoDados.inserirAlunosNaTurma(selecionados.get(i), id_turma);
+                    }
+                    Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else Toast.makeText(CadTurmaActivity.this, "Turma já cadstradada! ", Toast.LENGTH_SHORT).show();
+
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

@@ -18,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+
 public class ProvaCorrigirActivity extends AppCompatActivity {
     Button btnGaleria, btnCamera;
     ImageButton voltar;
@@ -74,8 +76,17 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 // Se a imagem foi capturada pela câmera
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 if (photo != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
                     teste.setImageBitmap(photo);
-                    Toast.makeText(ProvaCorrigirActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(ProvaCorrigirActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(this, GaleriaActivity.class);
+                    intent.putExtra("photo", byteArray);
+                    startActivity(intent);
+                    finish();
                 }
             }
         }

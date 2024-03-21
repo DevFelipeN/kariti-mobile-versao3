@@ -92,7 +92,6 @@
     <string name="btnBaixarProva">Baixar Prova</string>
     <string name="btnCompartilhar">Compartilhar</string>
 
-
     <string name="btnVoltar">Button Voltar</string>
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>
@@ -101,10 +100,13 @@
     <string name="msgCodigo">Código de validação ENVIADO para</string>
     <string name="imgDelete">Botão de Deletar</string>
     <string name="txtViewNomeTurma">Nome da Turma</string>
+    <string name="btnFlutuante">Adicionar Fotos</string>
 
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>
 
     <string name="descritionScroll">Bloco do Gabarito</string>
+
+    <string name="btnGaleriaFinalizar">Finalizar</string>
 
 </resources>

@@ -56,70 +56,85 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="350dp"
-        android:layout_height="400dp"
+    <Spinner
+        android:id="@+id/spinnerBuscAluno"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
         android:layout_marginTop="25dp"
-        android:background="@drawable/borda_botao"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma">
 
+    </Spinner>
+
         <ListView
             android:id="@+id/listViewAlunosTurma"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="315dp"
+            android:layout_height="315dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.524"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma"
-            app:layout_constraintVertical_bias="0.16" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
+            android:background="@drawable/borda_botao"
+            android:layout_marginTop="25dp"/>
 
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/editTextPesquisarAlunos"
-        android:layout_width="165dp"
+    <LinearLayout
+        android:id="@+id/layoutEditIncluirAlun"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="90dp"
-        android:background="@drawable/borda_botao"
-        android:ems="10"
-        android:hint="@string/editTextBuscAluno"
-        android:inputType="text"
-        android:padding="8dp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <ImageView
-        android:id="@+id/imageView16"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextPesquisarAlunos"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPesquisarAlunos"
-        app:layout_constraintHorizontal_bias="0.041"
-        app:layout_constraintStart_toStartOf="@+id/editTextPesquisarAlunos"
-        app:layout_constraintTop_toTopOf="@+id/editTextPesquisarAlunos"
-        app:srcCompat="@mipmap/search" />
-
-    <Button
-        style="@style/BUTTONSTYLE"
-        android:id="@+id/buttonIncluir"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="90dp"
-        android:text="@string/btnIncluirAluno"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.807"
-        app:layout_constraintStart_toEndOf="@+id/editTextPesquisarAlunos"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/listViewAlunosTurma">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewAlunoAnonim"
+            android:textSize="18sp"
+            android:layout_marginRight="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/listViewAlTurma"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0">
+
+            <ImageView
+                android:id="@+id/imageViewMenosAnonimos"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/subtract"/>
+
+            <EditText
+                android:id="@+id/editTextAlunosAnonimos"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/borda_botao"
+                android:ems="10"
+                android:inputType="text"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imageViewMaisAnonimos"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/btnadicionar"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -127,11 +142,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/buttonCadTurma"
+        android:text="@string/buttonSalvTurma"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPesquisarAlunos"
+        app:layout_constraintTop_toBottomOf="@+id/layoutEditIncluirAlun"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

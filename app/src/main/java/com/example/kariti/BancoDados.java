@@ -168,6 +168,17 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
+    public Boolean deletarAlunoDturma(Integer id_alunoDturma){
+        try {
+            SQLiteDatabase data_base = this.getWritableDatabase();
+            String deleta = "DELETE FROM alunos_da_turma WHERE id_alunos_da_turma = ?";
+            SQLiteStatement stmt = data_base.compileStatement(deleta);
+            stmt.bindLong(1, id_alunoDturma);
+            stmt.executeUpdateDelete();
+            data_base.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
     public Boolean upadateSenha(String password, Integer id){
         try {
             SQLiteDatabase data_base = this.getWritableDatabase();

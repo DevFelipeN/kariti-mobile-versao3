@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -12,13 +13,31 @@ import java.util.ArrayList;
 
 public class EditarTurmaActivity extends AppCompatActivity {
     ImageButton voltar;
+    ListView listView;
+    EditText editTurma;
+    ArrayList<String> editAlTurma;
+    String id_turma;
+    BancoDados bancoDados;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_turma);
 
-        ListView listView = findViewById(R.id.listViewAlunosTurma);
+        listView = findViewById(R.id.listViewAlunosTurma);
+        editTurma = findViewById(R.id.editTextEditTurma);
         voltar = findViewById(R.id.imgBtnVoltar);
+        bancoDados = new BancoDados(this);
+
+        id_turma = getIntent().getExtras().getString("id_turma");
+        String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        editTurma.setText(pegaTurma);
+
+        editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
+        EscolaAdapter adapter = new EscolaAdapter(this, editAlTurma, editAlTurma);
+        listView.setAdapter(adapter);
+
+
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,17 +45,5 @@ public class EditarTurmaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        ArrayList<String> teste = new ArrayList<>();
-        teste.add("Antonio");
-        teste.add("Carlos");
-        teste.add("Gil");
-        teste.add("Guilherme");
-        teste.add("Miguel");
-        teste.add("Paulo");
-        teste.add("Toji");
-        teste.add("Via");
-        ArrayAdapter<String> adapterAlunos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teste);
-        listView.setAdapter(adapterAlunos);
     }
 }

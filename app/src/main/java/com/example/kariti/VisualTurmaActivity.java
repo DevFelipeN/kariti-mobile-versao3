@@ -26,12 +26,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+
         listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
         EscolaAdapter adapter = new EscolaAdapter(this, listarTurma, listarTurma);
         listView.setAdapter(adapter);

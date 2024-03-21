@@ -23,23 +23,6 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="2dp" />
 
-    <!--    <ImageButton-->
-    <!--        android:id="@+id/imgBtnVoltar"-->
-    <!--        android:layout_width="48dp"-->
-    <!--        android:layout_height="40dp"-->
-    <!--        android:layout_marginStart="5dp"-->
-    <!--        android:background="@color/tranparente"-->
-    <!--        android:contentDescription="@string/btnVoltar"-->
-    <!--        android:src="@mipmap/setaleft"-->
-    <!--        android:textColor="@android:color/black"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.0"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-    <!--        app:layout_constraintVertical_bias="0.0"-->
-    <!--        tools:ignore="MissingConstraints" />-->
-
     <EditText
         android:id="@+id/editTextEditTurma"
         android:layout_width="wrap_content"
@@ -60,7 +43,7 @@
         <Spinner
             android:id="@+id/spinnerBuscAluno"
             android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_marginTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
@@ -69,41 +52,31 @@
 
         </Spinner>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="315dp"
-        android:layout_height="283dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/borda_botao"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno">
-
-
         <ListView
             android:id="@+id/listViewAlTurma"
-            android:layout_width="match_parent"
-            android:layout_height="272dp"
+            android:layout_width="315dp"
+            android:layout_height="315dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma"
-            app:layout_constraintVertical_bias="0.363" />
-    </LinearLayout>
+            app:layout_constraintVertical_bias="0.363"
+            android:background="@drawable/borda_botao"/>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="312dp"
         android:text="@string/textViewAlunos"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/listViewAlTurma"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/listViewAlTurma"
         app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -115,59 +88,65 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="132dp"
-        android:text="@string/textViewAlunoAnonim"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutIncluirAlunos" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/layoutIncluirAlunos"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="124dp"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textView4">
+        app:layout_constraintTop_toBottomOf="@id/listViewAlTurma">
 
-        <ImageView
-            android:id="@+id/imageViewMenosAnonimos"
-            android:layout_width="35dp"
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/subtract"
-            tools:layout_editor_absoluteX="135dp"
-            tools:layout_editor_absoluteY="114dp" />
+            android:text="@string/textViewAlunoAnonim"
+            android:textSize="18sp"
+            android:layout_marginRight="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextAlunosAnonimos"
-            android:layout_width="50dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/borda_botao"
-            android:ems="10"
-            android:inputType="text"
-            android:text="0"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/imageViewMaisAnonimos"
-            android:layout_width="35dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/btnadicionar"
-            tools:layout_editor_absoluteX="86dp"
-            tools:layout_editor_absoluteY="197dp" />
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/listViewAlTurma"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0">
+
+            <ImageView
+                android:id="@+id/imageViewMenosAnonimos"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/subtract"/>
+
+            <EditText
+                android:id="@+id/editTextAlunosAnonimos"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/borda_botao"
+                android:ems="10"
+                android:inputType="text"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imageViewMaisAnonimos"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/btnadicionar"/>
+        </LinearLayout>
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

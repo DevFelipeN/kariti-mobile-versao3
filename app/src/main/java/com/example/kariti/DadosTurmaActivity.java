@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -32,7 +30,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         voltar = findViewById(R.id.imgBtnVoltar);
         menuPnt = findViewById(R.id.menu_icon);
-        listView = findViewById(R.id.listViewAlunosTurma);
+        listView = findViewById(R.id.listViewTurma);
         turmaCad = findViewById(R.id.textViewTurmaCad);
         bancoDados = new BancoDados(this);
 

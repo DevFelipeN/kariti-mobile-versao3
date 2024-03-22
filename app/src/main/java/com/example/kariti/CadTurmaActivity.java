@@ -38,7 +38,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         voltar = findViewById(R.id.imgBtnVoltar);
         listarAlunos = findViewById(R.id.listViewAlTurma);
-        nomeTurma = findViewById(R.id.editTextEditTurma);
+        nomeTurma = findViewById(R.id.editTextTurmaCad);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
         spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
         alunosAnonimos = findViewById(R.id.editTextAlunosAnonimos);
@@ -49,9 +49,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
         nomesAluno.add(0, "Selecione os Alunos");
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
-
         spinnerBuscAluno.setAdapter(adapter);
-
         spinnerBuscAluno.setSelection(0);
 
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -59,11 +57,11 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
-                selectedAlunos.add(alunoSelecionado);
-                al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
-                listarAlunos.setAdapter(al);
-            }
+                    alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
+                    selectedAlunos.add(alunoSelecionado);
+                    al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
+                    listarAlunos.setAdapter(al);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -96,7 +94,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                 mais ++;
                 selectedAlunos.add("Aluno "+mais);
                 alunosAnonimos.setText(mais.toString());
-                listarAlunos.setAdapter(al);
+                //listarAlunos.setAdapter(al);
             }
         });
         cadastrar.setOnClickListener(new View.OnClickListener() {

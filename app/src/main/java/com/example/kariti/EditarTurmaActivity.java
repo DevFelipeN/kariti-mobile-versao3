@@ -2,13 +2,12 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -17,9 +16,10 @@ import java.util.ArrayList;
 
 public class EditarTurmaActivity extends AppCompatActivity {
     ImageButton voltar;
+    ImageView maisAn, menosAn;
     ListView listView;
-    EditText editTurma;
-    ArrayList<String> editAlTurma;
+    EditText editTurma, novosAlAnonmos;
+    ArrayList<String> editAlTurma, alunosSpinner;
     String id_turma;
     BancoDados bancoDados;
     Spinner spinnerBuscAlun;
@@ -31,9 +31,18 @@ public class EditarTurmaActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listViewAlunosTurma);
         editTurma = findViewById(R.id.editTextEditTurma);
+        maisAn = findViewById(R.id.imageViewMaisNovosAnonimos);
+        menosAn = findViewById(R.id.imageViewMenosNovosAnonimos);
+        novosAlAnonmos = findViewById(R.id.editTextNovosAlunosAnonimos);
         voltar = findViewById(R.id.imgBtnVoltar);
         bancoDados = new BancoDados(this);
-        spinnerBuscAlun = findViewById(R.id.spinnerBuscAluno);
+        spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
+
+        alunosSpinner = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        alunosSpinner.add(0, "Selecione os Alunos");
+        SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
+        spinnerBuscAlun.setAdapter(adapterSpinner);
+        spinnerBuscAlun.setSelection(0);
 
         id_turma = getIntent().getExtras().getString("id_turma");
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
@@ -42,16 +51,6 @@ public class EditarTurmaActivity extends AppCompatActivity {
         editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
         AdapterExclAluno adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
-
-        ArrayList<String> alunosSpinner = new ArrayList<String>();
-
-        alunosSpinner.add(0, "Selecione os Alunos");
-        alunosSpinner.add("Aluno 1");
-        alunosSpinner.add("Aluno 2");
-        alunosSpinner.add("Aluno 3");
-        SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
-        spinnerBuscAlun.setAdapter(adapterSpinner);
-        spinnerBuscAlun.setSelection(0);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,6 +61,27 @@ public class EditarTurmaActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     Toast.makeText(EditarTurmaActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        menosAn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer menos = Integer.valueOf(novosAlAnonmos.getText().toString());
+                if(menos > 0)
+                    menos --;
+                novosAlAnonmos.setText(menos.toString());
+            }
+        });
+
+        maisAn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer mais = Integer.valueOf(novosAlAnonmos.getText().toString());
+                mais ++;
+                editAlTurma.add("Novo Aluno "+mais);
+                novosAlAnonmos.setText(mais.toString());
+                //listView.setAdapter(adapter);
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

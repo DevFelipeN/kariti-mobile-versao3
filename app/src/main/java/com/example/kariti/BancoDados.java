@@ -168,6 +168,18 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
+
+    public Boolean deletarTurma(Integer id_turma){
+        try {
+            SQLiteDatabase data_base = this.getWritableDatabase();
+            String deleta = "DELETE FROM turma WHERE id_turma=?";
+            SQLiteStatement stmt = data_base.compileStatement(deleta);
+            stmt.bindLong(1, id_turma);
+            stmt.executeUpdateDelete();
+            data_base.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
     public Boolean deletarAlunoDturma(String alTurma){
         try {
             SQLiteDatabase data_base = this.getWritableDatabase();

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -32,7 +31,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnMenu = findViewById(R.id.imageViewIcon);
-        ListView listView = findViewById(R.id.listViewAlunosTurma);
+        ListView listView = findViewById(R.id.listViewTurma);
         bancoDados = new BancoDados(this);
         atualiza = new VisualEscolaActivity();
         iconHelp = findViewById(R.id.iconHelp);

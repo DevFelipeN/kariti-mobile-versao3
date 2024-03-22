@@ -1,13 +1,16 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,7 +25,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visual_turma);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
-        listView = findViewById(R.id.listViewAlunosTurma);
+        listView = findViewById(R.id.listViewTurma);
 
         bancoDados = new BancoDados(this);
 
@@ -37,6 +40,39 @@ public class VisualTurmaActivity extends AppCompatActivity {
                 String qTurma = listarTurma.get(position);
                 Integer idTurma = bancoDados.pegaIdTurma(qTurma);
                 telaTeste(idTurma);
+            }
+        });
+
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // Exibir a caixa de diálogo
+                AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
+                builder.setTitle("Atenção!")
+                        .setMessage("Deseja Escluir Esta Turma?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String ids = listarTurma.get(position);
+                                Toast.makeText(VisualTurmaActivity.this, "Item: "+ids, Toast.LENGTH_SHORT).show();
+                                //Boolean deletAluno = bancoDados.deletarTurma(ids);
+                                //if (deletAluno) {
+                                    //adapter.remove(String.valueOf(ids));
+                                    //adapter.notifyDataSetChanged();
+                                    //Toast.makeText(VisualTurmaActivity.this, "Turma Escluida! ", Toast.LENGTH_SHORT).show();
+                                //}
+                            }
+                        })
+                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // cancelou
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
             }
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {

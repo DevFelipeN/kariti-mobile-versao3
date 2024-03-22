@@ -56,7 +56,6 @@ public class EditarTurmaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(EditarTurmaActivity.this, ""+i, Toast.LENGTH_SHORT).show();
                 Boolean remove = bancoDados.deletarAlunoDturma(editAlTurma.get(i));
                 if(remove) {
                     editAlTurma.remove(i);

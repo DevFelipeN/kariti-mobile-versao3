@@ -52,7 +52,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
             }
         });
     }
-
     public void PopMenu(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
@@ -65,9 +64,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         int id = item.getItemId();
         if (id == R.id.menuEditar) {
             telaEditar();
-            Toast.makeText(DadosTurmaActivity.this, "Editar Turma selecionada", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (id == R.id.menuExcluir) {
+        }
+        /*else if (id == R.id.menuExcluir) {
             Toast.makeText(DadosTurmaActivity.this, "Excluir Turma selecionado", Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.menuExclTurmAlun) {
@@ -76,6 +75,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         } else {
             return false;
         }
+
+         */
+        return true;
     }
 
     public void telaEditar(){

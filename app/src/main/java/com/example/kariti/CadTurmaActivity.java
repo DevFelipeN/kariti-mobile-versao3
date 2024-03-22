@@ -72,7 +72,9 @@ public class CadTurmaActivity extends AppCompatActivity{
         listarAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               Toast.makeText(CadTurmaActivity.this, "Implementar ação para apagar! ", Toast.LENGTH_SHORT).show();
+               selectedAlunos.remove(i);
+               al.notifyDataSetChanged();
+               Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
            }
         });
 

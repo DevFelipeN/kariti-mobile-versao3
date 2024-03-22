@@ -29,8 +29,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         nomeEscola = findViewById(R.id.textViewNomeEscola);
         bancoDados = new BancoDados(this);
 
-
-        String escola = getIntent().getExtras().getString("escola");
+        String escola = bancoDados.pegaEscola(String.valueOf(BancoDados.ID_ESCOLA));
         nomeEscola.setText(escola);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {

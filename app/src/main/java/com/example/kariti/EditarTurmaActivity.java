@@ -43,15 +43,15 @@ public class EditarTurmaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Boolean remove = bancoDados.deletarAlunoDturma(i);
-                Intent intent = new Intent(getApplicationContext(), EditarTurmaActivity.class);
-                startActivity(intent);
-                finish();
+                Toast.makeText(EditarTurmaActivity.this, ""+i, Toast.LENGTH_SHORT).show();
+                Boolean remove = bancoDados.deletarAlunoDturma(editAlTurma.get(i));
+                if(remove) {
+                    editAlTurma.remove(i);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(EditarTurmaActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

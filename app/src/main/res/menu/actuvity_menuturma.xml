@@ -5,10 +5,4 @@
     <item
         android:id="@+id/menuEditar"
         android:title="Editar Turma" />
-    <item
-        android:id="@+id/menuExcluir"
-        android:title="Excluir Turma" />
-    <item
-        android:id="@+id/menuExclTurmAlun"
-        android:title="Excluir Turma e Aluno" />
 </menu>

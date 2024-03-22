@@ -71,20 +71,19 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextAlunoCad" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonSalvarEdit"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="272dp"
         android:text="@string/btnSalvaAluno"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
+        app:layout_constraintVertical_bias="0.219"
         tools:ignore="MissingConstraints" />
 
     <ImageView

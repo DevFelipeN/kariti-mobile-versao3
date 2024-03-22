@@ -44,51 +44,49 @@
             android:id="@+id/spinnerBuscAluno"
             android:layout_width="250dp"
             android:layout_height="48dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/style_spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma">
-
         </Spinner>
 
-        <ListView
-            android:id="@+id/listViewAlTurma"
-            android:layout_width="315dp"
-            android:layout_height="315dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.533"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma"
-            app:layout_constraintVertical_bias="0.363"
-            android:background="@drawable/borda_botao"/>
-
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewalun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:text="@string/textViewAlunos"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/listViewAlTurma"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/listViewAlTurma"
         app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
         app:layout_constraintVertical_bias="1.0" />
 
+        <ListView
+            android:id="@+id/listViewAlTurma"
+            android:layout_width="315dp"
+            android:layout_height="315dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewalun"
+            app:layout_constraintVertical_bias="0.363"
+            android:background="@drawable/borda_botao"/>
+
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonCadastrarTurma"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/buttonCadTurma"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutIncluirAlunos" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutIncluirAlunos"
+        app:layout_constraintVertical_bias="0.427" />
 
     <LinearLayout
         android:id="@+id/layoutIncluirAlunos"

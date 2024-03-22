@@ -28,10 +28,14 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         View view = mInflater.inflate(R.layout.spinner_select, parent, false);
         TextView textView = view.findViewById(R.id.text_viewAluno);
         textView.setText(aluno.get(position));
+
+
         return view;
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         return getView(position, convertView, parent);
-    }}
+    }
+
+}

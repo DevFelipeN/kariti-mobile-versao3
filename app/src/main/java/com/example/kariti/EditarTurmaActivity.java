@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ArrayList<String> editAlTurma;
     String id_turma;
     BancoDados bancoDados;
+    Spinner spinnerBuscAlun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         editTurma = findViewById(R.id.editTextEditTurma);
         voltar = findViewById(R.id.imgBtnVoltar);
         bancoDados = new BancoDados(this);
+        spinnerBuscAlun = findViewById(R.id.spinnerBuscAluno);
 
         id_turma = getIntent().getExtras().getString("id_turma");
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
@@ -39,6 +42,16 @@ public class EditarTurmaActivity extends AppCompatActivity {
         editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
         AdapterExclAluno adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
+
+        ArrayList<String> alunosSpinner = new ArrayList<String>();
+
+        alunosSpinner.add(0, "Selecione os Alunos");
+        alunosSpinner.add("Aluno 1");
+        alunosSpinner.add("Aluno 2");
+        alunosSpinner.add("Aluno 3");
+        SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
+        spinnerBuscAlun.setAdapter(adapterSpinner);
+        spinnerBuscAlun.setSelection(0);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

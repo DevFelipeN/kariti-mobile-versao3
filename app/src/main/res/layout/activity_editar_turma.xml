@@ -58,9 +58,10 @@
 
     <Spinner
         android:id="@+id/spinnerBuscAluno"
+        android:background="@drawable/style_spinner"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,8 +138,8 @@
     </LinearLayout>
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonCadastrarTurma"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -147,6 +148,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutEditIncluirAlun"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.062" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

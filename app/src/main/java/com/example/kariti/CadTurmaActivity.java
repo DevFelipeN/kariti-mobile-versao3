@@ -28,7 +28,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     String alunoSelecionado;
     AdapterExclAluno al;
     private ArrayList<String> selectedAlunos = new ArrayList<>();
-    ArrayList<String> nomesAluno, selecionados;;
+    ArrayList<String> nomesAluno, selecionados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,17 +47,23 @@ public class CadTurmaActivity extends AppCompatActivity{
         bancoDados = new BancoDados(this);
 
         nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        nomesAluno.add(0, "Selecione os Alunos");
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
+
         spinnerBuscAluno.setAdapter(adapter);
+
+        spinnerBuscAluno.setSelection(0);
 
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
                 alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
                 selectedAlunos.add(alunoSelecionado);
                 al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
                 listarAlunos.setAdapter(al);
+            }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

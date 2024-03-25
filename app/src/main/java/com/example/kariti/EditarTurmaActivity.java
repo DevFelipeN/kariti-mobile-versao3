@@ -19,10 +19,11 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ImageButton voltar;
     ImageView maisAn, menosAn;
     ListView listView;
-    EditText editTurma, novosAlAnonmos;
-    ArrayList<String> editAlTurma, alunosSpinner;
-    String id_turma;
+    EditText editTurma, novosAlAnonimos;
+    ArrayList<String> editAlTurma, alunosSpinner, selecionados;
+    String id_turma, pegaTurma, alunosSelecionados;
     BancoDados bancoDados;
+    AdapterExclAluno adapter;
     Spinner spinnerBuscAlun;
     Button salvar;
 
@@ -35,61 +36,91 @@ public class EditarTurmaActivity extends AppCompatActivity {
         editTurma = findViewById(R.id.editTextEditTurma);
         maisAn = findViewById(R.id.imageViewMaisNovosAnonimos);
         menosAn = findViewById(R.id.imageViewMenosNovosAnonimos);
-        novosAlAnonmos = findViewById(R.id.editTextNovosAlunosAnonimos);
+        novosAlAnonimos = findViewById(R.id.editTextNovosAlunosAnonimos);
         voltar = findViewById(R.id.imgBtnVoltar);
-        bancoDados = new BancoDados(this);
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
         salvar = findViewById(R.id.buttonSalvarTurma);
-
+        bancoDados = new BancoDados(this);
+        //Lista todos os alunos no Spinner
         alunosSpinner = (ArrayList<String>) bancoDados.obterNomesAlunos();
         alunosSpinner.add(0, "Selecione os Alunos");
         SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
         spinnerBuscAlun.setAdapter(adapterSpinner);
         spinnerBuscAlun.setSelection(0);
-
+        //Mostra a turma a ser editada
         id_turma = getIntent().getExtras().getString("id_turma");
-        String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         editTurma.setText(pegaTurma);
-
+        //Lista os aluno cadastrados nesta turma.
         editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
-        AdapterExclAluno adapter = new AdapterExclAluno(this, editAlTurma);
+        adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
+        //Identifica o aluno selecionado no Spinner e adiciona no listView
+        spinnerBuscAlun.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {
+                    alunosSelecionados = spinnerBuscAlun.getSelectedItem().toString();
+                    editAlTurma.add(alunosSelecionados);
+                    adapter = new AdapterExclAluno(EditarTurmaActivity.this, editAlTurma);
+                    listView.setAdapter(adapter);
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //Remove aluno do listView após simples click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Boolean remove = bancoDados.deletarAlunoDturma(editAlTurma.get(i));
-                if(remove) {
                     editAlTurma.remove(i);
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(EditarTurmaActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(EditarTurmaActivity.this, "Aluno Removido! ", Toast.LENGTH_SHORT).show();
             }
         });
 
         menosAn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer menos = Integer.valueOf(novosAlAnonmos.getText().toString());
+                Integer menos = Integer.valueOf(novosAlAnonimos.getText().toString());
                 if(menos > 0)
                     menos --;
-                novosAlAnonmos.setText(menos.toString());
+                novosAlAnonimos.setText(menos.toString());
             }
         });
 
         maisAn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer mais = Integer.valueOf(novosAlAnonmos.getText().toString());
+                Integer mais = Integer.valueOf(novosAlAnonimos.getText().toString());
                 mais ++;
-                novosAlAnonmos.setText(mais.toString());
+                novosAlAnonimos.setText(mais.toString());
                 //listView.setAdapter(adapter);
             }
         });
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Em desenvolvimento!
+                if(!editTurma.getText().toString().equals(pegaTurma)) {
+                    bancoDados.upadateTurma(editTurma.getText().toString(), Integer.valueOf(id_turma));
+                }
+                bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));
+                int num = listView.getAdapter().getCount();
+                selecionados = (ArrayList<String>) editAlTurma;
+                for (int i = 0; i < num; i++) {
+                    bancoDados.inserirAlunosNaTurma(selecionados.get(i), Integer.valueOf(id_turma));
+                }
+                Integer qtdAlunosAnonimos = Integer.valueOf(novosAlAnonimos.getText().toString());
+                if (qtdAlunosAnonimos > 0){
+                    for (int x = 1; x <=qtdAlunosAnonimos; x++){
+                        String an = "Alunos 0"+x;
+                        bancoDados.inserirAlunosNaTurma(an, Integer.valueOf(id_turma));
+                    }
+                }
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

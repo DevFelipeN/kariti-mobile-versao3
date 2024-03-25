@@ -94,7 +94,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                 Integer mais = Integer.valueOf(alunosAnonimos.getText().toString());
                 mais ++;
                 alunosAnonimos.setText(mais.toString());
-                //listarAlunos.setAdapter(al);
             }
         });
         cadastrar.setOnClickListener(new View.OnClickListener() {

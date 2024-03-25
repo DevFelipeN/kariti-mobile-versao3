@@ -52,7 +52,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         editTurma.setText(pegaTurma);
         //Lista os aluno cadastrados nesta turma.
-        editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
+        //editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
         adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
         //Identifica o aluno selecionado no Spinner e adiciona no listView
@@ -105,6 +105,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 if(!editTurma.getText().toString().equals(pegaTurma)) {
                     bancoDados.upadateTurma(editTurma.getText().toString(), Integer.valueOf(id_turma));
                 }
@@ -121,6 +122,8 @@ public class EditarTurmaActivity extends AppCompatActivity {
                         bancoDados.inserirAlunosNaTurma(an, Integer.valueOf(id_turma));
                     }
                 }
+
+                 */
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

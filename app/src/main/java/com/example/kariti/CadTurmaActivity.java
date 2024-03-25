@@ -26,6 +26,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     BancoDados bancoDados;
     Spinner spinnerBuscAluno;
     String alunoSelecionado;
+    Integer id_turma = 0;
     AdapterExclAluno al;
     private ArrayList<String> selectedAlunos = new ArrayList<>();
     ArrayList<String> nomesAluno, selecionados;
@@ -92,7 +93,6 @@ public class CadTurmaActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Integer mais = Integer.valueOf(alunosAnonimos.getText().toString());
                 mais ++;
-                selectedAlunos.add("Aluno "+mais);
                 alunosAnonimos.setText(mais.toString());
                 //listarAlunos.setAdapter(al);
             }
@@ -103,7 +103,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                 String turma = nomeTurma.getText().toString();
                 Boolean checkTurma = bancoDados.checkTurma(turma);
                 if(!checkTurma) {
-                    Integer id_turma = 0;
                     Boolean cadTurma = bancoDados.inserirTurma(turma);
                     if (cadTurma) {
                         id_turma = bancoDados.pegaIdTurma(turma);
@@ -113,6 +112,13 @@ public class CadTurmaActivity extends AppCompatActivity{
                     selecionados = (ArrayList<String>) selectedAlunos;
                     for (int i = 0; i < num; i++) {
                         bancoDados.inserirAlunosNaTurma(selecionados.get(i), id_turma);
+                    }
+                    Integer qtdAlunosAnonimos = Integer.valueOf(alunosAnonimos.getText().toString());
+                    if (qtdAlunosAnonimos > 0){
+                        for (int x = 1; x <=qtdAlunosAnonimos; x++){
+                            String an = "Alunos 0"+x;
+                            bancoDados.inserirAlunosNaTurma(an, id_turma);
+                        }
                     }
                     Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
                     finish();
@@ -124,6 +130,7 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                finish();
             }
         });
     }

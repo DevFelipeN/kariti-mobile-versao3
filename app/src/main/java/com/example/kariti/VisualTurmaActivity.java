@@ -54,14 +54,14 @@ public class VisualTurmaActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = listarTurma.get(position);
-                                Toast.makeText(VisualTurmaActivity.this, "Item: "+ids, Toast.LENGTH_SHORT).show();
-                                //Boolean deletAluno = bancoDados.deletarTurma(ids);
-                                //if (deletAluno) {
-                                    //adapter.remove(String.valueOf(ids));
-                                    //adapter.notifyDataSetChanged();
-                                    //Toast.makeText(VisualTurmaActivity.this, "Turma Escluida! ", Toast.LENGTH_SHORT).show();
-                                //}
+                                String turma = listarTurma.get(position);
+                                Toast.makeText(VisualTurmaActivity.this, "Item: "+turma, Toast.LENGTH_SHORT).show();
+                                Boolean deletAluno = bancoDados.deletarTurma(turma);
+                                if (deletAluno) {
+                                   listarTurma.remove(position);
+                                   adapter.notifyDataSetChanged();
+                                   Toast.makeText(VisualTurmaActivity.this, "Turma Escluida! ", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -86,5 +86,12 @@ public class VisualTurmaActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DadosTurmaActivity.class);
         intent.putExtra("idTurma", idTurma);
         startActivity(intent);
+    }
+    public void aviso(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Nao foram encontradas turmas cadastradas para esse usuário!");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

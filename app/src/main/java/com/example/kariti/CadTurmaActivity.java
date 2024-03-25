@@ -17,18 +17,18 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity{
-    private ImageButton voltar;
-    private Toolbar toolbar;
-    private EditText nomeTurma, alunosAnonimos;
+    ImageButton voltar;
+    Toolbar toolbar;
+    EditText nomeTurma, alunosAnonimos;
     ImageView menosAnonimos, maisAnonimos;
     ListView listarAlunos;
-    private Button cadastrar;
+    Button cadastrar;
     BancoDados bancoDados;
     Spinner spinnerBuscAluno;
     String alunoSelecionado;
     Integer id_turma = 0;
     AdapterExclAluno al;
-    private ArrayList<String> selectedAlunos = new ArrayList<>();
+    ArrayList<String> selectedAlunos = new ArrayList<>();
     ArrayList<String> nomesAluno, selecionados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                 String turma = nomeTurma.getText().toString();
                 Boolean checkTurma = bancoDados.checkTurma(turma);
                 if(!checkTurma) {
-                    Boolean cadTurma = bancoDados.inserirTurma(turma);
+                    Boolean cadTurma = bancoDados.inserirTurma(turma, Integer.valueOf(alunosAnonimos.getText().toString()));
                     if (cadTurma) {
                         id_turma = bancoDados.pegaIdTurma(turma);
                     } else
@@ -110,14 +110,8 @@ public class CadTurmaActivity extends AppCompatActivity{
                     int num = listarAlunos.getAdapter().getCount();
                     selecionados = (ArrayList<String>) selectedAlunos;
                     for (int i = 0; i < num; i++) {
-                        bancoDados.inserirAlunosNaTurma(selecionados.get(i), id_turma);
-                    }
-                    Integer qtdAlunosAnonimos = Integer.valueOf(alunosAnonimos.getText().toString());
-                    if (qtdAlunosAnonimos > 0){
-                        for (int x = 1; x <=qtdAlunosAnonimos; x++){
-                            String an = "Alunos 0"+x;
-                            bancoDados.inserirAlunosNaTurma(an, id_turma);
-                        }
+                        Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
+                        bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
                     }
                     Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
                     finish();

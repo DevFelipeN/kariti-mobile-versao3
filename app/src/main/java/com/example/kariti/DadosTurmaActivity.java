@@ -38,7 +38,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         turmaCad.setText(pegaTurma);
 
-        listAlunosDturma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
+       // listAlunosDturma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
         EscolaAdapter adapter = new EscolaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
 

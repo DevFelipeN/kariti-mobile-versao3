@@ -31,14 +31,13 @@ public class AtualizarSenha extends AppCompatActivity {
         confNovaSenha = (EditText) findViewById(R.id.editTextConfirmNovaSenha);
         alterar = (Button) findViewById(R.id.buttonSalvarEdit);
         voltar = (ImageButton) findViewById(R.id.imgBtnVoltar);
+        bancoDados = new BancoDados(this);
 
         Integer id = getIntent().getExtras().getInt("id");
         String nome = getIntent().getExtras().getString("nome");
         String emails = getIntent().getExtras().getString("email");
         editTextNome.setText(nome);
         editTextEmail.setText(emails);
-
-        bancoDados = new BancoDados(this);
 
         alterar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     String id_turma;
     BancoDados bancoDados;
     Spinner spinnerBuscAlun;
+    Button salvar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         bancoDados = new BancoDados(this);
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
+        salvar = findViewById(R.id.buttonSalvarTurma);
 
         alunosSpinner = (ArrayList<String>) bancoDados.obterNomesAlunos();
         alunosSpinner.add(0, "Selecione os Alunos");
@@ -79,9 +82,14 @@ public class EditarTurmaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Integer mais = Integer.valueOf(novosAlAnonmos.getText().toString());
                 mais ++;
-                editAlTurma.add("Novo Aluno "+mais);
                 novosAlAnonmos.setText(mais.toString());
                 //listView.setAdapter(adapter);
+            }
+        });
+        salvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Em desenvolvimento!
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

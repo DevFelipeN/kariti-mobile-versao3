@@ -1,8 +1,10 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,7 +31,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     Integer id_turma = 0;
     AdapterExclAluno al;
     ArrayList<String> selectedAlunos = new ArrayList<>();
-    ArrayList<String> nomesAluno, selecionados;
+    ArrayList<String> nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,23 +101,26 @@ public class CadTurmaActivity extends AppCompatActivity{
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String turma = nomeTurma.getText().toString();
-                Boolean checkTurma = bancoDados.checkTurma(turma);
-                if(!checkTurma) {
-                    Boolean cadTurma = bancoDados.inserirTurma(turma, Integer.valueOf(alunosAnonimos.getText().toString()));
-                    if (cadTurma) {
-                        id_turma = bancoDados.pegaIdTurma(turma);
-                    } else
-                        Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
-                    int num = listarAlunos.getAdapter().getCount();
-                    selecionados = (ArrayList<String>) selectedAlunos;
-                    for (int i = 0; i < num; i++) {
-                        Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
-                        bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
-                    }
-                    Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else Toast.makeText(CadTurmaActivity.this, "Turma já cadstradada! ", Toast.LENGTH_SHORT).show();
+                if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
+                    String turma = nomeTurma.getText().toString();
+                    Boolean checkTurma = bancoDados.checkTurma(turma);
+                    if(!checkTurma) {
+                        Boolean cadTurma = bancoDados.inserirTurma(turma, Integer.valueOf(alunosAnonimos.getText().toString()));
+                        if (cadTurma) {
+                            id_turma = bancoDados.pegaIdTurma(turma);
+                            if(!selectedAlunos.isEmpty()) {
+                                int num = listarAlunos.getAdapter().getCount();
+                                for (int i = 0; i < num; i++) {
+                                    Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
+                                    bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
+                                }
+                            }
+                            Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else
+                            Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(CadTurmaActivity.this, "Turma já cadstradada! ", Toast.LENGTH_SHORT).show();
+                }else aviso();
 
             }
         });
@@ -126,5 +131,18 @@ public class CadTurmaActivity extends AppCompatActivity{
                 finish();
             }
         });
+    }
+    public void aviso(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CadTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Não é possivel cadastrar turma sem incluir aluno. Favor selecionar os alunos pertencentes a essa turma ou informe a quantidade de alunos anônimos se preferir! ")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(CadTurmaActivity.this, "Selecione os alunos!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

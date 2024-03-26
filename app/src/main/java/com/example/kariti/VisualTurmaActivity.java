@@ -55,7 +55,6 @@ public class VisualTurmaActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String turma = listarTurma.get(position);
-                                Toast.makeText(VisualTurmaActivity.this, "Item: "+turma, Toast.LENGTH_SHORT).show();
                                 Boolean deletAluno = bancoDados.deletarTurma(turma);
                                 if (deletAluno) {
                                    listarTurma.remove(position);

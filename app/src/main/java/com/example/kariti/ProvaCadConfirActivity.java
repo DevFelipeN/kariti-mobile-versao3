@@ -16,7 +16,7 @@ public class ProvaCadConfirActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova_cad_confir);
 
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltarDconfirm);
         gerarCartao = findViewById(R.id.btnGerarCartao);
 
         gerarCartao.setOnClickListener(new View.OnClickListener() {

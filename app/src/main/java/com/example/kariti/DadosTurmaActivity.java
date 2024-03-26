@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
+
         for(int y = 1; y <= num; y++){
             listAlunosDturma.add(bancoDados.pegaAluno(String.valueOf(y)));
         }

@@ -21,7 +21,7 @@ public class VisualProvaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_prova);
 
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltar);
         visualProva = findViewById(R.id.buttonVisualizarProva);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

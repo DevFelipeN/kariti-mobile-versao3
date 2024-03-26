@@ -34,7 +34,7 @@ public class CadProvaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cad_prova);
 
         datePickerButton = findViewById(R.id.datePickerButton);
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
         btnGerProva = findViewById(R.id.btnGerarProva);
         nomeProva = findViewById(R.id.editTextNomeProva);
         qtdQuest = findViewById(R.id.textViewQuantity);

@@ -30,7 +30,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
         btnGaleria = findViewById(R.id.buttonGaleria);
         btnCamera = findViewById(R.id.buttonCamera);
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         teste = findViewById(R.id.imageView20);
 
         voltar.setOnClickListener(new View.OnClickListener() {

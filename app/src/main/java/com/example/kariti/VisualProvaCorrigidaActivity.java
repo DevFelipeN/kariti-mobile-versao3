@@ -19,7 +19,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_prova_corrigida);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

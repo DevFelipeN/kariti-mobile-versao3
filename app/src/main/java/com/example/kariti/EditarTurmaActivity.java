@@ -40,7 +40,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         maisAn = findViewById(R.id.imageViewMaisNovosAnonimos);
         menosAn = findViewById(R.id.imageViewMenosNovosAnonimos);
         novosAlAnonimos = findViewById(R.id.editTextNovosAlunosAnonimos);
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltaDediturma);
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
         salvar = findViewById(R.id.buttonSalvarTurma);
         bancoDados = new BancoDados(this);
@@ -64,8 +64,8 @@ public class EditarTurmaActivity extends AppCompatActivity {
         //Lista os aluno cadastrados nesta turma.
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
-        for(int y = 1; y <= num; y++){
-            editAlTurma.add(bancoDados.pegaAluno(String.valueOf(y)));
+        for(int y = 0; y < num; y++){
+            editAlTurma.add(bancoDados.pegaNomeAluno(String.valueOf(idsAlTurma.get(y))));
         }
         adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);

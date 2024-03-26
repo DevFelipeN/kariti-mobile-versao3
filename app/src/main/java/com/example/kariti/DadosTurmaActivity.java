@@ -29,9 +29,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_turma);
 
-        voltar = findViewById(R.id.imgBtnVoltarDadosTurma);
-        menuPnt = findViewById(R.id.menu_icon);
-        listView = findViewById(R.id.listViewDadosTurma);
+        voltar = findViewById(R.id.imgBtnVoltarDados);
+        //menuPnt = findViewById(R.id.menu_icon);
+        listView = findViewById(R.id.listViewDados);
         turmaCad = findViewById(R.id.textViewTurmaCad);
         bancoDados = new BancoDados(this);
 
@@ -39,13 +39,13 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         turmaCad.setText(pegaTurma);
 
+
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
-
-        for(int y = 1; y <= num; y++){
-            listAlunosDturma.add(bancoDados.pegaAluno(String.valueOf(y)));
+        for(int y = 0; y < num; y++){
+            String id_aluno = String.valueOf(idsAlTurma.get(y));
+            listAlunosDturma.add(bancoDados.pegaNomeAluno(id_aluno));
         }
-
         EscolaAdapter adapter = new EscolaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
 

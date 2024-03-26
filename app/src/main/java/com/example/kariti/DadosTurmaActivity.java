@@ -28,7 +28,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_turma);
 
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltarDadosTurma);
         menuPnt = findViewById(R.id.menu_icon);
         listView = findViewById(R.id.listViewDadosTurma);
         turmaCad = findViewById(R.id.textViewTurmaCad);

@@ -64,8 +64,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
         cursor.close();
         database.close();
 
-
-
         EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
 

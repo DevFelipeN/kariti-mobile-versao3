@@ -24,8 +24,8 @@ public class VisualTurmaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_turma);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
-        listView = findViewById(R.id.listViewTurma);
+        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        listView = findViewById(R.id.listViewVisualTurma);
 
         bancoDados = new BancoDados(this);
 

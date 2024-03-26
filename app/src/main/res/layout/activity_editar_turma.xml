@@ -70,7 +70,7 @@
     </Spinner>
 
         <ListView
-            android:id="@+id/listViewAlunosTurma"
+            android:id="@+id/listViewEditarTurma"
             android:layout_width="315dp"
             android:layout_height="315dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +88,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listViewAlunosTurma">
+        app:layout_constraintTop_toBottomOf="@id/listViewEditarTurma">
 
         <TextView
             android:id="@+id/textView4"
@@ -107,8 +107,7 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintTop_toBottomOf="@id/listViewAlTurma">
+            app:layout_constraintHorizontal_bias="1.0">
 
             <ImageView
                 android:id="@+id/imageViewMenosNovosAnonimos"

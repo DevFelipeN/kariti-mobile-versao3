@@ -32,6 +32,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         btnMenu = findViewById(R.id.imageViewIconDesativadas);
         ListView listView = findViewById(R.id.listViewEscDesativadas);
+
         bancoDados = new BancoDados(this);
         atualiza = new VisualEscolaActivity();
         iconHelp = findViewById(R.id.iconHelp);

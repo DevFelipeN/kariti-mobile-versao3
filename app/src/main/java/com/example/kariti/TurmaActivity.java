@@ -16,7 +16,7 @@ public class TurmaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turma);
 
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltar);
         cadTurma = findViewById(R.id.buttonCadAluno);
         visuTurma = findViewById(R.id.buttonVisuTurma);
         voltar.setOnClickListener(new View.OnClickListener() {

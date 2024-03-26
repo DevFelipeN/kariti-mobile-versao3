@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -50,5 +51,13 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
         // Adiciona a nova linha à tabela
         tableLayout.addView(row);
+    }
+    public void PopMenu(View v){
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -22,7 +22,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visual_turma);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
-        listView = findViewById(R.id.listViewAlunosTurma);
+        listView = findViewById(R.id.listViewVisualTurma);
 
         bancoDados = new BancoDados(this);
 

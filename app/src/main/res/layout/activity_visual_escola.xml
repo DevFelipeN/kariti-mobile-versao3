@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listViewEscola"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VisualEscolaActivity">
@@ -14,7 +13,7 @@
         tools:layout_editor_absoluteY="-16dp" />
 
     <ListView
-        android:id="@+id/listViewAlunosTurma"
+        android:id="@+id/listViewEscola"
         android:layout_width="350dp"
         android:layout_height="450dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,6 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.172"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewAlunosTurma" />
+        app:layout_constraintTop_toBottomOf="@+id/listViewEscola" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,20 +52,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/linearLayout"-->
-<!--        android:layout_width="350dp"-->
-<!--        android:layout_height="400dp"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:layout_marginBottom="160dp"-->
-<!--        android:background="@drawable/borda_botao"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textViewTurmaCad">-->
-
     <ListView
-        android:id="@+id/listViewAlunosTurma"
+        android:id="@+id/listViewDadosTurma"
         android:layout_width="350dp"
         android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +63,5 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewTurmaCad"
         app:layout_constraintVertical_bias="0.16"
         android:background="@drawable/borda_botao"/>
-
-<!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

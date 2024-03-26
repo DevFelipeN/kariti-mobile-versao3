@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_turma);
 
-        listView = findViewById(R.id.listViewAlunosTurma);
+        listView = findViewById(R.id.listViewEditarTurma);
         editTurma = findViewById(R.id.editTextEditTurma);
         voltar = findViewById(R.id.imgBtnVoltar);
         bancoDados = new BancoDados(this);
@@ -72,4 +73,13 @@ public class EditarTurmaActivity extends AppCompatActivity {
             }
         });
     }
+    public void PopMenu(View v){
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(EditarTurmaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

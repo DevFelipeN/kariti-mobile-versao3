@@ -64,7 +64,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         database.close();
 
 
-        ListView listView = findViewById(R.id.listViewAlunosTurma);
+        ListView listView = findViewById(R.id.listViewEscola);
         EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
 

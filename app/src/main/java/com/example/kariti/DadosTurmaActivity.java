@@ -32,7 +32,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         voltar = findViewById(R.id.imgBtnVoltar);
         menuPnt = findViewById(R.id.menu_icon);
-        listView = findViewById(R.id.listViewAlunosTurma);
+        listView = findViewById(R.id.listViewDadosTurma);
         turmaCad = findViewById(R.id.textViewTurmaCad);
         bancoDados = new BancoDados(this);
 

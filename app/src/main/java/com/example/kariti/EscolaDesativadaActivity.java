@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,6 +23,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
     ImageButton btnVoltar;
     ImageView btnMenu, iconHelp;
     BancoDados bancoDados;
+    VisualEscolaActivity atualiza;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +33,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         btnMenu = findViewById(R.id.imageViewIcon);
         ListView listView = findViewById(R.id.listViewDesativEscola);
         bancoDados = new BancoDados(this);
+        atualiza = new VisualEscolaActivity();
         iconHelp = findViewById(R.id.iconHelp);
 
         iconHelp.setOnClickListener(new View.OnClickListener() {
@@ -40,11 +41,6 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             public void onClick(View view) {
                 dialogHelp();
             }
-        });
-
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {onBackPressed();}
         });
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
@@ -82,14 +78,15 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                                 String pegaBairro = bancoDados.pegaBairroDesativado(ids);
                                 Integer id = Integer.valueOf(ids);
                                 Boolean deletaEscola = bancoDados.deletarEscola(id);
-                                Boolean reativa = bancoDados.inserirDadosEscola(pegaNome, pegaBairro);
-                                if (deletaEscola!=false && reativa!=false) {
-                                    Toast.makeText(EscolaDesativadaActivity.this, "Escola reativada com Sucesso!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else
-                                    Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
+                                if(deletaEscola){
+                                    Boolean reativa = bancoDados.inserirDadosEscola(pegaNome, pegaBairro);
+                                    if(reativa){
+                                        nomesEscolasDesativadas.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(EscolaDesativadaActivity.this, "Escola Reativada com Sucesso!", Toast.LENGTH_SHORT).show();
+                                        //finish();
+                                    } else Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
+                                }else Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
@@ -97,15 +94,21 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                             public void onClick(DialogInterface dialog, int which) {
                                 Integer ids = Integer.valueOf(idsEscolasDesativadas.get(position));
                                 Boolean deletaEscola = bancoDados.deletarEscola(ids);
-                                if (deletaEscola)
+                                if (deletaEscola) {
+                                    nomesEscolasDesativadas.remove(position);
+                                    adapter.notifyDataSetChanged();
                                     Toast.makeText(EscolaDesativadaActivity.this, "Escola Excluida Com Sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
+                                }
                             }
                         });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
                 return true;
             }
+        });
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {onBackPressed();}
         });
     }
 

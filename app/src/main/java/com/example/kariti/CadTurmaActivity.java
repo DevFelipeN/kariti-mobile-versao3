@@ -1,8 +1,10 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,18 +19,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity{
-    private ImageButton voltar;
-    private Toolbar toolbar;
-    private EditText nomeTurma, alunosAnonimos;
+    ImageButton voltar;
+    Toolbar toolbar;
+    EditText nomeTurma, alunosAnonimos;
     ImageView menosAnonimos, maisAnonimos;
     ListView listarAlunos;
-    private Button cadastrar;
+    Button cadastrar;
     BancoDados bancoDados;
     Spinner spinnerBuscAluno;
     String alunoSelecionado;
+    Integer id_turma = 0;
     AdapterExclAluno al;
-    private ArrayList<String> selectedAlunos = new ArrayList<>();
-    ArrayList<String> nomesAluno, selecionados;
+    ArrayList<String> selectedAlunos = new ArrayList<>();
+    ArrayList<String> nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         voltar = findViewById(R.id.imgBtnVoltar);
         listarAlunos = findViewById(R.id.listViewCadTurma);
-        nomeTurma = findViewById(R.id.editTextEditTurma);
+        nomeTurma = findViewById(R.id.editTextTurmaCad);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);
         spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
         alunosAnonimos = findViewById(R.id.editTextAlunosAnonimos);
@@ -49,9 +52,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
         nomesAluno.add(0, "Selecione os Alunos");
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
-
         spinnerBuscAluno.setAdapter(adapter);
-
         spinnerBuscAluno.setSelection(0);
 
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -59,11 +60,11 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
-                selectedAlunos.add(alunoSelecionado);
-                al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
-                listarAlunos.setAdapter(al);
-            }
+                    alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
+                    selectedAlunos.add(alunoSelecionado);
+                    al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
+                    listarAlunos.setAdapter(al);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -72,7 +73,9 @@ public class CadTurmaActivity extends AppCompatActivity{
         listarAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               Toast.makeText(CadTurmaActivity.this, "Implementar ação para apagar! ", Toast.LENGTH_SHORT).show();
+               selectedAlunos.remove(i);
+               al.notifyDataSetChanged();
+               Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
            }
         });
 
@@ -92,31 +95,32 @@ public class CadTurmaActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Integer mais = Integer.valueOf(alunosAnonimos.getText().toString());
                 mais ++;
-                selectedAlunos.add("Aluno "+mais);
                 alunosAnonimos.setText(mais.toString());
-                listarAlunos.setAdapter(al);
             }
         });
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String turma = nomeTurma.getText().toString();
-                Boolean checkTurma = bancoDados.checkTurma(turma);
-                if(!checkTurma) {
-                    Integer id_turma = 0;
-                    Boolean cadTurma = bancoDados.inserirTurma(turma);
-                    if (cadTurma) {
-                        id_turma = bancoDados.pegaIdTurma(turma);
-                    } else
-                        Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
-                    int num = listarAlunos.getAdapter().getCount();
-                    selecionados = (ArrayList<String>) selectedAlunos;
-                    for (int i = 0; i < num; i++) {
-                        bancoDados.inserirAlunosNaTurma(selecionados.get(i), id_turma);
-                    }
-                    Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else Toast.makeText(CadTurmaActivity.this, "Turma já cadstradada! ", Toast.LENGTH_SHORT).show();
+                if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
+                    String turma = nomeTurma.getText().toString();
+                    Boolean checkTurma = bancoDados.checkTurma(turma);
+                    if(!checkTurma) {
+                        Boolean cadTurma = bancoDados.inserirTurma(turma, Integer.valueOf(alunosAnonimos.getText().toString()));
+                        if (cadTurma) {
+                            id_turma = bancoDados.pegaIdTurma(turma);
+                            if(!selectedAlunos.isEmpty()) {
+                                int num = listarAlunos.getAdapter().getCount();
+                                for (int i = 0; i < num; i++) {
+                                    Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
+                                    bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
+                                }
+                            }
+                            Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else
+                            Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(CadTurmaActivity.this, "Turma já cadstradada! ", Toast.LENGTH_SHORT).show();
+                }else aviso();
 
             }
         });
@@ -124,7 +128,21 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                finish();
             }
         });
+    }
+    public void aviso(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CadTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Não é possivel cadastrar turma sem incluir aluno. Favor selecionar os alunos pertencentes a essa turma ou informe a quantidade de alunos anônimos se preferir! ")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(CadTurmaActivity.this, "Selecione os alunos!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

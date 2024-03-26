@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Spinner
-        android:id="@+id/spinnerBuscAluno"
+        android:id="@+id/spinnerBuscAlunoNovos"
         android:background="@drawable/style_spinner"
         android:layout_width="250dp"
         android:layout_height="48dp"
@@ -76,7 +76,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.524"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAlunoNovos"
             android:background="@drawable/borda_botao"
             android:layout_marginTop="25dp"/>
 
@@ -105,18 +105,20 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@id/listViewEditarTurma"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0">
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@id/listViewAlTurma">
 
             <ImageView
-                android:id="@+id/imageViewMenosAnonimos"
+                android:id="@+id/imageViewMenosNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/subtract"/>
+                app:srcCompat="@mipmap/subtract" />
 
             <EditText
-                android:id="@+id/editTextAlunosAnonimos"
+                android:id="@+id/editTextNovosAlunosAnonimos"
                 android:layout_width="50dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="5dp"
@@ -130,15 +132,15 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/imageViewMaisAnonimos"
+                android:id="@+id/imageViewMaisNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/btnadicionar"/>
+                app:srcCompat="@mipmap/btnadicionar" />
         </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttonCadastrarTurma"
+        android:id="@+id/buttonSalvarTurma"
         style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -91,10 +91,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BancoDados.ID_ESCOLA = Integer.valueOf(idsEscolas.get(position));
-                String ids = idsEscolas.get(position);
-                String escola = bancoDados.pegaEscola(ids);
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
-                intent.putExtra("escola", escola);
                 startActivity(intent);
             }
         });
@@ -112,13 +109,15 @@ public class VisualEscolaActivity extends AppCompatActivity {
                                 String escola = bancoDados.pegaEscola(ids);
                                 String bairro = bancoDados.pegaBairro(ids);
                                 Boolean deletDativadas = bancoDados.deletarDasAtivadas(ids);
-                                Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
-                                if (deletDativadas)
-                                    if(inserSlcolDesativada)
+                                if(deletDativadas){
+                                    Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
+                                    if(inserSlcolDesativada) {
+                                        nomesEscolas.remove(position);
+                                        adapter.notifyDataSetChanged();
                                         Toast.makeText(VisualEscolaActivity.this, "Escola Desativada Com Sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
-                                startActivity(intent);
+                                    }
+
+                                }
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {

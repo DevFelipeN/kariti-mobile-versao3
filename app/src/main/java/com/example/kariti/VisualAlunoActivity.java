@@ -69,11 +69,11 @@ public class VisualAlunoActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Integer ids = Integer.valueOf(idsAlunos.get(position));
                                 Boolean deletAluno = bancoDados.deletarAluno(ids);
-                                if (deletAluno)
-                                    Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido Com Sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                                startActivity(intent);
+                                if (deletAluno) {
+                                    alunos.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {

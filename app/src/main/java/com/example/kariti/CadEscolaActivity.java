@@ -84,7 +84,7 @@ public class CadEscolaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
+        btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnVoltar.setVisibility(View.VISIBLE);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {

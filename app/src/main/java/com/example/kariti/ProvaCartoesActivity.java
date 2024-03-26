@@ -18,7 +18,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova_cartoes);
 
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltar);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

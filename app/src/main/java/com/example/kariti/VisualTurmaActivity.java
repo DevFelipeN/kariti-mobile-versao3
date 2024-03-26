@@ -30,6 +30,8 @@ public class VisualTurmaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
 
+
+
         listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
         EscolaAdapter adapter = new EscolaAdapter(this, listarTurma, listarTurma);
         listView.setAdapter(adapter);

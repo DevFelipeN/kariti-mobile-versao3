@@ -20,7 +20,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 39);
+        super(context, "data_base", null, 40);
     }
 
     @Override
@@ -273,14 +273,14 @@ public class BancoDados extends SQLiteOpenHelper {
 
     public String pegaAluno(String id_aluno) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
+        Cursor cursor = data_base.rawQuery("Select nomeAluno from aluno where id_aluno = ?", new String[]{id_aluno});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
     }
     public Integer pegaIdAluno(String nomeAluno) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select * from Aluno where nomeAluno = ?", new String[]{nomeAluno});
+        Cursor cursor = data_base.rawQuery("Select id_aluno from Aluno where nomeAluno = ?", new String[]{nomeAluno});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);

@@ -25,7 +25,7 @@ public class CadAlunoActivity extends AppCompatActivity {
 
         nomeAluno = findViewById(R.id.editTextAlunoCad);
         emailAluno = findViewById(R.id.editTextEmailCad);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadastrar = findViewById(R.id.buttonSalvarEdit);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

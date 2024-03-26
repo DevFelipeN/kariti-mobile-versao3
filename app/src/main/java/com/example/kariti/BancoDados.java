@@ -205,13 +205,14 @@ public class BancoDados extends SQLiteOpenHelper {
        return true;
     }
 
-    public Boolean upadateTurma(String turma, Integer id_turma){
+    public Boolean upadateTurma(String turma, Integer qtdAnonimos, Integer id_turma){
         try {
             SQLiteDatabase data_base = this.getWritableDatabase();
-            String altera = "UPDATE turma SET nomeTurma=? WHERE id_turma=?";
+            String altera = "UPDATE turma SET nomeTurma=?, qtdAnonimos = ? WHERE id_turma=?";
             SQLiteStatement stmt = data_base.compileStatement(altera);
             stmt.bindString(1, turma);
-            stmt.bindLong(2, id_turma);
+            stmt.bindLong(2, qtdAnonimos);
+            stmt.bindLong(3, id_turma);
             stmt.executeUpdateDelete();
             data_base.close();
         }catch (Exception e){e.printStackTrace();}

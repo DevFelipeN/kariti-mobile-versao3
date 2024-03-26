@@ -27,7 +27,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
 
         nomeAluno = findViewById(R.id.editTextAlunoCad);
         emailAluno = findViewById(R.id.editTextEmailCad);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         salvar = findViewById(R.id.buttonSalvarEdit);
         bancoDados = new BancoDados(this);
 

@@ -2,7 +2,6 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +34,7 @@ public class CadProvaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cad_prova);
 
         datePickerButton = findViewById(R.id.datePickerButton);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         btnGerProva = findViewById(R.id.btnGerarProva);
         nomeProva = findViewById(R.id.editTextNomeProva);
         qtdQuest = findViewById(R.id.textViewQuantity);

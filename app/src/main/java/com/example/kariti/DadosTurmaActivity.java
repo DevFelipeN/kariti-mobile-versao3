@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_turma);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltarDadosTurma);
         menuPnt = findViewById(R.id.menu_icon);
         listView = findViewById(R.id.listViewDadosTurma);
         turmaCad = findViewById(R.id.textViewTurmaCad);

@@ -1,6 +1,5 @@
 package com.example.kariti;
 
-import androidx.activity.result.ActivityResult;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +30,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
         btnGaleria = findViewById(R.id.buttonGaleria);
         btnCamera = findViewById(R.id.buttonCamera);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         teste = findViewById(R.id.imageView20);
 
         voltar.setOnClickListener(new View.OnClickListener() {

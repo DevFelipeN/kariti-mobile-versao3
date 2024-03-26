@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,10 +19,10 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     ImageButton voltar;
     ImageView menuPnt;
     TextView turmaCad;
-    ArrayList<String> listAlTurma;
     BancoDados bancoDados;
     ListView listView;
-    ArrayList<String> listAlunosDturma;
+    ArrayList<String> listAlunosDturma = new ArrayList<>();
+    ArrayList<Integer> idsAlTurma;
     String id_turma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,12 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         turmaCad.setText(pegaTurma);
 
-       // listAlunosDturma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
+        idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
+        int num = idsAlTurma.size();
+        for(int y = 1; y <= num; y++){
+            listAlunosDturma.add(bancoDados.pegaAluno(String.valueOf(y)));
+        }
+
         EscolaAdapter adapter = new EscolaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
 

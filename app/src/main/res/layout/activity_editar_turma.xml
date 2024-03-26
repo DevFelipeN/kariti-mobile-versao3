@@ -104,16 +104,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/listViewAlTurma"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0">
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@id/listViewAlTurma">
 
             <ImageView
                 android:id="@+id/imageViewMenosNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/subtract"/>
+                app:srcCompat="@mipmap/subtract" />
 
             <EditText
                 android:id="@+id/editTextNovosAlunosAnonimos"
@@ -133,7 +134,7 @@
                 android:id="@+id/imageViewMaisNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/btnadicionar"/>
+                app:srcCompat="@mipmap/btnadicionar" />
         </LinearLayout>
     </LinearLayout>
 

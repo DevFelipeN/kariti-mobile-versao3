@@ -21,11 +21,13 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ListView listView;
     EditText editTurma, novosAlAnonimos;
     ArrayList<String> editAlTurma, alunosSpinner, selecionados;
+    ArrayList<Integer> idsAlTurma;
     String id_turma, pegaTurma, alunosSelecionados;
     BancoDados bancoDados;
     AdapterExclAluno adapter;
     Spinner spinnerBuscAlun;
     Button salvar;
+    Integer qtdAnonimos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +43,32 @@ public class EditarTurmaActivity extends AppCompatActivity {
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
         salvar = findViewById(R.id.buttonSalvarTurma);
         bancoDados = new BancoDados(this);
+        editAlTurma = new ArrayList<>();
+
         //Lista todos os alunos no Spinner
         alunosSpinner = (ArrayList<String>) bancoDados.obterNomesAlunos();
         alunosSpinner.add(0, "Selecione os Alunos");
         SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
         spinnerBuscAlun.setAdapter(adapterSpinner);
         spinnerBuscAlun.setSelection(0);
+
         //Mostra a turma a ser editada
         id_turma = getIntent().getExtras().getString("id_turma");
         pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        qtdAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         editTurma.setText(pegaTurma);
+        novosAlAnonimos.setText(qtdAnonimos.toString());
+        Toast.makeText(this, "Anonimos: "+qtdAnonimos, Toast.LENGTH_SHORT).show();
+
         //Lista os aluno cadastrados nesta turma.
-        //editAlTurma = (ArrayList<String>) bancoDados.listAlunosDturma(id_turma);
+        idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
+        int num = idsAlTurma.size();
+        for(int y = 1; y <= num; y++){
+            editAlTurma.add(bancoDados.pegaAluno(String.valueOf(y)));
+        }
         adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
+
         //Identifica o aluno selecionado no Spinner e adiciona no listView
         spinnerBuscAlun.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -99,7 +113,6 @@ public class EditarTurmaActivity extends AppCompatActivity {
                 Integer mais = Integer.valueOf(novosAlAnonimos.getText().toString());
                 mais ++;
                 novosAlAnonimos.setText(mais.toString());
-                //listView.setAdapter(adapter);
             }
         });
         salvar.setOnClickListener(new View.OnClickListener() {

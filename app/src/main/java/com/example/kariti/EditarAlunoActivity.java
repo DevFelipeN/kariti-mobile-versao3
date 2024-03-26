@@ -32,9 +32,9 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         bancoDados = new BancoDados(this);
 
         String id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
-        //String aluno = bancoDados.pegaAluno(id_aluno);
+        String aluno = bancoDados.pegaNomeAluno(id_aluno);
         String email = bancoDados.pegaEmailAluno(id_aluno);
-        //nomeAluno.setText(aluno);
+        nomeAluno.setText(aluno);
         emailAluno.setText(email);
 
        voltar.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +44,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
             finish();}
         });
 
-        /*salvar.setOnClickListener(new View.OnClickListener() {
+        salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String nomAtual = nomeAluno.getText().toString();
@@ -63,8 +63,6 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                     Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
             }
         });
-
-         */
     }
 
     public void popMenuAluno(View v){

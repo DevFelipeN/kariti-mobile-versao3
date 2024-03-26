@@ -29,6 +29,8 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
+        bancoDados.deletarAlunoDturma(4);
+
 
 
 

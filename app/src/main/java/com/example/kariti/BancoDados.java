@@ -271,13 +271,14 @@ public class BancoDados extends SQLiteOpenHelper {
         return cursor.getString(2);
     }
 
-    public String pegaAluno(String id_aluno) {
+    public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select nomeAluno from aluno where id_aluno = ?", new String[]{id_aluno});
+        Cursor cursor = data_base.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+
     public Integer pegaIdAluno(String nomeAluno) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select id_aluno from Aluno where nomeAluno = ?", new String[]{nomeAluno});

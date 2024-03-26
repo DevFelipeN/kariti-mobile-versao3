@@ -267,7 +267,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = data_base.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getString(1);
+        return cursor.getString(2);
     }
 
     public String pegaAluno(String id_aluno) {
@@ -283,6 +283,13 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);
+    }
+    public Integer pegaqtdAnonimos(String id_turma) {
+        SQLiteDatabase data_base = this.getWritableDatabase();
+        Cursor cursor = data_base.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(3);
     }
 
     public Integer pegaIdProva(String provacad) {
@@ -436,7 +443,7 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo
-                Integer id = cursor.getInt(1);
+                Integer id = cursor.getInt(0);
                 ids.add(id);
             } while (cursor.moveToNext());
             cursor.close();

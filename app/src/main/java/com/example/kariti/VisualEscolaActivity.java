@@ -39,8 +39,9 @@ public class VisualEscolaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
+        ListView listView = findViewById(R.id.listViewEscolas);
         bancoDados = new BancoDados(this);
         iconHelp = findViewById(R.id.iconHelp);
 
@@ -64,7 +65,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         database.close();
 
 
-        ListView listView = findViewById(R.id.listViewTurma);
+
         EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
 

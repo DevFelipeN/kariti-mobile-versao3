@@ -13,7 +13,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -29,7 +28,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_aluno);
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
         ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);

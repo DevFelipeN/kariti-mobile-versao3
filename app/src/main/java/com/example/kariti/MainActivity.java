@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextEmail);
         senha = findViewById(R.id.editTextNovaSenha);
         confirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadastro = findViewById(R.id.buttonSalvarEdit);
 
         bancoDados = new BancoDados(this);

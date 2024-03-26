@@ -21,7 +21,7 @@ public class AlunoActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
         btnCadAluno = findViewById(R.id.buttonCadAluno);
         btnVisualizarAluno = findViewById(R.id.buttonVisuTurma);
 

@@ -39,7 +39,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         maisAn = findViewById(R.id.imageViewMaisNovosAnonimos);
         menosAn = findViewById(R.id.imageViewMenosNovosAnonimos);
         novosAlAnonimos = findViewById(R.id.editTextNovosAlunosAnonimos);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
         salvar = findViewById(R.id.buttonSalvarTurma);
         bancoDados = new BancoDados(this);
@@ -58,7 +58,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         qtdAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         editTurma.setText(pegaTurma);
         novosAlAnonimos.setText(qtdAnonimos.toString());
-        Toast.makeText(this, "Anonimos: "+qtdAnonimos, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Esta turma possui "+qtdAnonimos+" alunos anônimos cadastrados!", Toast.LENGTH_SHORT).show();
 
         //Lista os aluno cadastrados nesta turma.
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
@@ -87,7 +87,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
             }
         });
 
-        //Remove aluno do listView após simples click
+        //Remove aluno do listView, após simples click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -118,25 +118,18 @@ public class EditarTurmaActivity extends AppCompatActivity {
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                if(!editTurma.getText().toString().equals(pegaTurma)) {
-                    bancoDados.upadateTurma(editTurma.getText().toString(), Integer.valueOf(id_turma));
-                }
-                bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));
-                int num = listView.getAdapter().getCount();
-                selecionados = (ArrayList<String>) editAlTurma;
-                for (int i = 0; i < num; i++) {
-                    bancoDados.inserirAlunosNaTurma(selecionados.get(i), Integer.valueOf(id_turma));
-                }
-                Integer qtdAlunosAnonimos = Integer.valueOf(novosAlAnonimos.getText().toString());
-                if (qtdAlunosAnonimos > 0){
-                    for (int x = 1; x <=qtdAlunosAnonimos; x++){
-                        String an = "Alunos 0"+x;
-                        bancoDados.inserirAlunosNaTurma(an, Integer.valueOf(id_turma));
+                bancoDados.upadateTurma(editTurma.getText().toString(), Integer.valueOf(novosAlAnonimos.getText().toString()), Integer.valueOf(id_turma)); //Alterando Dados da turma
+                bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
+                if(!editAlTurma.isEmpty()) {
+                    int num = listView.getAdapter().getCount();
+                    selecionados = (ArrayList<String>) editAlTurma;
+                    for (int i = 0; i < num; i++) {
+                        Integer id_aluno = bancoDados.pegaIdAluno(editAlTurma.get(i));
+                        bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), id_aluno);
                     }
                 }
-
-                 */
+                Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

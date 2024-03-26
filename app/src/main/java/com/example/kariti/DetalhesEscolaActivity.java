@@ -20,7 +20,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_escola);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
         btnVoltar.setVisibility(View.VISIBLE);
 
         btnTurma = findViewById(R.id.btnTurma);

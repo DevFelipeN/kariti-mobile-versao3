@@ -108,7 +108,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
 
     <ImageButton
-        android:id="@+id/imgBtnVoltar"
+        android:id="@+id/imgBtnVoltaEscola"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -40,7 +39,7 @@ public class GabaritoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gabarito);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);

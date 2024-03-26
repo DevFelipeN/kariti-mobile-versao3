@@ -29,9 +29,9 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escola_desativada);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
-        btnMenu = findViewById(R.id.imageViewIcon);
-        ListView listView = findViewById(R.id.listViewTurma);
+        btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
+        btnMenu = findViewById(R.id.imageViewIconDesativadas);
+        ListView listView = findViewById(R.id.listViewEscDesativadas);
         bancoDados = new BancoDados(this);
         atualiza = new VisualEscolaActivity();
         iconHelp = findViewById(R.id.iconHelp);

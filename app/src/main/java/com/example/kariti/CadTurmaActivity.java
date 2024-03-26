@@ -39,7 +39,7 @@ public class CadTurmaActivity extends AppCompatActivity{
 
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         listarAlunos = findViewById(R.id.listViewAlTurma);
         nomeTurma = findViewById(R.id.editTextTurmaCad);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);

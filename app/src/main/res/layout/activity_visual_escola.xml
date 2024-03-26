@@ -14,7 +14,7 @@
         tools:layout_editor_absoluteY="-16dp" />
 
     <ListView
-        android:id="@+id/listViewTurma"
+        android:id="@+id/listViewEscolas"
         android:layout_width="350dp"
         android:layout_height="450dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,6 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.172"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewTurma" />
+        app:layout_constraintTop_toBottomOf="@+id/listViewEscolas" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

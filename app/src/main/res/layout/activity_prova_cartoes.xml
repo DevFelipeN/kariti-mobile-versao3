@@ -24,7 +24,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
-        android:id="@+id/imgBtnVoltar"
+        android:id="@+id/imgBtnVoltaEscola"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBtnVoltar" />
+        app:layout_constraintTop_toBottomOf="@+id/imgBtnVoltaEscola" />
 
     <Spinner
         android:id="@+id/spinnerProva"

@@ -5,11 +5,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +22,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Objects;
 
 public class ProvaCorrigirActivity extends AppCompatActivity {
     Button btnGaleria, btnCamera;
     ImageButton voltar;
     ImageView teste;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,15 +67,49 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
             }
         });
     }
-    public void PopMenu(View v){
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ProvaCorrigirActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
+    // Método para salvar a imagem no armazenamento externo e atualizar a galeria
+    private void salvarImagemNaGaleria(Bitmap bitmap) {
+        String fileName = System.currentTimeMillis() + ".png";
+        OutputStream fos;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentResolver resolver = getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+
+            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            try {
+                fos = resolver.openOutputStream(Objects.requireNonNull(imageUri));
+                if (fos != null) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.close();
+                    Toast.makeText(this, "Imagem salva na galeria!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
+            if (!directory.exists())
+                directory.mkdirs();
+
+            File file = new File(directory, fileName);
+            try {
+                fos = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+                Toast.makeText(this, "Imagem salva na galeria!", Toast.LENGTH_SHORT).show();
+
+                // Atualizar a galeria
+                MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/png"}, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -83,25 +127,23 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 // Se a imagem foi capturada pela câmera
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 if (photo != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-
                     teste.setImageBitmap(photo);
-//                    Toast.makeText(ProvaCorrigirActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
-
-                    Intent intent = new Intent(this, GaleriaActivity.class);
-                    intent.putExtra("photo", byteArray);
-                    startActivity(intent);
-                    finish();
+                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
                 }
             }
         }
     }
 
+    public void PopMenu(View v){
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ProvaCorrigirActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void telaProva(){
-
         AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCorrigirActivity.this);
         builder.setTitle("Provas enviadas para correção!")
                 .setMessage("Para acompanhar o andamento da correção, selecione a opção 'Visualizar Prova'.")
@@ -115,16 +157,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
-
-//        String mensagem = "Provas enviadas com Sucesso! Para acompanhar o andamento da correção, vá em VERIFICAR PROVA.";
-//        Intent intent = new Intent(this, ProvaActivity.class);
-//        intent.putExtra("mensagem", mensagem);
-//        startActivity(intent);
-//        finish();
         Toast.makeText(this, "Provas enviadas para Correção!!", Toast.LENGTH_SHORT).show();
-        // Volte para a tela da Prova
-//        Intent intent = new Intent(this, ProvaActivity.class);
-//        startActivity(intent);
-//        finish();
     }
 }

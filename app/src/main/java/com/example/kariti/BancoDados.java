@@ -382,7 +382,7 @@ public class BancoDados extends SQLiteOpenHelper {
 
     public Boolean checkTurma(String turma){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT nomeTurma FROM turma WHERE nomeTurma = ?", new String[]{turma});
+        Cursor cursor = database.rawQuery("SELECT nomeTurma FROM turma WHERE nomeTurma = ? and id_escola = ?", new String[]{turma, String.valueOf(BancoDados.ID_ESCOLA)});
         if (cursor.getCount() > 0) return true;
         else return false;
     }
@@ -411,7 +411,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> obterNomesAlunos() {
         List<String> nomesAlunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno", null);
+        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo
@@ -426,7 +426,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> obterNomeTurmas() {
         List<String>  nomesTurma = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeTurma FROM turma", null);
+        Cursor cursor = db.rawQuery("SELECT nomeTurma FROM turma where id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo

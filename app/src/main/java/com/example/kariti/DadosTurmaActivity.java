@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
     ImageView menuPnt;
-    TextView turmaCad;
+    TextView turmaCad, txtAonimos, qtdAnonimos;
     BancoDados bancoDados;
     ListView listView;
     ArrayList<String> listAlunosDturma = new ArrayList<>();
@@ -32,12 +33,16 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         voltar = findViewById(R.id.imgBtnVoltarDados);
         //menuPnt = findViewById(R.id.menu_icon);
         listView = findViewById(R.id.listViewDados);
+        qtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
         turmaCad = findViewById(R.id.textViewTurmaCad);
+        txtAonimos = findViewById(R.id.textViewAlunosAnonimos);
         bancoDados = new BancoDados(this);
 
         id_turma = String.valueOf(getIntent().getExtras().getInt("idTurma"));
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        Integer pegaAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         turmaCad.setText(pegaTurma);
+        qtdAnonimos.setText(pegaAnonimos.toString());
 
 
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);

@@ -40,7 +40,6 @@ public class CadAlunoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nome = nomeAluno.getText().toString();
                 String email = emailAluno.getText().toString();
-
                 if (nome.equals("") || email.equals("")) {
                     Toast.makeText(CadAlunoActivity.this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
                 } else {

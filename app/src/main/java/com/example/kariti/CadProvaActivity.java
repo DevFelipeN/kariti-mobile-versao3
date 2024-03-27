@@ -21,12 +21,14 @@ import java.util.List;
 import java.util.Locale;
 
 public class CadProvaActivity extends AppCompatActivity {
-    private Button datePickerButton;
-    private Calendar calendar;
+    Button datePickerButton;
+    Calendar calendar;
     EditText nomeProva;
     TextView qtdQuest, qtdAlter;
     Button btnGerProva;
+    Spinner spinnerTurma;
     BancoDados bancoDados;
+    ArrayList<String> listTurmaEmProva;
     ImageButton voltar, questMenos, questMais, altMais, altMenos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +45,13 @@ public class CadProvaActivity extends AppCompatActivity {
         questMenos = findViewById(R.id.imageButtonMenosQuest);
         altMais = findViewById(R.id.imgBtnMaisAlter);
         altMenos = findViewById(R.id.imgBtnMenoAlter);
+        spinnerTurma = findViewById(R.id.spinnerTurmaPprova);
         bancoDados = new BancoDados(this);
 
-        Spinner spinner = findViewById(R.id.spinnerTurma);
-        List<String> options = new ArrayList<>();
-        options.add("Turma:"); // Item fixo
-        options.add("Turma 1");
-        options.add("Turma 2");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
+        listTurmaEmProva = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        listTurmaEmProva.add(0, "Selecione a Turma");
+        SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmaEmProva);
+        spinnerTurma.setAdapter(adapter);
         questMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,22 +99,20 @@ public class CadProvaActivity extends AppCompatActivity {
                 String prova = nomeProva.getText().toString();
                 Integer quest = Integer.valueOf(qtdQuest.getText().toString());
                 Integer alter = Integer.valueOf(qtdAlter.getText().toString());
+                String turma = spinnerTurma.getSelectedItem().toString();
                 if (!prova.equals("")){
-                    Boolean exist = bancoDados.checkProva(prova);
-                    if (!exist) {
-                        if (!quest.equals(0)) {
-                            if (!alter.equals(0)) {
-                                Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                                intent.putExtra("nomeProva", prova);
-                                intent.putExtra("Turma", "Turma teste");
-                                intent.putExtra("data", data);
-                                intent.putExtra("quest", quest);
-                                intent.putExtra("alter", alter);
-                                startActivity(intent);
-                                finish();
-                            }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
-                        }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                    } else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com esse nome!", Toast.LENGTH_SHORT).show();
+                    if (!quest.equals(0)) {
+                        if (!alter.equals(0)) {
+                            Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                            intent.putExtra("nomeProva", prova);
+                            intent.putExtra("turma", turma);
+                            intent.putExtra("data", data);
+                            intent.putExtra("quest", quest);
+                            intent.putExtra("alter", alter);
+                            startActivity(intent);
+                            finish();
+                        }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                 }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
             }
         });

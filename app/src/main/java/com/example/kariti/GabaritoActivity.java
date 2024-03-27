@@ -39,12 +39,12 @@ public class GabaritoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gabarito);
 
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);
         ndata = findViewById(R.id.textViewData);
-//        txtTeste = findViewById(R.id.textViewTeste);
+        notaProva = findViewById(R.id.txtViewNotaProva);
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         bancoDados = new BancoDados(this);
@@ -53,11 +53,12 @@ public class GabaritoActivity extends AppCompatActivity {
         HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
 
         String prova = getIntent().getExtras().getString("nomeProva");
+        String turma = getIntent().getExtras().getString("turma");
         String data = getIntent().getExtras().getString("data");
         Integer quest = getIntent().getExtras().getInt("quest");
         Integer alter = getIntent().getExtras().getInt("alter");
         nProva.setText(String.format("Prova: %s", prova));
-        nturma.setText("Turma: "+"Turma teste 123");
+        nturma.setText("Turma: "+turma);
         ndata.setText("Data: "+data);
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,24 +74,24 @@ public class GabaritoActivity extends AppCompatActivity {
                     }
                 }
                 if (respostaSelecionada) {
-                Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter);
-                if(insProva) {
-                    Integer id_prova = bancoDados.pegaIdProva(prova);
-                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
-                    if(!nPquest.isEmpty() && !id_prova.equals(null)){
-                        for(int i = 0; i < quest; i++){
-                            Integer resp = alternativasEscolhidas.get(i);
-                            bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
+                    Integer id_turma = bancoDados.pegaIdTurma(turma);
+                    Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter, id_turma);;
+                    if(insProva) {
+                        Integer id_prova = bancoDados.pegaIdProva(prova);
+                        ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
+                        if(!nPquest.isEmpty() && !id_prova.equals(null)){
+                            for(int i = 0; i < quest; i++){
+                                Integer resp = alternativasEscolhidas.get(i);
+                                bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
+                            }
+                            dialogProvaSucess();
                         }
-                        dialogProvaSucess();
                     }
                 }
-            }
             }
        });
 
        //sayury
-        notaProva = findViewById(R.id.txtViewNotaProva);
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");

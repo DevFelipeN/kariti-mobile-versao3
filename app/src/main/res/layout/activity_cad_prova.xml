@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
     <Spinner
-        android:id="@+id/spinnerTurma"
+        android:id="@+id/spinnerTurmaPprova"
         android:layout_width="320dp"
         android:layout_height="56dp"
         android:layout_marginTop="30dp"
@@ -73,7 +73,7 @@
         app:layout_constraintEnd_toStartOf="@+id/datePickerButton"
         app:layout_constraintHorizontal_bias="0.027"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurmaPprova" />
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -87,7 +87,7 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/btnGerarProva"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurmaPprova"
         app:layout_constraintVertical_bias="0.0" />
 
 

@@ -20,20 +20,20 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "data_base", null, 40);
+        super(context, "data_base", null, 42);
     }
 
     @Override
     public void onCreate(SQLiteDatabase data_base) {
         try {
             data_base.execSQL("create Table usuario( id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT, email TEXT UNIQUE, password varchar(256))");
-            //data_base.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
+            data_base.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             data_base.execSQL("create Table escola( id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
             data_base.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
             data_base.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER, nomeTurma TEXT, qtdAnonimos Integer)");
             data_base.execSQL("create Table alunosTurma (id_turma Integer, id_aluno Integer)");
-            data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER)");
+            data_base.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER, id_turma Integer)");
             data_base.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer, nota Integer)");
             data_base.execSQL("create Table galeria(id INTEGER PRIMARY KEY AUTOINCREMENT, foto BLOB)");
         }catch(Exception e){
@@ -96,7 +96,7 @@ public class BancoDados extends SQLiteOpenHelper {
         return inserir != -1;
     }
 
-    public Boolean inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas){
+    public Boolean inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase data_base = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeProva", nomeProva);
@@ -104,6 +104,7 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("qtdQuestoes", qtdQuestoes);
         contentValues.put("qtdAlternativas", qtdAlternativas);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        contentValues.put("id_turma", id_turma);
         long inserir = data_base.insert("prova", null, contentValues);
         return inserir != -1;
     }
@@ -240,15 +241,6 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-
-    public Boolean checkProva(String nomeProva) {
-        SQLiteDatabase data_base = this.getWritableDatabase();
-        Cursor cursor = data_base.rawQuery("Select nomeProva from prova where nomeProva =?", new String[]{nomeProva});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
-    }
     public Integer checkemail(String email) {
         SQLiteDatabase data_base = this.getWritableDatabase();
         Cursor cursor = data_base.rawQuery("Select * from usuario where email = ?", new String[]{email});
@@ -359,6 +351,14 @@ public class BancoDados extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM escola WHERE nomeEscola = ?", new String[]{nomeEscola});
 
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+    public Boolean checkprovas(String nomeProva){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM prova WHERE nomeProva = ?", new String[]{nomeProva});
         if (cursor.getCount() > 0)
             return true;
         else

@@ -28,6 +28,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     BancoDados bancoDados;
     Spinner spinnerBuscAluno;
     String alunoSelecionado;
+    Boolean checkList;
     Integer id_turma = 0;
     AdapterExclAluno al;
     ArrayList<String> selectedAlunos = new ArrayList<>();
@@ -62,9 +63,23 @@ public class CadTurmaActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
-                    selectedAlunos.add(alunoSelecionado);
+                    int n = selectedAlunos.size();
+                    int i = 0;
+                    if(n == 0)
+                        selectedAlunos.add(alunoSelecionado);
+                    for(int a = 0; a < n; a++){
+                        if(alunoSelecionado.equals(selectedAlunos.get(a))) {
+                            i = 1;
+                            Toast.makeText(CadTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
+                            break;
+                        }else i = 2;
+
+                    }
+                    if (i == 2)
+                        selectedAlunos.add(alunoSelecionado);
                     al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
                     listarAlunos.setAdapter(al);
+
                 }
             }
             @Override

@@ -59,7 +59,6 @@ public class EditarTurmaActivity extends AppCompatActivity {
         qtdAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         editTurma.setText(pegaTurma);
         novosAlAnonimos.setText(qtdAnonimos.toString());
-        Toast.makeText(this, "Esta turma possui "+qtdAnonimos+" alunos anônimos cadastrados!", Toast.LENGTH_SHORT).show();
 
         //Lista os aluno cadastrados nesta turma.
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
@@ -76,7 +75,20 @@ public class EditarTurmaActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
                     alunosSelecionados = spinnerBuscAlun.getSelectedItem().toString();
-                    editAlTurma.add(alunosSelecionados);
+                    int n = editAlTurma.size();
+                    int x = 0;
+                    if(n == 0)
+                        editAlTurma.add(alunosSelecionados);
+                    for(int a = 0; a < n; a++){
+                        if(alunosSelecionados.equals(editAlTurma.get(a))) {
+                            x = 1;
+                            Toast.makeText(EditarTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
+                            break;
+                        }else x = 2;
+
+                    }
+                    if (x == 2)
+                        editAlTurma.add(alunosSelecionados);
                     adapter = new AdapterExclAluno(EditarTurmaActivity.this, editAlTurma);
                     listView.setAdapter(adapter);
                 }

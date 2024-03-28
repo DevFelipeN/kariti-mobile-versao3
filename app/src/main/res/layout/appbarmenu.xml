@@ -17,7 +17,7 @@
             android:contentDescription="@string/btnVoltar"/>
 
         <ImageView
-            android:id="@+id/menu_icon"
+            android:id="@+id/menu_icon_point"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="end"

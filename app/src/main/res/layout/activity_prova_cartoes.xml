@@ -23,39 +23,6 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageButton
-        android:id="@+id/imgBtnVoltaEscola"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
-        android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.0" />
-=======
-<!--    <ImageButton-->
-<!--        android:id="@+id/imgBtnVoltar"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:background="@color/tranparente"-->
-<!--        android:contentDescription="@string/btnVoltar"-->
-<!--        android:src="@mipmap/setaleft"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
-
-
     <Spinner
         android:id="@+id/spinnerTurma"
         android:layout_width="350dp"
@@ -64,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBtnVoltaEscola" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Spinner
         android:id="@+id/spinnerProva"

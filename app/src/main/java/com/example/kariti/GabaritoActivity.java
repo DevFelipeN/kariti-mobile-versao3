@@ -34,6 +34,8 @@ public class GabaritoActivity extends AppCompatActivity {
     BancoDados bancoDados;
     Map<String, Object> info;
     LinearLayout layoutHorizontal;
+    String prova, turma, data;
+    Integer id_turma, id_prova, quest, alter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,17 +48,16 @@ public class GabaritoActivity extends AppCompatActivity {
         ndata = findViewById(R.id.textViewData);
         notaProva = findViewById(R.id.txtViewNotaProva);
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
-
         bancoDados = new BancoDados(this);
         info = new HashMap<>();
         List<RadioGroup> listRadioGroups = new ArrayList<>();
         HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
 
-        String prova = getIntent().getExtras().getString("nomeProva");
-        String turma = getIntent().getExtras().getString("turma");
-        String data = getIntent().getExtras().getString("data");
-        Integer quest = getIntent().getExtras().getInt("quest");
-        Integer alter = getIntent().getExtras().getInt("alter");
+        prova = getIntent().getExtras().getString("nomeProva");
+        turma = getIntent().getExtras().getString("turma");
+        data = getIntent().getExtras().getString("data");
+        quest = getIntent().getExtras().getInt("quest");
+        alter = getIntent().getExtras().getInt("alter");
         nProva.setText(String.format("Prova: %s", prova));
         nturma.setText("Turma: "+turma);
         ndata.setText("Data: "+data);
@@ -74,10 +75,10 @@ public class GabaritoActivity extends AppCompatActivity {
                     }
                 }
                 if (respostaSelecionada) {
-                    Integer id_turma = bancoDados.pegaIdTurma(turma);
+                    id_turma = bancoDados.pegaIdTurma(turma);
                     Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter, id_turma);;
                     if(insProva) {
-                        Integer id_prova = bancoDados.pegaIdProva(prova);
+                        id_prova = bancoDados.pegaIdProva(prova);
                         ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
                         if(!nPquest.isEmpty() && !id_prova.equals(null)){
                             for(int i = 0; i < quest; i++){
@@ -202,6 +203,8 @@ public class GabaritoActivity extends AppCompatActivity {
     }
     public void telaConfim() {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
+        intent.putExtra("prova", prova);
+        intent.putExtra("id_turma", id_turma);
         startActivity(intent);
     }
     private void calcularNotaTotal() {

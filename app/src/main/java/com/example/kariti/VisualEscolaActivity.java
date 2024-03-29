@@ -45,6 +45,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         iconHelp = findViewById(R.id.iconHelp);
 
+
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeEscola", "id_escola"};
         Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);

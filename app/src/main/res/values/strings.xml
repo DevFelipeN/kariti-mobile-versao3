@@ -42,7 +42,7 @@
     <string name="senhahint">********</string>
     <string name="btnAlterarSenha">Alterar Senha</string>
     <string name="btnEscolaDesativada">Escolas Desativadas</string>
-<!--    Aluno-->
+    <!--    Aluno-->
     <string name="textViewAluno">Aluno</string>
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
@@ -53,7 +53,7 @@
     <string name="btnSalvaAluno">Salvar</string>
     <string name="menuEditarAlun">Editar Aluno</string>
     <string name="menuExclAlun">Excluir Aluno</string>
-<!--    Turma-->
+    <!--    Turma-->
     <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonSalvTurma">Salvar Turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
@@ -64,7 +64,7 @@
     <string name="btnIncluir">Incluir</string>
     <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnTranferirOutraTurma">Transf. de outra Turma</string>
-<!--    Prova-->
+    <!--    Prova-->
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
     <string name="buttonVisuProva">Visualizar Prova</string>
@@ -92,7 +92,7 @@
     <string name="btnEnviarParaProf">Enviar Para Professor</string>
     <string name="btnBaixarProva">Baixar Prova</string>
     <string name="btnCompartilhar">Compartilhar</string>
-<!--    Descrição das Imagens-->
+    <!--    Descrição das Imagens-->
     <string name="btnVoltar">Button Voltar</string>
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>

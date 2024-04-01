@@ -48,6 +48,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
         alunolist = new ArrayList<>();
         listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(id_turma));
+        alunolist.add(0, "Alunos");
         int num = listIdAlTurma.size();
         for(int x = 0; x < num; x++){
             String id_aluno = String.valueOf(listIdAlTurma.get(x));

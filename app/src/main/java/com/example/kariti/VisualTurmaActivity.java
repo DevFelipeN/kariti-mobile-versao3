@@ -54,17 +54,22 @@ public class VisualTurmaActivity extends AppCompatActivity {
                 // Exibir a caixa de diálogo
                 AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
                 builder.setTitle("Atenção!")
-                        .setMessage("Deseja Escluir Esta Turma?")
+                        .setMessage("Deseja excluir essa turma?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String turma = listarTurma.get(position);
-                                Boolean deletAluno = bancoDados.deletarTurma(turma);
-                                if (deletAluno) {
-                                   listarTurma.remove(position);
-                                   adapter.notifyDataSetChanged();
-                                   Toast.makeText(VisualTurmaActivity.this, "Turma Escluida! ", Toast.LENGTH_SHORT).show();
-                                }
+                                Integer id_turma = bancoDados.pegaIdTurma(turma);
+                                Boolean checkEmProva = bancoDados.checkTurmaEmProva(id_turma);
+                                if(!checkEmProva) {
+                                    Boolean deletTurma = bancoDados.deletarTurma(turma);
+                                    bancoDados.deletarAlunoDturma(id_turma);
+                                    if (deletTurma) {
+                                        listarTurma.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(VisualTurmaActivity.this, "Turma Excluida! ", Toast.LENGTH_SHORT).show();
+                                    }
+                                }else avisoNotExluir();
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -97,4 +102,12 @@ public class VisualTurmaActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    public void avisoNotExluir(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível excluir!.");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 }

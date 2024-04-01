@@ -63,16 +63,19 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 // Exibir a caixa de diálogo
                 AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
                 builder.setTitle("Atenção!")
-                        .setMessage("Deseja Realmente Excluir Aluno?")
+                        .setMessage("Deseja excluir aluno?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Integer ids = Integer.valueOf(idsAlunos.get(position));
-                                Boolean deletAluno = bancoDados.deletarAluno(ids);
-                                if (deletAluno) {
-                                    alunos.remove(position);
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(ids);
+                                if(!checkAlEmTurma){
+                                    Boolean deletAluno = bancoDados.deletarAluno(ids);
+                                    if (deletAluno) {
+                                        alunos.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                                    }else avisoNotExluirAluno();
                                 }
                             }
                         })
@@ -118,5 +121,12 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void avisoNotExluirAluno(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Este aluno possui vínculo com uma ou mais turma(s) cadastrada(s), não sendo possível excluir!.");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

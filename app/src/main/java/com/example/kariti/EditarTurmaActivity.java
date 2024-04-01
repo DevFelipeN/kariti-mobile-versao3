@@ -3,6 +3,7 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -142,6 +143,9 @@ public class EditarTurmaActivity extends AppCompatActivity {
                     }
                 }
                 Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), DadosTurmaActivity.class);
+                intent.putExtra("idTurma", Integer.valueOf(id_turma));
+                startActivity(intent);
                 finish();
             }
         });

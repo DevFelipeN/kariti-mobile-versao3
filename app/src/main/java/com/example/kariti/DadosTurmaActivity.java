@@ -1,5 +1,6 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -73,8 +74,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuEditar) {
-            //Boolean check =
-            telaEditar();
+                telaEditar();
             return true;
         }
         /*else if (id == R.id.menuExcluir) {
@@ -92,8 +92,19 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     }
 
     public void telaEditar(){
-        Intent intent = new Intent(this, EditarTurmaActivity.class);
-        intent.putExtra("id_turma", id_turma);
-        startActivity(intent);
+        Boolean checkTurmaEmProva = bancoDados.checkTurmaEmProva(Integer.valueOf(id_turma));
+        if(!checkTurmaEmProva) {
+            Intent intent = new Intent(this, EditarTurmaActivity.class);
+            intent.putExtra("id_turma", id_turma);
+            startActivity(intent);
+            finish();
+        }else avisoNotExluir();
+    }
+    public void avisoNotExluir(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(DadosTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível Editar!.");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

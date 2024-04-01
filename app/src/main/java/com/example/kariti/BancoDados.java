@@ -386,6 +386,18 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) return true;
         else return false;
     }
+    public Boolean checkTurmaEmProva(Integer id_turma){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT id_turma FROM prova WHERE id_turma = ? and id_escola = ?", new String[]{String.valueOf(id_turma), String.valueOf(BancoDados.ID_ESCOLA)});
+        if (cursor.getCount() > 0) return true;
+        else return false;
+    }
+    public Boolean checkAlunoEmTurma(Integer id_aluno){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT id_aluno FROM alunosTurma WHERE id_aluno = ? and id_escola = ?", new String[]{String.valueOf(id_aluno), String.valueOf(BancoDados.ID_ESCOLA)});
+        if (cursor.getCount() > 0) return true;
+        else return false;
+    }
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (int i = 0; i < hash.length; i++) {

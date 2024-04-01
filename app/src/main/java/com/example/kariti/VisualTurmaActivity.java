@@ -94,6 +94,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DadosTurmaActivity.class);
         intent.putExtra("idTurma", idTurma);
         startActivity(intent);
+        finish();
     }
     public void aviso(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);

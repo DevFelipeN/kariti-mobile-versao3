@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
-    Integer id_turma;
+    Integer id_turma, endereco;
     String prova, turma;
     ArrayList<String> provalist, turmalist, alunolist;
     ArrayList<Integer> listIdAlTurma;
@@ -31,17 +31,22 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
+        endereco = getIntent().getExtras().getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
-        id_turma = getIntent().getExtras().getInt("id_turma");
-        turma = bancoDados.pegaNomeTurma(String.valueOf(id_turma));
 
 
         turmalist = (ArrayList<String>) bancoDados.obterNomeTurmas();
-        turmalist.add(0, turma);
+        if(endereco.equals(02)){
+            turmalist.add(0,"Selecione a turma");
+        }else if(endereco.equals(01)){
+            id_turma = getIntent().getExtras().getInt("id_turma");
+            turma = bancoDados.pegaNomeTurma(String.valueOf(id_turma));
+            turmalist.add(0, turma);
+        }
         SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
         spinnerTurma.setAdapter(adapterTurma);
 
-        provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(id_turma));
+        /*provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(id_turma));
         provalist.add(0, prova);
         SpinnerAdapter adapterProva = new SpinnerAdapter(this, provalist);
         spinnerProva.setAdapter(adapterProva);
@@ -56,6 +61,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         }
         SpinnerAdapter adapterAluno = new SpinnerAdapter(this, alunolist);
         spinnerAluno.setAdapter(adapterAluno);
+
+         */
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

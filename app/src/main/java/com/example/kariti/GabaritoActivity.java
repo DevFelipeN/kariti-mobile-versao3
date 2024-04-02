@@ -205,6 +205,7 @@ public class GabaritoActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
         intent.putExtra("prova", prova);
         intent.putExtra("id_turma", id_turma);
+        intent.putExtra("endereco", 01);
         startActivity(intent);
     }
     private void calcularNotaTotal() {

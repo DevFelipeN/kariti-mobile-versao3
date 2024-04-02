@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
+    Button baixarCartoes;
     Integer id_turma, endereco, idTurmaSelect;
     String prova, turma, turmaSelecionada;
     ArrayList<String> provalist, turmalist, alunolist;
@@ -29,6 +31,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         Spinner spinnerTurma = findViewById(R.id.spinnerTurma);
         Spinner spinnerProva = findViewById(R.id.spinnerProva);
         Spinner spinnerAluno = findViewById(R.id.spinnerAlunos);
+        baixarCartoes = findViewById(R.id.baixarcatoes);
 
         bancoDados = new BancoDados(this);
 
@@ -107,7 +110,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         spinnerProva.setAdapter(adapterProva);
 
                         alunolist = new ArrayList<>();
-                        listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurmaSelect));
+                        listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurmaSelect));//pegando Ids dos alunos
                         alunolist.add(0, "Alunos");
                         int num = listIdAlTurma.size();
                         for(int x = 0; x < num; x++){
@@ -126,10 +129,18 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 }
             });
         }
+        baixarCartoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String provaSelect = spinnerProva.getSelectedItem().toString();
+                String turmaSelect = spinnerTurma.getSelectedItem().toString();
+                Integer id_prova = bancoDados.pegaIdProva(provaSelect);
+                String prof = bancoDados.pegaUsuario(BancoDados.USER_ID);
+                Toast.makeText(ProvaCartoesActivity.this, "Informações: "+id_prova+";"+provaSelect+";"+prof+";"+turmaSelect, Toast.LENGTH_SHORT).show();
+                //Em Implementação
 
-        /*
-
-         */
+            }
+        });
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override

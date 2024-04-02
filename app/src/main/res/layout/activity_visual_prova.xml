@@ -40,7 +40,7 @@
 <!--        app:layout_constraintVertical_bias="0.0" />-->
 
     <Spinner
-        android:id="@+id/spinnerTurma"
+        android:id="@+id/spinnerTurma1"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Spinner
-        android:id="@+id/spinnerProva"
+        android:id="@+id/spinnerProva1"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
@@ -59,10 +59,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma1" />
 
     <Spinner
-        android:id="@+id/spinnerAlunos"
+        android:id="@+id/spinnerAlunos1"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerProva" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProva1" />
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -83,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos1"
         app:layout_constraintVertical_bias="0.501" />
 
     <ImageView

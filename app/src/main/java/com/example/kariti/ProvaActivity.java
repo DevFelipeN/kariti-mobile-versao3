@@ -74,6 +74,7 @@ public class ProvaActivity extends AppCompatActivity {
     }
     public void telaGerarCartao(){
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
+        intent.putExtra("endereco", 02);
         startActivity(intent);
     }
     public void telaCorrigirProva(){

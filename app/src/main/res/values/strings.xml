@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kariti</string>
     <string name="buttonvoltarTela">VOLTAR</string>
-    <string name="nomeCompleto">Nome Completo</string>
+    <string name="nomeCompleto">Nome Completo*</string>
     <string name="email">E-mail</string>
     <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>
@@ -21,8 +21,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="textViewKariti">Kariti</string>
-    <string name="buttonCadastroEscola">Cadastrar Escola</string>
-    <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
     <string name="buttonConfig">Configurações</string>
     <string name="buttonValidar">Validar</string>
     <string name="textViewReenviar">Reenviar o Código</string>
@@ -36,7 +34,11 @@
     <string name="textViewInformeSenha">Informe Sua Senha</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
-    <string name="nomeSchool">Nome da Escola</string>
+    <string name="voidSchool">Nenhuma Dado Cadastrado!</string>
+
+    <string name="buttonCadastroEscola">Cadastrar Escola</string>
+    <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
+    <string name="nomeSchool">Nome da Escola*</string>
     <string name="bairroSchool">Bairro</string>
     <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="senhahint">********</string>
@@ -57,7 +59,7 @@
     <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonSalvTurma">Salvar Turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
-    <string name="editTextNomeTurma">Nome da Turma</string>
+    <string name="editTextNomeTurma">Nome da Turma*</string>
     <string name="textViewAlunos">Alunos</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="btnIncluirAluno">Incluir Alunos</string>

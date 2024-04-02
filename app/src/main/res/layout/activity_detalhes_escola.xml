@@ -44,12 +44,12 @@
         android:id="@+id/buttonAluno"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="149dp"
         android:layout_marginEnd="60dp"
         android:text="@string/textViewAluno"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTurma"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -57,12 +57,12 @@
         android:id="@+id/btnTurma"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="60dp"
         android:text="@string/textViewTurma"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAluno" />
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -74,43 +74,43 @@
         android:text="@string/textViewProva"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAluno"
+        app:layout_constraintTop_toBottomOf="@+id/btnTurma"
         tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageButton9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="25dp"
         app:layout_constraintEnd_toStartOf="@+id/buttonAluno"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton6"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola"
         app:srcCompat="@mipmap/student" />
 
     <ImageView
         android:id="@+id/imageButton8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="25dp"
         app:layout_constraintEnd_toStartOf="@+id/btnProva"
-        app:layout_constraintHorizontal_bias="0.951"
+        app:layout_constraintHorizontal_bias="0.987"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton9"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton6"
         app:srcCompat="@mipmap/prova" />
 
     <ImageView
         android:id="@+id/imageButton6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="58dp"
         android:layout_marginEnd="25dp"
         app:layout_constraintEnd_toStartOf="@+id/btnTurma"
         app:layout_constraintHorizontal_bias="0.987"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton9"
         app:srcCompat="@mipmap/turma" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

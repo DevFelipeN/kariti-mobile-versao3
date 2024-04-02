@@ -45,6 +45,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         iconHelp = findViewById(R.id.iconHelp);
 
+        if (!haEscolasCadastradas()) {
+            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeEscola", "id_escola"};
@@ -153,4 +160,14 @@ public class VisualEscolaActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivity(intent);
     }
+
+    public boolean haEscolasCadastradas() {
+        SQLiteDatabase database = bancoDados.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario=" + BancoDados.USER_ID, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
+    }
+
 }

@@ -46,7 +46,7 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="Digite o nome da prova"
+        android:hint="Digite o nome da prova*"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"

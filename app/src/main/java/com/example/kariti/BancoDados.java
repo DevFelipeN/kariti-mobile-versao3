@@ -270,6 +270,13 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+    public String pegaData(String id_prova) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from prova where id_prova = ?", new String[]{id_prova});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getString(2);
+    }
 
     public Integer pegaIdAluno(String nomeAluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -315,9 +322,9 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
-    public String pegaUsuario(Integer id_usuario) {
+    public String pegaUsuario(String id_usuario) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select nomeUsuario from usuario where id_usuario = ?", new String[]{String.valueOf(id_usuario)});
+        Cursor cursor = base_dados.rawQuery("Select * from usuario where id_usuario = ?", new String[]{id_usuario});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
@@ -487,6 +494,23 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return ids;
+    }
+    public Integer listNota(String id_prova) {
+        int notaTot = 0;
+        ArrayList<Integer>  notas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM gabarito where id_prova = ?", new String[]{id_prova});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // O índice 0 corresponde à coluna 'nome' no exemplo
+                Integer nota = cursor.getInt(4);
+                notaTot = notaTot + nota;
+                //notas.add(nota);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return notaTot;
     }
 
 }

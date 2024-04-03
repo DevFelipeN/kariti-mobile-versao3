@@ -61,7 +61,6 @@ public class CadProvaActivity extends AppCompatActivity {
                 qtdQuest.setText(quest.toString());
             }
         });
-
         questMenos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +70,6 @@ public class CadProvaActivity extends AppCompatActivity {
                 qtdQuest.setText(quest.toString());
             }
         });
-
         altMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +78,6 @@ public class CadProvaActivity extends AppCompatActivity {
                 qtdAlter.setText(alter.toString());
             }
         });
-
         altMenos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,9 +87,6 @@ public class CadProvaActivity extends AppCompatActivity {
                 qtdAlter.setText(alter.toString());
             }
         });
-
-
-
         btnGerProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +126,6 @@ public class CadProvaActivity extends AppCompatActivity {
                             // Atualiza o texto do botão com a data selecionada
                             datePickerButton.setText(formatDate(calendar));
                             dataform = formatDateBanco(calendar);
-                            Toast.makeText(CadProvaActivity.this, "Data:"+dataform, Toast.LENGTH_SHORT).show();
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),

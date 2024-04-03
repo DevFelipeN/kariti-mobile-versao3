@@ -133,12 +133,14 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String provaSelect = spinnerProva.getSelectedItem().toString();
-                String turmaSelect = spinnerTurma.getSelectedItem().toString();
                 Integer id_prova = bancoDados.pegaIdProva(provaSelect);
-                String prof = bancoDados.pegaUsuario(BancoDados.USER_ID);
-                Toast.makeText(ProvaCartoesActivity.this, "Informações: "+id_prova+";"+provaSelect+";"+prof+";"+turmaSelect, Toast.LENGTH_SHORT).show();
+                String turmaSelect = spinnerTurma.getSelectedItem().toString();
+                String id_usuario = String.valueOf(BancoDados.USER_ID);
+                String prof = bancoDados.pegaUsuario(id_usuario);
+                String data =  bancoDados.pegaData(String.valueOf(id_prova));
+                Integer nota = bancoDados.listNota(String.valueOf(id_prova));
+                Toast.makeText(ProvaCartoesActivity.this, "Informações: "+id_prova+";"+provaSelect+";"+prof+";"+turmaSelect+";"+data+";"+nota, Toast.LENGTH_SHORT).show();
                 //Em Implementação
-
             }
         });
 

@@ -34,8 +34,8 @@ public class GabaritoActivity extends AppCompatActivity {
     BancoDados bancoDados;
     Map<String, Object> info;
     LinearLayout layoutHorizontal;
-    String prova, turma, data;
-    Integer id_turma, id_prova, quest, alter;
+    String prova, turma, data, dataForm;
+    Integer id_turma, id_prova, quest, alter, totNota;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +56,7 @@ public class GabaritoActivity extends AppCompatActivity {
         prova = getIntent().getExtras().getString("nomeProva");
         turma = getIntent().getExtras().getString("turma");
         data = getIntent().getExtras().getString("data");
+        dataForm = getIntent().getExtras().getString("dataForm");
         quest = getIntent().getExtras().getInt("quest");
         alter = getIntent().getExtras().getInt("alter");
         nProva.setText(String.format("Prova: %s", prova));
@@ -76,7 +77,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
                 if (respostaSelecionada) {
                     id_turma = bancoDados.pegaIdTurma(turma);
-                    Boolean insProva = bancoDados.inserirProva(prova, data, quest, alter, id_turma);;
+                    Boolean insProva = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);;
                     if(insProva) {
                         id_prova = bancoDados.pegaIdProva(prova);
                         ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");

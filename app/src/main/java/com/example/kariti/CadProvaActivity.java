@@ -30,6 +30,7 @@ public class CadProvaActivity extends AppCompatActivity {
     BancoDados bancoDados;
     ArrayList<String> listTurmaEmProva;
     ImageButton voltar, questMenos, questMais, altMais, altMenos;
+    String dataform;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +108,7 @@ public class CadProvaActivity extends AppCompatActivity {
                             intent.putExtra("nomeProva", prova);
                             intent.putExtra("turma", turma);
                             intent.putExtra("data", data);
+                            intent.putExtra("dataForm", dataform);
                             intent.putExtra("quest", quest);
                             intent.putExtra("alter", alter);
                             startActivity(intent);
@@ -129,6 +131,8 @@ public class CadProvaActivity extends AppCompatActivity {
                             calendar.set(year, monthOfYear, dayOfMonth);
                             // Atualiza o texto do botão com a data selecionada
                             datePickerButton.setText(formatDate(calendar));
+                            dataform = formatDateBanco(calendar);
+                            Toast.makeText(CadProvaActivity.this, "Data:"+dataform, Toast.LENGTH_SHORT).show();
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
@@ -148,6 +152,11 @@ public class CadProvaActivity extends AppCompatActivity {
     }
     private String formatDate(Calendar calendar) {
         String dateFormat = "dd/MM/yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
+        return simpleDateFormat.format(calendar.getTime());
+    }
+    private String formatDateBanco(Calendar calendar) {
+        String dateFormat = "yyy/MM/dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
     }

@@ -1,7 +1,9 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +22,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     Integer id_turma, endereco, idTurmaSelect;
     String prova, turma, turmaSelecionada;
     ArrayList<String> provalist, turmalist, alunolist;
-    ArrayList<Integer> listIdAlTurma;
+    ArrayList<Integer> listIdAlTurma, listIdsAlunos;
     BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +141,34 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 String prof = bancoDados.pegaUsuario(id_usuario);
                 String data =  bancoDados.pegaData(String.valueOf(id_prova));
                 Integer nota = bancoDados.listNota(String.valueOf(id_prova));
-                Toast.makeText(ProvaCartoesActivity.this, "Informações: "+id_prova+";"+provaSelect+";"+prof+";"+turmaSelect+";"+data+";"+nota, Toast.LENGTH_SHORT).show();
+                Integer questoes = bancoDados.pegaqtdQuestoes(String.valueOf(id_prova));
+                Integer alternativas = bancoDados.pegaqtdAlternativas(String.valueOf(id_prova));
+                Integer idTurma = bancoDados.pegaIdTurma(turmaSelect);
+
+                listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurma));
+                int qtdProvas = listIdsAlunos.size();
+                for(int x = 0;  x < qtdProvas; x++){
+                    String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                    builder.setTitle("Dados Prova")
+                            .setMessage(id_prova
+                                    +";"+provaSelect
+                                    +";"+prof+";"
+                                    + turmaSelect
+                                    +";"+data+";"
+                                    +nota+";"
+                                    +questoes+
+                                    ";"+alternativas
+                                    +";"+listIdsAlunos.get(x)
+                                    +";"+aluno)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
                 //Em Implementação
             }
         });

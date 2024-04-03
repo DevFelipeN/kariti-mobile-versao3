@@ -172,7 +172,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 //Em Implementação
             }
         });
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

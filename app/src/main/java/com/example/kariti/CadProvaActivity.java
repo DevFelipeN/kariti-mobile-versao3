@@ -156,7 +156,7 @@ public class CadProvaActivity extends AppCompatActivity {
         return simpleDateFormat.format(calendar.getTime());
     }
     private String formatDateBanco(Calendar calendar) {
-        String dateFormat = "yyy/MM/dd";
+        String dateFormat = "yyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
     }

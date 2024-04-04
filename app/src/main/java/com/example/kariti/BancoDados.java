@@ -17,7 +17,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "base_dados", null, 1);
+        super(context, "base_dados", null, 6);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
@@ -32,6 +32,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER, id_turma Integer)");
             base_dados.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer, nota Integer)");
             base_dados.execSQL("create Table galeria(id INTEGER PRIMARY KEY AUTOINCREMENT, foto BLOB)");
+            base_dados.execSQL("create Table gerarProva(id_prova Integer, nome_prova TEXT, nome_professor TEXT, nome_turma TEXT, data_prova TEXT, nota_prova Integer, qtd_questoes Integer, qtd_alternativas Integer, id_aluno Integer UNIQUE, nome_aluno TEXT )");
         }catch(Exception e){
             Log.e("Error data_base: ",e.getMessage());
         }
@@ -40,6 +41,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase data_base, int oldVersion, int newVersion) {
         try {
             data_base.execSQL("drop Table if exists usuario");
+            data_base.execSQL("drop Table if exists validacao_usuario");
             data_base.execSQL("drop Table if exists escola");
             data_base.execSQL("drop Table if exists aluno");
             data_base.execSQL("drop Table if exists turma");
@@ -47,7 +49,8 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("drop Table if exists escolasDesativadas");
             data_base.execSQL("drop Table if exists gabarito");
             data_base.execSQL("drop Table if exists galeria");
-            data_base.execSQL("drop Table if exists alunos_da_turma");
+            data_base.execSQL("drop Table if exists alunosTurma");
+            data_base.execSQL("drop Table if exists gerarProva");
             onCreate(data_base);
         }catch(Exception e){
             Log.e("Error base_dados: ",e.getMessage());
@@ -100,6 +103,22 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
         contentValues.put("id_turma", id_turma);
         long inserir = base_dados.insert("prova", null, contentValues);
+        return inserir != -1;
+    }
+    public Boolean insertDadosCartao(Integer id_prova, String nome_prova, String nome_professor, String nome_turma, String data_prova, Integer nota_prova, Integer qtd_questoes, Integer qtd_alternativas, Integer id_aluno, String nome_aluno){
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id_prova", id_prova);
+        contentValues.put("nome_prova", nome_prova);
+        contentValues.put("nome_professor", nome_professor);
+        contentValues.put("nome_turma", nome_turma);
+        contentValues.put("data_prova", data_prova);
+        contentValues.put("nota_prova", nota_prova);
+        contentValues.put("qtd_questoes", qtd_questoes);
+        contentValues.put("qtd_alternativas", qtd_alternativas);
+        contentValues.put("id_aluno", id_aluno);
+        contentValues.put("nome_aluno", nome_aluno);
+        long inserir = base_dados.insert("gerarProva", null, contentValues);
         return inserir != -1;
     }
     public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Integer nota){
@@ -178,6 +197,17 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
             String deleta = "DELETE FROM alunosTurma WHERE id_turma = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt.bindLong(1, id_turma);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
+    public Boolean deletDadosprova(Integer id_turma){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String deleta = "DELETE FROM gerarProva WHERE id_prova = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_turma);
             stmt.executeUpdateDelete();

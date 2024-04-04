@@ -21,7 +21,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     Button baixarCartoes;
     Integer id_turma, endereco, idTurmaSelect;
     String prova, turma, turmaSelecionada;
-    ArrayList<String> provalist, turmalist, alunolist;
+    ArrayList<String> provalist, turmalist, alunolist, listAlunos;
     ArrayList<Integer> listIdAlTurma, listIdsAlunos;
     BancoDados bancoDados;
     @Override
@@ -145,18 +145,19 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 Integer alternativas = bancoDados.pegaqtdAlternativas(String.valueOf(id_prova));
                 Integer idTurma = bancoDados.pegaIdTurma(turmaSelect);
 
+
+                listAlunos = new ArrayList<>();
+
                 //bancoDados.deletDadosprova(id_prova);
 
                 listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurma));
                 int qtdProvas = listIdsAlunos.size();
                 for(int x = 0;  x < qtdProvas; x++){
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
+                    listAlunos.add(id_prova, aluno);
                     Boolean inserirDados = bancoDados.insertDadosCartao(id_prova, provaSelect, prof, turmaSelect, data, nota, questoes, alternativas, listIdsAlunos.get(x), aluno);
                     if(inserirDados)
                         Toast.makeText(ProvaCartoesActivity.this, "Dados prontos para serem importados", Toast.LENGTH_SHORT).show();
-
-
-
 
 
                     /*AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);

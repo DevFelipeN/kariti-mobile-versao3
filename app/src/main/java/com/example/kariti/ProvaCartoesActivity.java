@@ -21,7 +21,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     Button baixarCartoes;
     Integer id_turma, endereco, idTurmaSelect;
     String prova, turma, turmaSelecionada;
-    ArrayList<String> provalist, turmalist, alunolist, listAlunos;
+    ArrayList<String> provalist, turmalist, alunolist;
+    ArrayList<String[]> listProvas;
     ArrayList<Integer> listIdAlTurma, listIdsAlunos;
     BancoDados bancoDados;
     @Override
@@ -135,43 +136,28 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String provaSelect = spinnerProva.getSelectedItem().toString();
-                Integer id_prova = bancoDados.pegaIdProva(provaSelect);
+                String id_prova = String.valueOf(bancoDados.pegaIdProva(provaSelect));
                 String turmaSelect = spinnerTurma.getSelectedItem().toString();
                 String id_usuario = String.valueOf(BancoDados.USER_ID);
                 String prof = bancoDados.pegaUsuario(id_usuario);
-                String data =  bancoDados.pegaData(String.valueOf(id_prova));
-                Integer nota = bancoDados.listNota(String.valueOf(id_prova));
-                Integer questoes = bancoDados.pegaqtdQuestoes(String.valueOf(id_prova));
-                Integer alternativas = bancoDados.pegaqtdAlternativas(String.valueOf(id_prova));
-                Integer idTurma = bancoDados.pegaIdTurma(turmaSelect);
+                String data =  bancoDados.pegaData(id_prova);
+                String nota = String.valueOf(bancoDados.listNota(id_prova));
+                String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
+                String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
+                String idTurma = String.valueOf(bancoDados.pegaIdTurma(turmaSelect));
 
+                listProvas = new ArrayList<>();
 
-                listAlunos = new ArrayList<>();
-
-                //bancoDados.deletDadosprova(id_prova);
-
-                listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurma));
+                listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
                 int qtdProvas = listIdsAlunos.size();
                 for(int x = 0;  x < qtdProvas; x++){
+                    String id_aluno = String.valueOf(listIdsAlunos.get(x));
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
-                    listAlunos.add(id_prova, aluno);
-                    Boolean inserirDados = bancoDados.insertDadosCartao(id_prova, provaSelect, prof, turmaSelect, data, nota, questoes, alternativas, listIdsAlunos.get(x), aluno);
-                    if(inserirDados)
-                        Toast.makeText(ProvaCartoesActivity.this, "Dados prontos para serem importados", Toast.LENGTH_SHORT).show();
+                    listProvas.add(new String[]{id_prova, provaSelect, prof, turmaSelect, data, nota, questoes, alternativas, id_aluno, aluno});
 
-
-                    /*AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
                     builder.setTitle("Dados Prova")
-                            .setMessage(id_prova
-                                    +";"+provaSelect
-                                    +";"+prof+";"
-                                    + turmaSelect
-                                    +";"+data+";"
-                                    +nota+";"
-                                    +questoes+
-                                    ";"+alternativas
-                                    +";"+listIdsAlunos.get(x)
-                                    +";"+aluno)
+                            .setMessage("Dados"+listProvas.get(x))
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -179,8 +165,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-
-                     */
                 }
                 //Em Implementação
             }

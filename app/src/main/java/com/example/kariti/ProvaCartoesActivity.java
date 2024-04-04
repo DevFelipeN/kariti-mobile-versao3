@@ -145,11 +145,21 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 Integer alternativas = bancoDados.pegaqtdAlternativas(String.valueOf(id_prova));
                 Integer idTurma = bancoDados.pegaIdTurma(turmaSelect);
 
+                //bancoDados.deletDadosprova(id_prova);
+
                 listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurma));
                 int qtdProvas = listIdsAlunos.size();
                 for(int x = 0;  x < qtdProvas; x++){
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                    Boolean inserirDados = bancoDados.insertDadosCartao(id_prova, provaSelect, prof, turmaSelect, data, nota, questoes, alternativas, listIdsAlunos.get(x), aluno);
+                    if(inserirDados)
+                        Toast.makeText(ProvaCartoesActivity.this, "Dados prontos para serem importados", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+                    /*AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
                     builder.setTitle("Dados Prova")
                             .setMessage(id_prova
                                     +";"+provaSelect
@@ -168,6 +178,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
+
+                     */
                 }
                 //Em Implementação
             }

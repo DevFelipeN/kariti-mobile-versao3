@@ -70,14 +70,6 @@ public class VisualProvaActivity extends AppCompatActivity {
 
             }
         });
-
-        /*alunolist = new ArrayList<>();
-
-
-         */
-
-
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

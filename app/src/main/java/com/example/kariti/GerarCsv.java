@@ -1,11 +1,19 @@
 package com.example.kariti;
 
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.List;
 import java.util.ArrayList;
 public class GerarCsv {
+
+    public Boolean dadosProva(List<String[]> dados){
+        //gerar(dados, "entraday.csv");
+        return true;
+    }
+
     public static void gerar(List<String[]> dados, String fileName)
             throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
@@ -24,6 +32,7 @@ public class GerarCsv {
         writer.close();
     }
     public static void main(String[]args) throws Exception{
+
         List<String[]> dados = new ArrayList<>();
 
         dados.add(new String[]{"a", "b", "c"}); //linha 1
@@ -41,4 +50,5 @@ public class GerarCsv {
         -------
         */
     }
+
 }

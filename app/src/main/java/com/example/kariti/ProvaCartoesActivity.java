@@ -22,9 +22,10 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     Integer id_turma, endereco, idTurmaSelect;
     String prova, turma, turmaSelecionada;
     ArrayList<String> provalist, turmalist, alunolist;
-    ArrayList<String[]> listProvas;
+    List<String[]> dados;
     ArrayList<Integer> listIdAlTurma, listIdsAlunos;
     BancoDados bancoDados;
+    GerarCsv gerarCsv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         baixarCartoes = findViewById(R.id.baixarcatoes);
 
         bancoDados = new BancoDados(this);
+        gerarCsv = new GerarCsv();
 
         endereco = getIntent().getExtras().getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
@@ -135,38 +137,30 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         baixarCartoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String provaSelect = spinnerProva.getSelectedItem().toString();
-                String id_prova = String.valueOf(bancoDados.pegaIdProva(provaSelect));
-                String turmaSelect = spinnerTurma.getSelectedItem().toString();
+                String nomeProva = spinnerProva.getSelectedItem().toString();
+                String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
+                String nomeTurma = spinnerTurma.getSelectedItem().toString();
                 String id_usuario = String.valueOf(BancoDados.USER_ID);
                 String prof = bancoDados.pegaUsuario(id_usuario);
                 String data =  bancoDados.pegaData(id_prova);
                 String nota = String.valueOf(bancoDados.listNota(id_prova));
                 String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
                 String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
-                String idTurma = String.valueOf(bancoDados.pegaIdTurma(turmaSelect));
 
-                listProvas = new ArrayList<>();
+                dados = new ArrayList<>();
 
+                String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
                 listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
                 int qtdProvas = listIdsAlunos.size();
-                for(int x = 0;  x < qtdProvas; x++){
+                for(int x = 0;  x < qtdProvas; x++) {
                     String id_aluno = String.valueOf(listIdsAlunos.get(x));
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
-                    listProvas.add(new String[]{id_prova, provaSelect, prof, turmaSelect, data, nota, questoes, alternativas, id_aluno, aluno});
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
-                    builder.setTitle("Dados Prova")
-                            .setMessage("Dados"+listProvas.get(x))
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                    dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, aluno});
                 }
-                //Em Implementação
+                Boolean teste = gerarCsv.dadosProva(dados);
+                if (teste)
+                    Toast.makeText(ProvaCartoesActivity.this, "Sucesso!!!!", Toast.LENGTH_SHORT).show();
+
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

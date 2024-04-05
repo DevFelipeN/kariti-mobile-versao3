@@ -34,7 +34,7 @@
     <string name="textViewInformeSenha">Informe Sua Senha</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
-    <string name="voidSchool">Nenhuma Dado Cadastrado!</string>
+    <string name="voidSchool">Nenhum Dado Cadastrado!</string>
 
     <string name="buttonCadastroEscola">Cadastrar Escola</string>
     <string name="buttonVisualizarEscolas">Visualizar Escolas</string>

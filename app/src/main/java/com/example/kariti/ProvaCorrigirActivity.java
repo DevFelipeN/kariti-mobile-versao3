@@ -3,8 +3,10 @@ package com.example.kariti;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -20,8 +22,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +49,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     Button btnGaleria, btnCamera;
     ImageButton voltar;
     ImageView teste;
-
+    TextView txt;
+    String nomeDaFoto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +60,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.buttonCamera);
         voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         teste = findViewById(R.id.imageView20);
+        txt = findViewById(R.id.textView7);
+
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,10 +82,24 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 2);
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, 2);
+                iniciarScannerQRCode(); // primeiro o qrcode
             }
         });
+    }
+    private void iniciarScannerQRCode() {
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setOrientationLocked(false);       // rotação do scanner
+        intentIntegrator.setPrompt("Escaneie o QR code");
+        intentIntegrator.setBeepEnabled(true);              // som ao scanear
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); //especifica o qrcode
+        intentIntegrator.initiateScan();                    //iniciar o scan
+    }
+
+    private void tirarFoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 2); // Iniciar a captura da foto
     }
 
     // Método para salvar a imagem no armazenamento externo e atualizar a galeria
@@ -102,7 +136,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.close();
                 Toast.makeText(this, "Imagem salva na galeria!", Toast.LENGTH_SHORT).show();
-
                 // Atualizar a galeria
                 MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/png"}, null);
             } catch (IOException e) {
@@ -113,6 +146,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
                 // Se a imagem foi selecionada da galeria
@@ -125,15 +160,33 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 2) {
                 // Se a imagem foi capturada pela câmera
+
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 if (photo != null) {
                     teste.setImageBitmap(photo);
-                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArray = stream.toByteArray();
+//                    Intent intent = new Intent(this, GaleriaActivity.class);
+//                    intent.putExtra("photo", byteArray);
+//                    intent.putExtra("nomeFotoAnterior", nomeDaFoto);
+//                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
+//                    startActivity(intent);
+//                    finish();
                 }
             }
+        } if (result != null && result.getContents() != null) {
+            String qrCodeConteudo = result.getContents(); // Conteúdo do QR Code
+
+            qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
+            String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
+            nomeDaFoto = partes[0] + "_" + partes[1];           // junção das partes
+
+
+            txt.setText(nomeDaFoto);
+            tirarFoto();
         }
     }
-
     public void PopMenu(View v){
         v.setOnClickListener(new View.OnClickListener() {
             @Override

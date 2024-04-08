@@ -3,8 +3,14 @@ package com.example.kariti;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +19,9 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +34,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     List<String[]> dados;
     ArrayList<Integer> listIdAlTurma, listIdsAlunos;
     BancoDados bancoDados;
-    GerarCsv gerarCsv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +46,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         baixarCartoes = findViewById(R.id.baixarcatoes);
 
         bancoDados = new BancoDados(this);
-        gerarCsv = new GerarCsv();
 
         endereco = getIntent().getExtras().getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
@@ -137,6 +144,23 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         baixarCartoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                builder.setMessage("Escolha o metodo de Download");
+                builder.setNegativeButton("Download Manager", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        downloadPDF("http://kariti.online/src/services/download_template/download.php");
+                    }
+                });
+                builder.setPositiveButton("Using Browser", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://kariti.online/src/services/download_template/download.php")));
+                    }
+                });
+
+                 */
                 String nomeProva = spinnerProva.getSelectedItem().toString();
                 String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
                 String nomeTurma = spinnerTurma.getSelectedItem().toString();
@@ -156,11 +180,31 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     String id_aluno = String.valueOf(listIdsAlunos.get(x));
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
                     dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, aluno});
-                }
-                Boolean teste = gerarCsv.dadosProva(dados);
-                if (teste)
-                    Toast.makeText(ProvaCartoesActivity.this, "Sucesso!!!!", Toast.LENGTH_SHORT).show();
 
+                }
+                try {
+                    GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
+                    Toast.makeText(ProvaCartoesActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                    boolean res = BaixarModeloCartao.baixarProvas(openFileInput("teste.csv"), "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
+                    Toast.makeText(ProvaCartoesActivity.this, "Resultado: " + res, Toast.LENGTH_SHORT).show();
+                    /*
+                    File dir = getFilesDir();
+                    File file = new File(dir+"/teste.csv");
+                    if(file.exists()){
+                        FileInputStream f = openFileInput("teste.csv");
+                        byte[] b = new byte[(int)file.length()];
+                        while(f.read(b)!= -1){
+                            String texto = new String(b);
+                            Log.e("Kariti", texto);
+
+                        }
+                        Toast.makeText(ProvaCartoesActivity.this, "Encontrou o arquivo..............", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(ProvaCartoesActivity.this, "Arquivo não encontrado............aaaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
+                     */
+                }catch (Exception e){
+                    Log.e("Kariti",e.toString());
+                    Toast.makeText(ProvaCartoesActivity.this, "Erro: "+e.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -169,5 +213,15 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+    private void downloadPDF(String pdfURF){
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(pdfURF));
+        request.setTitle("PDF Download");
+        request.setDescription("Downloading the PDF File");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pdf_file.pdf");
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+
     }
 }

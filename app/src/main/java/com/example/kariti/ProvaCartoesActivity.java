@@ -144,23 +144,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         baixarCartoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
-                builder.setMessage("Escolha o metodo de Download");
-                builder.setNegativeButton("Download Manager", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        downloadPDF("http://kariti.online/src/services/download_template/download.php");
-                    }
-                });
-                builder.setPositiveButton("Using Browser", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://kariti.online/src/services/download_template/download.php")));
-                    }
-                });
 
-                 */
                 String nomeProva = spinnerProva.getSelectedItem().toString();
                 String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
                 String nomeTurma = spinnerTurma.getSelectedItem().toString();
@@ -182,11 +166,13 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, aluno});
 
                 }
+
                 try {
                     GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
-                    Toast.makeText(ProvaCartoesActivity.this, "OK", Toast.LENGTH_SHORT).show();
                     boolean res = BaixarModeloCartao.baixarProvas(openFileInput("teste.csv"), "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
                     Toast.makeText(ProvaCartoesActivity.this, "Resultado: " + res, Toast.LENGTH_SHORT).show();
+
+
                     /*
                     File dir = getFilesDir();
                     File file = new File(dir+"/teste.csv");
@@ -200,11 +186,33 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         }
                         Toast.makeText(ProvaCartoesActivity.this, "Encontrou o arquivo..............", Toast.LENGTH_SHORT).show();
                     }else Toast.makeText(ProvaCartoesActivity.this, "Arquivo não encontrado............aaaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
-                     */
+                    */
+
                 }catch (Exception e){
                     Log.e("Kariti",e.toString());
                     Toast.makeText(ProvaCartoesActivity.this, "Erro: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
+
+                /*
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                builder.setMessage("Escolha o metodo de Download");
+                builder.setNegativeButton("Download Manager", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        downloadPDF("https://www.orimi.com/pdf-test.pdf");
+                    }
+                });
+                builder.setPositiveButton("Using Browser", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.orimi.com/pdf-test.pdf")));
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                */
+
+
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

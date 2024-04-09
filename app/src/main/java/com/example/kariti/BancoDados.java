@@ -399,9 +399,17 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-    public Boolean checkprovas(String nomeProva){
+    public Boolean checkprovasNome(String nomeProva){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM prova WHERE nomeProva = ?", new String[]{nomeProva});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+    public Boolean checkprovaId(String id_prova){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM prova WHERE id_prova = ?", new String[]{id_prova});
         if (cursor.getCount() > 0)
             return true;
         else

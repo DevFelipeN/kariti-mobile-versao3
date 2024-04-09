@@ -51,6 +51,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     ImageView teste;
     TextView txt;
     String nomeDaFoto;
+    BancoDados bancoDados;
+    Integer qtdQuestoes, qtdAlternativas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         teste = findViewById(R.id.imageView20);
         txt = findViewById(R.id.textView7);
+
+        bancoDados = new BancoDados(this);
 
 
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -163,16 +167,18 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 if (photo != null) {
-                    teste.setImageBitmap(photo);
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                    byte[] byteArray = stream.toByteArray();
-//                    Intent intent = new Intent(this, GaleriaActivity.class);
-//                    intent.putExtra("photo", byteArray);
-//                    intent.putExtra("nomeFotoAnterior", nomeDaFoto);
-//                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
-//                    startActivity(intent);
-//                    finish();
+                    /*
+                    teste.setImageBitmap(photo); //Mostra a imagem na Activity
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    Intent intent = new Intent(this, GaleriaActivity.class);
+                    intent.putExtra("photo", byteArray);
+                    intent.putExtra("nomeFotoAnterior", nomeDaFoto);
+                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
+                    startActivity(intent);
+                    finish();
+                     */
                 }
             }
         } if (result != null && result.getContents() != null) {
@@ -180,7 +186,17 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
             qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
             String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
-            nomeDaFoto = partes[0] + "_" + partes[1];           // junção das partes
+            Boolean existProva = bancoDados.checkprovaId(partes[0]);
+            if(!existProva.equals(false)) {
+                qtdQuestoes = bancoDados.pegaqtdQuestoes(partes[0]);
+                qtdAlternativas = bancoDados.pegaqtdAlternativas(partes[1]);
+            }else{
+                qtdQuestoes = 0;
+                qtdAlternativas = 0;
+            }
+            nomeDaFoto = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".png";
+
+            // junção das partes
 
 
             txt.setText(nomeDaFoto);

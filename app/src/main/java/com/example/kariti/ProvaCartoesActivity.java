@@ -21,9 +21,11 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import android.os.Environment;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -169,8 +171,15 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
                 try {
                     GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
-                    boolean res = BaixarModeloCartao.baixarProvas(openFileInput("teste.csv"), "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
-                    Toast.makeText(ProvaCartoesActivity.this, "Resultado: " + res, Toast.LENGTH_SHORT).show();
+                    //boolean res = BaixarModeloCartao.baixarProvas(openFileInput("teste.csv"), "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
+
+                    File root = android.os.Environment.getExternalStorageDirectory();
+                    File dir = Environment.getDownloadCacheDirectory();
+                    File file = new File(dir, "vai.pdf");
+
+                    BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(file));
+
+                    //Toast.makeText(ProvaCartoesActivity.this, "Resultado: " + res, Toast.LENGTH_SHORT).show();
 
 
                     /*
@@ -231,5 +240,16 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
 
+    }
+
+    public void gerar()
+            throws IOException {
+
+        FileOutputStream fos = openFileOutput("teste.txt", MODE_PRIVATE);
+
+        String texto = "Dados do arquivo";
+        fos.write(texto.getBytes());
+
+        fos.close();
     }
 }

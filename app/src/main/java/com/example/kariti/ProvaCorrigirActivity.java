@@ -77,7 +77,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);// Caminho para imagem na galeria?
                 intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, "Selecione as imagens"), 1);
 

@@ -177,23 +177,27 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     String estado = Environment.getExternalStorageState();
                     if(estado.equals(Environment.MEDIA_MOUNTED)) {
                         File file = new File(getExternalFilesDir(null), "/teste.csv");
-                        GerarCsv.gerar(dados, file);
+                        GerarCsv.gerar(dados, file);// salvando arquivo.csv
                         Toast.makeText(ProvaCartoesActivity.this, "Arquivo armazenado", Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(ProvaCartoesActivity.this, "Armazenamento não disponivel", Toast.LENGTH_SHORT).show();
                     }
                     File dir = getExternalFilesDir(null);
-                    File file  = new File(dir+"/texto.txt");
+                    File file  = new File(dir+"/teste.csv");
+                    if(file.exists()) {
+                        Toast.makeText(ProvaCartoesActivity.this, "Arquivo Existe!!!", Toast.LENGTH_SHORT).show();
+                        FileInputStream fis = openFileInput("teste.csv");
+                        boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
+                        if(res == true) {
+                            Toast.makeText(ProvaCartoesActivity.this, "Pdf baixado!!", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(ProvaCartoesActivity.this, "Erro ao tentar baixar PDF", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
 
-
-
-
-
-
-
-
-                    //boolean res = BaixarModeloCartao.baixarProvas(openFileInput("teste.csv"), "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
+                    //FileInputStream fis = openFileInput("teste.csv");
+                    //boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
 
                     //File root = android.os.Environment.getExternalStorageDirectory();
                     //File dir = Environment.getDownloadCacheDirectory();

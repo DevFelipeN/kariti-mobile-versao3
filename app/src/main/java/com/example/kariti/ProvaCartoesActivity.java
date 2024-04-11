@@ -170,14 +170,36 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 }
 
                 try {
-                    GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
+                    //salvarExterno();
+                    //readFileExterno();
+                    //GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
+
+                    String estado = Environment.getExternalStorageState();
+                    if(estado.equals(Environment.MEDIA_MOUNTED)) {
+                        File file = new File(getExternalFilesDir(null), "/teste.csv");
+                        GerarCsv.gerar(dados, file);
+                        Toast.makeText(ProvaCartoesActivity.this, "Arquivo armazenado", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(ProvaCartoesActivity.this, "Armazenamento não disponivel", Toast.LENGTH_SHORT).show();
+                    }
+                    File dir = getExternalFilesDir(null);
+                    File file  = new File(dir+"/texto.txt");
+
+
+
+
+
+
+
+
+
                     //boolean res = BaixarModeloCartao.baixarProvas(openFileInput("teste.csv"), "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
 
-                    File root = android.os.Environment.getExternalStorageDirectory();
-                    File dir = Environment.getDownloadCacheDirectory();
-                    File file = new File(dir, "vai.pdf");
+                    //File root = android.os.Environment.getExternalStorageDirectory();
+                    //File dir = Environment.getDownloadCacheDirectory();
+                    //File file = new File(dir, "vai.pdf");
 
-                    BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(file));
+                    //BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(file));
 
                     //Toast.makeText(ProvaCartoesActivity.this, "Resultado: " + res, Toast.LENGTH_SHORT).show();
 
@@ -242,14 +264,31 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
     }
 
-    public void gerar()
+    public void salvarExterno()
             throws IOException {
-
-        FileOutputStream fos = openFileOutput("teste.txt", MODE_PRIVATE);
-
         String texto = "Dados do arquivo";
-        fos.write(texto.getBytes());
+        String estado = Environment.getExternalStorageState();
+        if(estado.equals(Environment.MEDIA_MOUNTED)){
+            File file = new File(getExternalFilesDir(null), "/texto.txt");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(texto.getBytes());
+            fos.close();
+            Toast.makeText(this, "Arquivo Salvo", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "Não ha espaco para armazenar!!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public  void readFileExterno(){
+        try {
+            String estado = Environment.getExternalStorageState();
+            if(estado.equals(Environment.MEDIA_MOUNTED)){
+                File dir = getExternalFilesDir(null);
+                File file  = new File(dir+"/texto.txt");
 
-        fos.close();
+            }
+
+        }catch (Exception e){
+            Toast.makeText(this, "Erro!!!!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

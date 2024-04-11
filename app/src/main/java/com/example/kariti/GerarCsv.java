@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.ArrayList;
 public class GerarCsv {
 
-    public static void gerar(List<String[]> dados, FileOutputStream fos)
+    public static void gerar(List<String[]> dados, File file)
             throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
 
         StringBuffer sb = new StringBuffer("");
         for(String[] linha : dados){

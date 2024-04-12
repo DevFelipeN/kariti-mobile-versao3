@@ -53,7 +53,7 @@ public class GaleriaActivity extends AppCompatActivity {
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GaleriaActivity.this, CameraNoAppActivity.class);
+                Intent intent = new Intent(GaleriaActivity.this, ProvaCorrigirActivity.class);
                 startActivity(intent);
                 finish();
             }

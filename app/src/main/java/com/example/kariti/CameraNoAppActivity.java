@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,12 +35,13 @@ public class CameraNoAppActivity extends AppCompatActivity {
         camera = getCameraInstace();
         cameraPreview = new CameraPreview(this, camera);
         btnCapturar = findViewById(R.id.buttonCameraFoto);
-        FrameLayout previewFrame = findViewById(R.id.frameCamera);
-
+        FrameLayout previewFrame = (FrameLayout) findViewById(R.id.frameCamera);
         previewFrame.addView(cameraPreview);
+
         btnCapturar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 camera.takePicture(null, null, pictureCallback);
             }
         });
@@ -58,7 +60,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
-            File pictureFile = getOutPutMediaFile(1);
+            File pictureFile = getOutPutMediaFile();
             if (pictureFile == null){
                 return;
             }
@@ -67,28 +69,29 @@ public class CameraNoAppActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(bytes);
                 fos.close();
+                Toast.makeText(CameraNoAppActivity.this, "Imagem Capturada", Toast.LENGTH_SHORT).show();
+                camera.startPreview();
             }catch (Exception e){
                 Log.e("Error:", e.getMessage());
             }
         }
     };
 
-    private File getOutPutMediaFile(int type){
+    private File getOutPutMediaFile(){
         File mediaFile = null;
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()+"/"+"GabaritoKariti");
+        File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
 
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
+        if (!mediaDir.exists()){
+            if (!mediaDir.mkdirs()){
                 Log.d("Error File:", "Falha ao criar o diretório");
                 return null;
             }
         }
 
-        String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
+        //String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
+        String nomeImagem = "111_15_10_5"; //Alterar esse campo pelo dado capturado do Qrcode+Banco
+        mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem + ".jpg");
 
-        if (type == 1){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + nomeImagem + ".jpg");
-        }
 
         return mediaFile;
     }

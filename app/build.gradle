@@ -59,10 +59,7 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
     }
 
-<<<<<<< HEAD
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
 
-=======
->>>>>>> c55c4db43b821db7bc0c08dc5dae808284eca50c
 }

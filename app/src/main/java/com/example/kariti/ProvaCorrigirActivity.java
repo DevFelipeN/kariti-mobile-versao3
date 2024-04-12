@@ -88,14 +88,17 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivityForResult(intent, 2);
-                iniciarScannerQRCode(); // primeiro o qrcode
+                //iniciarScannerQRCode(); // primeiro o qrcode
+                Intent intent = new Intent(ProvaCorrigirActivity.this, CameraNoAppActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
     private void iniciarScannerQRCode() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setOrientationLocked(false);       // rotação do scanner
-        intentIntegrator.setPrompt("Escaneie o QR code");
+        intentIntegrator.setPrompt("Escaneie o QR CODE da Prova");
         intentIntegrator.setBeepEnabled(true);              // som ao scanear
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); //especifica o qrcode
         intentIntegrator.initiateScan();                    //iniciar o scan
@@ -164,21 +167,20 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 2) {
                 // Se a imagem foi capturada pela câmera
-
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 if (photo != null) {
-                    /*
-                    teste.setImageBitmap(photo); //Mostra a imagem na Activity
+/*
+                    //teste.setImageBitmap(photo); //Mostra a imagem na Activity
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
                     Intent intent = new Intent(this, GaleriaActivity.class);
                     intent.putExtra("photo", byteArray);
-                    intent.putExtra("nomeFotoAnterior", nomeDaFoto);
-                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
+                    //intent.putExtra("nomeFotoAnterior", nomeDaFoto);
+                    //salvarImagemNaGaleria(photo); // Salvar imagem na galeria
                     startActivity(intent);
-                    finish();
-                     */
+                    finish();*/
+
                 }
             }
         } if (result != null && result.getContents() != null) {

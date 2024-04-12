@@ -112,4 +112,8 @@
 
     <string name="btnGaleriaFinalizar">Finalizar</string>
 
+    <!--    Camera-->
+    <string name="informacaoCamera">Agora tire a foto do Gabarito</string>
+    <string name="CapturaCamera">Capturar</string>
+
 </resources>

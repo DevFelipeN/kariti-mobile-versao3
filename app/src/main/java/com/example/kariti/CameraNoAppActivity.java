@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ public class CameraNoAppActivity extends AppCompatActivity {
         });
     }
 
+
+    //Iniciando a camera
     public static Camera getCameraInstace() {
         Camera c = null;
         try{
@@ -57,6 +60,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
         return c;
     }
 
+    //salvanco Imagem
     private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
@@ -64,19 +68,22 @@ public class CameraNoAppActivity extends AppCompatActivity {
             if (pictureFile == null){
                 return;
             }
-
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(bytes);
                 fos.close();
                 Toast.makeText(CameraNoAppActivity.this, "Imagem Capturada", Toast.LENGTH_SHORT).show();
-                camera.startPreview();
+                Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
+                startActivity(intent);
+                finish();
+                //camera.startPreview();
             }catch (Exception e){
                 Log.e("Error:", e.getMessage());
             }
         }
     };
 
+    //Criando diretorio
     private File getOutPutMediaFile(){
         File mediaFile = null;
         File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
@@ -89,10 +96,9 @@ public class CameraNoAppActivity extends AppCompatActivity {
         }
 
         //String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
-        String nomeImagem = "111_15_10_5"; //Alterar esse campo pelo dado capturado do Qrcode+Banco
+
+        String nomeImagem = "113_15_10_5"; //Alterar esse campo pelo dado capturado do Qrcode+Banco
         mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem + ".jpg");
-
-
         return mediaFile;
     }
 

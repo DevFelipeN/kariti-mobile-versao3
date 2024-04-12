@@ -41,6 +41,7 @@ public class GabaritoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gabarito);
 
+
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);

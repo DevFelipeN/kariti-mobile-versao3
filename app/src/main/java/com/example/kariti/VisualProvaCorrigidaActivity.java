@@ -2,17 +2,25 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.NetworkInterface;
+
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
+    Button btnBaixar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +28,19 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visual_prova_corrigida);
 
         voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
+        btnBaixar = findViewById(R.id.buttonBaixarResultado);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+
+        btnBaixar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -51,6 +68,15 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
         // Adiciona a nova linha à tabela
         tableLayout.addView(row);
+    }
+    private boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }else{
+            return false;
+        }
     }
     public void PopMenu(View v){
         v.setOnClickListener(new View.OnClickListener() {

@@ -28,6 +28,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private Camera camera;
     private CameraPreview cameraPreview;
     private Button btnCapturar;
+    String nomeImagem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,8 @@ public class CameraNoAppActivity extends AppCompatActivity {
         btnCapturar = findViewById(R.id.buttonCameraFoto);
         FrameLayout previewFrame = (FrameLayout) findViewById(R.id.frameCamera);
         previewFrame.addView(cameraPreview);
+
+        nomeImagem = getIntent().getExtras().getString("nomeImagem");
 
         btnCapturar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,8 +99,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
         }
 
         //String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
-
-        String nomeImagem = "113_15_10_5"; //Alterar esse campo pelo dado capturado do Qrcode+Banco
         mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem + ".jpg");
         return mediaFile;
     }

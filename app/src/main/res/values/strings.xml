@@ -88,7 +88,7 @@
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="btnEnvCartao">Enviar Cartão</string>
     <string name="btnAbrirGaleria">Carregar da Galeria</string>
-    <string name="btnAbrirCamera">Abrir Câmera</string>
+    <string name="btnAbrirCamera">Scannear Cartão</string>
     <string name="txtProva1">Prova 1</string>
     <string name="btnEnviarParaAluno">Enviar Para Aluno</string>
     <string name="btnEnviarParaProf">Enviar Para Professor</string>
@@ -111,5 +111,9 @@
     <string name="descritionScroll">Bloco do Gabarito</string>
 
     <string name="btnGaleriaFinalizar">Finalizar</string>
+
+    <!--    Camera-->
+    <string name="informacaoCamera">Agora tire a foto do Gabarito</string>
+    <string name="CapturaCamera">Capturar</string>
 
 </resources>

@@ -45,19 +45,31 @@ public class GaleriaActivity extends AppCompatActivity {
             return insets;
         });
 
+
         btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
 
+        btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GaleriaActivity.this, ProvaCorrigirActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        /*
+
         // Recebendo o byte array e nome da foto TELA ANTERIOR
         byte[] byteArray = getIntent().getByteArrayExtra("photo");
-        String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
+        //String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
 
         recyclerView = findViewById(R.id.recyclerViewFotos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        nomePhoto.add(nomeFotoAnterior);
+        nomePhoto.add("nomeFotoAnterior");
         dataImg.add("2024-03-2024 20:01");
         photoTelaAnterior.add(byteArray);
 
@@ -69,13 +81,6 @@ public class GaleriaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
                 finish();
-            }
-        });
-        btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
             }
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {
@@ -105,5 +110,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 }
             }
         }
+
+         */
     }
 }

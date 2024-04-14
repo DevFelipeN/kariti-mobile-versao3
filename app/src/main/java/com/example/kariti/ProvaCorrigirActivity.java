@@ -88,8 +88,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
 
     //private void tirarFoto() {
-        //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //startActivityForResult(intent, 2); // Iniciar a captura da foto
+    //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    //startActivityForResult(intent, 2); // Iniciar a captura da foto
     //}
 
     // Método para salvar a imagem no armazenamento externo e atualizar a galeria
@@ -112,9 +112,9 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
             } else if (requestCode == 2) {
 
              */
-                // Se a imagem foi capturada pela câmera
-                //Bitmap photo = (Bitmap) data.getExtras().get("data");
-                //if (photo != null) {
+        // Se a imagem foi capturada pela câmera
+        //Bitmap photo = (Bitmap) data.getExtras().get("data");
+        //if (photo != null) {
 /*
                     //teste.setImageBitmap(photo); //Mostra a imagem na Activity
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -128,32 +128,32 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                     finish();*/
 
 //                }
-           // }
-       // } if (result != null && result.getContents() != null) {
-            String qrCodeConteudo = result.getContents(); // Conteúdo do QR Code
+        // }
+        // } if (result != null && result.getContents() != null) {
+        String qrCodeConteudo = result.getContents(); // Conteúdo do QR Code
 
-            qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
-            String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
-            Boolean existProva = bancoDados.checkprovaId(partes[0]);
-            if(!existProva.equals(false)) {
-                qtdQuestoes = bancoDados.pegaqtdQuestoes(partes[0]);
-                qtdAlternativas = bancoDados.pegaqtdAlternativas(partes[1]);
-            }else{
-                qtdQuestoes = 0;
-                qtdAlternativas = 0;
-            }
-            nomeDaFoto = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".png";
-            Intent intent = new Intent(ProvaCorrigirActivity.this, CameraNoAppActivity.class);
-            intent.putExtra("nomeImagem", nomeDaFoto);
-            startActivity(intent);
-            finish();
-
-
-            // junção das partes
+        qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
+        String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
+        Boolean existProva = bancoDados.checkprovaId(partes[0]);
+        if(!existProva.equals(false)) {
+            qtdQuestoes = bancoDados.pegaqtdQuestoes(partes[0]);
+            qtdAlternativas = bancoDados.pegaqtdAlternativas(partes[1]);
+        }else{
+            qtdQuestoes = 0;
+            qtdAlternativas = 0;
+        }
+        nomeDaFoto = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".png";
+        Intent intent = new Intent(ProvaCorrigirActivity.this, CameraNoAppActivity.class);
+        intent.putExtra("nomeImagem", nomeDaFoto);
+        startActivity(intent);
+        finish();
 
 
-            //txt.setText(nomeDaFoto);
-            //tirarFoto();
+        // junção das partes
+
+
+        //txt.setText(nomeDaFoto);
+        //tirarFoto();
     }
 
 

@@ -174,6 +174,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     //readFileExterno();
                     //GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
 
+
                     String estado = Environment.getExternalStorageState();
                     if(estado.equals(Environment.MEDIA_MOUNTED)) {
                         File file = new File(getExternalFilesDir(null), "/teste.csv");
@@ -186,13 +187,18 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     File file  = new File(dir+"/teste.csv");
                     if(file.exists()) {
                         Toast.makeText(ProvaCartoesActivity.this, "Arquivo Existe!!!", Toast.LENGTH_SHORT).show();
+                        File fSaida = new File(getExternalFilesDir(null), "/cartoes.pdf");
                         FileInputStream fis = openFileInput("teste.csv");
-                        boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
-                        if(res == true) {
+                        BaixarModeloCartao.teste(new File(getFilesDir()+"/teste.csv"), new FileOutputStream(fSaida));
+                        //boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", new FileOutputStream(fSaida));
+                        //BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(fSaida));
+                        /*if(res == true) {
                             Toast.makeText(ProvaCartoesActivity.this, "Pdf baixado!!", Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(ProvaCartoesActivity.this, "Erro ao tentar baixar PDF", Toast.LENGTH_SHORT).show();
                         }
+
+                         */
                     }
 
 

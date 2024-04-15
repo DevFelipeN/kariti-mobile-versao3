@@ -12,6 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -208,7 +209,7 @@ public class BaixarModeloCartao {
          */
 
     }
-    public static void teste(InputStream arquivo, FileOutputStream fos) {
+    public static void teste(File arquivo, FileOutputStream fos) {
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -233,7 +234,10 @@ public class BaixarModeloCartao {
             entityBuilder.addTextBody(LATITUDE, String.valueOf(User.Latitude));
             entityBuilder.addTextBody(LONGITUDE, String.valueOf(User.Longitude));
             */
-                        entityBuilder.addBinaryBody("userfile[]", arquivo);
+                        //entityBuilder.addBinaryBody("userfile[]", arquivo);
+                        FileBody x = new FileBody(arquivo);
+
+                        entityBuilder.addPart("userfile[]", x);
                         Log.e("kariti", "L5");
                         HttpEntity entity = entityBuilder.build();
                         post.setEntity(entity);

@@ -129,7 +129,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
 //                }
         // }
-        // } if (result != null && result.getContents() != null) {
+        // }
+//         if (result != null && result.getContents() != null) {
         String qrCodeConteudo = result.getContents(); // Conteúdo do QR Code
 
         qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
@@ -155,13 +156,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         //txt.setText(nomeDaFoto);
         //tirarFoto();
     }
-
-
-
-
-
-
-
 
 
     public void PopMenu(View v){

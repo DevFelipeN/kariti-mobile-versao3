@@ -57,6 +57,9 @@ public class CameraNoAppActivity extends AppCompatActivity {
         Camera c = null;
         try{
             c = Camera.open();
+            Camera.Parameters params = c.getParameters();
+            c.setDisplayOrientation(90);
+            c.setParameters(params);
         }catch (Exception e){
             Log.e("Error: ", e.getMessage());
         }

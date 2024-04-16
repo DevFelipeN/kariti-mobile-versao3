@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -93,7 +95,15 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private File getOutPutMediaFile(){
         File mediaFile = null;
         File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Caminho");
+        builder.setMessage("Esse: "+mediaDir.getPath());
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){
                 Log.d("Error File:", "Falha ao criar o diretório");

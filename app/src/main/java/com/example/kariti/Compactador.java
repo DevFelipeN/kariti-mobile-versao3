@@ -15,28 +15,8 @@ import java.util.ArrayList;
 //compactar arquivos para enviar
 public class Compactador{
     public static void main(String[] args){
+
         testar();
-    }
-
-    public static void copiar(String origem, String destino) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try{
-            is = new FileInputStream(origem);
-            os = new FileOutputStream(destino);
-            byte[] buffer = new byte[1024];
-            int length;
-            while((length = is.read())>0){
-                os.write(buffer, 0, length);
-            }
-        }catch(Exception e){
-            Log.e("KARITI", e.toString());
-
-        }
-        finally{
-            is.close();
-            os.close();
-        }
     }
     public static boolean testar(){
         //exemplo de como compactar duas imagens em um arquivo zip
@@ -67,7 +47,6 @@ public class Compactador{
             fos.close();
             return true;
         }catch(Exception e){
-            Log.e("KARITI", "TTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSTTTTTTTTTTTEEEEEEE");
             Log.e("KARITI", e.toString());
             return false;
         }

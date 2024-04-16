@@ -30,7 +30,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private Camera camera;
     private CameraPreview cameraPreview;
     private Button btnCapturar;
-    String nomeImagem, caminho;
+    String nomeImagem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +80,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
                 fos.close();
                 Toast.makeText(CameraNoAppActivity.this, "Imagem Capturada", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
-                intent.putExtra("caminho", caminho);
                 startActivity(intent);
                 finish();
                 //camera.startPreview();
@@ -94,7 +93,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private File getOutPutMediaFile(){
         File mediaFile = null;
         File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
-        caminho = mediaDir.getPath();
 
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){

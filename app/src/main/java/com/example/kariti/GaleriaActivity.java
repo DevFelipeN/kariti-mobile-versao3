@@ -1,35 +1,29 @@
 package com.example.kariti;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class GaleriaActivity extends AppCompatActivity {
+    public static Integer qtdCartoes;
     AppCompatButton btnFinalizar;
     ImageButton btnVoltar;
     FloatingActionButton btnAdcionarFoto;
+
     RecyclerView recyclerView;
     ArrayList<String> nomePhoto = new ArrayList<>();
     ArrayList<String> dataImg = new ArrayList<>();
@@ -47,12 +41,9 @@ public class GaleriaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
-
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +55,7 @@ public class GaleriaActivity extends AppCompatActivity {
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean teste = Compactador.testar();
+                Boolean teste = Compactador.compactador();
                 if(teste)
 
                     Toast.makeText(GaleriaActivity.this, " Arquivo compactado (^_^) ", Toast.LENGTH_SHORT).show();

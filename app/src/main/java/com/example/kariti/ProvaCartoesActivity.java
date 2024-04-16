@@ -161,11 +161,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     String id_aluno = String.valueOf(listIdsAlunos.get(x));
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
                     dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, aluno});
-
                 }
-
                 try {
-                    //GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
                     File filecsv = null;
                     String estado = Environment.getExternalStorageState();
                     if(estado.equals(Environment.MEDIA_MOUNTED)) {

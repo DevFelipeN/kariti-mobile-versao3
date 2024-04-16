@@ -2,9 +2,6 @@ package com.example.kariti;
 
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import java.io.File;
@@ -16,9 +13,9 @@ import java.util.ArrayList;
 public class Compactador{
     public static void main(String[] args){
 
-        testar();
+        compactador();
     }
-    public static boolean testar(){
+    public static boolean compactador(){
         //exemplo de como compactar duas imagens em um arquivo zip
         List<String> arquivos = new ArrayList<>();
         arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_1_0_0.png");

@@ -94,10 +94,10 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        //if (resultCode == Activity.RESULT_OK) {
+/*        if (resultCode == Activity.RESULT_OK) {
             /*
             if (requestCode == 1) {
-                //Se a imagem foi selecionada da galeria
+                Se a imagem foi selecionada da galeria
                 if (data != null) {
                     Uri selectedImageUri = data.getData();
                     if (selectedImageUri != null) {
@@ -105,27 +105,25 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                         Toast.makeText(ProvaCorrigirActivity.this, "Imagem da galeria enviada!", Toast.LENGTH_LONG).show();
                     }
                 }
-            } else if (requestCode == 2) {
+           } else if (requestCode == 2) {
 
-             */
-        // Se a imagem foi capturada pela câmera
-        //Bitmap photo = (Bitmap) data.getExtras().get("data");
-        //if (photo != null) {
-/*
-                    //teste.setImageBitmap(photo); //Mostra a imagem na Activity
+                Se a imagem foi capturada pela câmera
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                if (photo != null) {
+
+                    teste.setImageBitmap(photo); //Mostra a imagem na Activity
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
                     Intent intent = new Intent(this, GaleriaActivity.class);
                     intent.putExtra("photo", byteArray);
-                    //intent.putExtra("nomeFotoAnterior", nomeDaFoto);
-                    //salvarImagemNaGaleria(photo); // Salvar imagem na galeria
+                    intent.putExtra("nomeFotoAnterior", nomeDaFoto);
+                    salvarImagemNaGaleria(photo); // Salvar imagem na galeria
                     startActivity(intent);
-                    finish();*/
+                    finish();
+                }
 
-//                }
-        // }
-        // }
+ */
 //         if (result != null && result.getContents() != null) {
         //Coletando dados do QRCode
         String qrCodeConteudo = result.getContents(); // Conteúdo do QR Code
@@ -172,6 +170,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Provas enviadas para Correção!!", Toast.LENGTH_SHORT).show();
     }
+
+
     private void salvarImagemNaGaleria(Bitmap bitmap) {
         String fileName = System.currentTimeMillis() + ".png";
         OutputStream fos;

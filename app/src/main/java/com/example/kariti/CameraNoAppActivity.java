@@ -78,6 +78,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(bytes);
                 fos.close();
+
                 Toast.makeText(CameraNoAppActivity.this, "Imagem Capturada", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
                 startActivity(intent);

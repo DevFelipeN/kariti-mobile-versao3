@@ -1,5 +1,6 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -7,11 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,14 +20,41 @@ import java.util.ArrayList;
 public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
     ImageView menuPnt;
+    TextView turmaCad, txtAonimos, qtdAnonimos;
+    BancoDados bancoDados;
+    ListView listView;
+    ArrayList<String> listAlunosDturma = new ArrayList<>();
+    ArrayList<Integer> idsAlTurma;
+    String id_turma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_turma);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
-        menuPnt = findViewById(R.id.menu_icon);
-        ListView listView = findViewById(R.id.listView);
+        voltar = findViewById(R.id.imgBtnVoltarDados);
+        //menuPnt = findViewById(R.id.menu_icon);
+        listView = findViewById(R.id.listViewDados);
+        qtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
+        turmaCad = findViewById(R.id.textViewTurmaCad);
+        txtAonimos = findViewById(R.id.textViewAlunosAnonimos);
+        bancoDados = new BancoDados(this);
+
+        id_turma = String.valueOf(getIntent().getExtras().getInt("idTurma"));
+        String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        Integer pegaAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
+        turmaCad.setText(pegaTurma);
+        qtdAnonimos.setText(pegaAnonimos.toString());
+
+
+        idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
+        int num = idsAlTurma.size();
+        for(int y = 0; y < num; y++){
+            String id_aluno = String.valueOf(idsAlTurma.get(y));
+            listAlunosDturma.add(bancoDados.pegaNomeAluno(id_aluno));
+        }
+        EscolaAdapter adapter = new EscolaAdapter(this, listAlunosDturma, listAlunosDturma);
+        listView.setAdapter(adapter);
+
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,20 +62,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
                 onBackPressed();
             }
         });
-
-        ArrayList<String> teste = new ArrayList<>();
-        teste.add("Antonio");
-        teste.add("Carlos");
-        teste.add("Gil");
-        teste.add("Guilherme");
-        teste.add("Miguel");
-        teste.add("Paulo");
-        teste.add("Toji");
-        teste.add("Via");
-        ArrayAdapter<String> adapterAlunos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teste);
-        listView.setAdapter(adapterAlunos);
     }
-
     public void PopMenu(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
@@ -59,10 +74,10 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuEditar) {
-            telaEditar();
-            Toast.makeText(DadosTurmaActivity.this, "Editar Turma selecionado", Toast.LENGTH_SHORT).show();
+                telaEditar();
             return true;
-        } else if (id == R.id.menuExcluir) {
+        }
+        /*else if (id == R.id.menuExcluir) {
             Toast.makeText(DadosTurmaActivity.this, "Excluir Turma selecionado", Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.menuExclTurmAlun) {
@@ -71,10 +86,25 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         } else {
             return false;
         }
+
+         */
+        return true;
     }
 
     public void telaEditar(){
-        Intent intent = new Intent(this, EditarTurmaActivity.class);
-        startActivity(intent);
+        Boolean checkTurmaEmProva = bancoDados.checkTurmaEmProva(Integer.valueOf(id_turma));
+        if(!checkTurmaEmProva) {
+            Intent intent = new Intent(this, EditarTurmaActivity.class);
+            intent.putExtra("id_turma", id_turma);
+            startActivity(intent);
+            finish();
+        }else avisoNotExluir();
+    }
+    public void avisoNotExluir(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(DadosTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível Editar!.");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

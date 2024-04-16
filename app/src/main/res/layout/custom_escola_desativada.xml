@@ -12,6 +12,7 @@
         android:layout_marginTop="16dp">
 
         <TextView
+            style="@style/COLORTEXT"
             android:id="@+id/textViewNome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,11 +20,10 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/imageViewIcon"
             android:text="Nome da Escola"
-            android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/imageViewIcon"
+            android:id="@+id/imageViewIconDesativadas"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"

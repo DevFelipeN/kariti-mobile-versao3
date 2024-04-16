@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextEmail);
         senha = findViewById(R.id.editTextNovaSenha);
         confirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadastro = findViewById(R.id.buttonSalvarEdit);
 
         bancoDados = new BancoDados(this);
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                                     proxima.putExtra("senha", password);
                                     proxima.putExtra("cod", cod);
                                     startActivity(proxima);
+                                    finish();
                                 } else {Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
                             } else {Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
                         } else {Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}

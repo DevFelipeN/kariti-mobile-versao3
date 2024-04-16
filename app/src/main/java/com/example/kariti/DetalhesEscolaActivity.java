@@ -20,7 +20,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_escola);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
         btnVoltar.setVisibility(View.VISIBLE);
 
         btnTurma = findViewById(R.id.btnTurma);
@@ -29,8 +29,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         nomeEscola = findViewById(R.id.textViewNomeEscola);
         bancoDados = new BancoDados(this);
 
-
-        String escola = getIntent().getExtras().getString("escola");
+        String escola = bancoDados.pegaEscola(String.valueOf(BancoDados.ID_ESCOLA));
         nomeEscola.setText(escola);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {

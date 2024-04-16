@@ -39,10 +39,19 @@ public class VisualEscolaActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         btnEscDesativada = findViewById(R.id.buttonEscDesativada);
+        ListView listView = findViewById(R.id.listViewEscolas);
         bancoDados = new BancoDados(this);
         iconHelp = findViewById(R.id.iconHelp);
+
+        if (!haEscolasCadastradas()) {
+            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeEscola", "id_escola"};
@@ -63,8 +72,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
         cursor.close();
         database.close();
 
-
-        ListView listView = findViewById(R.id.listView);
         EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
         listView.setAdapter(adapter);
 
@@ -91,10 +98,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BancoDados.ID_ESCOLA = Integer.valueOf(idsEscolas.get(position));
-                String ids = idsEscolas.get(position);
-                String escola = bancoDados.pegaEscola(ids);
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
-                intent.putExtra("escola", escola);
                 startActivity(intent);
             }
         });
@@ -112,13 +116,15 @@ public class VisualEscolaActivity extends AppCompatActivity {
                                 String escola = bancoDados.pegaEscola(ids);
                                 String bairro = bancoDados.pegaBairro(ids);
                                 Boolean deletDativadas = bancoDados.deletarDasAtivadas(ids);
-                                Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
-                                if (deletDativadas)
-                                    if(inserSlcolDesativada)
+                                if(deletDativadas){
+                                    Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
+                                    if(inserSlcolDesativada) {
+                                        nomesEscolas.remove(position);
+                                        adapter.notifyDataSetChanged();
                                         Toast.makeText(VisualEscolaActivity.this, "Escola Desativada Com Sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
-                                startActivity(intent);
+                                    }
+
+                                }
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -141,7 +147,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("Para arquivar uma escola, basta pressionar sobre a escola desejada e confirmar a ação. " +
-                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas desativadas'.");
+                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas Desativadas'.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -153,6 +159,15 @@ public class VisualEscolaActivity extends AppCompatActivity {
     public void telaEscolaDesativada() {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivity(intent);
-        finish();
     }
+
+    public boolean haEscolasCadastradas() {
+        SQLiteDatabase database = bancoDados.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario=" + BancoDados.USER_ID, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
+    }
+
 }

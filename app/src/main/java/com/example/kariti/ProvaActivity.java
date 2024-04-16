@@ -30,7 +30,7 @@ public class ProvaActivity extends AppCompatActivity {
         }
 
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
         cadProva = findViewById(R.id.buttonCadProva);
         gerarCartao = findViewById(R.id.buttonGerarCatao);
         corrigirProva = findViewById(R.id.buttonCorrigirProva);
@@ -74,6 +74,7 @@ public class ProvaActivity extends AppCompatActivity {
     }
     public void telaGerarCartao(){
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
+        intent.putExtra("endereco", 02);
         startActivity(intent);
     }
     public void telaCorrigirProva(){

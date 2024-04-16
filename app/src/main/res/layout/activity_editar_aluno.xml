@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
-        android:id="@+id/editTextAlunoCad"
+        android:id="@+id/editTextAlunoCadastrado"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
@@ -47,7 +47,6 @@
         android:hint="@string/nomeCompleto"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -55,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
-        android:id="@+id/editTextEmailCad"
+        android:id="@+id/editTextEmailCadastrado"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -65,29 +64,26 @@
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAlunoCad" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextAlunoCadastrado" />
 
     <Button
-        android:id="@+id/buttonSalvarEdit"
+        android:id="@+id/buttonSalvarEditAluno"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="272dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnSalvaAluno"
         android:textAlignment="center"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailCadastrado"
+        app:layout_constraintVertical_bias="0.219"
         tools:ignore="MissingConstraints" />
 
     <ImageView
@@ -95,9 +91,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextAlunoCad"
-        app:layout_constraintStart_toStartOf="@+id/editTextAlunoCad"
-        app:layout_constraintTop_toTopOf="@+id/editTextAlunoCad"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextAlunoCadastrado"
+        app:layout_constraintStart_toStartOf="@+id/editTextAlunoCadastrado"
+        app:layout_constraintTop_toTopOf="@+id/editTextAlunoCadastrado"
         app:srcCompat="@mipmap/usuario"
         tools:ignore="MissingConstraints" />
 
@@ -107,9 +103,9 @@
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
         android:contentDescription="@string/email"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextEmailCad"
-        app:layout_constraintStart_toStartOf="@+id/editTextEmailCad"
-        app:layout_constraintTop_toTopOf="@+id/editTextEmailCad"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextEmailCadastrado"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmailCadastrado"
+        app:layout_constraintTop_toTopOf="@+id/editTextEmailCadastrado"
         app:srcCompat="@mipmap/email"
         tools:ignore="MissingConstraints" />
 

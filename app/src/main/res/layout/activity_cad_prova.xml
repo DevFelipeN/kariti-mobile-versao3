@@ -46,7 +46,7 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="Digite o nome da prova"
+        android:hint="Digite o nome da prova*"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,13 +54,14 @@
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
     <Spinner
-        android:id="@+id/spinnerTurma"
+        android:id="@+id/spinnerTurmaPprova"
         android:layout_width="320dp"
         android:layout_height="56dp"
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNomeProva" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomeProva"
+        android:background="@drawable/style_spinner"/>
 
     <TextView
         android:id="@+id/textView8"
@@ -73,22 +74,21 @@
         app:layout_constraintEnd_toStartOf="@+id/datePickerButton"
         app:layout_constraintHorizontal_bias="0.027"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurmaPprova" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/datePickerButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="44dp"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonData"
         android:textAlignment="center"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/btnGerarProva"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurmaPprova"
         app:layout_constraintVertical_bias="0.0" />
 
 
@@ -201,13 +201,12 @@
     </LinearLayout>
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/btnGerarProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonGerarProva"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

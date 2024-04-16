@@ -14,7 +14,7 @@
         android:gravity="center">
 
         <ImageButton
-            android:id="@+id/imgBtnVoltar"
+            android:id="@+id/imgBtnVoltaDescola"
             android:layout_width="48dp"
             android:layout_height="40dp"
             android:background="@color/tranparente"

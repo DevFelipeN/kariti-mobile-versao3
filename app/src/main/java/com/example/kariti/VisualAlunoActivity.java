@@ -13,7 +13,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -29,6 +28,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_aluno);
+
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
         ListView listView = findViewById(R.id.listSelecAluno);
@@ -55,7 +55,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
 
 
         EscolaAdapter adapter = new EscolaAdapter(this, alunos, idsAlunos);
-//        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
         listView.setAdapter(adapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -64,17 +63,20 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 // Exibir a caixa de diálogo
                 AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
                 builder.setTitle("Atenção!")
-                        .setMessage("Deseja Realmente Excluir Aluno?")
+                        .setMessage("Deseja excluir aluno?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Integer ids = Integer.valueOf(idsAlunos.get(position));
-                                Boolean deletAluno = bancoDados.deletarAluno(ids);
-                                if (deletAluno)
-                                    Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido Com Sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                                startActivity(intent);
+                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(ids);
+                                if(!checkAlEmTurma){
+                                    Boolean deletAluno = bancoDados.deletarAluno(ids);
+                                    if (deletAluno) {
+                                        alunos.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                                    }else avisoNotExluirAluno();
+                                }
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -119,5 +121,12 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void avisoNotExluirAluno(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Este aluno possui vínculo com uma ou mais turma(s) cadastrada(s), não sendo possível excluir!.");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

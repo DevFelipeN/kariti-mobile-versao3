@@ -23,7 +23,7 @@ public class AlunoActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnCadAluno = findViewById(R.id.buttonCadAluno);
-        btnVisualizarAluno = findViewById(R.id.buttonVisuTurma);
+        btnVisualizarAluno = findViewById(R.id.buttonVisualAluno);
 
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {

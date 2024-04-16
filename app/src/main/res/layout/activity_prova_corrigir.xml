@@ -24,7 +24,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
-        android:id="@+id/imgBtnVoltar"
+        android:id="@+id/imgBtnVoltarDacorrecao"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
@@ -41,30 +41,21 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/buttonGaleria"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="196dp"
-        android:background="@drawable/button_selector"
-        android:text="@string/btnAbrirGaleria"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
-
-    <Button
         android:id="@+id/buttonCamera"
+        style="@style/BUTTONSTYLE"
         android:layout_width="200dp"
         android:layout_height="70dp"
-        android:background="@drawable/button_selector"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/btnAbrirCamera"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.569"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGaleria"
-        app:layout_constraintVertical_bias="0.125" />
+        app:layout_constraintTop_toBottomOf="@+id/divider4"
+        app:layout_constraintVertical_bias="0.413" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

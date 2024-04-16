@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tranparente"
+    style="@style/BACKGROUND"
     tools:context=".MainActivity">
 
     <ImageView
@@ -40,7 +41,6 @@
         android:hint="@string/nomeCompleto"
         android:inputType="textPersonName|none"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,6 @@
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -102,7 +101,6 @@
         android:inputType="textPassword"
         android:maxLength="8"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -110,7 +108,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
 
     <ImageButton
-        android:id="@+id/imgBtnVoltar"
+        android:id="@+id/imgBtnVoltaEscola"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
@@ -127,14 +125,13 @@
         tools:ignore="MissingConstraints" />
 
     <Button
+        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonSalvarEdit"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonCadastrar"
         android:textAlignment="center"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -189,7 +186,6 @@
         android:hint="@string/acessoSenha"
         android:inputType="textPassword"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         android:maxLength="8"
         app:layout_constraintEnd_toEndOf="parent"

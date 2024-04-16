@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class ProvaCadConfirActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -17,7 +16,7 @@ public class ProvaCadConfirActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova_cad_confir);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltarDconfirm);
         gerarCartao = findViewById(R.id.btnGerarCartao);
 
         gerarCartao.setOnClickListener(new View.OnClickListener() {

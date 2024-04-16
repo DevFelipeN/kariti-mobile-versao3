@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kariti</string>
     <string name="buttonvoltarTela">VOLTAR</string>
-    <string name="nomeCompleto">Nome Completo</string>
+    <string name="nomeCompleto">Nome Completo*</string>
     <string name="email">E-mail</string>
     <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>
@@ -21,8 +21,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="textViewKariti">Kariti</string>
-    <string name="buttonCadastroEscola">Cadastrar Escola</string>
-    <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
     <string name="buttonConfig">Configurações</string>
     <string name="buttonValidar">Validar</string>
     <string name="textViewReenviar">Reenviar o Código</string>
@@ -36,13 +34,17 @@
     <string name="textViewInformeSenha">Informe Sua Senha</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
-    <string name="nomeSchool">Nome da Escola</string>
+    <string name="voidSchool">Nenhum Dado Cadastrado!</string>
+
+    <string name="buttonCadastroEscola">Cadastrar Escola</string>
+    <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
+    <string name="nomeSchool">Nome da Escola*</string>
     <string name="bairroSchool">Bairro</string>
     <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="senhahint">********</string>
     <string name="btnAlterarSenha">Alterar Senha</string>
     <string name="btnEscolaDesativada">Escolas Desativadas</string>
-
+    <!--    Aluno-->
     <string name="textViewAluno">Aluno</string>
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
@@ -53,17 +55,18 @@
     <string name="btnSalvaAluno">Salvar</string>
     <string name="menuEditarAlun">Editar Aluno</string>
     <string name="menuExclAlun">Excluir Aluno</string>
-
+    <!--    Turma-->
     <string name="buttonCadTurma">Cadastrar Turma</string>
+    <string name="buttonSalvTurma">Salvar Turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
-    <string name="editTextNomeTurma">Nome da Turma</string>
+    <string name="editTextNomeTurma">Nome da Turma*</string>
     <string name="textViewAlunos">Alunos</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="btnIncluirAluno">Incluir Alunos</string>
     <string name="btnIncluir">Incluir</string>
     <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnTranferirOutraTurma">Transf. de outra Turma</string>
-
+    <!--    Prova-->
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
     <string name="buttonVisuProva">Visualizar Prova</string>
@@ -85,14 +88,13 @@
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="btnEnvCartao">Enviar Cartão</string>
     <string name="btnAbrirGaleria">Carregar da Galeria</string>
-    <string name="btnAbrirCamera">Abrir Câmera</string>
+    <string name="btnAbrirCamera">Scannear Cartão</string>
     <string name="txtProva1">Prova 1</string>
     <string name="btnEnviarParaAluno">Enviar Para Aluno</string>
     <string name="btnEnviarParaProf">Enviar Para Professor</string>
     <string name="btnBaixarProva">Baixar Prova</string>
     <string name="btnCompartilhar">Compartilhar</string>
-
-
+    <!--    Descrição das Imagens-->
     <string name="btnVoltar">Button Voltar</string>
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>
@@ -101,10 +103,17 @@
     <string name="msgCodigo">Código de validação ENVIADO para</string>
     <string name="imgDelete">Botão de Deletar</string>
     <string name="txtViewNomeTurma">Nome da Turma</string>
+    <string name="btnFlutuante">Adicionar Fotos</string>
 
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>
 
     <string name="descritionScroll">Bloco do Gabarito</string>
+
+    <string name="btnGaleriaFinalizar">Finalizar</string>
+
+    <!--    Camera-->
+    <string name="informacaoCamera">Agora tire a foto do Gabarito</string>
+    <string name="CapturaCamera">Capturar</string>
 
 </resources>

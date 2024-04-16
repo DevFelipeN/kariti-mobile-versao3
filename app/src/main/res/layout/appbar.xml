@@ -31,6 +31,9 @@
                 android:contentDescription="@string/btnVoltar" />
 
 <!--             Título da ActionBar -->
+
+
+            <!-- Ícone do home -->
             <TextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="0dp"
@@ -40,8 +43,6 @@
                 android:text="@string/textViewKariti"
                 android:textSize="34sp" />
 
-
-            <!-- Ícone do home -->
             <ImageButton
                 android:id="@+id/home_icon"
                 android:layout_width="40dp"

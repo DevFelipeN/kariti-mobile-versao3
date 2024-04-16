@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/appbarmenamburg"
+        layout="@layout/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,37 +23,23 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageButton
-        android:id="@+id/imgBtnVoltar"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
-        android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.0" />
-
     <Spinner
         android:id="@+id/spinnerTurma"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBtnVoltar" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Spinner
         android:id="@+id/spinnerProva"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
+        android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +50,7 @@
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
+        android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,19 +58,16 @@
 
     <Button
         android:id="@+id/buttonVisualizarProva"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnEnvCartao"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.626"
-        app:layout_constraintStart_toEndOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
-        app:layout_constraintVertical_bias="0.501" />
+        app:layout_constraintStart_toEndOf="@+id/baixarcatoes"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -100,25 +84,23 @@
         android:id="@+id/imageView15"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
+        app:layout_constraintBottom_toBottomOf="@+id/baixarcatoes"
+        app:layout_constraintEnd_toEndOf="@+id/baixarcatoes"
         app:layout_constraintHorizontal_bias="0.081"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="@+id/baixarcatoes"
+        app:layout_constraintTop_toTopOf="@+id/baixarcatoes"
         app:srcCompat="@mipmap/prova" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/baixarcatoes"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:background="@drawable/button_selector"
         android:text="@string/btnBaixCartao"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
-        app:layout_constraintVertical_bias="0.572" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,7 +25,7 @@ public class CadAlunoActivity extends AppCompatActivity {
 
         nomeAluno = findViewById(R.id.editTextAlunoCad);
         emailAluno = findViewById(R.id.editTextEmailCad);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadastrar = findViewById(R.id.buttonSalvarEdit);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +40,6 @@ public class CadAlunoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nome = nomeAluno.getText().toString();
                 String email = emailAluno.getText().toString();
-
                 if (nome.equals("") || email.equals("")) {
                     Toast.makeText(CadAlunoActivity.this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
                 } else {

@@ -7,7 +7,7 @@
     tools:context=".CadAlunoActivity">
 
     <ImageButton
-        android:id="@+id/imgBtnVoltar"
+        android:id="@+id/imgBtnVoltaEscola"
         android:layout_width="48dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
@@ -56,7 +56,6 @@
         android:hint="@string/nomeCompleto"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -74,7 +73,6 @@
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
@@ -83,20 +81,18 @@
 
     <Button
         android:id="@+id/buttonSalvarEdit"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="272dp"
-        android:background="@drawable/button_selector"
         android:text="@string/buttonCadastrar"
         android:textAlignment="center"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailCad"
+        app:layout_constraintVertical_bias="0.202"
         tools:ignore="MissingConstraints" />
 
     <ImageView

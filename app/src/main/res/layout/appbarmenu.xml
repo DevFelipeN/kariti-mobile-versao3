@@ -8,7 +8,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <ImageButton
-            android:id="@+id/imgBtnVoltar"
+            android:id="@+id/imgBtnVoltaEscola"
             android:layout_width="48dp"
             android:layout_height="40dp"
             android:background="@color/tranparente"
@@ -17,7 +17,7 @@
             android:contentDescription="@string/btnVoltar"/>
 
         <ImageView
-            android:id="@+id/menu_icon"
+            android:id="@+id/menu_icon_point"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="end"

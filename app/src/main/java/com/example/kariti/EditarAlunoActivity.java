@@ -25,19 +25,19 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_aluno);
 
-        nomeAluno = findViewById(R.id.editTextAlunoCad);
-        emailAluno = findViewById(R.id.editTextEmailCad);
-        voltar = findViewById(R.id.imgBtnVoltar);
-        salvar = findViewById(R.id.buttonSalvarEdit);
+        nomeAluno = findViewById(R.id.editTextAlunoCadastrado);
+        emailAluno = findViewById(R.id.editTextEmailCadastrado);
+        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        salvar = findViewById(R.id.buttonSalvarEditAluno);
         bancoDados = new BancoDados(this);
 
         String id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
-        String aluno = bancoDados.pegaAluno(id_aluno);
+        String aluno = bancoDados.pegaNomeAluno(id_aluno);
         String email = bancoDados.pegaEmailAluno(id_aluno);
         nomeAluno.setText(aluno);
         emailAluno.setText(email);
 
-        voltar.setOnClickListener(new View.OnClickListener() {
+       voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
                 startActivity(intent);

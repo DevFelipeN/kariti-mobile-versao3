@@ -13,9 +13,9 @@
         tools:layout_editor_absoluteY="-16dp" />
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/listViewEscolas"
         android:layout_width="350dp"
-        android:layout_height="500dp"
+        android:layout_height="450dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -26,16 +26,17 @@
 
     <Button
         android:id="@+id/buttonEscDesativada"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
+        android:layout_marginBottom="40dp"
         android:text="@string/btnEscolaDesativada"
-        android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.172"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView" />
+        app:layout_constraintTop_toBottomOf="@+id/listViewEscolas" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

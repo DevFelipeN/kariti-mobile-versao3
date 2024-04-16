@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -33,6 +35,7 @@ public class GaleriaActivity extends AppCompatActivity {
     ArrayList<String> dataImg = new ArrayList<>();
     ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
+    String diretorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,15 @@ public class GaleriaActivity extends AppCompatActivity {
                 finish();
             }
         });
+        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Boolean teste = Compactador.testar();
+                if(teste)
+
+                    Toast.makeText(GaleriaActivity.this, " Arquivo compactado (^_^) ", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,28 +79,28 @@ public class GaleriaActivity extends AppCompatActivity {
         });
 
 
-
-        // Recebendo o byte array e nome da foto TELA ANTERIOR
-        //byte[] byteArray = getIntent().getByteArrayExtra("photo");
-        //String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
 /*
+        Recebendo o byte array e nome da foto TELA ANTERIOR
+        byte[] byteArray = getIntent().getByteArrayExtra("photo");
+        String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
+
         recyclerView = findViewById(R.id.recyclerViewFotos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         nomePhoto.add("nomeFotoAnterior");
         dataImg.add("2024-03-2024 20:01");
-//        photoTelaAnterior.add(byteArray);
+        photoTelaAnterior.add(byteArray);
 
         adapter = new AdapterGaleria(this, nomePhoto, dataImg, photoTelaAnterior);
         recyclerView.setAdapter(adapter);
-//        btnFinalizar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
-//                finish();
-//            }
-//        });
+        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
+                finish();
+           }
+        });
     }
 
     @Override

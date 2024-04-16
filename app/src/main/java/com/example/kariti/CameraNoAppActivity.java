@@ -52,8 +52,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
             }
         });
     }
-
-
     //Iniciando a camera
     public static Camera getCameraInstace() {
         Camera c = null;
@@ -95,15 +93,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private File getOutPutMediaFile(){
         File mediaFile = null;
         File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Caminho");
-        builder.setMessage("Esse: "+mediaDir.getPath());
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){
                 Log.d("Error File:", "Falha ao criar o diretório");
@@ -112,7 +102,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
         }
 
         //String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
-        mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem + ".jpg");
+        mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem);
         return mediaFile;
     }
 

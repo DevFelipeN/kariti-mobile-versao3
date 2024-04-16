@@ -59,8 +59,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.buttonCamera);
         voltar = findViewById(R.id.imgBtnVoltarDacorrecao);
         bancoDados = new BancoDados(this);
-
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,8 +82,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); //especifica o qrcode
         intentIntegrator.initiateScan();                    //iniciar o scan
     }
-
-
 
     //private void tirarFoto() {
     //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -148,13 +144,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         intent.putExtra("nomeImagem", nomeDaFoto);
         startActivity(intent);
         finish();
-
-
-        // junção das partes
-
-
-        //txt.setText(nomeDaFoto);
-        //tirarFoto();
     }
 
 

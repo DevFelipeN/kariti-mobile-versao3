@@ -15,35 +15,15 @@ import java.util.ArrayList;
 //compactar arquivos para enviar
 public class Compactador{
     public static void main(String[] args){
+
         testar();
-    }
-
-    public static void copiar(String origem, String destino) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try{
-            is = new FileInputStream(origem);
-            os = new FileOutputStream(destino);
-            byte[] buffer = new byte[1024];
-            int length;
-            while((length = is.read())>0){
-                os.write(buffer, 0, length);
-            }
-        }catch(Exception e){
-            Log.e("KARITI", e.toString());
-
-        }
-        finally{
-            is.close();
-            os.close();
-        }
     }
     public static boolean testar(){
         //exemplo de como compactar duas imagens em um arquivo zip
         List<String> arquivos = new ArrayList<>();
-        arquivos.add("/storage/emulated/0/Download/apagar.png");
-        arquivos.add("/storage/emulated/0/Download/senha.png");
-        return compactar("/data/user/0/com.example.kariti/files/saida.zip", arquivos); //retorna true se funcionou
+        arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_1_0_0.png");
+        arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_4_0_0.png");
+        return compactar("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/saida.zip", arquivos); //retorna true se funcionou
     }
     public static boolean compactar(String arquivoSaida, List<String> arquivosParaCompactar){
         try{
@@ -67,7 +47,6 @@ public class Compactador{
             fos.close();
             return true;
         }catch(Exception e){
-            Log.e("KARITI", "TTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSTTTTTTTTTTTEEEEEEE");
             Log.e("KARITI", e.toString());
             return false;
         }

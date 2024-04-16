@@ -124,9 +124,10 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 
 //                }
         // }
-        // } if (result != null && result.getContents() != null) {
+        // }
+//         if (result != null && result.getContents() != null) {
+        //Coletando dados do QRCode
         String qrCodeConteudo = result.getContents(); // Conteúdo do QR Code
-
         qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
         String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
         Boolean existProva = bancoDados.checkprovaId(partes[0]);
@@ -150,13 +151,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         //txt.setText(nomeDaFoto);
         //tirarFoto();
     }
-
-
-
-
-
-
-
 
 
     public void PopMenu(View v){

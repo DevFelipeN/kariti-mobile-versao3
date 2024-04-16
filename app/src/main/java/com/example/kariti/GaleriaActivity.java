@@ -46,7 +46,7 @@ public class GaleriaActivity extends AppCompatActivity {
         });
 
 
-        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
+        btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
 
@@ -59,36 +59,36 @@ public class GaleriaActivity extends AppCompatActivity {
             }
         });
 
-        /*
-
-        // Recebendo o byte array e nome da foto TELA ANTERIOR
-        byte[] byteArray = getIntent().getByteArrayExtra("photo");
-        //String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
-
-        recyclerView = findViewById(R.id.recyclerViewFotos);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        nomePhoto.add("nomeFotoAnterior");
-        dataImg.add("2024-03-2024 20:01");
-        photoTelaAnterior.add(byteArray);
-
-        adapter = new AdapterGaleria(this, nomePhoto, dataImg, photoTelaAnterior);
-        recyclerView.setAdapter(adapter);
-
-        btnFinalizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        });
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
+
+
+
+        // Recebendo o byte array e nome da foto TELA ANTERIOR
+        //byte[] byteArray = getIntent().getByteArrayExtra("photo");
+        //String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
+/*
+        recyclerView = findViewById(R.id.recyclerViewFotos);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        nomePhoto.add("nomeFotoAnterior");
+        dataImg.add("2024-03-2024 20:01");
+//        photoTelaAnterior.add(byteArray);
+
+        adapter = new AdapterGaleria(this, nomePhoto, dataImg, photoTelaAnterior);
+        recyclerView.setAdapter(adapter);
+//        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
+//                finish();
+//            }
+//        });
     }
 
     @Override

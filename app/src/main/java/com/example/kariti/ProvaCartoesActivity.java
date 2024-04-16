@@ -1,31 +1,25 @@
 package com.example.kariti;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import android.os.Environment;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -162,6 +156,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
                 listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
                 int qtdProvas = listIdsAlunos.size();
+                dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                 for(int x = 0;  x < qtdProvas; x++) {
                     String id_aluno = String.valueOf(listIdsAlunos.get(x));
                     String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
@@ -170,83 +165,23 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 }
 
                 try {
-                    //salvarExterno();
-                    //readFileExterno();
                     //GerarCsv.gerar(dados, openFileOutput("teste.csv", MODE_PRIVATE));
-
+                    File filecsv = null;
                     String estado = Environment.getExternalStorageState();
                     if(estado.equals(Environment.MEDIA_MOUNTED)) {
-                        File file = new File(getExternalFilesDir(null), "/teste.csv");
-                        GerarCsv.gerar(dados, file);// salvando arquivo.csv
-                        Toast.makeText(ProvaCartoesActivity.this, "Arquivo armazenado", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(ProvaCartoesActivity.this, "Armazenamento não disponivel", Toast.LENGTH_SHORT).show();
-                    }
-                    File dir = getExternalFilesDir(null);
-                    File file  = new File(dir+"/teste.csv");
-                    if(file.exists()) {
-                        Toast.makeText(ProvaCartoesActivity.this, "Arquivo Existe!!!", Toast.LENGTH_SHORT).show();
-                        FileInputStream fis = openFileInput("teste.csv");
-                        boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
-                        if(res == true) {
-                            Toast.makeText(ProvaCartoesActivity.this, "Pdf baixado!!", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(ProvaCartoesActivity.this, "Erro ao tentar baixar PDF", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                        filecsv = new File(getExternalFilesDir(null), "/teste.csv");
+                        GerarCsv.gerar(dados, filecsv);// salvando arquivo.csv
+                    }else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();;
+                        File fSaida = new File(getExternalFilesDir(null), "/cartoes.pdf");
+                        BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida));
 
-
-                    //FileInputStream fis = openFileInput("teste.csv");
-                    //boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", openFileOutput("cartoes.pdf", MODE_PRIVATE));
-
-                    //File root = android.os.Environment.getExternalStorageDirectory();
-                    //File dir = Environment.getDownloadCacheDirectory();
-                    //File file = new File(dir, "vai.pdf");
-
-                    //BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(file));
-
-                    //Toast.makeText(ProvaCartoesActivity.this, "Resultado: " + res, Toast.LENGTH_SHORT).show();
-
-
-                    /*
-                    File dir = getFilesDir();
-                    File file = new File(dir+"/teste.csv");
-                    if(file.exists()){
-                        FileInputStream f = openFileInput("teste.csv");
-                        byte[] b = new byte[(int)file.length()];
-                        while(f.read(b)!= -1){
-                            String texto = new String(b);
-                            Log.e("Kariti", texto);
-
-                        }
-                        Toast.makeText(ProvaCartoesActivity.this, "Encontrou o arquivo..............", Toast.LENGTH_SHORT).show();
-                    }else Toast.makeText(ProvaCartoesActivity.this, "Arquivo não encontrado............aaaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
-                    */
-
+                        //boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", new FileOutputStream(fSaida));
+                        //BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(fSaida));
                 }catch (Exception e){
                     Log.e("Kariti",e.toString());
                     Toast.makeText(ProvaCartoesActivity.this, "Erro: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
-
-                /*
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
-                builder.setMessage("Escolha o metodo de Download");
-                builder.setNegativeButton("Download Manager", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        downloadPDF("https://www.orimi.com/pdf-test.pdf");
-                    }
-                });
-                builder.setPositiveButton("Using Browser", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.orimi.com/pdf-test.pdf")));
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                */
-
+                //downloadPDF("https://www.orimi.com/pdf-test.pdf");
 
             }
         });
@@ -265,34 +200,5 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pdf_file.pdf");
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
-
-    }
-
-    public void salvarExterno()
-            throws IOException {
-        String texto = "Dados do arquivo";
-        String estado = Environment.getExternalStorageState();
-        if(estado.equals(Environment.MEDIA_MOUNTED)){
-            File file = new File(getExternalFilesDir(null), "/texto.txt");
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(texto.getBytes());
-            fos.close();
-            Toast.makeText(this, "Arquivo Salvo", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "Não ha espaco para armazenar!!!", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public  void readFileExterno(){
-        try {
-            String estado = Environment.getExternalStorageState();
-            if(estado.equals(Environment.MEDIA_MOUNTED)){
-                File dir = getExternalFilesDir(null);
-                File file  = new File(dir+"/texto.txt");
-
-            }
-
-        }catch (Exception e){
-            Toast.makeText(this, "Erro!!!!", Toast.LENGTH_SHORT).show();
-        }
     }
 }

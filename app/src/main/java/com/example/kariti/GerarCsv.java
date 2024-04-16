@@ -13,8 +13,23 @@ import java.io.FileWriter;
 import java.util.List;
 import java.util.ArrayList;
 public class GerarCsv {
-
-    public static void gerar(List<String[]> dados, File file)
+    /**
+     * Este método gera um arquivo CSV (separado por ponto-e-vírgula) a partir de uma lista de dados.
+     * @param dados Lista de vetores de string em que cada vetor corresponderá a uma linha do CSV
+     * @param file Arquivo onde serão escritas as linhas do CSV.
+     * @throws IOException
+     */
+    public static void gerar(List<String[]> dados, File file)throws IOException {
+        gerar(dados, file, ";");
+    }
+    /**
+     * Este método gera um arquivo CSV a partir de uma lista de dados.
+     * @param dados Lista de vetores de string em que cada vetor corresponderá a uma linha do CSV
+     * @param file Arquivo onde serão escritas as linhas do CSV.
+     * @param separador Caractere que separa cada informação nas linhas
+     * @throws IOException
+     */
+    public static void gerar(List<String[]> dados, File file, String separador)
             throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
 
@@ -23,7 +38,7 @@ public class GerarCsv {
             //sb.setLength(0);
             for(int i = 0; i < linha.length; i++){
                 if (i > 0){
-                    sb.append(";");
+                    sb.append(separador);
                 }
                 sb.append(linha[i]);
             }
@@ -32,25 +47,4 @@ public class GerarCsv {
         fos.write(sb.toString().getBytes());
         fos.close();
     }
-    public static void main(String[]args) throws Exception{
-
-        List<String[]> dados = new ArrayList<>();
-
-        dados.add(new String[]{"a", "b", "c"}); //linha 1
-        dados.add(new String[]{"d", "e", "f"}); //linha 2
-        dados.add(new String[]{"g", "h", "i"}); //linha 3
-
-        //gerar(dados, "entraday.csv");
-        /*
-        Este exemplo vai gerar um arquivo chamada entraday.csv com as seguintes linhas:
-        -------
-        |a,b,c|
-        |d,e,f|
-        |g,h,i|
-        |     |
-        -------
-        */
-    }
-
-
 }

@@ -30,7 +30,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private Camera camera;
     private CameraPreview cameraPreview;
     private Button btnCapturar;
-    String nomeImagem;
+    String nomeImagem, caminho;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +80,9 @@ public class CameraNoAppActivity extends AppCompatActivity {
                 fos.close();
                 Toast.makeText(CameraNoAppActivity.this, "Imagem Capturada", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
+                intent.putExtra("caminho", caminho);
                 startActivity(intent);
-                //finish();
+                finish();
                 //camera.startPreview();
             }catch (Exception e){
                 Log.e("Error:", e.getMessage());
@@ -93,16 +94,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private File getOutPutMediaFile(){
         File mediaFile = null;
         File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Caminho");
-        builder.setMessage("Esse: "+mediaDir.getPath());
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-        //testando
+        caminho = mediaDir.getPath();
 
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){
@@ -112,7 +104,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
         }
 
         //String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
-        mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem + ".jpg");
+        mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem);
         return mediaFile;
     }
 

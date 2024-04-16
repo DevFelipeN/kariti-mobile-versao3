@@ -41,9 +41,9 @@ public class Compactador{
     public static boolean testar(){
         //exemplo de como compactar duas imagens em um arquivo zip
         List<String> arquivos = new ArrayList<>();
-        arquivos.add("/storage/emulated/0/Download/apagar.png");
-        arquivos.add("/storage/emulated/0/Download/senha.png");
-        return compactar("/data/user/0/com.example.kariti/files/saida.zip", arquivos); //retorna true se funcionou
+        arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_1_0_0.png");
+        arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_4_0_0.png");
+        return compactar("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/saida.zip", arquivos); //retorna true se funcionou
     }
     public static boolean compactar(String arquivoSaida, List<String> arquivosParaCompactar){
         try{

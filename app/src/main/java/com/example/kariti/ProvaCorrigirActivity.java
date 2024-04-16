@@ -70,7 +70,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivityForResult(intent, 2);
-                //iniciarScannerQRCode(); // primeiro o qrcode
+                iniciarScannerQRCode(); // primeiro o qrcode
             }
         });
     }
@@ -82,6 +82,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); //especifica o qrcode
         intentIntegrator.initiateScan();                    //iniciar o scan
     }
+
     //private void tirarFoto() {
     //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     //startActivityForResult(intent, 2); // Iniciar a captura da foto
@@ -143,13 +144,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         intent.putExtra("nomeImagem", nomeDaFoto);
         startActivity(intent);
         finish();
-
-
-        // junção das partes
-
-
-        //txt.setText(nomeDaFoto);
-        //tirarFoto();
     }
 
 

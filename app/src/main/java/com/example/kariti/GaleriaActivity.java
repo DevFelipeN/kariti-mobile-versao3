@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -33,6 +35,7 @@ public class GaleriaActivity extends AppCompatActivity {
     ArrayList<String> dataImg = new ArrayList<>();
     ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
+    String diretorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +53,33 @@ public class GaleriaActivity extends AppCompatActivity {
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
 
+        diretorio = getIntent().getExtras().getString("caminho");
+        AlertDialog.Builder builder = new AlertDialog.Builder(GaleriaActivity.this);
+        builder.setTitle("Caminho")
+                .setMessage("esse: "+diretorio)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //teste
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GaleriaActivity.this, ProvaCorrigirActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Boolean teste = Compactador.testar();
+                if(teste)
+                    Toast.makeText(GaleriaActivity.this, "Funcionou.. Aeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -56,30 +56,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerProva" />
 
-    <Button
-        android:id="@+id/buttonVisualizarProva"
-        style="@style/BUTTONSTYLE"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="@string/btnEnvCartao"
-        android:textAlignment="textEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.626"
-        app:layout_constraintStart_toEndOf="@+id/baixarcatoes"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos" />
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonVisualizarProva"
-        app:layout_constraintEnd_toEndOf="@+id/buttonVisualizarProva"
-        app:layout_constraintHorizontal_bias="0.079"
-        app:layout_constraintStart_toStartOf="@+id/buttonVisualizarProva"
-        app:layout_constraintTop_toTopOf="@+id/buttonVisualizarProva"
-        app:srcCompat="@mipmap/prova" />
-
     <ImageView
         android:id="@+id/imageView15"
         android:layout_width="24dp"
@@ -94,13 +70,15 @@
     <Button
         android:id="@+id/baixarcatoes"
         style="@style/BUTTONSTYLE"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_width="169dp"
+        android:layout_height="50dp"
         android:text="@string/btnBaixCartao"
         android:textAlignment="textEnd"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos"
+        app:layout_constraintVertical_bias="0.49" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,16 @@
 package com.example.kariti;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,14 +22,16 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
     Button baixarCartoes;
     Integer id_turma, endereco, idTurmaSelect;
-    String prova, turma, turmaSelecionada;
+    String prova, turma, turmaSelecionada, idAluno;
     ArrayList<String> provalist, turmalist, alunolist;
     List<String[]> dados;
     ArrayList<Integer> listIdAlTurma, listIdsAlunos;
@@ -140,46 +146,55 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         baixarCartoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isOnline()) {
+                    String nomeProva = spinnerProva.getSelectedItem().toString();
+                    String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
+                    String nomeTurma = spinnerTurma.getSelectedItem().toString();
+                    String id_usuario = String.valueOf(BancoDados.USER_ID);
+                    String prof = bancoDados.pegaUsuario(id_usuario);
+                    String data = bancoDados.pegaData(id_prova);
+                    String nota = String.valueOf(bancoDados.listNota(id_prova));
+                    String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
+                    String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
 
-                String nomeProva = spinnerProva.getSelectedItem().toString();
-                String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
-                String nomeTurma = spinnerTurma.getSelectedItem().toString();
-                String id_usuario = String.valueOf(BancoDados.USER_ID);
-                String prof = bancoDados.pegaUsuario(id_usuario);
-                String data =  bancoDados.pegaData(id_prova);
-                String nota = String.valueOf(bancoDados.listNota(id_prova));
-                String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
-                String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
+                    dados = new ArrayList<>();
 
-                dados = new ArrayList<>();
-
-                String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
-                listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
-                int qtdProvas = listIdsAlunos.size();
-                dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
-                for(int x = 0;  x < qtdProvas; x++) {
-                    String id_aluno = String.valueOf(listIdsAlunos.get(x));
-                    String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
-                    dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, aluno});
-                }
-                try {
-                    File filecsv = null;
-                    String estado = Environment.getExternalStorageState();
-                    if(estado.equals(Environment.MEDIA_MOUNTED)) {
-                        filecsv = new File(getExternalFilesDir(null), "/teste.csv");
-                        GerarCsv.gerar(dados, filecsv);// salvando arquivo.csv
-                    }else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();;
-                        File fSaida = new File(getExternalFilesDir(null), "/cartoes.pdf");
+                    String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
+                    listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
+                    int qtdProvas = listIdsAlunos.size();
+                    dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
+                    for (int x = 0; x < qtdProvas; x++) {
+                        idAluno = String.valueOf(listIdsAlunos.get(x));
+                        String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
+                        dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
+                    }
+                    Integer anonimatos = bancoDados.pegaqtdAnonimos(idTurma);
+                    Integer idAnonimos = Integer.valueOf(idAluno);
+                    for(int a = 1; a <= anonimatos; a++){
+                        idAnonimos++;
+                        dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAnonimos.toString(), "Aluno 000"+a});
+                    }
+                    try {
+                        File filecsv = null;
+                        String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
+                        String filePdf = nomeProva + dateCart+".pdf";
+                        String estado = Environment.getExternalStorageState();
+                        if (estado.equals(Environment.MEDIA_MOUNTED)) {
+                            filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                            GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
+                        } else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
+                        //File fSaida = new File(getExternalFilesDir(null), "/cartoes.pdf");
+                        File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                         BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida));
 
-                        //boolean res = BaixarModeloCartao.baixarProvas(fis, "teste.csv", new FileOutputStream(fSaida));
-                        //BaixarModeloCartao.teste(openFileInput("teste.csv"), new FileOutputStream(fSaida));
-                }catch (Exception e){
-                    Log.e("Kariti",e.toString());
-                    Toast.makeText(ProvaCartoesActivity.this, "Erro: "+e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                //downloadPDF("https://www.orimi.com/pdf-test.pdf");
-
+                        DownloadManager baixarPdf = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
+                        Toast.makeText(ProvaCartoesActivity.this, "Arquivo Baixado  ", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.e("Kariti", e.toString());
+                        Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else Toast.makeText(ProvaCartoesActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -197,5 +212,9 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pdf_file.pdf");
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
+    }
+    private boolean isOnline() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }

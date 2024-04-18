@@ -109,6 +109,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 adapter.getFilter().filter(charSequence);
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void afterTextChanged(Editable editable) {

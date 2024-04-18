@@ -35,15 +35,12 @@ public class CameraNoAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_no_app);
-
         camera = getCameraInstace();
         cameraPreview = new CameraPreview(this, camera);
         btnCapturar = findViewById(R.id.buttonCameraFoto);
         FrameLayout previewFrame = (FrameLayout) findViewById(R.id.frameCamera);
         previewFrame.addView(cameraPreview);
-
         nomeImagem = getIntent().getExtras().getString("nomeImagem");
-
         btnCapturar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +62,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
         }
         return c;
     }
-
     //salvanco Imagem
     private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
@@ -83,6 +79,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
                 intent.putExtra("nomeImagem", nomeImagem);
                 startActivity(intent);
+                Toast.makeText(CameraNoAppActivity.this, "Passando aqui!!!!!!!", Toast.LENGTH_SHORT).show();
                 finish();
                 //camera.startPreview();
             }catch (Exception e){
@@ -90,7 +87,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
             }
         }
     };
-
     //Criando diretorio
     private File getOutPutMediaFile(){
         File mediaFile = null;
@@ -108,13 +104,11 @@ public class CameraNoAppActivity extends AppCompatActivity {
         mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem);
         return mediaFile;
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         releaseCamera();
     }
-
     private void releaseCamera(){
         if (camera != null){
             camera.release();
@@ -122,7 +116,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
         }
     }
     public void onBackPressed() {
-        Compactador.listCartoes = null;
+        Compactador.listCartoes.clear();
         super.onBackPressed();
     }
 }

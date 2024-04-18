@@ -19,18 +19,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class GaleriaActivity extends AppCompatActivity {
-    public static Integer qtdCartoes;
     AppCompatButton btnFinalizar;
     ImageButton btnVoltar;
     FloatingActionButton btnAdcionarFoto;
-
     RecyclerView recyclerView;
     ArrayList<String> nomePhoto = new ArrayList<>();
     ArrayList<String> dataImg = new ArrayList<>();
     ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
     String diretorio, nomeCartao;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +42,7 @@ public class GaleriaActivity extends AppCompatActivity {
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
 
-        nomeCartao = getIntent().getExtras().getString("nomeImagem");
+        nomeCartao = getIntent().getExtras().getString("nomeImagem") ;
         Compactador.listCartoes.add(nomeCartao);
 
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
@@ -61,21 +58,16 @@ public class GaleriaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Boolean teste = Compactador.compactador();
                 if(teste)
-
                     Toast.makeText(GaleriaActivity.this, " Arquivo compactado (^_^) ", Toast.LENGTH_SHORT).show();
             }
         });
-
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Compactador.listCartoes = null;
+                Compactador.listCartoes.clear();
                 onBackPressed();
             }
-        });
-
-
-/*
+        });/*
         Recebendo o byte array e nome da foto TELA ANTERIOR
         byte[] byteArray = getIntent().getByteArrayExtra("photo");
         String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
@@ -98,7 +90,6 @@ public class GaleriaActivity extends AppCompatActivity {
            }
         });
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -118,11 +109,10 @@ public class GaleriaActivity extends AppCompatActivity {
                 }
             }
         }
-
          */
     }
     public void onBackPressed() {
-        Compactador.listCartoes = null;
+        Compactador.listCartoes.clear();
         super.onBackPressed();
     }
 }

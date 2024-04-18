@@ -59,12 +59,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.buttonCamera);
         voltar = findViewById(R.id.imgBtnVoltarDacorrecao);
         bancoDados = new BancoDados(this);
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +126,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         Boolean existProva = bancoDados.checkprovaId(partes[0]);
         if(!existProva.equals(false)) {
             qtdQuestoes = bancoDados.pegaqtdQuestoes(partes[0]);
-            qtdAlternativas = bancoDados.pegaqtdAlternativas(partes[1]);
+            qtdAlternativas = bancoDados.pegaqtdAlternativas(partes[0]);
         }else{
             qtdQuestoes = 0;
             qtdAlternativas = 0;
@@ -211,5 +205,17 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Compactador.listCartoes = null;
+                onBackPressed();
+            }
+        });
+
+    }
+    public void onBackPressed() {
+        Compactador.listCartoes = null;
+        super.onBackPressed();
     }
 }

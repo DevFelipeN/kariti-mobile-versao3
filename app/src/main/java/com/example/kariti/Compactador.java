@@ -1,6 +1,7 @@
 package com.example.kariti;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 //compactar arquivos para enviar
 public class Compactador{
+    public static ArrayList<String> listCartoes = new ArrayList<>();
     public static void main(String[] args){
 
         compactador();
@@ -18,8 +20,9 @@ public class Compactador{
     public static boolean compactador(){
         //exemplo de como compactar duas imagens em um arquivo zip
         List<String> arquivos = new ArrayList<>();
-        arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_1_0_0.png");
-        arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/2_4_0_0.png");
+        for(int x = 0; x < listCartoes.size(); x++) {
+            arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/"+listCartoes.get(x));
+        }
         return compactar("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/saida.zip", arquivos); //retorna true se funcionou
     }
     public static boolean compactar(String arquivoSaida, List<String> arquivosParaCompactar){

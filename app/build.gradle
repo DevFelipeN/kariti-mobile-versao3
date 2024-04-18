@@ -1,21 +1,17 @@
 plugins {
     id 'com.android.application'
 }
-
 android {
     namespace 'com.example.kariti'
     compileSdk 34
-
     defaultConfig {
         applicationId "com.example.kariti"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -34,7 +30,6 @@ android {
     }
 
 }
-
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.zxing:core:3.4.1'

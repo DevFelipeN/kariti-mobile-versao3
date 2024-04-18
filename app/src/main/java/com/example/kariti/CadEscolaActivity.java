@@ -80,7 +80,6 @@ public class CadEscolaActivity extends AppCompatActivity {
                 }
             }
         });
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

@@ -79,7 +79,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
                 intent.putExtra("nomeImagem", nomeImagem);
                 startActivity(intent);
-                Toast.makeText(CameraNoAppActivity.this, "Passando aqui!!!!!!!", Toast.LENGTH_SHORT).show();
                 finish();
                 //camera.startPreview();
             }catch (Exception e){
@@ -94,13 +93,10 @@ public class CameraNoAppActivity extends AppCompatActivity {
 
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){
-                Toast.makeText(this, "Erro ao criar diretório 222222222222222222222", Toast.LENGTH_SHORT).show();
                 Log.d("Error File:", "Falha ao criar o diretório");
                 return null;
             }
         }
-
-        //String nomeImagem = new SimpleDateFormat("HH_mm_ss").format(new Date());
         mediaFile = new File(mediaDir.getPath() + File.separator + nomeImagem);
         return mediaFile;
     }

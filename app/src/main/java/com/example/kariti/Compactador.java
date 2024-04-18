@@ -18,7 +18,6 @@ public class Compactador{
         compactador();
     }
     public static boolean compactador(){
-        //exemplo de como compactar duas imagens em um arquivo zip
         List<String> arquivos = new ArrayList<>();
         for(int x = 0; x < listCartoes.size(); x++) {
             arquivos.add("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/"+listCartoes.get(x));

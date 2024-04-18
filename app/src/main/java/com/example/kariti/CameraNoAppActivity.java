@@ -81,6 +81,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
 
                 Toast.makeText(CameraNoAppActivity.this, "Imagem Capturada", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
+                intent.putExtra("nomeImagem", nomeImagem);
                 startActivity(intent);
                 finish();
                 //camera.startPreview();
@@ -97,6 +98,7 @@ public class CameraNoAppActivity extends AppCompatActivity {
 
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){
+                Toast.makeText(this, "Erro ao criar diretório 222222222222222222222", Toast.LENGTH_SHORT).show();
                 Log.d("Error File:", "Falha ao criar o diretório");
                 return null;
             }
@@ -118,5 +120,9 @@ public class CameraNoAppActivity extends AppCompatActivity {
             camera.release();
             camera = null;
         }
+    }
+    public void onBackPressed() {
+        Compactador.listCartoes = null;
+        super.onBackPressed();
     }
 }

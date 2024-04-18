@@ -29,7 +29,7 @@ public class GaleriaActivity extends AppCompatActivity {
     ArrayList<String> dataImg = new ArrayList<>();
     ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
-    String diretorio;
+    String diretorio, nomeCartao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,10 @@ public class GaleriaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
+
+        nomeCartao = getIntent().getExtras().getString("nomeImagem");
+        Compactador.listCartoes.add(nomeCartao);
+
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,6 +69,7 @@ public class GaleriaActivity extends AppCompatActivity {
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Compactador.listCartoes = null;
                 onBackPressed();
             }
         });
@@ -115,5 +120,9 @@ public class GaleriaActivity extends AppCompatActivity {
         }
 
          */
+    }
+    public void onBackPressed() {
+        Compactador.listCartoes = null;
+        super.onBackPressed();
     }
 }

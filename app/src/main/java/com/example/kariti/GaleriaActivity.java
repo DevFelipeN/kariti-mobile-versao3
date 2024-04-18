@@ -1,5 +1,6 @@
 package com.example.kariti;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -59,6 +61,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 Boolean teste = Compactador.compactador();
                 if(teste)
                     Toast.makeText(GaleriaActivity.this, " Arquivo compactado (^_^) ", Toast.LENGTH_SHORT).show();
+                telaProva();
             }
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +113,20 @@ public class GaleriaActivity extends AppCompatActivity {
             }
         }
          */
+    }
+    public void telaProva(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Provas enviadas para correção!")
+                .setMessage("Para visualizar o resultado da correção, selecione a opção 'Visualizar Prova'.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), ProvaActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
     public void onBackPressed() {
         Compactador.listCartoes.clear();

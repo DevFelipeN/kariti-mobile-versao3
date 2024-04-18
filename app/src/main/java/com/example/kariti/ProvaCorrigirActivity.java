@@ -147,29 +147,9 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void telaProva(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCorrigirActivity.this);
-        builder.setTitle("Provas enviadas para correção!")
-                .setMessage("Para acompanhar o andamento da correção, selecione a opção 'Visualizar Prova'.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), ProvaActivity.class);
-                        startActivity(intent);
-                    }
-                });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        Toast.makeText(this, "Provas enviadas para Correção!!", Toast.LENGTH_SHORT).show();
-    }
-
-
     private void salvarImagemNaGaleria(Bitmap bitmap) {
         String fileName = System.currentTimeMillis() + ".png";
         OutputStream fos;
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentResolver resolver = getContentResolver();
             ContentValues contentValues = new ContentValues();

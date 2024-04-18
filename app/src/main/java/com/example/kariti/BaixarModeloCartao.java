@@ -77,20 +77,17 @@ public class BaixarModeloCartao {
             }catch(Exception e){
                 Log.e("Kariti", "ErroDesc");
             }
-
             HttpURLConnection cc = ((HttpURLConnection) connection);
             int code = cc.getResponseCode();
             Log.e("Kariti", "F");
             if (code == 200){
                 InputStream inputStream = cc.getInputStream();
-
                 Log.e("Kariti", "G");
                 int bytesRead = -1;
                 byte[] buffer = new byte[4096];
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);
                 }
-
                 outputStream.close();
                 inputStream.close();
                 return true;

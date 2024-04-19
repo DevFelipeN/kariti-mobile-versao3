@@ -1,8 +1,13 @@
 package com.example.kariti;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -18,7 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GaleriaActivity extends AppCompatActivity {
     AppCompatButton btnFinalizar;
@@ -59,9 +68,27 @@ public class GaleriaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Boolean teste = Compactador.compactador();
-                if(teste)
-                    Toast.makeText(GaleriaActivity.this, " Arquivo compactado (^_^) ", Toast.LENGTH_SHORT).show();
-                telaProva();
+                if(teste) {
+                    try {
+                        File fileZip = new File("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/saida.zip");
+                        File fileJson  = new File(getExternalFilesDir(null), "/json.json");
+                        BaixarModeloCartao.solicitarCartoesResposta(fileZip, new FileOutputStream(fileJson));
+                        Toast.makeText(GaleriaActivity.this, "Testandooooooo!!!!!!!", Toast.LENGTH_SHORT).show();
+                        Compactador.listCartoes.clear();
+                        telaProva();
+
+                        /*
+                        DownloadManager baixarJson = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        baixarJson.addCompletedDownload("jsonTeste", "Arquivo Json: " + "jsonTeste", true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
+                        Toast.makeText(GaleriaActivity.this, "Arquivo Baixado  ", Toast.LENGTH_SHORT).show();
+
+                         */
+
+                    } catch (Exception e) {
+                        Log.e("Kariti", e.toString());
+                        Toast.makeText(GaleriaActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else Toast.makeText(GaleriaActivity.this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
             }
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {

@@ -184,6 +184,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
                         } else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
                         //File fSaida = new File(getExternalFilesDir(null), "/cartoes.pdf");
+
                         File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                         BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida));
 

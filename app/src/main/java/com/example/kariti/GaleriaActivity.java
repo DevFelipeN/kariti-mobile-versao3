@@ -72,7 +72,7 @@ public class GaleriaActivity extends AppCompatActivity {
                     try {
                         File fileZip = new File("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
-                        BaixarModeloCartao.solicitarCartoesResposta(fileZip, new FileOutputStream(fileJson));
+                        UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson));
                         Toast.makeText(GaleriaActivity.this, "Testandooooooo!!!!!!!", Toast.LENGTH_SHORT).show();
                         Compactador.listCartoes.clear();
                         telaProva();

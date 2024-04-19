@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ public class VisualProvaActivity extends AppCompatActivity {
         Spinner spinnerAluno = findViewById(R.id.spinnerAlunos1);
 
         bancoDados = new BancoDados(this);
-
 
         turmalist = (ArrayList<String>) bancoDados.obterNomeTurmas();
         turmalist.add(0, "Selecione a turmas");
@@ -79,12 +79,22 @@ public class VisualProvaActivity extends AppCompatActivity {
         visualProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                telaVisuProvaSelecionada();
+                telaVisualProvaSelecionada();
             }
         });
     }
+    public void telaVisualProvaSelecionada(){
+        Boolean teste = bancoDados.inserirResultCorrecao(1,1, 4, 8);
+        if(teste){
+            Toast.makeText(this, "Dado inserido", Toast.LENGTH_SHORT).show();
+        }else Toast.makeText(this, "Erro: Dados não inseridos", Toast.LENGTH_SHORT).show();
+        /*
+        bancoDados.inserirResultCorrecao(1,2, 3, 7);
+        bancoDados.inserirResultCorrecao(1,3, 2, 5);
+        bancoDados.inserirResultCorrecao(1,4, 3, 6);
+        bancoDados.inserirResultCorrecao(1,5, 4, 9);
+        */
 
-    public void telaVisuProvaSelecionada(){
         Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
         startActivity(intent);
     }

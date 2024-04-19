@@ -17,7 +17,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "base_dados", null, 7);
+        super(context, "base_dados", null, 9);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
@@ -31,6 +31,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("create Table alunosTurma (id_turma Integer, id_aluno Integer)");
             base_dados.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER, id_turma Integer)");
             base_dados.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer, nota Integer)");
+            base_dados.execSQL("create Table resultadoCorrecao (id_resultado Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, id_aluno Integer, acertos Integer, nota Integer)");
             base_dados.execSQL("create Table galeria(id INTEGER PRIMARY KEY AUTOINCREMENT, foto BLOB)");
             base_dados.execSQL("create Table gerarProva(id_prova Integer, nome_prova TEXT, nome_professor TEXT, nome_turma TEXT, data_prova TEXT, nota_prova Integer, qtd_questoes Integer, qtd_alternativas Integer, id_aluno Integer UNIQUE, nome_aluno TEXT )");
         }catch(Exception e){
@@ -51,6 +52,7 @@ public class BancoDados extends SQLiteOpenHelper {
             data_base.execSQL("drop Table if exists galeria");
             data_base.execSQL("drop Table if exists alunosTurma");
             data_base.execSQL("drop Table if exists gerarProva");
+            data_base.execSQL("drop Table if exists resultadoCorrecao");
             onCreate(data_base);
         }catch(Exception e){
             Log.e("Error base_dados: ",e.getMessage());
@@ -91,6 +93,16 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("id_turma", id_turma);
         contentValues.put("id_aluno", id_aluno);
         long inserir = base_dados.insert("alunosTurma", null, contentValues);
+        return inserir != -1;
+    }
+    public Boolean inserirResultCorrecao(Integer id_escola, Integer id_aluno, Integer acertos, Integer nota){
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id_escola", id_escola);
+        contentValues.put("id_aluno", id_aluno);
+        contentValues.put("acertos", acertos);
+        contentValues.put("nota", nota);
+        long inserir = base_dados.insert("resultadoCorrecao", null, contentValues);
         return inserir != -1;
     }
     public Boolean inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){

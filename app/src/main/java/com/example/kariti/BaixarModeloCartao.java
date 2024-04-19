@@ -156,8 +156,6 @@ public class BaixarModeloCartao {
                         is.close();
                         Log.e("kariti", "L11");
                         fos.close();
-
-
                         Log.e("Kariti", "Fim");
                     } catch (Exception e) {
                         e.printStackTrace();

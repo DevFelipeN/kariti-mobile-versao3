@@ -40,97 +40,73 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/textViewProvaResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/txtProva1"
+        android:layout_marginTop="32dp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="376dp"
-        android:layout_height="251dp"
+        android:layout_width="354dp"
+        android:layout_height="393dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="15dp"
         android:stretchColumns="*"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBaixarResultado"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.442"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15">
+        app:layout_constraintTop_toBottomOf="@+id/textViewProvaResult"
+        app:layout_constraintVertical_bias="0.125">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="174dp"
+                android:layout_height="match_parent"
                 android:text="@string/textViewAluno"
-                android:textAlignment="center" />
+                android:textAlignment="textStart"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total de Acertos"
-                android:textAlignment="center" />
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="Acertos"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="101dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="Nota Final"
-                android:textAlignment="center" />
+                android:text="Nota "
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </TableRow>
 
     </TableLayout>
 
     <Button
-        style="@style/BUTTONSTYLE"
-        android:id="@+id/button4"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="84dp"
-        android:text="@string/btnEnviarParaAluno"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
-    <Button
-        style="@style/BUTTONSTYLE"
-        android:id="@+id/buttonEnviarProf"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/btnEnviarParaProf"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toEndOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
-    <Button
-        style="@style/BUTTONSTYLE"
-        android:id="@+id/button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnCompartilhar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonBaixarResultado"
-        app:layout_constraintTop_toBottomOf="@+id/buttonEnviarProf"
-        app:layout_constraintVertical_bias="0.462" />
-
-    <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonBaixarResultado"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginBottom="72dp"
         android:text="@string/btnBaixarProva"
+        android:textAllCaps="false"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
-        app:layout_constraintVertical_bias="0.462" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -20,7 +21,7 @@ public class VisualProvaActivity extends AppCompatActivity {
     Button visualProva;
     String turmaSelecionada, provaSelected;
     Integer id_turma;
-    Spinner spinnerProva;
+    Spinner spinnerProva, spinnerTurma, spinnerAluno;
     BancoDados bancoDados;
     ArrayList<Integer> listIdAlTurma;
     ArrayList<String> provalist, turmalist, alunolist;
@@ -31,9 +32,9 @@ public class VisualProvaActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltar);
         visualProva = findViewById(R.id.buttonVisualizarProva);
-        Spinner spinnerTurma = findViewById(R.id.spinnerTurma1);
+        spinnerTurma = findViewById(R.id.spinnerTurma1);
         spinnerProva = findViewById(R.id.spinnerProva1);
-        Spinner spinnerAluno = findViewById(R.id.spinnerAlunos1);
+        spinnerAluno = findViewById(R.id.spinnerAlunos1);
 
         bancoDados = new BancoDados(this);
 
@@ -45,7 +46,7 @@ public class VisualProvaActivity extends AppCompatActivity {
         spinnerTurma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position!=0){
+                if(position!=0) {
                     turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                     id_turma = bancoDados.pegaIdTurma(turmaSelecionada);
 
@@ -56,7 +57,7 @@ public class VisualProvaActivity extends AppCompatActivity {
                     alunolist = new ArrayList<>();
                     listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(id_turma));
                     int num = listIdAlTurma.size();
-                    for(int x = 0; x < num; x++){
+                    for (int x = 0; x < num; x++) {
                         String id_aluno = String.valueOf(listIdAlTurma.get(x));
                         alunolist.add(bancoDados.pegaNomeAluno(id_aluno));
                     }
@@ -80,7 +81,6 @@ public class VisualProvaActivity extends AppCompatActivity {
         visualProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 telaVisualProvaSelecionada();
             }
         });
@@ -92,11 +92,16 @@ public class VisualProvaActivity extends AppCompatActivity {
         bancoDados.inserirResultCorrecao(1,5, 2, 5);
         bancoDados.inserirResultCorrecao(1,6, 3, 6);
         bancoDados.inserirResultCorrecao(1,7, 4, 9);
-
  */
-
         Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
         intent.putExtra("prova", provaSelected);
         startActivity(intent);
+    }
+    public void avisoCamposNulos(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Selecione as opções desejadas ");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

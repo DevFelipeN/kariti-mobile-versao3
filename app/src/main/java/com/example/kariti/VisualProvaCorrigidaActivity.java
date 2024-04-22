@@ -81,7 +81,6 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         btnBaixar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

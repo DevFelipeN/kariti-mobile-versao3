@@ -18,8 +18,9 @@ import java.util.List;
 public class VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button visualProva;
-    String turmaSelecionada;
+    String turmaSelecionada, provaSelected;
     Integer id_turma;
+    Spinner spinnerProva;
     BancoDados bancoDados;
     ArrayList<Integer> listIdAlTurma;
     ArrayList<String> provalist, turmalist, alunolist;
@@ -31,13 +32,13 @@ public class VisualProvaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         visualProva = findViewById(R.id.buttonVisualizarProva);
         Spinner spinnerTurma = findViewById(R.id.spinnerTurma1);
-        Spinner spinnerProva = findViewById(R.id.spinnerProva1);
+        spinnerProva = findViewById(R.id.spinnerProva1);
         Spinner spinnerAluno = findViewById(R.id.spinnerAlunos1);
 
         bancoDados = new BancoDados(this);
 
         turmalist = (ArrayList<String>) bancoDados.obterNomeTurmas();
-        turmalist.add(0, "Selecione a turmas");
+        turmalist.add(0, "Selecione a turma");
         SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
         spinnerTurma.setAdapter(adapterTurma);
 
@@ -79,23 +80,23 @@ public class VisualProvaActivity extends AppCompatActivity {
         visualProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 telaVisualProvaSelecionada();
             }
         });
     }
     public void telaVisualProvaSelecionada(){
-        Boolean teste = bancoDados.inserirResultCorrecao(1,1, 4, 8);
-        if(teste){
-            Toast.makeText(this, "Dado inserido", Toast.LENGTH_SHORT).show();
-        }else Toast.makeText(this, "Erro: Dados não inseridos", Toast.LENGTH_SHORT).show();
-        /*
-        bancoDados.inserirResultCorrecao(1,2, 3, 7);
-        bancoDados.inserirResultCorrecao(1,3, 2, 5);
-        bancoDados.inserirResultCorrecao(1,4, 3, 6);
-        bancoDados.inserirResultCorrecao(1,5, 4, 9);
-        */
+        provaSelected = spinnerProva.getSelectedItem().toString();
+/*
+        bancoDados.inserirResultCorrecao(1,4, 3, 7);
+        bancoDados.inserirResultCorrecao(1,5, 2, 5);
+        bancoDados.inserirResultCorrecao(1,6, 3, 6);
+        bancoDados.inserirResultCorrecao(1,7, 4, 9);
+
+ */
 
         Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
+        intent.putExtra("prova", provaSelected);
         startActivity(intent);
     }
 }

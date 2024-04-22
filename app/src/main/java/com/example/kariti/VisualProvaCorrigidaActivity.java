@@ -17,10 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixar;
+    ArrayList<String> listAlunos;
+    ArrayList<Integer> listAcertos, listNotaDaluno;
+    BancoDados bancoDados;
+    String provaSelected, idProva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,45 +34,53 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         btnBaixar = findViewById(R.id.buttonBaixarResultado);
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        bancoDados = new BancoDados(this);
 
+        provaSelected = getIntent().getExtras().getString("prova");
+        idProva = String.valueOf(bancoDados.pegaIdProva(provaSelected));
+        listAlunos = (ArrayList<String>) bancoDados.listAluno(idProva);
+        listAcertos = (ArrayList<Integer>) bancoDados.listAcertos(idProva);
+        listNotaDaluno = (ArrayList<Integer>) bancoDados.listNotaAluno(idProva);
 
+        for(int x = 0; x < listAlunos.size(); x++) {
+
+            TableLayout tableLayout = findViewById(R.id.tableLayout);
+            TableRow row = new TableRow(this);
+            TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
+            row.setLayoutParams(layoutParams);
+
+            // Cria uma célula para a nova linha
+            TextView cell1 = new TextView(this);
+            cell1.setText(listAlunos.get(x));
+            cell1.setGravity(Gravity.CENTER);
+            row.addView(cell1);
+
+            // Cria outra célula para a nova linha
+            TextView cell2 = new TextView(this);
+            cell2.setText(listAcertos.get(x).toString());
+            cell2.setGravity(Gravity.CENTER);
+            row.addView(cell2);
+
+            TextView cell3 = new TextView(this);
+            cell3.setText(listNotaDaluno.get(x).toString());
+            cell3.setGravity(Gravity.CENTER);
+            row.addView(cell3);
+
+            // Adiciona a nova linha à tabela
+            tableLayout.addView(row);
+        }
         btnBaixar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
-        TableRow row = new TableRow(this);
-        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
-        row.setLayoutParams(layoutParams);
-
-        // Cria uma célula para a nova linha
-        TextView cell1 = new TextView(this);
-        cell1.setText("Romulo");
-        cell1.setGravity(Gravity.CENTER);
-        row.addView(cell1);
-
-        // Cria outra célula para a nova linha
-        TextView cell2 = new TextView(this);
-        cell2.setText("6");
-        cell2.setGravity(Gravity.CENTER);
-        row.addView(cell2);
-
-        TextView cell3 = new TextView(this);
-        cell3.setText("6");
-        cell3.setGravity(Gravity.CENTER);
-        row.addView(cell3);
-
-        // Adiciona a nova linha à tabela
-        tableLayout.addView(row);
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
     private boolean isOnline(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

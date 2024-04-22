@@ -75,14 +75,15 @@ public class VisualAlunoActivity extends AppCompatActivity {
                                         alunos.remove(position);
                                         adapter.notifyDataSetChanged();
                                         Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
-                                    }else avisoNotExluirAluno();
-                                }
+                                    }else
+                                        Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
+                                }else avisoNotExluirAluno();
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // cancelou
+                                //cancelou
                             }
                         });
                 AlertDialog alertDialog = builder.create();

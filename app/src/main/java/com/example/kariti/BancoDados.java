@@ -438,7 +438,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkAlunoEmTurma(Integer id_aluno){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT id_aluno FROM alunosTurma WHERE id_aluno = ? and id_escola = ?", new String[]{String.valueOf(id_aluno), String.valueOf(BancoDados.ID_ESCOLA)});
+        Cursor cursor = database.rawQuery("SELECT * FROM alunosTurma WHERE id_aluno = ?", new String[]{String.valueOf(id_aluno)});
         if (cursor.getCount() > 0) return true;
         else return false;
     }

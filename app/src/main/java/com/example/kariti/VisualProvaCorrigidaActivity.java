@@ -22,10 +22,10 @@ import java.util.ArrayList;
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixar;
-    ArrayList<String> listAlunos;
+    ArrayList<String> listIdsAlunos, listAlunos;
     ArrayList<Integer> listAcertos, listNotaDaluno;
     BancoDados bancoDados;
-    String provaSelected, idProva;
+    String provaSelected, idProva, aluno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +35,19 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         btnBaixar = findViewById(R.id.buttonBaixarResultado);
         bancoDados = new BancoDados(this);
+        listAlunos = new ArrayList<>();
 
         provaSelected = getIntent().getExtras().getString("prova");
         idProva = String.valueOf(bancoDados.pegaIdProva(provaSelected));
-        listAlunos = (ArrayList<String>) bancoDados.listAluno(idProva);
+        listIdsAlunos = (ArrayList<String>) bancoDados.listAluno(idProva);
+        for(int i = 0; i < listIdsAlunos.size(); i++){
+            aluno = bancoDados.pegaNomeAluno(listIdsAlunos.get(i));
+            listAlunos.add(aluno);
+        }
         listAcertos = (ArrayList<Integer>) bancoDados.listAcertos(idProva);
         listNotaDaluno = (ArrayList<Integer>) bancoDados.listNotaAluno(idProva);
 
-        for(int x = 0; x < listAlunos.size(); x++) {
+        for(int x = 0; x < listIdsAlunos.size(); x++) {
 
             TableLayout tableLayout = findViewById(R.id.tableLayout);
             TableRow row = new TableRow(this);
@@ -52,7 +57,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             // Cria uma célula para a nova linha
             TextView cell1 = new TextView(this);
             cell1.setText(listAlunos.get(x));
-            cell1.setGravity(Gravity.CENTER);
+            //cell1.setGravity(Gravity.);
             row.addView(cell1);
 
             // Cria outra célula para a nova linha

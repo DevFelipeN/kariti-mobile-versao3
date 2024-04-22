@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -26,6 +27,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ArrayList<Integer> listAcertos, listNotaDaluno;
     BancoDados bancoDados;
     String provaSelected, idProva, aluno;
+    TextView provaResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +36,12 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltarDcorrecao);
         btnBaixar = findViewById(R.id.buttonBaixarResultado);
+        provaResult = findViewById(R.id.textViewProvaResult);
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
 
         provaSelected = getIntent().getExtras().getString("prova");
+        provaResult.setText(provaSelected);
         idProva = String.valueOf(bancoDados.pegaIdProva(provaSelected));
         listIdsAlunos = (ArrayList<String>) bancoDados.listAluno(idProva);
         for(int i = 0; i < listIdsAlunos.size(); i++){

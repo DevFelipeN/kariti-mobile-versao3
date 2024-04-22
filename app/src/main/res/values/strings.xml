@@ -45,7 +45,7 @@
     <string name="btnAlterarSenha">Alterar Senha</string>
     <string name="btnEscolaDesativada">Escolas Desativadas</string>
     <!--    Aluno-->
-    <string name="textViewAluno">Aluno</string>
+    <string name="textViewAluno"> Aluno</string>
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
     <string name="textViewProva">Prova</string>
@@ -92,7 +92,7 @@
     <string name="txtProva1">Prova 1</string>
     <string name="btnEnviarParaAluno">Enviar Para Aluno</string>
     <string name="btnEnviarParaProf">Enviar Para Professor</string>
-    <string name="btnBaixarProva">Baixar Prova</string>
+    <string name="btnBaixarProva">Baixar Resultado</string>
     <string name="btnCompartilhar">Compartilhar</string>
     <!--    Descrição das Imagens-->
     <string name="btnVoltar">Button Voltar</string>

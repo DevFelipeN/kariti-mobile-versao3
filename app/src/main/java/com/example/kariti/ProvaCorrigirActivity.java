@@ -188,14 +188,14 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Compactador.listCartoes = null;
+                Compactador.listCartoes.clear();
                 onBackPressed();
             }
         });
 
     }
     public void onBackPressed() {
-        Compactador.listCartoes = null;
+        Compactador.listCartoes.clear();
         super.onBackPressed();
     }
 }

@@ -93,10 +93,10 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("alunosTurma", null, contentValues);
         return inserir != -1;
     }
-    public Boolean inserirResultCorrecao(Integer id_escola, Integer id_aluno, Integer acertos, Integer nota){
+    public Boolean inserirResultCorrecao(Integer id_prova, Integer id_aluno, Integer acertos, Integer nota){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id_escola", id_escola);
+        contentValues.put("id_prova", id_prova);
         contentValues.put("id_aluno", id_aluno);
         contentValues.put("acertos", acertos);
         contentValues.put("nota", nota);
@@ -526,7 +526,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Integer listNota(String id_prova) {
         int notaTot = 0;
-        ArrayList<Integer>  notas = new ArrayList<>();
+        //ArrayList<Integer>  notas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM gabarito where id_prova = ?", new String[]{id_prova});
         if (cursor != null && cursor.moveToFirst()) {
@@ -541,4 +541,47 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return notaTot;
     }
+    public List<String> listAluno(String id_prova) {
+        ArrayList<String>  alunos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String aluno = cursor.getString(2);
+                alunos.add(aluno);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return alunos;
+    }
+    public List<Integer> listAcertos(String id_prova) {
+        ArrayList<Integer>  acertos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Integer acerto = cursor.getInt(3);
+                acertos.add(acerto);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return acertos;
+    }
+    public List<Integer> listNotaAluno(String id_prova) {
+        ArrayList<Integer>  notas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Integer nota = cursor.getInt(4);
+                notas.add(nota);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return notas;
+    }
+
 }

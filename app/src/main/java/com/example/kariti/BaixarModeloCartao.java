@@ -1,5 +1,6 @@
 package com.example.kariti;
 
+import android.app.DownloadManager;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -116,7 +117,7 @@ public class BaixarModeloCartao {
             in.close();
         }
     }
-    public static void solicitarCartoesResposta(File arquivo, FileOutputStream fos) {
+    public static void solicitarCartoesResposta(File arquivo, FileOutputStream fos, File fSaida, String filePdf, DownloadManager baixarPdf) {
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -156,6 +157,7 @@ public class BaixarModeloCartao {
                         is.close();
                         Log.e("kariti", "L11");
                         fos.close();
+                        baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
                         Log.e("Kariti", "Fim");
                     } catch (Exception e) {
                         e.printStackTrace();

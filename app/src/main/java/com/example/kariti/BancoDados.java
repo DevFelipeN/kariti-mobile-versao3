@@ -198,17 +198,6 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
-    public Boolean deletDadosprova(Integer id_turma){
-        try {
-            SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM gerarProva WHERE id_prova = ?";
-            SQLiteStatement stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_turma);
-            stmt.executeUpdateDelete();
-            base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-        return true;
-    }
     public Boolean upadateSenha(String password, Integer id){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -396,6 +385,14 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkprovasNome(String nomeProva){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM prova WHERE nomeProva = ?", new String[]{nomeProva});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+    public Boolean checkProvaCorrigida(String id_prova){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova});
         if (cursor.getCount() > 0)
             return true;
         else

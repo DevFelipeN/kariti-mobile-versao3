@@ -2,6 +2,7 @@ package com.example.kariti;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
@@ -136,7 +137,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
                     }
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
@@ -183,14 +183,14 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
                         } else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
-                        //File fSaida = new File(getExternalFilesDir(null), "/cartoes.pdf");
-
                         File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
-                        BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida));
+                        BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                        builder.setTitle("Por favor, Aguarde!")
+                                .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
 
-                        DownloadManager baixarPdf = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
-                        Toast.makeText(ProvaCartoesActivity.this, "Arquivo Baixado  ", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Log.e("Kariti", e.toString());
                         Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();

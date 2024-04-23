@@ -67,6 +67,12 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 iniciarScannerQRCode(); // primeiro o qrcode
             }
         });
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
     private void iniciarScannerQRCode() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);

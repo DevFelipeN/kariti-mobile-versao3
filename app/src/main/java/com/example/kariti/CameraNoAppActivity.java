@@ -90,7 +90,6 @@ public class CameraNoAppActivity extends AppCompatActivity {
     private File getOutPutMediaFile(){
         File mediaFile = null;
         File mediaDir = new File(getExternalFilesDir(null), "/Cartoes");
-
         if (!mediaDir.exists()){
             if (!mediaDir.mkdirs()){
                 Log.d("Error File:", "Falha ao criar o diretório");

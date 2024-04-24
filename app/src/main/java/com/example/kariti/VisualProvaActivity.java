@@ -73,9 +73,7 @@ public class VisualProvaActivity extends AppCompatActivity {
                     SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, alunolist);
                     spinnerAluno.setAdapter(adapterAluno);
                 }
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 

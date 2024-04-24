@@ -71,10 +71,12 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Compactador.listCartoes.clear();
                 onBackPressed();
             }
         });
     }
+
     private void iniciarScannerQRCode() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setOrientationLocked(false);// rotação do scanner
@@ -195,13 +197,6 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Compactador.listCartoes.clear();
-                onBackPressed();
-            }
-        });
 
     }
     public void onBackPressed() {

@@ -103,7 +103,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     public void avisoNotExluir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(DadosTurmaActivity.this);
         builder.setTitle("Atenção!")
-                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível Editar!.");
+                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível Editar!");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

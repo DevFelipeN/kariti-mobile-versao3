@@ -103,26 +103,19 @@ public class VisualProvaActivity extends AppCompatActivity {
                 String situacao = Environment.getExternalStorageState();
                 if (situacao.equals(Environment.MEDIA_MOUNTED)) {
                     File dir = getExternalFilesDir(null);
-                    //File arq = new File(dir+"/json.json");
                     String result = leitor(dir+"/json.json");
                     json = new JSONArray(result);
                     for (int x = 0; x < json.length(); x++){
                         objJson = json.getJSONObject(x);
-                        String resultCorrect = objJson.get("resultado").toString();
-                        if(!resultCorrect.equals(0))
-                            Toast.makeText(this, "Erro na correção da prova "+x, Toast.LENGTH_SHORT).show();
+                        Integer resultCorrect = objJson.getInt("resultado");
+                        if(resultCorrect.equals(0)){
+                            Integer id_prova = objJson.getInt("id_prova");
+                            Integer id_aluno = objJson.getInt("id_aluno");
+                            Integer mensagem = objJson.getInt("mensagem");
+                            testeJson(objJson);
+                        }else Toast.makeText(this, "Erro na correção da prova "+x, Toast.LENGTH_SHORT).show();
+                        testeJson(objJson);
                     }
-                    //testeJson(objJson.get("id_prova"));
-
-
-
-
-
-                    String teste = "[{\"id_prova\":\"1\",\"id_aluno\":\"3\",\"arquivo\":\"1_3_10_5.png\",\"resultado\":\"-5\",\"mensagem\":\"Erro desconhecido (cod.: 31\"},\n" +
-                            "{\"id_prova\":\"1\",\"id_aluno\":\"2\",\"arquivo\":\"1_2_10_5.png\",\"resultado\":\"-5\",\"mensagem\":\"Erro desconhecido (cod.: 31\"},\n" +
-                            "{\"id_prova\":\"1\",\"id_aluno\":\"4\",\"arquivo\":\"1_4_10_5.png\",\"resultado\":\"-5\",\"mensagem\":\"Erro desconhecido (cod.: 31\"},\n" +
-                            "{\"id_prova\":\"1\",\"id_aluno\":\"5\",\"arquivo\":\"1_5_10_5.png\",\"resultado\":\"-5\",\"mensagem\":\"Erro desconhecido (cod.: 31\"},\n" +
-                            "{\"id_prova\":\"1\",\"id_aluno\":\"1\",\"arquivo\":\"1_1_10_5.png\",\"resultado\":\"-5\",\"mensagem\":\"Erro desconhecido (cod.: 31\"}]";
                 }
 
             }catch (Exception e){

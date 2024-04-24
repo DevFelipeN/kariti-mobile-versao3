@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +33,12 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         bancoDados.deletarAlunoDturma(4);
 
-
+        if (!haTurmasCadastradas()) {
+            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
 
         listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
@@ -109,6 +116,15 @@ public class VisualTurmaActivity extends AppCompatActivity {
                 .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível excluir!.");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public boolean haTurmasCadastradas() {
+        SQLiteDatabase database = bancoDados.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM turma WHERE id_turma=" + BancoDados.USER_ID, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
     }
 
 }

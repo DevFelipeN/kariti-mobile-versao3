@@ -34,6 +34,13 @@ public class VisualAlunoActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
 
+        if (!haAlunoCadastrado()) {
+            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeAluno", "id_aluno"};
         Cursor cursor = database.query("aluno", projection, "id_escola="+BancoDados.ID_ESCOLA, null, null, null, null);
@@ -130,5 +137,14 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 .setMessage("Este aluno possui vínculo com uma ou mais turma(s) cadastrada(s), não sendo possível excluir!.");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public boolean haAlunoCadastrado() {
+        SQLiteDatabase database = bancoDados.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM aluno WHERE id_aluno=" + BancoDados.USER_ID, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
     }
 }

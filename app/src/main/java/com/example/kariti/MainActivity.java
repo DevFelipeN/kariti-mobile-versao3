@@ -3,7 +3,9 @@ package com.example.kariti;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Patterns;
@@ -46,33 +48,45 @@ public class MainActivity extends AppCompatActivity {
         cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String usernome = nome.getText().toString();
-                String emails = email.getText().toString();
-                String password = senha.getText().toString();
-                String repassword = confirmarSenha.getText().toString();
+                if (isOnline()) {
+                    String usernome = nome.getText().toString();
+                    String emails = email.getText().toString();
+                    String password = senha.getText().toString();
+                    String repassword = confirmarSenha.getText().toString();
 
-                if(usernome.equals("")||password.equals("")||repassword.equals("")||emails.equals(""))
-                    Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
-                else{
-                    if(!emails.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emails).matches())
-                        if (password.equals(repassword)) {
-                            Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
-                            if (checkuserMail == false) {
-                                String cod = gerarCodigo.gerarVerificador();
-                                Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
-                                if (mandaEmail == true) {
-                                    Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                    proxima.putExtra("identificador", 0);
-                                    proxima.putExtra("nome", usernome);
-                                    proxima.putExtra("email", emails);
-                                    proxima.putExtra("senha", password);
-                                    proxima.putExtra("cod", cod);
-                                    startActivity(proxima);
-                                    finish();
-                                } else {Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();}
-                            } else {Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();}
-                        } else {Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();}
-                    else{Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();}
+                    if (usernome.equals("") || password.equals("") || repassword.equals("") || emails.equals(""))
+                        Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                    else {
+                        if (!emails.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emails).matches())
+                            if (password.equals(repassword)) {
+                                Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
+                                if (checkuserMail == false) {
+                                    String cod = gerarCodigo.gerarVerificador();
+                                    Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
+                                    if (mandaEmail == true) {
+                                        Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                        proxima.putExtra("identificador", 0);
+                                        proxima.putExtra("nome", usernome);
+                                        proxima.putExtra("email", emails);
+                                        proxima.putExtra("senha", password);
+                                        proxima.putExtra("cod", cod);
+                                        startActivity(proxima);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();
+                            }
+                        else {
+                            Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }else{
+                    Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -119,4 +133,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private boolean isOnline() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 }
+
+    

@@ -96,19 +96,24 @@ public class CadProvaActivity extends AppCompatActivity {
                 Integer alter = Integer.valueOf(qtdAlter.getText().toString());
                 String turma = spinnerTurma.getSelectedItem().toString();
                 if (!prova.equals("")){
-                    if (!quest.equals(0)) {
-                        if (!alter.equals(0)) {
-                            Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                            intent.putExtra("nomeProva", prova);
-                            intent.putExtra("turma", turma);
-                            intent.putExtra("data", data);
-                            intent.putExtra("dataForm", dataform);
-                            intent.putExtra("quest", quest);
-                            intent.putExtra("alter", alter);
-                            startActivity(intent);
-                            finish();
-                        }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
-                    }else Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    Boolean exisProva = bancoDados.checkprovasNome(prova);
+                    if(!exisProva) {
+                        if (!quest.equals(0)) {
+                            if (!alter.equals(0)) {
+                                Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                                intent.putExtra("nomeProva", prova);
+                                intent.putExtra("turma", turma);
+                                intent.putExtra("data", data);
+                                intent.putExtra("dataForm", dataform);
+                                intent.putExtra("quest", quest);
+                                intent.putExtra("alter", alter);
+                                startActivity(intent);
+                                finish();
+                            } else
+                                Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(CadProvaActivity.this, "Já existe prova cadastrada com este nome!", Toast.LENGTH_SHORT).show();
                 }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
             }
         });

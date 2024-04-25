@@ -74,7 +74,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 Boolean teste = Compactador.compactador();
                 if(teste) {
                     try {
-                        File fileZip = new File("/storage/emulated/0/Android/data/com.example.kariti/files/Cartoes/saida.zip");
+                        File fileZip = new File("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/Cartoes/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson));
                         Toast.makeText(GaleriaActivity.this, "Testandooooooo!!!!!!!", Toast.LENGTH_SHORT).show();

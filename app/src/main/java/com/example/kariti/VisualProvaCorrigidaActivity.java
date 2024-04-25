@@ -61,7 +61,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             // Cria uma célula para a nova linha
             TextView cell1 = new TextView(this);
             cell1.setText(listAlunos.get(x));
-            //cell1.setGravity(Gravity.);
+            cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
 
             // Cria outra célula para a nova linha

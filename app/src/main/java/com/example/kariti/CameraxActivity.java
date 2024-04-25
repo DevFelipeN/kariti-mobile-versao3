@@ -73,7 +73,7 @@ public class CameraxActivity extends AppCompatActivity {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
         }
 
-            aroundCamera.setOnClickListener(new View.OnClickListener() {
+        aroundCamera.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (cameraFacing == CameraSelector.LENS_FACING_BACK){

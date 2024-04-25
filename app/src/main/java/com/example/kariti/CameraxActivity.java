@@ -3,6 +3,7 @@ package com.example.kariti;
 import static androidx.camera.core.CameraXThreads.TAG;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class CameraxActivity extends AppCompatActivity {
     private ImageCapture imageCapture;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    String nomeImagemx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class CameraxActivity extends AppCompatActivity {
         captureButton = findViewById(R.id.buttonCaptureX);
         toggleFlash = findViewById(R.id.buttonFlashX);
         aroundCamera = findViewById(R.id.aroundCameraX);
+
+        nomeImagemx = getIntent().getExtras().getString("nomeImagem");
 
         // Inicializar o launcher para solicitação de permissão
         requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
@@ -73,17 +77,17 @@ public class CameraxActivity extends AppCompatActivity {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
         }
 
-        aroundCamera.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (cameraFacing == CameraSelector.LENS_FACING_BACK){
-                cameraFacing = CameraSelector.LENS_FACING_FRONT;
-            }else {
-                cameraFacing = CameraSelector.LENS_FACING_BACK;
-            }
-            startCamera();
-        }
-    });
+            aroundCamera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (cameraFacing == CameraSelector.LENS_FACING_BACK){
+                        cameraFacing = CameraSelector.LENS_FACING_FRONT;
+                    }else {
+                        cameraFacing = CameraSelector.LENS_FACING_BACK;
+                    }
+                    startCamera();
+                }
+             });
 
         // Configurar o listener do botão de captura
         captureButton.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +146,7 @@ public class CameraxActivity extends AppCompatActivity {
         String fileName = "IMG_" + sdf.format(System.currentTimeMillis()) + ".jpg";
 
         File outputDirectory = getOutputDirectory();
-        File photoFile = new File(outputDirectory, fileName);
+        File photoFile = new File(outputDirectory, nomeImagemx);
 
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(photoFile)
@@ -153,7 +157,13 @@ public class CameraxActivity extends AppCompatActivity {
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 String msg = "Imagem salva em: " + photoFile.getAbsolutePath();
                 runOnUiThread(() -> Toast.makeText(CameraxActivity.this, msg, Toast.LENGTH_SHORT).show());
-                startCamera(); // Reiniciar a câmera após a captura
+
+                Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
+                intent.putExtra("nomeImagem", nomeImagemx);
+                intent.putExtra("caminhoImagem", photoFile.getAbsolutePath());
+                startActivity(intent);
+                finish();
+                //startCamera(); // Reiniciar a câmera após a captura
             }
 
             @Override

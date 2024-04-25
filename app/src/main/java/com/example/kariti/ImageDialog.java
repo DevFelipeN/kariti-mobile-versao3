@@ -9,12 +9,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-public class ImageDialog extends Dialog {
-    private Bitmap bitmap;
+import com.bumptech.glide.Glide;
 
-    public ImageDialog(Context context, Bitmap bitmap) {
+public class ImageDialog extends Dialog {
+    //private Bitmap bitmap;
+    private String imagePath;
+
+    public ImageDialog(Context context, String imagePath) {
         super(context);
-        this.bitmap = bitmap;
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -33,6 +36,11 @@ public class ImageDialog extends Dialog {
 //            window.setAttributes(layoutParams);
 //        }
         ImageView imageView = findViewById(R.id.imageViewDialog);
-        imageView.setImageBitmap(bitmap);
+        //imageView.setImageBitmap(bitmap);
+
+        // Carregar a imagem usando Glide a partir do caminho do arquivo
+        Glide.with(getContext())
+                .load(imagePath)
+                .into(imageView);
     }
 }

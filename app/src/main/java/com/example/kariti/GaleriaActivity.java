@@ -19,6 +19,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +29,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class GaleriaActivity extends AppCompatActivity {
     AppCompatButton btnFinalizar;
@@ -35,6 +37,7 @@ public class GaleriaActivity extends AppCompatActivity {
     FloatingActionButton btnAdcionarFoto;
     RecyclerView recyclerView;
     ArrayList<String> nomePhoto = new ArrayList<>();
+    ArrayList<String> caminhoDaImagem = new ArrayList<>();
     ArrayList<String> dataImg = new ArrayList<>();
     ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
@@ -98,20 +101,25 @@ public class GaleriaActivity extends AppCompatActivity {
                 Compactador.listCartoes.clear();
                 onBackPressed();
             }
-        });/*
-        Recebendo o byte array e nome da foto TELA ANTERIOR
-        byte[] byteArray = getIntent().getByteArrayExtra("photo");
-        String nomeFotoAnterior = getIntent().getStringExtra("nomeFotoAnterior");
+        });
+
+        //Recebendo o byte array e nome da foto TELA ANTERIOR
+        //byte[] byteArray = getIntent().getByteArrayExtra("photo");
+        String nomeFotoAnterior = getIntent().getStringExtra("nomeImagem");
+        String caminhoDaImagemAter = getIntent().getStringExtra("caminhoImagem");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String dataImagemAnt = sdf.format(System.currentTimeMillis());
 
         recyclerView = findViewById(R.id.recyclerViewFotos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        nomePhoto.add("nomeFotoAnterior");
-        dataImg.add("2024-03-2024 20:01");
-        photoTelaAnterior.add(byteArray);
+        nomePhoto.add(nomeFotoAnterior);
+        dataImg.add(dataImagemAnt);
+        caminhoDaImagem.add(caminhoDaImagemAter);
+        //adapter.notifyDataSetChanged();
 
-        adapter = new AdapterGaleria(this, nomePhoto, dataImg, photoTelaAnterior);
+        adapter = new AdapterGaleria(this, nomePhoto, dataImg, caminhoDaImagem);
         recyclerView.setAdapter(adapter);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,27 +129,27 @@ public class GaleriaActivity extends AppCompatActivity {
            }
         });
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {
-                // Se a imagem foi capturada pela câmera
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                if (photo != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArrayTirada = stream.toByteArray();
-
-                    nomePhoto.add("Foto Tirada");
-                    dataImg.add("2024-03-2024 22:01");
-                    photoTelaAnterior.add(byteArrayTirada);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        }
-         */
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == Activity.RESULT_OK) {
+//            if (requestCode == 1) {
+//                // Se a imagem foi capturada pela câmera
+//                Bitmap photo = (Bitmap) data.getExtras().get("data");
+//                if (photo != null) {
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArrayTirada = stream.toByteArray();
+//
+//                    nomePhoto.add("Foto Tirada");
+//                    dataImg.add("2024-03-2024 22:01");
+//                    photoTelaAnterior.add(byteArrayTirada);
+//                    adapter.notifyDataSetChanged();
+//                }
+//            }
+//        }
+//
+//    }
     public void telaProva(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Provas enviadas para correção!")

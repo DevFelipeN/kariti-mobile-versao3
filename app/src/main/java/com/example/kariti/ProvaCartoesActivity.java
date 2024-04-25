@@ -169,7 +169,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                     }
                     Integer anonimatos = bancoDados.pegaqtdAnonimos(idTurma);
-                    Integer idAnonimos = Integer.valueOf(idAluno);
+                    Integer idAnonimos = Integer.valueOf(idAluno); // Resolver erro...
                     for(int a = 1; a <= anonimatos; a++){
                         idAnonimos++;
                         dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAnonimos.toString(), "Aluno 000"+a});
@@ -178,11 +178,12 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         File filecsv = null;
                         String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
                         String filePdf = nomeProva + dateCart+".pdf";
-                        String estado = Environment.getExternalStorageState();
-                        if (estado.equals(Environment.MEDIA_MOUNTED)) {
-                            filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                        //String estado = Environment.getExternalStorageState();
+                        //if (estado.equals(Environment.MEDIA_MOUNTED)) {
+                            //filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                            filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                        } else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
+                        //} else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
                         File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                         BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
                         AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);

@@ -65,6 +65,10 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivityForResult(intent, 2);
                 iniciarScannerQRCode(); // primeiro o qrcode
+
+//                Intent intent = new Intent(ProvaCorrigirActivity.this, CameraxActivity.class);
+//                startActivity(intent);
+//                finish();
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

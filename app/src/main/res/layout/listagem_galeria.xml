@@ -33,9 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="101_80_15_5.png"
-            android:textSize="16dp"
             android:textColor="@color/white"
-            />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/dataDafoto"

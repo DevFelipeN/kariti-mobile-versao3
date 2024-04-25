@@ -112,8 +112,10 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 qtdQuestoes = 0;
                 qtdAlternativas = 0;
             }
-            nomeDaFoto = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".png";
-            Intent intent = new Intent(ProvaCorrigirActivity.this, CameraNoAppActivity.class);
+            nomeDaFoto = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".jpg";
+
+            //Intent intent = new Intent(ProvaCorrigirActivity.this, CameraNoAppActivity.class);
+            Intent intent = new Intent(ProvaCorrigirActivity.this, CameraxActivity.class);
             intent.putExtra("nomeImagem", nomeDaFoto);
             startActivity(intent);
             finish();

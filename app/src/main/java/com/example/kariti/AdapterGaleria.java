@@ -16,20 +16,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHolder> {
 
-    private ArrayList<String> nomesDasFotos, datasDasFotos;
+    private ArrayList<String> nomesDasFotos, datasDasFotos, caminhosDasFotos;
 //    private byte[] photo;
-    private ArrayList<byte[]> photo;
+//    private ArrayList<byte[]> photo;
     private Context context;
 
-    public AdapterGaleria(Context context, ArrayList<String> nomesDasFotos, ArrayList<String> datasDasFotos, ArrayList<byte[]> photo) {
+    public AdapterGaleria(Context context, ArrayList<String> nomesDasFotos, ArrayList<String> datasDasFotos, ArrayList<String> caminhosDasFotos) {
         this.context = context;
         this.nomesDasFotos = nomesDasFotos;
         this.datasDasFotos = datasDasFotos;
-        this.photo = photo;
+        this.caminhosDasFotos = caminhosDasFotos;
     }
 
     @NonNull
@@ -43,16 +45,23 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String nomeFoto = nomesDasFotos.get(position);
         String dataFoto = datasDasFotos.get(position);
-        byte[] fotoData = photo.get(position);
-//        Bitmap foto = fotosDoBanco.get(position); //teste para o banco.
+        String caminhoFoto = caminhosDasFotos.get(position);
 
-        Bitmap bitPhoto = BitmapFactory.decodeByteArray(fotoData, 0, fotoData.length);
-//        Bitmap bitPhoto = BitmapFactory.decodeByteArray(photo, 0, photo.length);
+        //byte[] fotoData = photo.get(position);
+        //Bitmap foto = fotosDoBanco.get(position); //teste para o banco.
+
+        //Bitmap bitPhoto = BitmapFactory.decodeByteArray(fotoData, 0, fotoData.length);
+        //Bitmap bitPhoto = BitmapFactory.decodeByteArray(photo, 0, photo.length);
 
         // Defina os dados nos elementos de visualização
         holder.nomeDaFoto.setText(nomeFoto);
         holder.dataDaFoto.setText(dataFoto);
-        holder.imageViewGaleria.setImageBitmap(bitPhoto);
+        //holder.imageViewGaleria.setImageBitmap(bitPhoto);
+
+        // Carregar a imagem usando Glide
+        Glide.with(context)
+                .load(caminhoFoto) // Carregar a imagem a partir do caminho do arquivo
+                .into(holder.imageViewGaleria);
 
         // Defina o clique do botão
         holder.deleteImg.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +73,8 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
         holder.imageViewGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageDialog dialog = new ImageDialog(context, bitPhoto);
+                //ImageDialog dialog = new ImageDialog(context, bitPhoto);
+                ImageDialog dialog = new ImageDialog(context, caminhoFoto);
                 dialog.show();
             }
         });

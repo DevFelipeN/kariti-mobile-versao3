@@ -54,7 +54,8 @@ public class GaleriaActivity extends AppCompatActivity {
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
 
         nomeCartao = getIntent().getExtras().getString("nomeImagem") ;
-        Compactador.listCartoes.add(nomeCartao);
+        if(!Compactador.listCartoes.contains(nomeCartao))
+            Compactador.listCartoes.add(nomeCartao);
 
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +151,7 @@ public class GaleriaActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getApplicationContext(), ProvaActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
         AlertDialog alertDialog = builder.create();

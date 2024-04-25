@@ -2,6 +2,7 @@ package com.example.kariti;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,13 +20,15 @@ public class CodSenhaActivity extends AppCompatActivity {
     EditText n1, n2, n3, n4;
     Button buttonValidarSenha;
     BancoDados bancoDados;
-    TextView msgValidacao;
+    TextView msgValidacao, cancelar;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cod_senha);
 
-
+        cancelar = findViewById(R.id.textViewCancelar);
         n1 = (EditText) findViewById(R.id.editTextNumber);
         n2 = (EditText) findViewById(R.id.editTextNumber2);
         n3 = (EditText) findViewById(R.id.editTextNumber3);
@@ -38,6 +41,13 @@ public class CodSenhaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         buttonValidarSenha = findViewById(R.id.buttonValidarSenhaw);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                finish();
+            }
+        });
         buttonValidarSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -3,8 +3,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -44,29 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
         codSenhaActivity = new CodSenhaActivity();
-        String text = "";
-
-        try {
-            text += "Z:" ;
-            for (String x : new File("/sdcard/Download/").list()){
-                text += x;
-                Log.e("KARITI", x);
-            }
-            text+= "A:" + new File("/sdcard/Download/senha.png").exists();
-            text+= "B:" + new File("/sdcard/Download/apagar.png").exists();
-            //text += Compactador.testar();
-            //Compactador.copiar("/storage/emulated/0/Download/apagar.png", "/data/user/0/com.example.kariti/files/apagar.png");
-            //Compactador.copiar("/storage/emulated/0/Download/senha.png", "/data/user/0/com.example.kariti/files/senha.png");
-            //text+= "C:" + new File("/data/user/0/com.example.kariti/files/senha.png").exists();
-            //text+= "D:" + new File("/data/user/0/com.example.kariti/files/apagar.png").exists();
-        }catch(Exception e) {
-            text = text + "ERRO1" + e;
-        }
-        //Toast.makeText(LoginActivity.this, "text; "+text, Toast.LENGTH_SHORT).show();
-
-
-
-
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,35 +79,39 @@ public class LoginActivity extends AppCompatActivity {
         esqueciSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String confEmail = email.getText().toString();
-                if (confEmail.equals("")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setTitle("Esqueceu Sua Senha?")
-                        .setMessage("Por favor informe seu e-mail cadastrado no campo sugerido, em seguida pressione 'Esqueci Minha Senha'")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(LoginActivity.this, "Informe o E-mail! ", Toast.LENGTH_SHORT).show();
+                if(isOnline()) {
+                    String confEmail = email.getText().toString();
+                    if (confEmail.equals("")) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setTitle("Esqueceu Sua Senha?")
+                                .setMessage("Por favor informe seu e-mail cadastrado no campo sugerido, em seguida pressione 'Esqueci Minha Senha'")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(LoginActivity.this, "Informe o E-mail! ", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    } else {
+                        Integer id = bancoDados.checkemail(confEmail);
+                        if (id > 0) {
+                            String cod = gerarCodigo.gerarVerificador();
+                            Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
+                            if (mandaEmail == true) {
+                                Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+                                proxima.putExtra("identificador", 1);
+                                proxima.putExtra("id", id);
+                                proxima.putExtra("email", confEmail);
+                                proxima.putExtra("cod", cod);
+                                startActivity(proxima);
                             }
-                        });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }else{
-                    Integer id = bancoDados.checkemail(confEmail);
-                    if(id>0){
-                        String cod = gerarCodigo.gerarVerificador();
-                        Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
-                        if(mandaEmail==true) {
-                            Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                            proxima.putExtra("identificador",1);
-                            proxima.putExtra("id", id);
-                            proxima.putExtra("email", confEmail);
-                            proxima.putExtra("cod", cod);
-                            startActivity(proxima);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "E-mail não cadastrado!", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Toast.makeText(LoginActivity.this, "E-mail não cadastrado!", Toast.LENGTH_SHORT).show();
                     }
+                }else {
+                    Toast.makeText(LoginActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -151,5 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                 password.setSelection(password.getText().length());
             }
         });
+    }
+    private boolean isOnline() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }

@@ -32,7 +32,8 @@ public class CadTurmaActivity extends AppCompatActivity{
     Integer id_turma = 0;
     AdapterExclAluno al;
     ArrayList<String> selectedAlunos = new ArrayList<>();
-    ArrayList<String> nomesAluno;
+    ArrayList<String> nomesAluno, anonimos;
+    Integer idAnonimos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,10 +119,11 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
+                    Integer an = Integer.valueOf(alunosAnonimos.getText().toString());
                     String turma = nomeTurma.getText().toString();
                     Boolean checkTurma = bancoDados.checkTurma(turma);
                     if(!checkTurma) {
-                        Boolean cadTurma = bancoDados.inserirTurma(turma, Integer.valueOf(alunosAnonimos.getText().toString()));
+                        Boolean cadTurma = bancoDados.inserirTurma(turma, an);
                         if (cadTurma) {
                             id_turma = bancoDados.pegaIdTurma(turma);
                             if(!selectedAlunos.isEmpty()) {
@@ -129,6 +131,18 @@ public class CadTurmaActivity extends AppCompatActivity{
                                 for (int i = 0; i < num; i++) {
                                     Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
                                     bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
+                                }
+                            }
+                            if(!an.equals(0)){
+                                anonimos = new ArrayList<>();
+                                for(int x = 0; x < an; x++){
+                                    String anonimo = "Aluno "+turma+" anonimo - " + x;
+                                    anonimos.add(anonimo);
+                                    bancoDados.inserirAnonimos(anonimo);
+                                }
+                                for(int a = 0; a < anonimos.size(); a++){
+                                    idAnonimos = bancoDados.pegaIdAnonimo(anonimos.get(a));
+                                    bancoDados.inserirAlunosNaTurma(id_turma, idAnonimos);
                                 }
                             }
                             Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();

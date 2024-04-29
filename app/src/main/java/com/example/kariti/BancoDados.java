@@ -17,7 +17,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "base_dados", null, 10);
+        super(context, "base_dados", null, 12);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
@@ -26,7 +26,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
             base_dados.execSQL("create Table escola( id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
             base_dados.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
-            base_dados.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, id_escola INTEGER)");
+            base_dados.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, n Integer, id_escola INTEGER)");
             base_dados.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER, nomeTurma TEXT, qtdAnonimos Integer)");
             base_dados.execSQL("create Table alunosTurma (id_turma Integer, id_aluno Integer)");
             base_dados.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER, id_turma Integer)");
@@ -76,11 +76,11 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("escola", null, contentValues);
         return inserir != -1;
     }
-    public Boolean inserirTurma(String nomeTurma, Integer qtdAnonimos){
+    public Boolean inserirTurma(String nomeTurma, Integer an){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeTurma", nomeTurma);
-        contentValues.put("qtdAnonimos", qtdAnonimos);
+        contentValues.put("qtdAnonimos", an);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
         long inserir = base_dados.insert("turma", null, contentValues);
         return inserir != -1;
@@ -139,6 +139,25 @@ public class BancoDados extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeAluno", nomeAluno);
         contentValues.put("email", email);
+        contentValues.put("n", 1);
+        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        long inserir = base_dados.insert("aluno", null, contentValues);
+        return inserir != -1;
+    }
+    public Boolean inserirDadosAlunoSemail(String nomeAluno){
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeAluno", nomeAluno);
+        contentValues.put("n", 1);
+        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        long inserir = base_dados.insert("aluno", null, contentValues);
+        return inserir != -1;
+    }
+    public Boolean inserirAnonimos(String anonimo){
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("nomeAluno", anonimo);
+        contentValues.put("n", 0);
         contentValues.put("id_escola", BancoDados.ID_ESCOLA);
         long inserir = base_dados.insert("aluno", null, contentValues);
         return inserir != -1;
@@ -282,6 +301,13 @@ public class BancoDados extends SQLiteOpenHelper {
     public Integer pegaIdAluno(String nomeAluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select id_aluno from Aluno where nomeAluno = ?", new String[]{nomeAluno});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+    public Integer pegaIdAnonimo(String an) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select id_aluno from Aluno where nomeAluno = ?", new String[]{an});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);
@@ -579,6 +605,34 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return notas;
+    }
+    public List<String> listAlunos() {
+        ArrayList<String>  alunos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM aluno where n = ? and id_escola = ?", new String[]{"1", BancoDados.ID_ESCOLA.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String aluno = cursor.getString(1);
+                alunos.add(aluno);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return alunos;
+    }
+    public List<String> listIdsAlunos() {
+        ArrayList<String>  alunos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM aluno where n = ? and id_escola = ?", new String[]{"1", BancoDados.ID_ESCOLA.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String aluno = cursor.getString(0);
+                alunos.add(aluno);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return alunos;
     }
 
 }

@@ -67,11 +67,12 @@
 
     <ListView
         android:id="@+id/listViewCadTurma"
-        android:layout_width="306dp"
-        android:layout_height="152dp"
+        android:layout_width="304dp"
+        android:layout_height="229dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/borda_botao"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewalun" />
 
@@ -86,25 +87,26 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutIncluirAlunos"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintVertical_bias="0.388" />
 
     <LinearLayout
         android:id="@+id/layoutIncluirAlunos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:gravity="center"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/listViewCadTurma">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:text="@string/textViewAlunoAnonim"
             android:textSize="18sp"
-            android:layout_marginRight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -112,16 +114,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/listViewCadTurma"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0">
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@id/listViewCadTurma">
 
             <ImageView
                 android:id="@+id/imageViewMenosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/subtract"/>
+                app:srcCompat="@mipmap/subtract" />
 
             <EditText
                 android:id="@+id/editTextAlunosAnonimos"
@@ -141,10 +143,9 @@
                 android:id="@+id/imageViewMaisAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/btnadicionar"/>
+                app:srcCompat="@mipmap/btnadicionar" />
         </LinearLayout>
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

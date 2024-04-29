@@ -24,6 +24,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
     BancoDados bancoDados;
     EditText pesquisarAlunos;
+    ArrayList<String> listAlunos,   idsAlunos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +35,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
 
-        if (!haAlunoCadastrado()) {
-            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
 
         SQLiteDatabase database = bancoDados.getReadableDatabase();
         String [] projection = {"nomeAluno", "id_aluno"};
@@ -60,7 +55,17 @@ public class VisualAlunoActivity extends AppCompatActivity {
         cursor.close();
         database.close();
 
+        /*
+        listAlunos = (ArrayList<String>) bancoDados.listAlunos();
+        if (listAlunos.size() == 0) {
+            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+        idsAlunos = (ArrayList<String>) bancoDados.listIdsAlunos();
 
+         */
         EscolaAdapter adapter = new EscolaAdapter(this, alunos, idsAlunos);
         listView.setAdapter(adapter);
 
@@ -81,7 +86,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
                                 if(!checkAlEmTurma){
                                     Boolean deletAluno = bancoDados.deletarAluno(ids);
                                     if (deletAluno) {
-                                        alunos.remove(position);
+                                        listAlunos.remove(position);
                                         adapter.notifyDataSetChanged();
                                         Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
                                     }else

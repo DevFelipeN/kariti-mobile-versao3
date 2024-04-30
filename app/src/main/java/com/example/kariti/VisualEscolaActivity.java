@@ -28,6 +28,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
     Button btnEscDesativada;
     ImageView iconHelp;
     private Toolbar toolbar;
+    ArrayList<String> listEscola;
 
     BancoDados bancoDados;
 
@@ -52,27 +53,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
             return;
         }
 
-
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeEscola", "id_escola"};
-        Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
-        ArrayList<String> nomesEscolas = new ArrayList<>();
-        ArrayList<String> idsEscolas = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeEscola");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nomeEscola = cursor.getString(0);
-                String idEscola = cursor.getString(1);
-                nomesEscolas.add(nomeEscola);
-                idsEscolas.add(idEscola);
-            }
-        }else{
-            Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");
-        }
-        cursor.close();
-        database.close();
-
-        EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
+        listEscola = (ArrayList<String>) bancoDados.listEscolas();
+        EscolaAdapter adapter = new EscolaAdapter(this, listEscola, listEscola);
         listView.setAdapter(adapter);
 
         btnEscDesativada.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +101,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
                                 if(deletDativadas){
                                     Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
                                     if(inserSlcolDesativada) {
-                                        nomesEscolas.remove(position);
+                                        listEscola.remove(position);
                                         adapter.notifyDataSetChanged();
                                         Toast.makeText(VisualEscolaActivity.this, "Escola desativada", Toast.LENGTH_SHORT).show();
                                     }

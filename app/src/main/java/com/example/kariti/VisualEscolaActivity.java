@@ -97,7 +97,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BancoDados.ID_ESCOLA = Integer.valueOf(idsEscolas.get(position));
+                BancoDados.ID_ESCOLA = bancoDados.pegaIdEscola(adapter.getItem(position));
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
                 startActivity(intent);
             }
@@ -112,7 +112,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = idsEscolas.get(position);
+                                String ids = String.valueOf(bancoDados.pegaIdEscola(adapter.getItem(position)));
                                 String escola = bancoDados.pegaEscola(ids);
                                 String bairro = bancoDados.pegaBairro(ids);
                                 Boolean deletDativadas = bancoDados.deletarDasAtivadas(ids);
@@ -121,7 +121,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
                                     if(inserSlcolDesativada) {
                                         nomesEscolas.remove(position);
                                         adapter.notifyDataSetChanged();
-                                        Toast.makeText(VisualEscolaActivity.this, "Escola Desativada Com Sucesso", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VisualEscolaActivity.this, "Escola desativada", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -146,8 +146,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
     public void dialogHelp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("Para arquivar uma escola, basta pressionar sobre a escola desejada e confirmar a ação. " +
-                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas Desativadas'.");
+        builder.setMessage("Para desativar uma escola, selecionar a escola desejada e confirmar a ação. " +
+                "Posteriormente, você poderá encontrar suas escolas desativadas clicando no botão 'Escolas Desativadas'.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

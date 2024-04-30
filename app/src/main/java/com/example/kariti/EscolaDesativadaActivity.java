@@ -74,7 +74,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                         .setPositiveButton("Ativar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = idsEscolasDesativadas.get(position);
+                                String ids = String.valueOf(bancoDados.pegaIdEscolaDesativada(adapter.getItem(position)));
                                 String pegaNome = bancoDados.pegaEscolaDesativada(ids);
                                 String pegaBairro = bancoDados.pegaBairroDesativado(ids);
                                 Integer id = Integer.valueOf(ids);

@@ -305,6 +305,20 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getInt(0);
     }
+    public Integer pegaIdEscola(String nomeEscola) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select id_escola from escola where nomeEscola = ?", new String[]{nomeEscola});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+    public Integer pegaIdEscolaDesativada(String nomeEscola) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select id_scolDesativadas from escolasDesativadas where nomeScolDesativada = ?", new String[]{nomeEscola});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
     public Integer pegaIdAnonimo(String an) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select id_aluno from Aluno where nomeAluno = ?", new String[]{an});
@@ -634,5 +648,28 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return alunos;
     }
+
+/*
+    SQLiteDatabase database = bancoDados.getReadableDatabase();
+    String [] projection = {"nomeAluno", "id_aluno"};
+    Cursor cursor = database.query("aluno", projection, "id_escola="+BancoDados.ID_ESCOLA, null, null, null, null);
+    ArrayList<String> alunos = new ArrayList<>();
+    ArrayList<String> idsAlunos = new ArrayList<>();
+    int nomeColumIndex = cursor.getColumnIndex("nomeAluno");
+        if (nomeColumIndex != -1){
+        while (cursor.moveToNext()){
+            String nome = cursor.getString(0);
+            String idAluno = cursor.getString(1);
+            alunos.add(nome);
+            idsAlunos.add(idAluno);
+        }
+    }else{
+        Log.e("VisualAlunoActivity", "A coluna 'nome' não foi encontrada no cursor.");
+    }
+        cursor.close();
+        database.close();
+
+ */
+
 
 }

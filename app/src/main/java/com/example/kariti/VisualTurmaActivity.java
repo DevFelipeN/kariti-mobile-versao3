@@ -85,7 +85,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
                             }
                         });
                 AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                alertDialog.show(); 
                 return true;
             }
         });

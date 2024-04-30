@@ -504,7 +504,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> obterNomesAlunos() {
         List<String> nomesAlunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where n = ? and id_escola = ?", new String[]{"1", String.valueOf(BancoDados.ID_ESCOLA)});
+        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where n = ? and id_escola = ? ORDER BY nomeAluno ASC", new String[]{"1", String.valueOf(BancoDados.ID_ESCOLA)});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo
@@ -623,7 +623,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> listAlunos() {
         ArrayList<String>  alunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM aluno where n = ? and id_escola = ?", new String[]{"1", BancoDados.ID_ESCOLA.toString()});
+        Cursor cursor = db.rawQuery("SELECT * FROM aluno where n = ? and id_escola = ? ORDER BY nomeAluno ASC", new String[]{"1", BancoDados.ID_ESCOLA.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String aluno = cursor.getString(1);
@@ -634,20 +634,35 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return alunos;
     }
-    public List<String> listIdsAlunos() {
-        ArrayList<String>  alunos = new ArrayList<>();
+    public List<String> listEscolas() {
+        ArrayList<String>  escolas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM aluno where n = ? and id_escola = ?", new String[]{"1", BancoDados.ID_ESCOLA.toString()});
+        Cursor cursor = db.rawQuery("SELECT * FROM escola ORDER BY nomeEscola ASC", new String[]{});
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String aluno = cursor.getString(0);
-                alunos.add(aluno);
+                String escola = cursor.getString(1);
+                escolas.add(escola);
             } while (cursor.moveToNext());
             cursor.close();
         }
         db.close();
-        return alunos;
+        return escolas;
     }
+    public List<String> listDesativadas() {
+        ArrayList<String>  desativadas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM escolasDesativadas ORDER BY nomeScolDesativada ASC", new String[]{});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String desativada = cursor.getString(1);
+                desativadas.add(desativada);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return desativadas;
+    }
+
 
 /*
     SQLiteDatabase database = bancoDados.getReadableDatabase();
@@ -666,6 +681,43 @@ public class BancoDados extends SQLiteOpenHelper {
     }else{
         Log.e("VisualAlunoActivity", "A coluna 'nome' não foi encontrada no cursor.");
     }
+        cursor.close();
+        database.close();
+
+
+         SQLiteDatabase database = bancoDados.getReadableDatabase();
+        String [] projection = {"nomeEscola", "id_escola"};
+        Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
+        ArrayList<String> nomesEscolas = new ArrayList<>();
+        ArrayList<String> idsEscolas = new ArrayList<>();
+        int nomeColumIndex = cursor.getColumnIndex("nomeEscola");
+        if (nomeColumIndex != -1){
+            while (cursor.moveToNext()){
+                String nomeEscola = cursor.getString(0);
+                String idEscola = cursor.getString(1);
+                nomesEscolas.add(nomeEscola);
+                idsEscolas.add(idEscola);
+            }
+        }else{
+            Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");
+        }
+        cursor.close();
+        database.close();
+
+        SQLiteDatabase database = bancoDados.getReadableDatabase();
+        String [] projection = {"nomeScolDesativada", "id_scolDesativadas"};
+        Cursor cursor = database.query("escolasDesativadas", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
+        ArrayList<String> nomesEscolasDesativadas = new ArrayList<>();
+        ArrayList<String> idsEscolasDesativadas = new ArrayList<>();
+        int nomeColumIndex = cursor.getColumnIndex("nomeScolDesativada");
+        if (nomeColumIndex != -1){
+            while (cursor.moveToNext()){
+                String nomeEscola = cursor.getString(0);
+                String idEscola = cursor.getString(1);
+                nomesEscolasDesativadas.add(nomeEscola);
+                idsEscolasDesativadas.add(idEscola);
+            }
+        }else{Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");}
         cursor.close();
         database.close();
 

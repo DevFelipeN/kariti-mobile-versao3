@@ -6,15 +6,6 @@
     android:id="@+id/myToolBarMenuHamburg"
     android:layout_height="?attr/actionBarSize">
 
-    <ImageButton
-        android:id="@+id/btn_menu_amb"
-        android:layout_width="40dp"
-        android:layout_height="45dp"
-        android:background="@color/tranparente"
-        android:textColor="@android:color/black"
-        android:src="@mipmap/ic_hamb"
-        android:contentDescription="@string/btnVoltar"/>
-
     <ImageView
         android:id="@+id/menu_icon"
         android:layout_width="45dp"

@@ -17,7 +17,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "base_dados", null, 12);
+        super(context, "base_dados", null, 13);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {

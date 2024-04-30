@@ -26,7 +26,7 @@ public class EnviarEmail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("kariti2024@gmail.com", "xbpw eypf tfyk kyjh");
+                return new PasswordAuthentication("kariti2024@gmail.com", "ukqv thud bgpr iomq");
             }
         });
         try {

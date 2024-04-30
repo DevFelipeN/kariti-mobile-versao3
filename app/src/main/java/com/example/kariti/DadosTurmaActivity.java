@@ -52,7 +52,8 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
             String id_aluno = String.valueOf(idsAlTurma.get(y));
             listAlunosDturma.add(bancoDados.pegaNomeAluno(id_aluno));
         }
-        EscolaAdapter adapter = new EscolaAdapter(this, listAlunosDturma, listAlunosDturma);
+
+        DesativadaAdapter adapter = new DesativadaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
 
 

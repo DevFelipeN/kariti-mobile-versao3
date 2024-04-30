@@ -504,7 +504,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> obterNomesAlunos() {
         List<String> nomesAlunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where n = ? and id_escola = ?", new String[]{"1", String.valueOf(BancoDados.ID_ESCOLA)});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo

@@ -255,6 +255,18 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
+    public Boolean upadateAluno(String nomeAluno, Integer id_aluno){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String altera = "UPDATE aluno SET nomeAluno=? WHERE id_aluno=?";
+            SQLiteStatement stmt = base_dados.compileStatement(altera);
+            stmt.bindString(1, nomeAluno);
+            stmt.bindLong(2, id_aluno);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from usuario where nomeUsuario =? and email = ?", new String[]{nome, email});

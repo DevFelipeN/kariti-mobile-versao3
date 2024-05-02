@@ -47,8 +47,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
         EscolaAdapter adapter = new EscolaAdapter(this, listAlunos, listAlunos);
         listView.setAdapter(adapter);
 
-
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {

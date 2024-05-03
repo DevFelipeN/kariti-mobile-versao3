@@ -165,7 +165,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                     for (int x = 0; x < qtdProvas; x++) {
                         idAluno = String.valueOf(listIdsAlunos.get(x));
-                        String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
+                        String aluno = bancoDados.alunosGerarProva(String.valueOf(listIdsAlunos.get(x)));
                         dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                     }
                     try {

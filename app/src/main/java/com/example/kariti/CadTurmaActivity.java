@@ -124,7 +124,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                     Boolean checkTurma = bancoDados.checkTurma(turma);
                     if(!checkTurma) {
                         Boolean cadTurma = bancoDados.inserirTurma(turma, an);
-                        if (cadTurma) {
+                        if (cadTurma){
                             id_turma = bancoDados.pegaIdTurma(turma);
                             if(!selectedAlunos.isEmpty()) {
                                 int num = listarAlunos.getAdapter().getCount();

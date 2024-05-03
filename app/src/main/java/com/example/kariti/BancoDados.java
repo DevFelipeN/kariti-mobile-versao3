@@ -216,6 +216,17 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
+    public Boolean deletaAnonimos(Integer id_aluno){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String deleta = "DELETE FROM aluno WHERE id_aluno = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt.bindLong(1, id_aluno);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
     public Boolean upadateSenha(String password, Integer id){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -297,10 +308,12 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
-        if (cursor.getCount() > 0)
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and n = ?", new String[]{id_aluno, "1"});
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-        return cursor.getString(1);
+            return cursor.getString(1);
+        }else
+            return null;
     }
     public String pegaData(String id_prova) {
         SQLiteDatabase base_dados = this.getWritableDatabase();

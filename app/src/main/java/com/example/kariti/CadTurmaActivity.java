@@ -136,7 +136,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                             if(!an.equals(0)){
                                 anonimos = new ArrayList<>();
                                 for(int x = 0; x < an; x++){
-                                    String anonimo = "Aluno "+turma+" anonimo - " + x;
+                                    String anonimo = "Aluno "+ x;
                                     anonimos.add(anonimo);
                                     bancoDados.inserirAnonimos(anonimo);
                                 }

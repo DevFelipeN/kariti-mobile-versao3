@@ -670,7 +670,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> listEscolas() {
         ArrayList<String>  escolas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM escola and  ORDER BY nomeEscola ASC", new String[]{});
+        Cursor cursor = db.rawQuery("SELECT * FROM escola WHERE id_escola = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String escola = cursor.getString(1);

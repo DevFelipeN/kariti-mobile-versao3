@@ -45,18 +45,17 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         turmaCad.setText(pegaTurma);
         qtdAnonimos.setText(pegaAnonimos.toString());
 
-
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
-        for(int y = 0; y < num; y++){
+        for(int y = 0; y < num; y++) {
             String id_aluno = String.valueOf(idsAlTurma.get(y));
-            listAlunosDturma.add(bancoDados.pegaNomeAluno(id_aluno));
+            String aluno = bancoDados.pegaNomeAluno(id_aluno);
+            if (aluno != null) {
+                listAlunosDturma.add(aluno);
+            }
         }
-
         DesativadaAdapter adapter = new DesativadaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
-
-
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

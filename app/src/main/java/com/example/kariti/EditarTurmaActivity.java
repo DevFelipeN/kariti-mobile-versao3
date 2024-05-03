@@ -22,7 +22,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ImageView maisAn, menosAn;
     ListView listView;
     EditText editTurma, novosAlAnonimos;
-    ArrayList<String> editAlTurma, alunosSpinner, selecionados;
+    ArrayList<String> editAlTurma, alunosSpinner, selecionados, anonimos;
     ArrayList<Integer> idsAlTurma;
     String id_turma, pegaTurma, alunosSelecionados;
     BancoDados bancoDados;
@@ -65,7 +65,10 @@ public class EditarTurmaActivity extends AppCompatActivity {
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
         for(int y = 0; y < num; y++){
-            editAlTurma.add(bancoDados.pegaNomeAluno(String.valueOf(idsAlTurma.get(y))));
+            String aluno = bancoDados.pegaNomeAluno(String.valueOf(idsAlTurma.get(y)));
+            if(aluno != null){
+                editAlTurma.add(aluno);
+            }
         }
         adapter = new AdapterExclAluno(this, editAlTurma);
         listView.setAdapter(adapter);
@@ -132,7 +135,8 @@ public class EditarTurmaActivity extends AppCompatActivity {
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bancoDados.upadateTurma(editTurma.getText().toString(), Integer.valueOf(novosAlAnonimos.getText().toString()), Integer.valueOf(id_turma)); //Alterando Dados da turma
+                String turmaedit = editTurma.getText().toString();
+                bancoDados.upadateTurma(turmaedit, Integer.valueOf(novosAlAnonimos.getText().toString()), Integer.valueOf(id_turma)); //Alterando Dados da turma
                 bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
                 if(!editAlTurma.isEmpty()) {
                     int num = listView.getAdapter().getCount();

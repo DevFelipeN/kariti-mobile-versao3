@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -434,13 +433,13 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-    public Integer checkprovasNome(String nomeProva){
+    public Boolean checkprovasNome(String nomeProva, String id_turma) {
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM prova WHERE nomeProva = ?", new String[]{nomeProva});
-        if (cursor.getCount() > 0)
-            return cursor.getInt(6);
-        else
-            return null;
+        Cursor cursor = database.rawQuery("SELECT id_turma FROM prova WHERE nomeProva = ? and id_turma = ?", new String[]{nomeProva, id_turma});
+        if (cursor.getCount() > 0){
+            return true;
+        }else
+            return false;
     }
     public Boolean checkProvaCorrigida(String id_prova){
         SQLiteDatabase database = this.getWritableDatabase();

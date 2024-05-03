@@ -98,9 +98,8 @@ public class CadProvaActivity extends AppCompatActivity {
                 String turma = spinnerTurma.getSelectedItem().toString();
                 if(!prova.equals("")){
                     id_turma = bancoDados.pegaIdTurma(turma);
-                    Integer existTurma = bancoDados.checkprovasNome(prova);
-                    Toast.makeText(CadProvaActivity.this, "Passando aqui!", Toast.LENGTH_SHORT).show();
-                    if(!id_turma.equals(existTurma)) {
+                    Boolean existTurma = bancoDados.checkprovasNome(prova, id_turma.toString());
+                    if(!existTurma) {
                         if(!quest.equals(0)){
                             if(!alter.equals(0)){
                                 Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);

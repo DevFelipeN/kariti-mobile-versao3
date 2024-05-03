@@ -86,7 +86,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
                 }
             });
 
@@ -130,7 +129,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         int num = listIdAlTurma.size();
                         for(int x = 0; x < num; x++){
                             String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                            alunolist.add(bancoDados.pegaNomeAluno(id_aluno));
+                            alunolist.add(bancoDados.alunosGerarProva(id_aluno));
                         }
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);
@@ -165,7 +164,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                     for (int x = 0; x < qtdProvas; x++) {
                         idAluno = String.valueOf(listIdsAlunos.get(x));
-                        String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
+                        String aluno = bancoDados.alunosGerarProva(String.valueOf(listIdsAlunos.get(x)));
                         dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                     }
                     try {

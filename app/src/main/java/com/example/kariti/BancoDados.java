@@ -315,6 +315,15 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return null;
     }
+    public String alunosGerarProva(String id_aluno) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return cursor.getString(1);
+        }else
+            return null;
+    }
     public String pegaData(String id_prova) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from prova where id_prova = ?", new String[]{id_prova});
@@ -661,7 +670,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> listEscolas() {
         ArrayList<String>  escolas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM escola ORDER BY nomeEscola ASC", new String[]{});
+        Cursor cursor = db.rawQuery("SELECT * FROM escola WHERE id_escola = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String escola = cursor.getString(1);

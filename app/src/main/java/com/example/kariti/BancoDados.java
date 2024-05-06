@@ -37,20 +37,20 @@ public class BancoDados extends SQLiteOpenHelper {
         }
     }
     @Override
-    public void onUpgrade(SQLiteDatabase data_base, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase base_dados, int oldVersion, int newVersion) {
         try {
-            data_base.execSQL("drop Table if exists usuario");
-            data_base.execSQL("drop Table if exists validacao_usuario");
-            data_base.execSQL("drop Table if exists escola");
-            data_base.execSQL("drop Table if exists aluno");
-            data_base.execSQL("drop Table if exists turma");
-            data_base.execSQL("drop Table if exists prova");
-            data_base.execSQL("drop Table if exists escolasDesativadas");
-            data_base.execSQL("drop Table if exists gabarito");
-            data_base.execSQL("drop Table if exists galeria");
-            data_base.execSQL("drop Table if exists alunosTurma");
-            data_base.execSQL("drop Table if exists resultadoCorrecao");
-            onCreate(data_base);
+            base_dados.execSQL("drop Table if exists usuario");
+            base_dados.execSQL("drop Table if exists validacao_usuario");
+            base_dados.execSQL("drop Table if exists escola");
+            base_dados.execSQL("drop Table if exists aluno");
+            base_dados.execSQL("drop Table if exists turma");
+            base_dados.execSQL("drop Table if exists prova");
+            base_dados.execSQL("drop Table if exists escolasDesativadas");
+            base_dados.execSQL("drop Table if exists gabarito");
+            base_dados.execSQL("drop Table if exists galeria");
+            base_dados.execSQL("drop Table if exists alunosTurma");
+            base_dados.execSQL("drop Table if exists resultadoCorrecao");
+            onCreate(base_dados);
         }catch(Exception e){
             Log.e("Error base_dados: ",e.getMessage());
         }
@@ -219,9 +219,10 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean deletaAnonimos(Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM aluno WHERE id_aluno = ?";
+            String deleta = "DELETE FROM aluno WHERE id_aluno = ? and n = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_aluno);
+            stmt.bindLong(2, 0);
             stmt.executeUpdateDelete();
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}

@@ -47,6 +47,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
+        Toast.makeText(this, "Alunos: "+num, Toast.LENGTH_SHORT).show();
         for(int y = 0; y < num; y++) {
             String id_aluno = String.valueOf(idsAlTurma.get(y));
             String aluno = bancoDados.pegaNomeAluno(id_aluno);
@@ -54,6 +55,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
                 listAlunosDturma.add(aluno);
             }
         }
+        Toast.makeText(this, "Alunos: "+listAlunosDturma.size(), Toast.LENGTH_SHORT).show();
         DesativadaAdapter adapter = new DesativadaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
         voltar.setOnClickListener(new View.OnClickListener() {

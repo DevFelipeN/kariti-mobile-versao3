@@ -108,13 +108,14 @@ public class VisualProvaActivity extends AppCompatActivity {
                         Integer id_aluno = objJson.getInt("id_aluno");
                         Integer mensagem = objJson.getInt("mensagem");
                         testeJson(objJson);
-                    }else Toast.makeText(this, "Erro na correção da prova "+x, Toast.LENGTH_SHORT).show();
-                        testeJson(objJson);
-                    }
+                    }else{Toast.makeText(this, "Erro na correção da prova "+x, Toast.LENGTH_SHORT).show();}
+
                 }
-            }catch (Exception e){
-                //Erro
+                testeJson(json);
             }
+        }catch (Exception e){
+            //Erro
+        }
 /*
             bancoDados.inserirResultCorrecao(1,4, 3, 7);
             bancoDados.inserirResultCorrecao(1,5, 2, 5);

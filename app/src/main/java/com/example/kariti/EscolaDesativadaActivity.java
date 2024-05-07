@@ -24,13 +24,13 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
     ImageView btnMenu, iconHelp;
     BancoDados bancoDados;
     VisualEscolaActivity atualiza;
+    ArrayList<String> listeDesativadas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escola_desativada);
 
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
-        btnMenu = findViewById(R.id.imageViewIconDesativadas);
         ListView listView = findViewById(R.id.listViewEscDesativadas);
 
         bancoDados = new BancoDados(this);
@@ -44,24 +44,8 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             }
         });
 
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeScolDesativada", "id_scolDesativadas"};
-        Cursor cursor = database.query("escolasDesativadas", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
-        ArrayList<String> nomesEscolasDesativadas = new ArrayList<>();
-        ArrayList<String> idsEscolasDesativadas = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeScolDesativada");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nomeEscola = cursor.getString(0);
-                String idEscola = cursor.getString(1);
-                nomesEscolasDesativadas.add(nomeEscola);
-                idsEscolasDesativadas.add(idEscola);
-            }
-        }else{Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");}
-        cursor.close();
-        database.close();
-
-        DesativadaAdapter adapter = new DesativadaAdapter(this, nomesEscolasDesativadas, idsEscolasDesativadas);
+        listeDesativadas = (ArrayList<String>) bancoDados.listDesativadas();
+        DesativadaAdapter adapter = new DesativadaAdapter(this, listeDesativadas, listeDesativadas);
         listView.setAdapter(adapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -74,7 +58,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                         .setPositiveButton("Ativar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = idsEscolasDesativadas.get(position);
+                                String ids = String.valueOf(bancoDados.pegaIdEscolaDesativada(adapter.getItem(position)));
                                 String pegaNome = bancoDados.pegaEscolaDesativada(ids);
                                 String pegaBairro = bancoDados.pegaBairroDesativado(ids);
                                 Integer id = Integer.valueOf(ids);
@@ -82,7 +66,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                                 if(deletaEscola){
                                     Boolean reativa = bancoDados.inserirDadosEscola(pegaNome, pegaBairro);
                                     if(reativa){
-                                        nomesEscolasDesativadas.remove(position);
+                                        listeDesativadas.remove(position);
                                         adapter.notifyDataSetChanged();
                                         Toast.makeText(EscolaDesativadaActivity.this, "Escola Reativada com Sucesso!", Toast.LENGTH_SHORT).show();
                                         //finish();
@@ -93,10 +77,10 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                         .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Integer ids = Integer.valueOf(idsEscolasDesativadas.get(position));
+                                Integer ids = bancoDados.pegaIdEscolaDesativada(adapter.getItem(position));
                                 Boolean deletaEscola = bancoDados.deletarEscola(ids);
                                 if (deletaEscola) {
-                                    nomesEscolasDesativadas.remove(position);
+                                    listeDesativadas.remove(position);
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(EscolaDesativadaActivity.this, "Escola Excluida Com Sucesso", Toast.LENGTH_SHORT).show();
                                 }
@@ -123,13 +107,6 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             }
         });
         builder.show();
-    }
-
-    public void menuAtivaExcl(View v){
-        PopupMenu popupMenu = new PopupMenu(this, v);
-        popupMenu.setOnMenuItemClickListener(this);
-        popupMenu.inflate(R.menu.activity_menuescola);
-        popupMenu.show();
     }
     @Override
     public boolean onMenuItemClick(MenuItem item) {

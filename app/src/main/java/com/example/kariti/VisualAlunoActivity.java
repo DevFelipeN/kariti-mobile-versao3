@@ -24,6 +24,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
     BancoDados bancoDados;
     EditText pesquisarAlunos;
+    ArrayList<String> listAlunos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,37 +35,17 @@ public class VisualAlunoActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
 
-        if (!haAlunoCadastrado()) {
+        listAlunos = (ArrayList<String>) bancoDados.listAlunos();
+        if (listAlunos.size() == 0) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);
             finish();
             return;
         }
 
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeAluno", "id_aluno"};
-        Cursor cursor = database.query("aluno", projection, "id_escola="+BancoDados.ID_ESCOLA, null, null, null, null);
-        ArrayList<String> alunos = new ArrayList<>();
-        ArrayList<String> idsAlunos = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeAluno");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nome = cursor.getString(0);
-                String idAluno = cursor.getString(1);
-                alunos.add(nome);
-                idsAlunos.add(idAluno);
-            }
-        }else{
-            Log.e("VisualAlunoActivity", "A coluna 'nome' não foi encontrada no cursor.");
-        }
-        cursor.close();
-        database.close();
 
-
-        EscolaAdapter adapter = new EscolaAdapter(this, alunos, idsAlunos);
+        EscolaAdapter adapter = new EscolaAdapter(this, listAlunos, listAlunos);
         listView.setAdapter(adapter);
-
-
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -76,12 +57,12 @@ public class VisualAlunoActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Integer ids = Integer.valueOf(idsAlunos.get(position));
-                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(ids);
+                                Integer idAluno = bancoDados.pegaIdAluno(adapter.getItem(position));
+                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(idAluno);
                                 if(!checkAlEmTurma){
-                                    Boolean deletAluno = bancoDados.deletarAluno(ids);
+                                    Boolean deletAluno = bancoDados.deletarAluno(idAluno);
                                     if (deletAluno) {
-                                        alunos.remove(position);
+                                        listAlunos.remove(position);
                                         adapter.notifyDataSetChanged();
                                         Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
                                     }else
@@ -104,7 +85,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Integer id = Integer.valueOf(idsAlunos.get(i));
+                Integer id = bancoDados.pegaIdAluno(adapter.getItem(i));
                 Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
                 intent.putExtra("id_aluno", id);
                 startActivity(intent);

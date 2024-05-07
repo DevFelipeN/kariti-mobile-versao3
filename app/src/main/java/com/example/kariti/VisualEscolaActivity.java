@@ -28,6 +28,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
     Button btnEscDesativada;
     ImageView iconHelp;
     private Toolbar toolbar;
+    ArrayList<String> listEscola;
 
     BancoDados bancoDados;
 
@@ -52,27 +53,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
             return;
         }
 
-
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeEscola", "id_escola"};
-        Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
-        ArrayList<String> nomesEscolas = new ArrayList<>();
-        ArrayList<String> idsEscolas = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeEscola");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nomeEscola = cursor.getString(0);
-                String idEscola = cursor.getString(1);
-                nomesEscolas.add(nomeEscola);
-                idsEscolas.add(idEscola);
-            }
-        }else{
-            Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");
-        }
-        cursor.close();
-        database.close();
-
-        EscolaAdapter adapter = new EscolaAdapter(this, nomesEscolas, idsEscolas);
+        listEscola = (ArrayList<String>) bancoDados.listEscolas();
+        EscolaAdapter adapter = new EscolaAdapter(this, listEscola, listEscola);
         listView.setAdapter(adapter);
 
         btnEscDesativada.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +79,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BancoDados.ID_ESCOLA = Integer.valueOf(idsEscolas.get(position));
+                BancoDados.ID_ESCOLA = bancoDados.pegaIdEscola(adapter.getItem(position));
                 Intent intent = new Intent(VisualEscolaActivity.this, DetalhesEscolaActivity.class);
                 startActivity(intent);
             }
@@ -112,16 +94,16 @@ public class VisualEscolaActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = idsEscolas.get(position);
+                                String ids = String.valueOf(bancoDados.pegaIdEscola(adapter.getItem(position)));
                                 String escola = bancoDados.pegaEscola(ids);
                                 String bairro = bancoDados.pegaBairro(ids);
                                 Boolean deletDativadas = bancoDados.deletarDasAtivadas(ids);
                                 if(deletDativadas){
                                     Boolean inserSlcolDesativada = bancoDados.inserirEscolaDesativada(escola, bairro);
                                     if(inserSlcolDesativada) {
-                                        nomesEscolas.remove(position);
+                                        listEscola.remove(position);
                                         adapter.notifyDataSetChanged();
-                                        Toast.makeText(VisualEscolaActivity.this, "Escola Desativada Com Sucesso", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VisualEscolaActivity.this, "Escola desativada", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -146,8 +128,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
     public void dialogHelp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("Para arquivar uma escola, basta pressionar sobre a escola desejada e confirmar a ação. " +
-                "Posteriormente, você poderá encontrar suas escolas arquivadas clicando no botão 'Escolas Desativadas'.");
+        builder.setMessage("Para desativar uma escola, selecionar a escola desejada e confirmar a ação. " +
+                "Posteriormente, você poderá encontrar suas escolas desativadas clicando no botão 'Escolas Desativadas'.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

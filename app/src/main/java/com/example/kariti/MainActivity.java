@@ -54,15 +54,16 @@ public class MainActivity extends AppCompatActivity {
                     String password = senha.getText().toString();
                     String repassword = confirmarSenha.getText().toString();
 
-                    if (usernome.equals("") || password.equals("") || repassword.equals("") || emails.equals(""))
+                    if (usernome.equals("") || password.equals("") || repassword.equals("") || emails.equals("")) {
                         Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
-                    else {
+                    }else{
                         if (!emails.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emails).matches())
                             if (password.equals(repassword)) {
                                 Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
                                 if (checkuserMail == false) {
                                     String cod = gerarCodigo.gerarVerificador();
                                     Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
+                                    Toast.makeText(MainActivity.this, "Resultado: "+cod, Toast.LENGTH_SHORT).show();
                                     if (mandaEmail == true) {
                                         Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
                                         proxima.putExtra("identificador", 0);

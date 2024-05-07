@@ -148,9 +148,7 @@ public class CameraxActivity extends AppCompatActivity {
         File outputDirectory = getOutputDirectory();
         File photoFile = new File(outputDirectory, nomeImagemx);
 
-        ImageCapture.OutputFileOptions outputFileOptions =
-                new ImageCapture.OutputFileOptions.Builder(photoFile)
-                        .build();
+        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
 
         imageCapture.takePicture(outputFileOptions, executorService, new ImageCapture.OnImageSavedCallback() {
             @Override

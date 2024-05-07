@@ -47,9 +47,8 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String qTurma = listarTurma.get(position);
-                Integer idTurma = bancoDados.pegaIdTurma(qTurma);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {;
+                Integer idTurma = bancoDados.pegaIdTurma(adapter.getItem(position));
                 telaTeste(idTurma);
             }
         });
@@ -86,7 +85,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
                             }
                         });
                 AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                alertDialog.show(); 
                 return true;
             }
         });

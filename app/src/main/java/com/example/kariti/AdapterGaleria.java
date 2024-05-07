@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHolder> {
 
     private ArrayList<String> nomesDasFotos, datasDasFotos, caminhosDasFotos;
-//    private byte[] photo;
+    //    private byte[] photo;
 //    private ArrayList<byte[]> photo;
     private Context context;
 

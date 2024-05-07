@@ -94,33 +94,27 @@ public class VisualProvaActivity extends AppCompatActivity {
     }
     public void telaVisualProvaSelecionada(){
         provaSelected = spinnerProva.getSelectedItem().toString();
-        Integer idProva = bancoDados.pegaIdProva(provaSelected);
-        Boolean verifica = bancoDados.checkProvaCorrigida(idProva.toString());
-        if (!verifica){
-            try {
-                String situacao = Environment.getExternalStorageState();
-                if (situacao.equals(Environment.MEDIA_MOUNTED)) {
-                    File dir = getExternalFilesDir(null);
-                    String result = leitor(dir+"/json.json");
-                    json = new JSONArray(result);
-                    for (int x = 0; x < json.length(); x++){
-                        objJson = json.getJSONObject(x);
-                        Integer resultCorrect = objJson.getInt("resultado");
-                        if(resultCorrect.equals(0)){
-                            Integer id_prova = objJson.getInt("id_prova");
-                            Integer id_aluno = objJson.getInt("id_aluno");
-                            Integer mensagem = objJson.getInt("mensagem");
-                            testeJson(objJson);
-                        }else Toast.makeText(this, "Erro na correção da prova "+x, Toast.LENGTH_SHORT).show();
+        try {
+            String situacao = Environment.getExternalStorageState();
+            if (situacao.equals(Environment.MEDIA_MOUNTED)) {
+                File dir = getExternalFilesDir(null);
+                String result = leitor(dir+"/json.json");
+                json = new JSONArray(result);
+                for (int x = 0; x < json.length(); x++){
+                    objJson = json.getJSONObject(x);
+                    Integer resultCorrect = objJson.getInt("resultado");
+                    if(resultCorrect.equals(0)){
+                        Integer id_prova = objJson.getInt("id_prova");
+                        Integer id_aluno = objJson.getInt("id_aluno");
+                        Integer mensagem = objJson.getInt("mensagem");
+                        testeJson(objJson);
+                    }else Toast.makeText(this, "Erro na correção da prova "+x, Toast.LENGTH_SHORT).show();
                         testeJson(objJson);
                     }
                 }
-
             }catch (Exception e){
                 //Erro
             }
-
-        }else {
 /*
             bancoDados.inserirResultCorrecao(1,4, 3, 7);
             bancoDados.inserirResultCorrecao(1,5, 2, 5);
@@ -130,7 +124,7 @@ public class VisualProvaActivity extends AppCompatActivity {
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", provaSelected);
             startActivity(intent);
-        }
+
     }
     public void avisoCamposNulos(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaActivity.this);

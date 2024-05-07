@@ -20,6 +20,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
     EditText nomeAluno, emailAluno;
     Button salvar;
     BancoDados bancoDados;
+    String id_aluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,38 +32,49 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         salvar = findViewById(R.id.buttonSalvarEditAluno);
         bancoDados = new BancoDados(this);
 
-        String id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
+        id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
         String aluno = bancoDados.pegaNomeAluno(id_aluno);
         String email = bancoDados.pegaEmailAluno(id_aluno);
         nomeAluno.setText(aluno);
         emailAluno.setText(email);
-
        voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
                 startActivity(intent);
             finish();}
-        });
-
-        salvar.setOnClickListener(new View.OnClickListener() {
+       });
+       salvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String nomAtual = nomeAluno.getText().toString();
                 String emailAtual = emailAluno.getText().toString();
-                if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
-                    if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                        Integer id_aluno = getIntent().getExtras().getInt("id_aluno");
-                        Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, id_aluno);
-                        if (alteraDadoAluno.equals(true))
-                            Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                        finish();
-                        Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                        startActivity(intent);
-                    }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
+                if(!nomAtual.equals("")) {
+                    if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
+                        if (!emailAtual.equals("")) {
+                            if (!emailAtual.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
+                                Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
+                                if (alteraDadoAluno.equals(true))
+                                    Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                                finish();
+                                Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                                startActivity(intent);
+                            }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
+                            if (alteraDadoAluno.equals(true))
+                                Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
+                            Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                            startActivity(intent);
+                        }
+
+                    } else
+                        Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(EditarAlunoActivity.this, "Por favor, preencher o campo aluno!", Toast.LENGTH_SHORT).show();
+                }
             }
-        });
+       });
     }
 
     public void popMenuAluno(View v){

@@ -7,7 +7,6 @@
     style="@style/BACKGROUND"
     tools:context=".LoginActivity">
 
-
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
@@ -85,15 +84,17 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonEntrarL"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:text="@string/btnEntrar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenha"
+        app:layout_constraintVertical_bias="0.085" />
 
     <LinearLayout
         app:layout_constraintTop_toBottomOf="@id/buttonEntrarL"
@@ -132,5 +133,5 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewCriarConta"
             app:layout_constraintVertical_bias="0.0" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -86,7 +86,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
                 }
             });
 
@@ -130,7 +129,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         int num = listIdAlTurma.size();
                         for(int x = 0; x < num; x++){
                             String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                            alunolist.add(bancoDados.pegaNomeAluno(id_aluno));
+                            alunolist.add(bancoDados.alunosGerarProva(id_aluno));
                         }
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);
@@ -165,24 +164,19 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                     for (int x = 0; x < qtdProvas; x++) {
                         idAluno = String.valueOf(listIdsAlunos.get(x));
-                        String aluno = bancoDados.pegaNomeAluno(String.valueOf(listIdsAlunos.get(x)));
+                        String aluno = bancoDados.alunosGerarProva(String.valueOf(listIdsAlunos.get(x)));
                         dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
-                    }
-                    Integer anonimatos = bancoDados.pegaqtdAnonimos(idTurma);
-                    Integer idAnonimos = Integer.valueOf(idAluno);
-                    for(int a = 1; a <= anonimatos; a++){
-                        idAnonimos++;
-                        dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAnonimos.toString(), "Aluno 000"+a});
                     }
                     try {
                         File filecsv = null;
                         String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
                         String filePdf = nomeProva + dateCart+".pdf";
-                        String estado = Environment.getExternalStorageState();
-                        if (estado.equals(Environment.MEDIA_MOUNTED)) {
-                            filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                        //String estado = Environment.getExternalStorageState();
+                        //if (estado.equals(Environment.MEDIA_MOUNTED)) {
+                            //filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                            filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                        } else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
+                        //} else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
                         File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                         BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
                         AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);

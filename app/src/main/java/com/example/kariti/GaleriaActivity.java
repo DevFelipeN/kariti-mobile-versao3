@@ -74,7 +74,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 Boolean teste = Compactador.compactador();
                 if(teste) {
                     try {
-                        File fileZip = new File("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/Cartoes/saida.zip");
+                        File fileZip = new File("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson));
                         Toast.makeText(GaleriaActivity.this, "Testandooooooo!!!!!!!", Toast.LENGTH_SHORT).show();
@@ -121,13 +121,15 @@ public class GaleriaActivity extends AppCompatActivity {
 
         adapter = new AdapterGaleria(this, nomePhoto, dataImg, caminhoDaImagem);
         recyclerView.setAdapter(adapter);
-        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+        /*btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
                 finish();
            }
         });
+
+         */
     }
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

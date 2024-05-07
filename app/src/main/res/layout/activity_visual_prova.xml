@@ -43,34 +43,34 @@
         android:id="@+id/spinnerTurma1"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnTurma" />
 
     <Spinner
         android:id="@+id/spinnerProva1"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma1" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnProva" />
 
     <Spinner
         android:id="@+id/spinnerAlunos1"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerProva1" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnAluno" />
 
     <Button
         style="@style/BUTTONSTYLE"
@@ -96,5 +96,38 @@
         app:layout_constraintStart_toStartOf="@+id/buttonVisualizarProva"
         app:layout_constraintTop_toTopOf="@+id/buttonVisualizarProva"
         app:srcCompat="@mipmap/prova" />
+
+    <TextView
+        android:id="@+id/textViewSpinnTurma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/textViewTurma"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerTurma1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerTurma1"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+    <TextView
+        android:id="@+id/textViewSpinnProva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/textViewProva"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerProva1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerProva1"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma1" />
+
+    <TextView
+        android:id="@+id/textViewSpinnAluno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/textViewAluno"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerAlunos1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerAlunos1"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProva1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

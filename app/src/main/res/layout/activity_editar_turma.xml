@@ -8,37 +8,37 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/appbarmenamburg"
+        layout="@layout/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="409dp"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:layout_editor_absoluteX="2dp"
-        tools:ignore="MissingConstraints" />
+<!--    <View-->
+<!--        android:id="@+id/divider4"-->
+<!--        android:layout_width="409dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="?android:attr/listDivider"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/include"-->
+<!--        tools:layout_editor_absoluteX="2dp"-->
+<!--        tools:ignore="MissingConstraints" />-->
 
-    <ImageButton
-        android:id="@+id/imgBtnVoltaDediturma"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
-        android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/imgBtnVoltaDediturma"-->
+<!--        android:layout_width="48dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:background="@color/tranparente"-->
+<!--        android:contentDescription="@string/btnVoltar"-->
+<!--        android:src="@mipmap/setaleft"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        tools:ignore="MissingConstraints" />-->
 
     <EditText
         android:id="@+id/editTextEditTurma"

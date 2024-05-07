@@ -30,7 +30,7 @@ public class ProvaActivity extends AppCompatActivity {
         }
 
 
-        voltar = findViewById(R.id.imgBtnVoltaDescola);
+        voltar = findViewById(R.id.imgBtnVoltar);
         cadProva = findViewById(R.id.buttonCadProva);
         gerarCartao = findViewById(R.id.buttonGerarCatao);
         corrigirProva = findViewById(R.id.buttonCorrigirProva);

@@ -23,38 +23,71 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/textViewSpinnTurma2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/textViewTurma"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerTurma"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerTurma"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+    <TextView
+        android:id="@+id/textViewSpinnProva2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/textViewProva"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerProva"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerProva"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma" />
+
+    <TextView
+        android:id="@+id/textViewSpinnAluno2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/textViewAluno"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerAlunos"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerAlunos"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProva" />
+
     <Spinner
         android:id="@+id/spinnerTurma"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnTurma2" />
 
     <Spinner
         android:id="@+id/spinnerProva"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnProva2" />
 
     <Spinner
         android:id="@+id/spinnerAlunos"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/style_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerProva" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnAluno2" />
 
     <ImageView
         android:id="@+id/imageView15"

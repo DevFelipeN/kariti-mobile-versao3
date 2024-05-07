@@ -42,7 +42,7 @@ public class GabaritoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gabarito);
 
 
-        voltar = findViewById(R.id.imgBtnVoltaDescola);
+        voltar = findViewById(R.id.imgBtnVoltar);
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);

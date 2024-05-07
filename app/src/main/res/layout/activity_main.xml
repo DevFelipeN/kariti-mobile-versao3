@@ -33,8 +33,8 @@
     <EditText
         android:id="@+id/editTextNome"
         android:layout_width="320dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -51,7 +51,7 @@
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -93,7 +93,7 @@
     <EditText
         android:id="@+id/editTextConfirmNovaSenha"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -125,18 +125,19 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonSalvarEdit"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_height="50dp"
         android:text="@string/buttonCadastrar"
         android:textAlignment="center"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmNovaSenha" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmNovaSenha"
+        app:layout_constraintVertical_bias="0.213" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -179,7 +180,7 @@
     <EditText
         android:id="@+id/editTextNovaSenha"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:ems="10"

@@ -58,7 +58,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         setContentView(R.layout.activity_prova_corrigir);
 
         btnCamera = findViewById(R.id.buttonCamera);
-        voltar = findViewById(R.id.imgBtnVoltarDacorrecao);
+        voltar = findViewById(R.id.imgBtnVoltar);
         bancoDados = new BancoDados(this);
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
     ListView listView;
     BancoDados bancoDados;
     ArrayList<String> listarTurma;
+    TextView tituloAppBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,8 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         listView = findViewById(R.id.listViewVisualTurma);
+        tituloAppBar = findViewById(R.id.toolbar_title);
+        tituloAppBar.setText("Turmas");
 
         bancoDados = new BancoDados(this);
 

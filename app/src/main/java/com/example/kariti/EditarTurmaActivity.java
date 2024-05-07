@@ -41,7 +41,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         maisAn = findViewById(R.id.imageViewMaisNovosAnonimos);
         menosAn = findViewById(R.id.imageViewMenosNovosAnonimos);
         novosAlAnonimos = findViewById(R.id.editTextNovosAlunosAnonimos);
-        voltar = findViewById(R.id.imgBtnVoltaDediturma);
+        voltar = findViewById(R.id.imgBtnVoltar);
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
         salvar = findViewById(R.id.buttonSalvarTurma);
         bancoDados = new BancoDados(this);

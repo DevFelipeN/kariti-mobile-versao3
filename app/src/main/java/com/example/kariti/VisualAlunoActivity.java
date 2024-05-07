@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     BancoDados bancoDados;
     EditText pesquisarAlunos;
     ArrayList<String> listAlunos;
+    TextView tituloAppBarAlunos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,9 @@ public class VisualAlunoActivity extends AppCompatActivity {
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
         ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
+
+        tituloAppBarAlunos = findViewById(R.id.toolbar_title);
+        tituloAppBarAlunos.setText("Alunos");
 
         listAlunos = (ArrayList<String>) bancoDados.listAlunos();
         if (listAlunos.size() == 0) {

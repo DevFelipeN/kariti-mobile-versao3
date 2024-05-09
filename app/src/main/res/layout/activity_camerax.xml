@@ -11,10 +11,10 @@
         android:id="@+id/txtViewinfoCameraX"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/informacaoCamera"
-        android:textSize="16sp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"/>
+        android:text="@string/informacaoCamera"
+        android:textSize="20sp" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewCameraX"
@@ -27,14 +27,14 @@
 
     <ImageButton
         android:id="@+id/buttonCaptureX"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="81dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30sp"
-        android:src="@drawable/baseline_camera_24"
-        android:scaleType="centerCrop"
         android:background="?attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_camera_24"
         app:tint="@color/white" />
 
     <ImageButton

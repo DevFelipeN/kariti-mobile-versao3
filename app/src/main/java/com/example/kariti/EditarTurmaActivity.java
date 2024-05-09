@@ -154,7 +154,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
                     for(int x = 1; x <= an; x++){
                         String anonimo = "Aluno "+turmaedit+" "+x;
                         anonimos.add(anonimo);
-                        bancoDados.inserirAnonimos(anonimo);
+                        bancoDados.inserirDadosAluno(anonimo, null, 0);
                     }
                     for(int a = 0; a < anonimos.size(); a++){
                         Integer idAnonimo = bancoDados.pegaIdAnonimo(anonimos.get(a));

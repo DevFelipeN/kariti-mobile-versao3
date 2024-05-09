@@ -42,11 +42,8 @@ public class VisualAlunoActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-
         EscolaAdapter adapter = new EscolaAdapter(this, listAlunos, listAlunos);
         listView.setAdapter(adapter);
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -57,10 +54,10 @@ public class VisualAlunoActivity extends AppCompatActivity {
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Integer idAluno = bancoDados.pegaIdAluno(adapter.getItem(position));
-                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(idAluno);
+                                Integer id_aluno = bancoDados.pegaIdAluno(adapter.getItem(position));
+                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(id_aluno);
                                 if(!checkAlEmTurma){
-                                    Boolean deletAluno = bancoDados.deletarAluno(idAluno);
+                                    Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
                                     if (deletAluno) {
                                         listAlunos.remove(position);
                                         adapter.notifyDataSetChanged();
@@ -81,13 +78,12 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Integer id = bancoDados.pegaIdAluno(adapter.getItem(i));
+                Integer id_aluno = bancoDados.pegaIdAluno(adapter.getItem(i));
                 Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
-                intent.putExtra("id_aluno", id);
+                intent.putExtra("id_aluno", id_aluno);
                 startActivity(intent);
                 finish();
             }

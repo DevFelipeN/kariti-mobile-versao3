@@ -31,9 +31,6 @@ import java.util.ArrayList;
 //faz download das folhas de respostas a serem preenchidas
 public class BaixarModeloCartao {
     public static void main(String[] args){
-        //Teste enviando dois arquivos (um jpg e outro zip) para serem corrigidos
-        //boolean resultado = baixarProvas("D:\\Arquivos\\Downloads\\kariti-main\\kariti-main\\src\\test_core\\entrada.csv","D:\\teste.pdf");
-        //System.out.println(resultado);
     }
 
     public static boolean baixarProvas(FileInputStream is, String nomeCSV, FileOutputStream outputStream){

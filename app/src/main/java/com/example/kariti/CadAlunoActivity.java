@@ -27,13 +27,6 @@ public class CadAlunoActivity extends AppCompatActivity {
         emailAluno = findViewById(R.id.editTextEmailCad);
         voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadastrar = findViewById(R.id.buttonSalvarEdit);
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
         bancoDados = new BancoDados(this);
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,13 +34,13 @@ public class CadAlunoActivity extends AppCompatActivity {
                 String nome = nomeAluno.getText().toString();
                 String email = emailAluno.getText().toString();
                 if (nome.equals("")) {
-                    Toast.makeText(CadAlunoActivity.this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean checkAluno = bancoDados.checkAluno(nome);
                     if (!checkAluno) {
                         if (!email.equals("")) {
-                            if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {  
-                                Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email);
+                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, 1);
                                 if (insertAluno) {
                                     Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                                     finish();
@@ -57,14 +50,20 @@ public class CadAlunoActivity extends AppCompatActivity {
                             } else
                                 Toast.makeText(CadAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Boolean insertAlunoS = bancoDados.inserirDadosAlunoSemail(nome);
+                            Boolean insertAlunoS = bancoDados.inserirDadosAluno(nome, email, 1);
                             if (insertAlunoS) {
                                 Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {Toast.makeText(CadAlunoActivity.this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();}
                         }
-                    } else{Toast.makeText(CadAlunoActivity.this, "Aluno já cadastrado!", Toast.LENGTH_SHORT).show();}
+                    } else { Toast.makeText(CadAlunoActivity.this, "Aluno já cadastrado!", Toast.LENGTH_SHORT).show();}
                 }
+            }
+        });
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

@@ -31,8 +31,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     Boolean checkList;
     Integer id_turma = 0;
     AdapterExclAluno al;
-    ArrayList<String> selectedAlunos = new ArrayList<>();
-    ArrayList<String> nomesAluno, anonimos;
+    ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno, anonimos;
     Integer idAnonimos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,8 +130,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                                     int num = listarAlunos.getAdapter().getCount();
                                     for (int i = 0; i < num; i++) {
                                         Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
-                                        Boolean result = bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
-                                        Toast.makeText(CadTurmaActivity.this, "result: "+result, Toast.LENGTH_SHORT).show();
+                                        bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
                                     }
                                 }
                                 if (!an.equals(0)) {
@@ -140,7 +138,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                                     for (int x = 1; x <= an; x++) {
                                         String anonimo = "Aluno "+turma+" "+ x;
                                         anonimos.add(anonimo);
-                                        bancoDados.inserirAnonimos(anonimo);
+                                        bancoDados.inserirDadosAluno(anonimo, null, 0);
                                     }
                                     for (int a = 0; a < anonimos.size(); a++) {
                                         idAnonimos = bancoDados.pegaIdAnonimo(anonimos.get(a));

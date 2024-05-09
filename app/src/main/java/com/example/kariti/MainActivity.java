@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                                 if (checkuserMail == false) {
                                     String cod = gerarCodigo.gerarVerificador();
                                     Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
-                                    Toast.makeText(MainActivity.this, "Resultado: "+cod, Toast.LENGTH_SHORT).show();
                                     if (mandaEmail == true) {
                                         Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
                                         proxima.putExtra("identificador", 0);

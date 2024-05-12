@@ -6,11 +6,12 @@ android {
     compileSdk 34
     defaultConfig {
         applicationId "com.example.kariti"
-        minSdkVersion 24
+        minSdkVersion 19
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -19,6 +20,10 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -31,8 +36,13 @@ android {
 
 }
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.zxing:core:3.4.1'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.activity:activity:1.8.0'
@@ -43,14 +53,11 @@ dependencies {
         exclude group: 'javax.activation', module: 'javax.activation-api'
     }
     implementation 'com.sun.mail:android-activation:1.6.7'
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
-    implementation 'com.google.zxing:core:3.4.1'
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
 
     //implementation 'org.apache.httpcomponents:httpcore:4.4.16'
     //implementation 'org.apache.httpcomponents:httpmime:4.5.14'
 
-    implementation 'org.apache.httpcomponents:httpclient:4.5.3'
+//    implementation 'org.apache.httpcomponents:httpclient:4.5.3'
     api 'org.apache.httpcomponents:httpcore:4.4.6'
     api 'org.apache.httpcomponents:httpmime:4.3.6'
 
@@ -59,8 +66,9 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
     }
 
+    //Zxing
     implementation 'com.google.zxing:core:3.4.1'
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+//    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
 
     //CameraX
     implementation 'androidx.camera:camera-core:1.3.3'

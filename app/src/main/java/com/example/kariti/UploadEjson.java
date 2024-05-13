@@ -23,6 +23,7 @@ import java.io.InputStream;
 
 
 public class UploadEjson {
+    static Integer questao, respostaDada;
     public static void enviarArquivosP(File arquivo, FileOutputStream fos, File dir, BancoDados bancoDados) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -73,10 +74,10 @@ public class UploadEjson {
                 for (int x = 0; x < json.length(); x++){
                     JSONObject objJson = json.getJSONObject(x);
                     Integer resultCorrect = objJson.getInt("resultado");
+                    Integer id_prova = objJson.getInt("id_prova");
+                    Integer id_aluno = objJson.getInt("id_aluno");
+                    String mensagem = objJson.getString("mensagem");
                     if(resultCorrect.equals(0)){
-                        Integer id_prova = objJson.getInt("id_prova");
-                        Integer id_aluno = objJson.getInt("id_aluno");
-                        String mensagem = objJson.getString("mensagem");
                         //String mensagem = "(1, 2),(2, 3),(3, 4),(4, 3),(5, 2),(6, 3),(7, 1),(8, 4),(9, 5),(10, 1)";
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
@@ -86,8 +87,8 @@ public class UploadEjson {
                         //mensagem = "";
                         for(String item : itens){
                             String[] sep = item.split(",");
-                            Integer questao = Integer.valueOf(sep[0]);
-                            Integer respostaDada = Integer.valueOf(sep[1]);
+                            questao = Integer.valueOf(sep[0]);
+                            respostaDada = Integer.valueOf(sep[1]);
                             if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno, questao)){
                                 bancoDados.upadateResultadoCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }else{
@@ -96,7 +97,7 @@ public class UploadEjson {
                         }
                         Log.e("kariti", "Json OK...........");
                     }else{
-
+                        bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
                     }
 
                 }

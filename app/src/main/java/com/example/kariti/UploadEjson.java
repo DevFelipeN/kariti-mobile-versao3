@@ -95,9 +95,6 @@ public class UploadEjson {
                                 bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }
                         }
-                        Log.e("kariti", "Json OK...........");
-                    }else{
-                        bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
                     }
 
                 }

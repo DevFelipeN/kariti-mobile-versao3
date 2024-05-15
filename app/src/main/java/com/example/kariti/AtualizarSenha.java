@@ -25,12 +25,12 @@ public class AtualizarSenha extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atualizar_senha);
 
-        editTextNome = (EditText) findViewById(R.id.editTextNome);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-        novaSenha = (EditText) findViewById(R.id.editTextNovaSenha);
-        confNovaSenha = (EditText) findViewById(R.id.editTextConfirmNovaSenha);
-        alterar = (Button) findViewById(R.id.buttonSalvarEdit);
-        voltar = (ImageButton) findViewById(R.id.imgBtnVoltaEscola);
+        editTextNome = (EditText) findViewById(R.id.editTextAttSenha);
+        editTextEmail = (EditText) findViewById(R.id.editTextEmailAttSenha);
+        novaSenha = (EditText) findViewById(R.id.editTextNovaAttSenha);
+        confNovaSenha = (EditText) findViewById(R.id.editTextConfirmAttSenha);
+        alterar = (Button) findViewById(R.id.buttonAttSenha);
+        voltar = (ImageButton) findViewById(R.id.imgBtnVoltaAttSenha);
         bancoDados = new BancoDados(this);
 
         Integer id = getIntent().getExtras().getInt("id");

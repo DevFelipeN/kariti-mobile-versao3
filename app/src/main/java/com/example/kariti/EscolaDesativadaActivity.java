@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -44,45 +45,44 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             }
         });
 
-        listeDesativadas = (ArrayList<String>) bancoDados.listDesativadas();
+        listeDesativadas = (ArrayList<String>) bancoDados.listEscolas(0);
+        if(listeDesativadas.size() == 0){
+            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         DesativadaAdapter adapter = new DesativadaAdapter(this, listeDesativadas, listeDesativadas);
         listView.setAdapter(adapter);
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 // Exibir a caixa de diálogo
+                Integer id_escola = bancoDados.pegaIdEscola(adapter.getItem(position));
                 AlertDialog.Builder builder = new AlertDialog.Builder(EscolaDesativadaActivity.this);
                 builder.setTitle("Atenção!")
-                        .setMessage("Qual operação deseja realizar")
+                        .setMessage("Qual operação deseja realizar com essa escola? ")
                         .setPositiveButton("Ativar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String ids = String.valueOf(bancoDados.pegaIdEscolaDesativada(adapter.getItem(position)));
-                                String pegaNome = bancoDados.pegaEscolaDesativada(ids);
-                                String pegaBairro = bancoDados.pegaBairroDesativado(ids);
-                                Integer id = Integer.valueOf(ids);
-                                Boolean deletaEscola = bancoDados.deletarEscola(id);
-                                if(deletaEscola){
-                                    Boolean reativa = bancoDados.inserirDadosEscola(pegaNome, pegaBairro);
-                                    if(reativa){
-                                        listeDesativadas.remove(position);
-                                        adapter.notifyDataSetChanged();
-                                        Toast.makeText(EscolaDesativadaActivity.this, "Escola Reativada com Sucesso!", Toast.LENGTH_SHORT).show();
-                                        //finish();
-                                    } else Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
+                                Boolean updadteStatus = bancoDados.upadateStatusEscola(id_escola, 1);
+                                if(updadteStatus){
+                                    listeDesativadas.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(EscolaDesativadaActivity.this, "Escola Reativada com Sucesso!", Toast.LENGTH_SHORT).show();
+                                    ativaVisualEscola();
                                 }else Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Integer ids = bancoDados.pegaIdEscolaDesativada(adapter.getItem(position));
-                                Boolean deletaEscola = bancoDados.deletarEscola(ids);
+                                //Implementar verificação, se possui dados como alunos turmas e provas ligadas a essa escola.................................
+                                Boolean deletaEscola = bancoDados.deletarEscola(id_escola);
                                 if (deletaEscola) {
                                     listeDesativadas.remove(position);
                                     adapter.notifyDataSetChanged();
-                                    Toast.makeText(EscolaDesativadaActivity.this, "Escola Excluida Com Sucesso", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EscolaDesativadaActivity.this, "Escola excluida com sucesso", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -93,8 +93,15 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {onBackPressed();}
+            public void onClick(View view) {
+                ativaVisualEscola();
+            }
         });
+    }
+    public void ativaVisualEscola(){
+        Intent intent = new Intent(getApplicationContext(), VisualEscolaActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void dialogHelp() {

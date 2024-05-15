@@ -1,4 +1,5 @@
 package com.example.kariti;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
+
+import androidx.camera.core.processing.SurfaceProcessorNode;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -16,24 +19,23 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, "base_dados", null, 13);
+        super(context, DBNAME, null, 23);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
         try {
-            base_dados.execSQL("create Table usuario( id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT, email TEXT UNIQUE, password varchar(256))");
-            base_dados.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL, codigo TEXT, data_expiracao TEXT)");
-            base_dados.execSQL("create Table escola( id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INTEGER)");
-            base_dados.execSQL("create Table escolasDesativadas( id_scolDesativadas INTEGER PRIMARY KEY AUTOINCREMENT, nomeScolDesativada TEXT, bairro TEXT, id_usuario INTEGER)");
-            base_dados.execSQL("create Table aluno (id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT, email TEXT, n Integer, id_escola INTEGER)");
-            base_dados.execSQL("create Table turma (id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER, nomeTurma TEXT, qtdAnonimos Integer)");
-            base_dados.execSQL("create Table alunosTurma (id_turma Integer, id_aluno Integer)");
-            base_dados.execSQL("create Table prova (id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT, dataProva TEXT, qtdQuestoes Integer, qtdAlternativas Interger, id_escola INTEGER, id_turma Integer)");
-            base_dados.execSQL("create Table gabarito (id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, questao Integer, resposta Integer, nota Integer)");
-            base_dados.execSQL("create Table resultadoCorrecao (id_resultado Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer, id_aluno Integer, acertos Integer, nota Integer)");
+            base_dados.execSQL("create Table usuario( id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
+            base_dados.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
+            base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INT NOT NULL references usuario(id_usuario), status Integer not null check(status = 0 or status = 1))");
+            base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_usuario INTEGER not null references usuario(id_usuario))");
+            base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null, qtdAnonimos Integer not null)");
+            base_dados.execSQL("create Table alunosTurma(id_turma Integer not null references turma(id_turma), id_aluno Integer not null references aluno(id_aluno), primary key (id_turma, id_aluno))");
+            base_dados.execSQL("create Table prova(id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT not null, dataProva TEXT not null, qtdQuestoes Integer not null, qtdAlternativas Interger not null, id_escola INTEGER, id_turma Integer not null references turma(id_turma))");
+            base_dados.execSQL("create Table gabarito(id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer not null references prova(id_prova), questao Integer not null, resposta Integer not null, nota Real not null)");
+            base_dados.execSQL("create Table resultadoCorrecao(id_resultado Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer not null references prova(id_prova), id_aluno Integer not null references aluno(id_aluno), questao Integer, respostaDada Integer)");
             base_dados.execSQL("create Table galeria(id INTEGER PRIMARY KEY AUTOINCREMENT, foto BLOB)");
         }catch(Exception e){
-            Log.e("Error data_base: ",e.getMessage());
+            Log.e("Error base_dados: ",e.getMessage());
         }
     }
     @Override
@@ -45,7 +47,6 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("drop Table if exists aluno");
             base_dados.execSQL("drop Table if exists turma");
             base_dados.execSQL("drop Table if exists prova");
-            base_dados.execSQL("drop Table if exists escolasDesativadas");
             base_dados.execSQL("drop Table if exists gabarito");
             base_dados.execSQL("drop Table if exists galeria");
             base_dados.execSQL("drop Table if exists alunosTurma");
@@ -66,11 +67,12 @@ public class BancoDados extends SQLiteOpenHelper {
             if (inserir == -1) return false;
             else {return true;}
     }
-    public Boolean inserirDadosEscola(String nomeEscola, String bairro){
+    public Boolean inserirDadosEscola(String nomeEscola, String bairro, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeEscola", nomeEscola);
         contentValues.put("bairro", bairro);
+        contentValues.put("status", status);
         contentValues.put("id_usuario", BancoDados.USER_ID);
         long inserir = base_dados.insert("escola", null, contentValues);
         return inserir != -1;
@@ -92,15 +94,23 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("alunosTurma", null, contentValues);
         return inserir != -1;
     }
-    public Boolean inserirResultCorrecao(Integer id_prova, Integer id_aluno, Integer acertos, Integer nota){
+    public Boolean inserirResultCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id_prova", id_prova);
         contentValues.put("id_aluno", id_aluno);
-        contentValues.put("acertos", acertos);
-        contentValues.put("nota", nota);
+        contentValues.put("questao", questao);
+        contentValues.put("respostaDada", respostaDada);
         long inserir = base_dados.insert("resultadoCorrecao", null, contentValues);
         return inserir != -1;
+    }
+    public Boolean checkCorrecao(Long id) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from resultadoCorrecao where id_resultado = ?", new String[]{id.toString()});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
     }
     public Boolean inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -124,60 +134,22 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("gabarito", null, contentValues);
         return inserir != -1;
     }
-    public Boolean inserirEscolaDesativada(String scolDesativada, String bairro){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeScolDesativada", scolDesativada);
-        contentValues.put("bairro", bairro);
-        contentValues.put("id_usuario", BancoDados.USER_ID);
-        long inserir = base_dados.insert("escolasDesativadas", null, contentValues);
-        return inserir != -1;
-    }
-    public Boolean inserirDadosAluno(String nomeAluno, String email){
+    public Boolean inserirDadosAluno(String nomeAluno, String email, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("nomeAluno", nomeAluno);
         contentValues.put("email", email);
-        contentValues.put("n", 1);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        contentValues.put("status", status);
+        contentValues.put("id_usuario", BancoDados.USER_ID);
         long inserir = base_dados.insert("aluno", null, contentValues);
         return inserir != -1;
     }
-    public Boolean inserirDadosAlunoSemail(String nomeAluno){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeAluno", nomeAluno);
-        contentValues.put("n", 1);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
-        long inserir = base_dados.insert("aluno", null, contentValues);
-        return inserir != -1;
-    }
-    public Boolean inserirAnonimos(String anonimo){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeAluno", anonimo);
-        contentValues.put("n", 0);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
-        long inserir = base_dados.insert("aluno", null, contentValues);
-        return inserir != -1;
-    }
-    public Boolean deletarDasAtivadas(String id_escola){
+    public Boolean deletarEscola(Integer id_escola){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM escola WHERE id_escola=?";
+            String deleta = "DELETE FROM escola WHERE id_escola = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
-            stmt.bindString(1, id_escola);
-            stmt.executeUpdateDelete();
-            base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-        return true;
-    }
-    public Boolean deletarEscola(Integer id_scolDesativadas){
-        try {
-            SQLiteDatabase base_dados= this.getWritableDatabase();
-            String deleta = "DELETE FROM escolasDesativadas WHERE id_scolDesativadas=?";
-            SQLiteStatement stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_scolDesativadas);
+            stmt.bindLong(1, id_escola);
             stmt.executeUpdateDelete();
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
@@ -186,9 +158,20 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean deletarAluno(Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM aluno WHERE id_aluno=?";
+            String deleta = "DELETE FROM aluno WHERE id_aluno = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_aluno);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+        return true;
+    }
+    public Boolean deleteDadosResultadoCorrecao(Integer id_prova){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt.bindLong(1, id_prova);
             stmt.executeUpdateDelete();
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
@@ -219,7 +202,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean deletaAnonimos(Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM aluno WHERE id_aluno = ? and n = ?";
+            String deleta = "DELETE FROM aluno WHERE id_aluno = ? and status = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_aluno);
             stmt.bindLong(2, 0);
@@ -253,6 +236,19 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
+    public void upadateResultadoCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String altera = "UPDATE resultadoCorrecao SET respostaDada = ? WHERE id_prova = ? and id_aluno = ? and questao = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(altera);
+            stmt.bindLong(1, respostaDada);
+            stmt.bindLong(2, id_prova);
+            stmt.bindLong(3, id_aluno);
+            stmt.bindLong(4, questao);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
     public Boolean upadateDadosAluno(String nomeAluno, String email, Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -266,13 +262,13 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
-    public Boolean upadateAluno(String nomeAluno, Integer id_aluno){
+    public Boolean upadateStatusEscola(Integer id_escola, Integer status){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String altera = "UPDATE aluno SET nomeAluno=? WHERE id_aluno=?";
+            String altera = "UPDATE escola SET status = ? WHERE id_escola = ?";
             SQLiteStatement stmt = base_dados.compileStatement(altera);
-            stmt.bindString(1, nomeAluno);
-            stmt.bindLong(2, id_aluno);
+            stmt.bindLong(1, status);
+            stmt.bindLong(2, id_escola);
             stmt.executeUpdateDelete();
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
@@ -281,6 +277,14 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from usuario where nomeUsuario =? and email = ?", new String[]{nome, email});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+    public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno, Integer questao) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
         if (cursor.getCount() > 0)
             return true;
         else
@@ -300,6 +304,27 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
+    public Integer pegaRespostaDada(Integer id_prova, Integer id_aluno, Integer questao) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(4);
+    }
+    public Integer pegaRespostaQuestao(Integer id_prova, Integer questao) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getInt(3);
+    }
+    public Float pegaNotaQuestao(Integer id_prova, Integer questao) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select * from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
+        if (cursor.getCount() > 0)
+            cursor.moveToFirst();
+        return cursor.getFloat(4);
+    }
     public String pegaNomeTurma(String id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
@@ -309,7 +334,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and n = ?", new String[]{id_aluno, "1"});
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and status = ? and id_usuario = ?", new String[]{id_aluno, "1", BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return cursor.getString(1);
@@ -341,14 +366,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Integer pegaIdEscola(String nomeEscola) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_escola from escola where nomeEscola = ?", new String[]{nomeEscola});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getInt(0);
-    }
-    public Integer pegaIdEscolaDesativada(String nomeEscola) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_scolDesativadas from escolasDesativadas where nomeScolDesativada = ?", new String[]{nomeEscola});
+        Cursor cursor = base_dados.rawQuery("Select id_escola from escola where nomeEscola = ? and id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);
@@ -397,14 +415,14 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaEmailAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and status = ? and id_usuario = ?", new String[]{id_aluno, "1", BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(2);
     }
-    public String pegaEscola(String id) {
+    public String pegaEscola(String escola) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from escola where id_escola = ?", new String[]{id});
+        Cursor cursor = base_dados.rawQuery("Select * from escola where id_escola = ? and id_usuario = ?", new String[]{escola, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
@@ -415,27 +433,6 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(1);
-    }
-    public String pegaEscolaDesativada(String id_scolDesativadas) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from escolasDesativadas where id_scolDesativadas = ?", new String[]{id_scolDesativadas});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getString(1);
-    }
-    public String pegaBairro(String id) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from escola where id_escola = ?", new String[]{id});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getString(2);
-    }
-    public String pegaBairroDesativado(String id_scolDesativadas) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from escolasDesativadas where id_scolDesativadas = ?", new String[]{id_scolDesativadas});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getString(2);
     }
     //Verifica se a senha Ligada ao email é a mesma informada
     public Integer checkemailpass(String email, String password){
@@ -449,12 +446,19 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkEscola(String nomeEscola){
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("SELECT * FROM escola WHERE nomeEscola = ?", new String[]{nomeEscola});
-
+        Cursor cursor = base_dados.rawQuery("SELECT * FROM escola WHERE nomeEscola = ? and id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0)
             return true;
         else
             return false;
+    }
+    public Boolean haEscolasCadastradas() {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario=" + BancoDados.USER_ID, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
     }
     public Boolean checkprovasNome(String nomeProva, String id_turma) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -482,7 +486,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Integer checkEscolaDesativada(String nomeScolDesativada){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM escolasDesativadas WHERE nomeScolDesativada = ?", new String[]{nomeScolDesativada});
+        Cursor cursor = database.rawQuery("SELECT * FROM escolasDesativadas WHERE nomeScolDesativada = ? and id_usuario", new String[]{nomeScolDesativada, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return cursor.getInt(0);
@@ -491,7 +495,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ?", new String[]{nome});
+        Cursor cursor = database.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ? and id_usuario = ?", new String[]{nome, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0) return true;
         else return false;
     }
@@ -538,7 +542,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<String> obterNomesAlunos() {
         List<String> nomesAlunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where n = ? and id_escola = ? ORDER BY nomeAluno ASC", new String[]{"1", String.valueOf(BancoDados.ID_ESCOLA)});
+        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where status = ? and id_usuario = ? ORDER BY nomeAluno ASC", new String[]{"1", BancoDados.USER_ID.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo
@@ -612,33 +616,19 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return notaTot;
     }
-    public List<String> listAluno(String id_prova) {
-        ArrayList<String>  alunos = new ArrayList<>();
+    public List<Integer> listAluno(Integer id_prova){
+        ArrayList<Integer> ids_alunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova});
+        Cursor cursor = db.rawQuery("SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String aluno = cursor.getString(2);
-                alunos.add(aluno);
+                Integer id_aluno = cursor.getInt(0);
+                ids_alunos.add(id_aluno);
             } while (cursor.moveToNext());
-            cursor.close();
-        }
+                cursor.close();
+            }
         db.close();
-        return alunos;
-    }
-    public List<Integer> listAcertos(String id_prova) {
-        ArrayList<Integer>  acertos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer acerto = cursor.getInt(3);
-                acertos.add(acerto);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return acertos;
+        return ids_alunos;
     }
     public List<Integer> listNotaAluno(String id_prova) {
         ArrayList<Integer>  notas = new ArrayList<>();
@@ -647,6 +637,7 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 Integer nota = cursor.getInt(4);
+
                 notas.add(nota);
             } while (cursor.moveToNext());
             cursor.close();
@@ -654,10 +645,24 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return notas;
     }
+    public List<Integer> listQuestoes(Integer id_prova, Integer id_aluno) {
+        ArrayList<Integer>  questoes = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Integer questao = cursor.getInt(3);
+                questoes.add(questao);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return questoes;
+    }
     public List<String> listAlunos() {
         ArrayList<String>  alunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM aluno where n = ? and id_escola = ? ORDER BY nomeAluno ASC", new String[]{"1", BancoDados.ID_ESCOLA.toString()});
+        Cursor cursor = db.rawQuery("SELECT * FROM aluno where status = ? and id_usuario = ? ORDER BY nomeAluno ASC", new String[]{"1", BancoDados.USER_ID.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String aluno = cursor.getString(1);
@@ -668,10 +673,10 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return alunos;
     }
-    public List<String> listEscolas() {
-        ArrayList<String>  escolas = new ArrayList<>();
+    public List<String> listEscolas(Integer status) {
+        ArrayList<String> escolas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM escola WHERE id_escola = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString()});
+        Cursor cursor = db.rawQuery("SELECT * FROM escola WHERE id_usuario = ? and status = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString(), status.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String escola = cursor.getString(1);
@@ -681,20 +686,6 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return escolas;
-    }
-    public List<String> listDesativadas() {
-        ArrayList<String>  desativadas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM escolasDesativadas ORDER BY nomeScolDesativada ASC", new String[]{});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String desativada = cursor.getString(1);
-                desativadas.add(desativada);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return desativadas;
     }
 
 

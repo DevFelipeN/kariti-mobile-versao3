@@ -1,17 +1,12 @@
 package com.example.kariti;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +16,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 public class GaleriaActivity extends AppCompatActivity {
@@ -41,7 +36,8 @@ public class GaleriaActivity extends AppCompatActivity {
     ArrayList<String> dataImg = new ArrayList<>();
     ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
-    String diretorio, nomeCartao;
+    String nomeCartao;
+    BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +51,7 @@ public class GaleriaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
+        bancoDados = new BancoDados(this);
 
         nomeCartao = getIntent().getExtras().getString("nomeImagem") ;
         if(!Compactador.listCartoes.contains(nomeCartao))
@@ -76,17 +73,9 @@ public class GaleriaActivity extends AppCompatActivity {
                     try {
                         File fileZip = new File("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
-                        UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson));
-                        Toast.makeText(GaleriaActivity.this, "Testandooooooo!!!!!!!", Toast.LENGTH_SHORT).show();
+                        UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
                         Compactador.listCartoes.clear();
                         telaProva();
-
-                        /*
-                        DownloadManager baixarJson = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        baixarJson.addCompletedDownload("jsonTeste", "Arquivo Json: " + "jsonTeste", true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
-                        Toast.makeText(GaleriaActivity.this, "Arquivo Baixado  ", Toast.LENGTH_SHORT).show();
-
-                         */
 
                     } catch (Exception e) {
                         Log.e("Kariti", e.toString());
@@ -121,37 +110,8 @@ public class GaleriaActivity extends AppCompatActivity {
 
         adapter = new AdapterGaleria(this, nomePhoto, dataImg, caminhoDaImagem);
         recyclerView.setAdapter(adapter);
-        /*btnFinalizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(GaleriaActivity.this, "Imagem da câmera enviada!", Toast.LENGTH_LONG).show();
-                finish();
-           }
-        });
-
-         */
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == 1) {
-//                // Se a imagem foi capturada pela câmera
-//                Bitmap photo = (Bitmap) data.getExtras().get("data");
-//                if (photo != null) {
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                    byte[] byteArrayTirada = stream.toByteArray();
-//
-//                    nomePhoto.add("Foto Tirada");
-//                    dataImg.add("2024-03-2024 22:01");
-//                    photoTelaAnterior.add(byteArrayTirada);
-//                    adapter.notifyDataSetChanged();
-//                }
-//            }
-//        }
-//
-//    }
+
     public void telaProva(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Provas enviadas para correção!")
@@ -170,5 +130,18 @@ public class GaleriaActivity extends AppCompatActivity {
     public void onBackPressed() {
         Compactador.listCartoes.clear();
         super.onBackPressed();
+    }
+    public static String leitor(String path) throws IOException {
+        BufferedReader buffRead = new BufferedReader(new FileReader(path));
+        String linha = "", texto = "";
+        while (true) {
+            if (linha == null) {
+                break;
+            }
+            texto += linha;
+            linha = buffRead.readLine();
+        }
+        buffRead.close();
+        return texto;
     }
 }

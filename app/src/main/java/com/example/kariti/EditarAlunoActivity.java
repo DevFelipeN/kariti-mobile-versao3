@@ -20,7 +20,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
     EditText nomeAluno, emailAluno;
     Button salvar;
     BancoDados bancoDados;
-    String id_aluno;
+    String id_aluno, aluno, email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +33,8 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         bancoDados = new BancoDados(this);
 
         id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
-        String aluno = bancoDados.pegaNomeAluno(id_aluno);
-        String email = bancoDados.pegaEmailAluno(id_aluno);
+        aluno = bancoDados.pegaNomeAluno(id_aluno);
+        email = bancoDados.pegaEmailAluno(id_aluno);
         nomeAluno.setText(aluno);
         emailAluno.setText(email);
        voltar.setOnClickListener(new View.OnClickListener() {
@@ -51,23 +51,26 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                 if(!nomAtual.equals("")) {
                     if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
                         if (!emailAtual.equals("")) {
-                            if (!emailAtual.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
+                            if (Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
                                 Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
-                                if (alteraDadoAluno.equals(true))
+                                if (alteraDadoAluno.equals(true)) {
                                     Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                                startActivity(intent);
+                                    Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }else
+                                    Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
                             }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
                         }else {
                             Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
-                            if (alteraDadoAluno.equals(true))
+                            if (alteraDadoAluno.equals(true)) {
                                 Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                            finish();
-                            Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                            startActivity(intent);
+                                Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else
+                                Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
                         }
-
                     } else
                         Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
                 }else{

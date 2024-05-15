@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         criarConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

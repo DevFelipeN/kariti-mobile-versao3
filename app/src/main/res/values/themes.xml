@@ -17,6 +17,12 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="BUTTONSTYLEdark" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_select_dark</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="COLORTEXT">
         <item name="android:textColor">@android:color/background_dark</item>
     </style>

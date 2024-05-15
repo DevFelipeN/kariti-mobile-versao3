@@ -78,11 +78,11 @@ public class ProvaActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void telaCorrigirProva(){
-        //Intent intent = new Intent(this, ProvaCorrigirActivity.class);
-        //startActivity(intent);
-        Intent intent = new Intent(getApplicationContext(), CameraxActivity.class);
-        intent.putExtra("nomeImagem", "2_1_10_5.jpg");
+        Intent intent = new Intent(this, ProvaCorrigirActivity.class);
         startActivity(intent);
+        //Intent intent = new Intent(getApplicationContext(), CameraxActivity.class);
+        //intent.putExtra("nomeImagem", "2_1_10_5.jpg");
+        //startActivity(intent);
     }
     public void telaVisuProva(){
         Intent intent = new Intent(this, VisualProvaActivity.class);

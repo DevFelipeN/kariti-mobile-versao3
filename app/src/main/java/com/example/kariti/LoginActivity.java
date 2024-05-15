@@ -81,20 +81,10 @@ public class LoginActivity extends AppCompatActivity {
                 if(isOnline()) {
                     String confEmail = email.getText().toString();
                     if (confEmail.equals("")) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setTitle("Esqueceu Sua Senha?")
-                                .setMessage("Por favor informe seu e-mail cadastrado no campo sugerido, em seguida pressione 'Esqueci Minha Senha'")
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(LoginActivity.this, "Informe o E-mail! ", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                       alerteEsqueciSenha();
                     } else {
                         Integer id = bancoDados.checkemail(confEmail);
-                        if (id > 0) {
+                        if (id != null) {
                             String cod = gerarCodigo.gerarVerificador();
                             Boolean mandaEmail = enviarEmail.enviaCodigo(confEmail, cod);
                             if (mandaEmail == true) {
@@ -137,5 +127,18 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isOnline() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+    public void alerteEsqueciSenha(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("Esqueceu Sua Senha?")
+                .setMessage("Por favor informe seu e-mail cadastrado no campo sugerido, em seguida pressione 'Esqueci Minha Senha'")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(LoginActivity.this, "Informe o E-mail! ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

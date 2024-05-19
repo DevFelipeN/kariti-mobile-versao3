@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tranparente"
+    tools:context=".AtualizarSenha">
+
+    <ImageButton
+        android:id="@+id/imgBtnVoltaAttSenha"
+        android:layout_width="48dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:background="@color/tranparente"
+        android:contentDescription="@string/btnVoltar"
+        android:src="@mipmap/setaleft"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageViewPerson"
+        android:layout_width="144dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/person"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="400dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
+
+    <EditText
+        android:id="@+id/editTextAttSenha"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/borda_botao"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="@string/nomeCompleto"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAttSenha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <EditText
+        android:id="@+id/editTextEmailAttSenha"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/borda_botao"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAttSenha" />
+
+    <TextView
+        android:id="@+id/textViewSenhaConfirma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="@string/textViewconfirmar"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmAttSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNovaAttSenha"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textViewAcessoSenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Nova Senha"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaAttSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailAttSenha"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editTextConfirmAttSenha"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/borda_botao"
+        android:ems="10"
+        android:hint="@string/repetirSenha"
+        android:inputType="textPassword"
+        android:maxLength="8"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
+
+    <Button
+        android:id="@+id/buttonAttSenha"
+        style="@style/BUTTONSTYLE"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/btnAlterarSenha"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmAttSenha" />
+
+    <ImageButton
+        android:id="@+id/imgButtonSenhaOFF"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="3dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextConfirmAttSenha"
+        app:layout_constraintEnd_toEndOf="@id/editTextConfirmAttSenha"
+        app:layout_constraintHorizontal_bias="0.994"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmAttSenha"
+        app:layout_constraintTop_toTopOf="@+id/editTextConfirmAttSenha"
+        app:layout_constraintVertical_bias="0.583"
+        app:srcCompat="@mipmap/senhaoff" />
+
+    <EditText
+        android:id="@+id/editTextNovaAttSenha"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/borda_botao"
+        android:ems="10"
+        android:hint="Informe a nova senha"
+        android:inputType="textPassword"
+        android:maxLength="8"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAcessoSenha" />
+
+    <ImageButton
+        android:id="@+id/senhaoculta"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextNovaAttSenha"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovaAttSenha"
+        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaAttSenha"
+        app:layout_constraintTop_toTopOf="@+id/editTextNovaAttSenha"
+        app:srcCompat="@mipmap/senhaoff"
+        tools:ignore="UnknownId" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

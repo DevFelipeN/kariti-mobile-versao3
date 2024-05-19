@@ -11,9 +11,10 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="@string/textViewInformeSenha"
         android:textColor="@color/cinzaClaro"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextSenha"
@@ -21,8 +22,8 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginTop="50dp"
         android:contentDescription="@string/imgProfessor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,9 +35,10 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="60dp"
         android:text="@string/textViewLoginEntrar"
         android:textColor="@color/cinzaClaro"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLogin"
@@ -44,20 +46,21 @@
 
     <EditText
         android:id="@+id/editTextLogin"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/email"
         android:inputType="text"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
         android:id="@+id/editTextSenha"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/senhahint"
@@ -69,8 +72,8 @@
 
     <ImageButton
         android:id="@+id/senhaoculta"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="#00FFFFFF"
         android:contentDescription="@string/acessoSenha"
         android:scaleType="fitCenter"
@@ -86,15 +89,15 @@
     <Button
         android:id="@+id/buttonEntrarL"
         style="@style/BUTTONSTYLE"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
         android:layout_marginTop="40dp"
         android:text="@string/btnEntrar"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSenha"
-        app:layout_constraintVertical_bias="0.085" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -105,7 +108,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonEntrarL">
+        app:layout_constraintTop_toBottomOf="@id/buttonEntrarL"
+        app:layout_constraintVertical_bias="0.852">
 
         <TextView
             android:id="@+id/textViewCriarConta"
@@ -114,7 +118,7 @@
             android:layout_marginTop="50dp"
             android:text="Criar conta"
             android:textColor="#03A9F4"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonEntrarL" />
@@ -127,6 +131,7 @@
             android:background="@color/tranparente"
             android:text="@string/buttonEsqueciSenha"
             android:textColor="#03A9F4"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"

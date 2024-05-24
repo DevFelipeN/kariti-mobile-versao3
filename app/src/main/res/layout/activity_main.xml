@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/tranparente"
     style="@style/BACKGROUND"
-    tools:context=".MainActivity">
+    tools:context="online.padev.kariti.MainActivity">
 
     <ImageView
         android:id="@+id/imageViewPerson"

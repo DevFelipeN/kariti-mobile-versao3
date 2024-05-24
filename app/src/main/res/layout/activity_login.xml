@@ -5,7 +5,8 @@
     style="@style/BACKGROUND"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    style="@style/BACKGROUND"
+    tools:context="online.padev.kariti.LoginActivity">
 
     <TextView
         android:id="@+id/textView6"

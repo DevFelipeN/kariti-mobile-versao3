@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="online.padev.kariti"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,7 +30,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="26">
         <activity
-            android:name=".CameraxActivity"
+            android:name="online.padev.kariti.CameraxActivity"
             android:exported="false"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
@@ -36,94 +38,94 @@
             tools:replace="android:screenOrientation"
             android:stateNotNeeded="true"/>
         <activity
-            android:name=".CameraNoAppActivity"
+            android:name="online.padev.kariti.CameraNoAppActivity"
             android:exported="false" />
         <activity
-            android:name=".ilustracionVoidSchoolctivity"
+            android:name="online.padev.kariti.ilustracionVoidSchoolctivity"
             android:exported="false" />
         <activity
-            android:name=".SplachActivity"
+            android:name="online.padev.kariti.SplachActivity"
             android:exported="false" />
         <activity
-            android:name=".GaleriaActivity"
+            android:name="online.padev.kariti.GaleriaActivity"
             android:exported="false" />
         <activity
-            android:name=".VisualProvaCorrigidaActivity"
+            android:name="online.padev.kariti.VisualProvaCorrigidaActivity"
             android:exported="false" />
         <activity
-            android:name=".VisualProvaActivity"
+            android:name="online.padev.kariti.VisualProvaActivity"
             android:exported="false" />
         <activity
-            android:name=".ProvaCorrigirActivity"
+            android:name="online.padev.kariti.ProvaCorrigirActivity"
             android:exported="false" />
         <activity
-            android:name=".ProvaCartoesActivity"
+            android:name="online.padev.kariti.ProvaCartoesActivity"
             android:exported="false" />
         <activity
-            android:name=".ProvaCadConfirActivity"
+            android:name="online.padev.kariti.ProvaCadConfirActivity"
             android:exported="false" />
         <activity
-            android:name=".GabaritoActivity"
+            android:name="online.padev.kariti.GabaritoActivity"
             android:exported="false" />
         <activity
-            android:name=".CadProvaActivity"
+            android:name="online.padev.kariti.CadProvaActivity"
             android:exported="false" />
         <activity
-            android:name=".EditarAlunoActivity"
+            android:name="online.padev.kariti.EditarAlunoActivity"
             android:exported="false" />
         <activity
-            android:name=".EditarTurmaActivity"
+            android:name="online.padev.kariti.EditarTurmaActivity"
             android:exported="false" />
         <activity
-            android:name=".DadosTurmaActivity"
+            android:name="online.padev.kariti.DadosTurmaActivity"
             android:exported="false" />
         <activity
-            android:name=".VisualTurmaActivity"
+            android:name="online.padev.kariti.VisualTurmaActivity"
             android:exported="false" />
         <activity
-            android:name=".CadTurmaActivity"
+            android:name="online.padev.kariti.CadTurmaActivity"
             android:exported="false" />
         <activity
-            android:name=".EscolaDesativadaActivity"
+            android:name="online.padev.kariti.EscolaDesativadaActivity"
             android:exported="false" />
         <activity
-            android:name=".ProvaActivity"
+            android:name="online.padev.kariti.ProvaActivity"
             android:exported="false" />
         <activity
-            android:name=".TurmaActivity"
+            android:name="online.padev.kariti.TurmaActivity"
             android:exported="false" />
         <activity
-            android:name=".AtualizarSenha"
+            android:name="online.padev.kariti.AtualizarSenha"
             android:exported="false" />
         <activity
-            android:name=".VisualAlunoActivity"
+            android:name="online.padev.kariti.VisualAlunoActivity"
             android:exported="false" />
         <activity
-            android:name=".CadAlunoActivity"
+            android:name="online.padev.kariti.CadAlunoActivity"
             android:exported="false" />
         <activity
-            android:name=".AlunoActivity"
+            android:name="online.padev.kariti.AlunoActivity"
             android:exported="false" />
         <activity
-            android:name=".DetalhesEscolaActivity"
+            android:name="online.padev.kariti.DetalhesEscolaActivity"
             android:exported="false" />
         <activity
-            android:name=".VisualEscolaActivity"
+            android:name="online.padev.kariti.VisualEscolaActivity"
             android:exported="false" />
         <activity
-            android:name=".CadEscolaActivity"
+            android:name="online.padev.kariti.CadEscolaActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name="online.padev.kariti.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".CodSenhaActivity"
+            android:name="online.padev.kariti.CodSenhaActivity"
             android:exported="false" />
         <activity
-            android:name=".InicioActivity"
+            android:name="online.padev.kariti.InicioActivity"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name="online.padev.kariti.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -132,7 +134,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="online.padev.kariti.MainActivity"
             android:exported="true" />
     </application>
 

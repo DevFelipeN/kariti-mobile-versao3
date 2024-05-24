@@ -2,10 +2,10 @@ plugins {
     id 'com.android.application'
 }
 android {
-    namespace 'com.example.kariti'
+    namespace 'online.padev.kariti'
     compileSdk 34
     defaultConfig {
-        applicationId "com.example.kariti"
+        applicationId "online.padev.kariti"
         minSdkVersion 23
         targetSdkVersion 34
         versionCode 1

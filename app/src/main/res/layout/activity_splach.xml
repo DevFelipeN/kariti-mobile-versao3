@@ -6,7 +6,7 @@
     style="@style/BACKGROUND"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplachActivity">
+    tools:context="online.padev.kariti.SplachActivity">
 
     <ImageView
         android:id="@+id/imageView1623"

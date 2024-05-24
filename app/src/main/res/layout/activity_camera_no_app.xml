@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CameraNoAppActivity">
+    tools:context="online.padev.kariti.CameraNoAppActivity">
 
     <TextView
         android:id="@+id/txtViewinfoCamera"

@@ -28,10 +28,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildToolsVersion '34.0.0'
-    packagingOptions{
-        exclude 'META-INF/NOTICE.md'
-        exclude 'META-INF/LICENSE.md'
-        exclude "META-INF/DEPENDENCIES"
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/NOTICE.md', 'META-INF/LICENSE.md', 'META-INF/DEPENDENCIES']
+        }
     }
 
 }

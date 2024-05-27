@@ -39,6 +39,7 @@ public class AdapterExclAluno extends ArrayAdapter<String> {
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
         textViewNome.setText(alunos.get(position));
 
+
         return view;
     }
 }

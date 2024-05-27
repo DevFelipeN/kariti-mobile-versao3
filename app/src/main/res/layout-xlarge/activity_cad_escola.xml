@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CadEscolaActivity">
+    tools:context="online.padev.kariti.CadEscolaActivity">
 
     <include
         android:id="@+id/include"

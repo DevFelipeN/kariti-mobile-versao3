@@ -44,7 +44,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         Integer pegaAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         turmaCad.setText(pegaTurma);
-        qtdAnonimos.setText(pegaAnonimos.toString());
+        qtdAnonimos.setText("Alunos Anônimos: "+pegaAnonimos.toString());
 
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
         int num = idsAlTurma.size();
@@ -55,7 +55,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
                 listAlunosDturma.add(aluno);
             }
         }
-        Toast.makeText(this, "Alunos: "+listAlunosDturma.size(), Toast.LENGTH_SHORT).show();
         DesativadaAdapter adapter = new DesativadaAdapter(this, listAlunosDturma, listAlunosDturma);
         listView.setAdapter(adapter);
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +70,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         popupMenu.inflate(R.menu.actuvity_menuturma);
         popupMenu.show();
     }
-
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
@@ -79,17 +77,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
                 telaEditar();
             return true;
         }
-        /*else if (id == R.id.menuExcluir) {
-            Toast.makeText(DadosTurmaActivity.this, "Excluir Turma selecionado", Toast.LENGTH_SHORT).show();
-            return true;
-        }else if (id == R.id.menuExclTurmAlun) {
-            Toast.makeText(DadosTurmaActivity.this, "Excluir Turma e Aluno selecionado", Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return false;
-        }
-
-         */
         return true;
     }
 

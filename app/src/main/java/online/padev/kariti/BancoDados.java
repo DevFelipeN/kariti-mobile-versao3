@@ -25,7 +25,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
             base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INT NOT NULL references usuario(id_usuario), status Integer not null check(status = 0 or status = 1))");
             base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_usuario INTEGER not null references usuario(id_usuario))");
-            base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null, qtdAnonimos Integer not null)");
+                base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null, qtdAnonimos Integer not null)");
             base_dados.execSQL("create Table alunosTurma(id_turma Integer not null references turma(id_turma), id_aluno Integer not null references aluno(id_aluno), primary key (id_turma, id_aluno))");
             base_dados.execSQL("create Table prova(id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT not null, dataProva TEXT not null, qtdQuestoes Integer not null, qtdAlternativas Interger not null, id_escola INTEGER, id_turma Integer not null references turma(id_turma))");
             base_dados.execSQL("create Table gabarito(id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer not null references prova(id_prova), questao Integer not null, resposta Integer not null, nota Real not null)");
@@ -388,10 +388,10 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Integer pegaqtdAnonimos(String id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
+        Cursor cursor = base_dados.rawQuery("Select qtdAnonimos from turma where id_turma = ?", new String[]{id_turma});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(3);
+        return cursor.getInt(0);
     }
     public Integer pegaIdProva(String provacad) {
         SQLiteDatabase base_dados = this.getWritableDatabase();

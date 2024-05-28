@@ -296,6 +296,15 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return null;
     }
+    public Boolean checkEmailDAluno(String email) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select email from aluno where email = ?", new String[]{email});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return true;
+        }else
+            return false;
+    }
     public String pegaNome(String id_usuario) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from usuario where id_usuario = ?", new String[]{id_usuario});

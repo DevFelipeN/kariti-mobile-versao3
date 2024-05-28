@@ -10,7 +10,7 @@
     <ImageButton
         android:id="@+id/imgBtnVoltaAttSenha"
         android:layout_width="48dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:background="@color/tranparente"
         android:contentDescription="@string/btnVoltar"
@@ -49,7 +49,7 @@
     <EditText
         android:id="@+id/editTextAttSenha"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/borda_botao"
@@ -68,7 +68,7 @@
     <EditText
         android:id="@+id/editTextEmailAttSenha"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -111,7 +111,7 @@
     <EditText
         android:id="@+id/editTextConfirmAttSenha"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -141,24 +141,25 @@
 
     <ImageButton
         android:id="@+id/imgButtonSenhaOFF"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
+        android:contentDescription="@string/acessoSenha"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/editTextConfirmAttSenha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.861"
+        app:layout_constraintHorizontal_bias="0.855"
         app:layout_constraintStart_toStartOf="@+id/editTextConfirmAttSenha"
         app:layout_constraintTop_toTopOf="@+id/editTextConfirmAttSenha"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@mipmap/senhaoff" />
 
     <EditText
         android:id="@+id/editTextNovaAttSenha"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -174,16 +175,17 @@
 
     <ImageButton
         android:id="@+id/senhaoculta"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="#00FFFFFF"
+        android:contentDescription="@string/acessoSenha"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/editTextNovaAttSenha"
         app:layout_constraintEnd_toEndOf="@+id/editTextNovaAttSenha"
-        app:layout_constraintHorizontal_bias="0.982"
         app:layout_constraintStart_toStartOf="@+id/editTextNovaAttSenha"
         app:layout_constraintTop_toTopOf="@+id/editTextNovaAttSenha"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.982"
         app:srcCompat="@mipmap/senhaoff"
         tools:ignore="UnknownId" />
 

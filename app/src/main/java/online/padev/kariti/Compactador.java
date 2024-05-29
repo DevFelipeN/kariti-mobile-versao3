@@ -19,9 +19,9 @@ public class Compactador{
     public static boolean compactador(){
         List<String> arquivos = new ArrayList<>();
         for(int x = 0; x < listCartoes.size(); x++) {
-            arquivos.add("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/"+listCartoes.get(x));
+            arquivos.add("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/"+listCartoes.get(x));
         }
-        return compactar("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/saida.zip", arquivos); //retorna true se funcionou
+        return compactar("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip", arquivos); //retorna true se funcionou
     }
     public static boolean compactar(String arquivoSaida, List<String> arquivosParaCompactar){
         try{

@@ -92,8 +92,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
                 qtdQuestoes = bancoDados.pegaqtdQuestoes(partes[0]);
                 qtdAlternativas = bancoDados.pegaqtdAlternativas(partes[0]);
             }else{
-                qtdQuestoes = 0;
-                qtdAlternativas = 0;
+                Toast.makeText(this, "Prova não cadastrada!", Toast.LENGTH_SHORT).show();
+                return;
             }
             nomeDaFoto = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".jpg";
 

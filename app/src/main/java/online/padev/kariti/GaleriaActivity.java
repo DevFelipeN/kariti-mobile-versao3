@@ -73,7 +73,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 Boolean teste = Compactador.compactador();
                 if(teste) {
                     try {
-                        File fileZip = new File("/storage/emulated/0/Android/media/com.example.kariti/CameraXApp/saida.zip");
+                        File fileZip = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
                         Compactador.listCartoes.clear();

@@ -58,7 +58,8 @@ public class CadProvaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Integer quest = Integer.valueOf(qtdQuest.getText().toString());
-                quest ++;
+                if(quest < 20)
+                    quest ++;
                 qtdQuest.setText(quest.toString());
             }
         });
@@ -75,7 +76,8 @@ public class CadProvaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Integer alter = Integer.valueOf(qtdAlter.getText().toString());
-                alter ++;
+                if(alter < 10)
+                    alter ++;
                 qtdAlter.setText(alter.toString());
             }
         });
@@ -96,6 +98,14 @@ public class CadProvaActivity extends AppCompatActivity {
                 Integer quest = Integer.valueOf(qtdQuest.getText().toString());
                 Integer alter = Integer.valueOf(qtdAlter.getText().toString());
                 String turma = spinnerTurma.getSelectedItem().toString();
+                if(spinnerTurma.getSelectedItem() == "Selecione a Turma"){
+                    Toast.makeText(CadProvaActivity.this, "Selecione uma turma!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(data.equals("Selecionar Data")){
+                    Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(!prova.equals("")){
                     id_turma = bancoDados.pegaIdTurma(turma);
                     Boolean existTurma = bancoDados.checkprovasNome(prova, id_turma.toString());

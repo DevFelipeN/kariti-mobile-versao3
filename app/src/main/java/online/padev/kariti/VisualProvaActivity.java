@@ -10,12 +10,13 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import online.padev.kariti.R;
 
 import java.util.ArrayList;
 
-public class VisualProvaActivity extends AppCompatActivity {
+public class    VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button visualProva;
     String turmaSelecionada, provaSelected;
@@ -92,19 +93,5 @@ public class VisualProvaActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    public void avisoCamposNulos(String msg){
-        AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaActivity.this);
-        builder.setTitle("Atenção!")
-                .setMessage(msg);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-    //public void testeJson(JSONObject objJson){
-    public void testeJson(Object objJson){
-        AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaActivity.this);
-        builder.setTitle("Arquivo!")
-                .setMessage("Este: "+objJson);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
+
 }

@@ -37,17 +37,13 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        bancoDados.deletarAlunoDturma(4);
-
-        if (!haTurmasCadastradas()) {
+        listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        if (listarTurma.isEmpty()) {
+            Toast.makeText(this, "Passando aqui", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);
             finish();
-            return;
         }
-
-
-        listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
         EscolaAdapter adapter = new EscolaAdapter(this, listarTurma, listarTurma);
         listView.setAdapter(adapter);
 
@@ -121,15 +117,6 @@ public class VisualTurmaActivity extends AppCompatActivity {
                 .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível excluir!.");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    public boolean haTurmasCadastradas() {
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM turma WHERE id_turma=" + BancoDados.USER_ID, null);
-        cursor.moveToFirst();
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count > 0;
     }
 
 }

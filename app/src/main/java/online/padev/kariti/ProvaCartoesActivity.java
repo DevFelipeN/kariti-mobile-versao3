@@ -66,7 +66,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                         idTurmaSelect = bancoDados.pegaIdTurma(turmaSelecionada);
                         provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
-                        provalist.add(0, "Selecione a prova");
+                        //provalist.add(0, "Selecione a prova");
                         SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, provalist);
                         spinnerProva.setAdapter(adapterProva);
 
@@ -146,49 +146,51 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isOnline()) {
-                    String nomeProva = spinnerProva.getSelectedItem().toString();
-                    String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
-                    String nomeTurma = spinnerTurma.getSelectedItem().toString();
-                    String id_usuario = String.valueOf(BancoDados.USER_ID);
-                    String prof = bancoDados.pegaUsuario(id_usuario);
-                    String data = bancoDados.pegaData(id_prova);
-                    String nota = String.valueOf(bancoDados.listNota(id_prova));
-                    String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
-                    String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
+                    if(spinnerProva.getSelectedItem() != null) {
+                        String nomeProva = spinnerProva.getSelectedItem().toString();
+                        String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
+                        String nomeTurma = spinnerTurma.getSelectedItem().toString();
+                        String id_usuario = String.valueOf(BancoDados.USER_ID);
+                        String prof = bancoDados.pegaUsuario(id_usuario);
+                        String data = bancoDados.pegaData(id_prova);
+                        String nota = String.valueOf(bancoDados.listNota(id_prova));
+                        String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
+                        String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
 
-                    dados = new ArrayList<>();
+                        dados = new ArrayList<>();
 
-                    String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
-                    listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
-                    int qtdProvas = listIdsAlunos.size();
-                    dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
-                    for (int x = 0; x < qtdProvas; x++) {
-                        idAluno = String.valueOf(listIdsAlunos.get(x));
-                        String aluno = bancoDados.alunosGerarProva(String.valueOf(listIdsAlunos.get(x)));
-                        dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
-                    }
-                    try {
-                        File filecsv = null;
-                        String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
-                        String filePdf = nomeProva + dateCart+".pdf";
-                        //String estado = Environment.getExternalStorageState();
-                        //if (estado.equals(Environment.MEDIA_MOUNTED)) {
+                        String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
+                        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
+                        int qtdProvas = listIdsAlunos.size();
+                        dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
+                        for (int x = 0; x < qtdProvas; x++) {
+                            idAluno = String.valueOf(listIdsAlunos.get(x));
+                            String aluno = bancoDados.alunosGerarProva(String.valueOf(listIdsAlunos.get(x)));
+                            dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
+                        }
+                        try {
+                            File filecsv = null;
+                            String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
+                            String filePdf = nomeProva + dateCart + ".pdf";
+                            //String estado = Environment.getExternalStorageState();
+                            //if (estado.equals(Environment.MEDIA_MOUNTED)) {
                             //filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
                             filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                        //} else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
-                        File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
-                        BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
-                        builder.setTitle("Por favor, Aguarde!")
-                                .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                            //} else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
+                            File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
+                            BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                            builder.setTitle("Por favor, Aguarde!")
+                                    .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
 
-                    } catch (Exception e) {
-                        Log.e("Kariti", e.toString());
-                        Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
-                    }
+                        } catch (Exception e) {
+                            Log.e("Kariti", e.toString());
+                            Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
                 }else Toast.makeText(ProvaCartoesActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
             }
         });

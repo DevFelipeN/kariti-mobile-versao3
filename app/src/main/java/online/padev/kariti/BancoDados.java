@@ -1,4 +1,5 @@
 package online.padev.kariti;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,7 +17,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, DBNAME, null, 24);
+        super(context, DBNAME, null, 25);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
@@ -25,7 +26,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("create Table validacao_usuario( id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
             base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, bairro TEXT, id_usuario INT NOT NULL references usuario(id_usuario), status Integer not null check(status = 0 or status = 1))");
             base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_usuario INTEGER not null references usuario(id_usuario))");
-                base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null, qtdAnonimos Integer not null)");
+            base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null, qtdAnonimos Integer not null)");
             base_dados.execSQL("create Table alunosTurma(id_turma Integer not null references turma(id_turma), id_aluno Integer not null references aluno(id_aluno), primary key (id_turma, id_aluno))");
             base_dados.execSQL("create Table prova(id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT not null, dataProva TEXT not null, qtdQuestoes Integer not null, qtdAlternativas Interger not null, id_escola INTEGER, id_turma Integer not null references turma(id_turma))");
             base_dados.execSQL("create Table gabarito(id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer not null references prova(id_prova), questao Integer not null, resposta Integer not null, nota Real not null)");
@@ -342,7 +343,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and status = ? and id_usuario = ?", new String[]{id_aluno, "1", BancoDados.USER_ID.toString()});
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and id_usuario = ?", new String[]{id_aluno, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return cursor.getString(1);
@@ -462,7 +463,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean haEscolasCadastradas() {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario=" + BancoDados.USER_ID, null);
+        Cursor cursor = base_dados.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario = " + BancoDados.USER_ID, null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

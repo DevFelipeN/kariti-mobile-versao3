@@ -69,6 +69,7 @@ public class GabaritoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean respostaSelecionada = false;
+                boolean respostasNotasPreenchidas = true;
                 for (RadioGroup radioGroup : listRadioGroups) {
                     if (radioGroup.getCheckedRadioButtonId() == -1) {
                         Toast.makeText(GabaritoActivity.this, "Por favor, selecione uma resposta para todas as questões.", Toast.LENGTH_SHORT).show();
@@ -78,7 +79,20 @@ public class GabaritoActivity extends AppCompatActivity {
                         respostaSelecionada = true;
                     }
                 }
-                if (respostaSelecionada) {
+
+                // Verifica se todos os campos de notas foram preenchidos
+                for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+                    LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
+                    EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+                    String nt = pontosEditText.getText().toString();
+                    if (nt.isEmpty()) {
+                        Toast.makeText(GabaritoActivity.this, "Por favor, preencha todas as notas para as questões.", Toast.LENGTH_SHORT).show();
+                        respostasNotasPreenchidas = false;
+                        break;
+                    }
+                }
+
+                if (respostaSelecionada && respostasNotasPreenchidas) {
                     id_turma = bancoDados.pegaIdTurma(turma);
                     Boolean insProva = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);;
                     if(insProva) {

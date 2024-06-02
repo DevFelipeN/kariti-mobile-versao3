@@ -1,18 +1,21 @@
 package online.padev.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import online.padev.kariti.R;
 
 public class DetalhesEscolaActivity extends AppCompatActivity {
-    ImageButton btnVoltar;
+    ImageButton btnVoltar, iconHelpDetalhes;
     Button btnTurma, btnAluno, btnProva;
     TextView nomeEscola;
 
@@ -24,6 +27,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
         btnVoltar.setVisibility(View.VISIBLE);
+        iconHelpDetalhes = findViewById(R.id.iconHelpDetalhesSchool);
 
         btnTurma = findViewById(R.id.btnTurma);
         btnAluno = findViewById(R.id.buttonAluno);
@@ -33,6 +37,13 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
 
         String escola = bancoDados.pegaEscola(String.valueOf(BancoDados.ID_ESCOLA));
         nomeEscola.setText(escola);
+
+        iconHelpDetalhes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelpDetalhes();
+            }
+        });
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +82,18 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
     public void irTelaProva(){
         Intent intent = new Intent(this, ProvaActivity.class);
         startActivity(intent);
+    }
+
+    public void dialogHelpDetalhes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Adcionar texto!.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
 }

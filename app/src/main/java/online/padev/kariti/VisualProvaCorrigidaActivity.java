@@ -34,7 +34,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_prova_corrigida);
 
-        voltar = findViewById(R.id.imgBtnVoltarDados);
+        voltar = findViewById(R.id.imgBtnVoltar);
         btnBaixar = findViewById(R.id.buttonBaixarResultado);
         provaResult = findViewById(R.id.textViewProvaResult);
         bancoDados = new BancoDados(this);

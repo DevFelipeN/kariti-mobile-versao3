@@ -104,6 +104,7 @@
     <string name="imgDelete">Botão de Deletar</string>
     <string name="txtViewNomeTurma">Nome da Turma</string>
     <string name="btnFlutuante">Adicionar Fotos</string>
+    <string name="textAjuda">Ajuda</string>
 
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>

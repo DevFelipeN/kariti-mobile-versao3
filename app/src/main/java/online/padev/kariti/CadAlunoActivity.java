@@ -41,7 +41,7 @@ public class CadAlunoActivity extends AppCompatActivity {
                     Boolean checkAluno = bancoDados.checkAluno(nome);
                     if (!checkAluno) {
                         if (!email.equals("")) {
-                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && bancoDados.checkEmailDAluno(email)) {
                                 Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, 1);
                                 if (insertAluno) {
                                     Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
@@ -50,7 +50,7 @@ public class CadAlunoActivity extends AppCompatActivity {
                                     Toast.makeText(CadAlunoActivity.this, "Falha no cadastro do aluno!", Toast.LENGTH_SHORT).show();
                                 }
                             } else
-                                Toast.makeText(CadAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CadAlunoActivity.this, "E-mail Inválido ou já existente!", Toast.LENGTH_SHORT).show();
                         } else {
                             Boolean insertAlunoS = bancoDados.inserirDadosAluno(nome, email, 1);
                             if (insertAlunoS) {

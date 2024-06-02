@@ -67,23 +67,25 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/textViewDataProva"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/datePickerButton"
-        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintHorizontal_bias="0.285"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerTurmaPprova" />
 
+
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/datePickerButton"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="48dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginEnd="36dp"
         android:text="@string/buttonData"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/btnGerarProva"
@@ -91,17 +93,17 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerTurmaPprova"
         app:layout_constraintVertical_bias="0.0" />
 
-
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/textViewQuantQuestoes"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
-        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -109,8 +111,8 @@
         android:id="@+id/linearLayout2"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,12 +151,13 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/textViewQuantAltern"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
-        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayoutAlter"
+        app:layout_constraintHorizontal_bias="0.678"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -163,7 +166,7 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginEnd="32dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/btnGerarProva"
@@ -201,10 +204,14 @@
     </LinearLayout>
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/btnGerarProva"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/buttonGerarProva"
         android:textAlignment="center"
         android:textSize="16sp"

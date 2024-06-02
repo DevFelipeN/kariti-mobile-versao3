@@ -1,4 +1,5 @@
 package online.padev.kariti;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,7 +17,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, DBNAME, null, 24);
+        super(context, DBNAME, null, 25);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
@@ -296,6 +297,15 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return null;
     }
+    public Boolean checkEmailDAluno(String email) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select email from aluno where email = ?", new String[]{email});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return true;
+        }else
+            return false;
+    }
     public String pegaNome(String id_usuario) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from usuario where id_usuario = ?", new String[]{id_usuario});
@@ -333,7 +343,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and status = ? and id_usuario = ?", new String[]{id_aluno, "1", BancoDados.USER_ID.toString()});
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and id_usuario = ?", new String[]{id_aluno, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return cursor.getString(1);
@@ -379,10 +389,10 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Integer pegaqtdAnonimos(String id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
+        Cursor cursor = base_dados.rawQuery("Select qtdAnonimos from turma where id_turma = ?", new String[]{id_turma});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(3);
+        return cursor.getInt(0);
     }
     public Integer pegaIdProva(String provacad) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -453,7 +463,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean haEscolasCadastradas() {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario=" + BancoDados.USER_ID, null);
+        Cursor cursor = base_dados.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario = " + BancoDados.USER_ID, null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,10 +39,8 @@ public class VisualAlunoActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
-        ListView listView = findViewById(R.id.listSelecAluno);
+        RecyclerView recyclerView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
-
-
 
         tituloAppBarAlunos = findViewById(R.id.toolbar_title);
         tituloAppBarAlunos.setText("Alunos");
@@ -54,16 +53,11 @@ public class VisualAlunoActivity extends AppCompatActivity {
             return;
         }
 
-        /*
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(this, listAlunos);
+        adapter = new MyAdapter(this, listAlunos, this::onItemClick, this::onItemLongClick);
         recyclerView.setAdapter(adapter);
 
-         */
-        EscolaAdapter adapter = new EscolaAdapter(this, listAlunos, listAlunos);
-        listView.setAdapter(adapter);
+        /*
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -98,16 +92,20 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 return true;
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+
+        recyclerView.setOnClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Integer id_aluno = bancoDados.pegaIdAluno(adapter.getItem(i));
+                Integer id_aluno = bancoDados.pegaIdAluno(adapter.toString(i));
                 Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
                 intent.putExtra("id_aluno", id_aluno);
                 startActivity(intent);
                 finish();
             }
         });
+
+         */
 
         pesquisarAlunos.addTextChangedListener(new TextWatcher(){
             @Override
@@ -128,6 +126,42 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void onItemClick(int position) {
+        Integer id_aluno = bancoDados.pegaIdAluno(listAlunos.get(position));
+        Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
+        intent.putExtra("id_aluno", id_aluno);
+        startActivity(intent);
+        finish();
+    }
+    public void onItemLongClick(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Deseja excluir aluno?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Integer id_aluno = bancoDados.pegaIdAluno(listAlunos.get(position));
+                        Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(id_aluno);
+                        if(!checkAlEmTurma){
+                            Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
+                            if (deletAluno) {
+                                listAlunos.remove(position);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                            }else
+                                Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
+                        }else avisoNotExluirAluno();
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //cancelou
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
     public void avisoNotExluirAluno(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);

@@ -41,7 +41,7 @@ public class CadAlunoActivity extends AppCompatActivity {
                     Boolean checkAluno = bancoDados.checkAluno(nome);
                     if (!checkAluno) {
                         if (!email.equals("")) {
-                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && bancoDados.checkEmailDAluno(email)) {
+                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && !bancoDados.checkEmailDAluno(email)) {
                                 Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, 1);
                                 if (insertAluno) {
                                     Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();

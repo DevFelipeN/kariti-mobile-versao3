@@ -67,7 +67,6 @@ public class    VisualProvaActivity extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -88,10 +87,12 @@ public class    VisualProvaActivity extends AppCompatActivity {
             return;
         }
         provaSelected = spinnerProva.getSelectedItem().toString();
-        Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
-        intent.putExtra("prova", provaSelected);
-        startActivity(intent);
-
+        if(bancoDados.checkCorrigida(bancoDados.pegaIdProva(provaSelected).toString())){
+            Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
+            intent.putExtra("prova", provaSelected);
+            startActivity(intent);
+        }else {
+            Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();
+        }
     }
-
 }

@@ -87,7 +87,13 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("Adcionar texto!.");
+        builder.setMessage("1 - Aluno \n" +
+                "Nesta etapa podem ser cadastrados e visualizados os alunos no app, independente da turma, a qual, pertecem! \n" +
+                "2 - Turma \n" +
+                "Nesta etapa, são cadastradas as turmas e selecionados os alunos pertencentes a essa turma, os quais, já devem antecipadamente está cadastrados na etapa anterior. Caso não deseje selecionar os alunos cadastrados ou nao deseje cadastrar os alunos," +
+                " é possivel cadastrar alunos anônimos na turma, informando a quandidade no campo 'Incluir Alunos Anônimos' \n " +
+                "3 - Prova \n" +
+                "Nesta etapa são realizadas todas as operações com as provas a serem cadastradas no app.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

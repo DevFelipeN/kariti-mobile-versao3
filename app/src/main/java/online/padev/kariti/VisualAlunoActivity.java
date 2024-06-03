@@ -2,6 +2,8 @@ package online.padev.kariti;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +29,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     BancoDados bancoDados;
     EditText pesquisarAlunos;
     ArrayList<String> listAlunos;
+    MyAdapter adapter;
     TextView tituloAppBarAlunos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class VisualAlunoActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
 
+
+
         tituloAppBarAlunos = findViewById(R.id.toolbar_title);
         tituloAppBarAlunos.setText("Alunos");
 
@@ -48,6 +53,15 @@ public class VisualAlunoActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        /*
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyAdapter(this, listAlunos);
+        recyclerView.setAdapter(adapter);
+
+         */
         EscolaAdapter adapter = new EscolaAdapter(this, listAlunos, listAlunos);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -102,7 +116,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2){
                 adapter.getFilter().filter(charSequence);
-                adapter.notifyDataSetChanged();
             }
             @Override
             public void afterTextChanged(Editable editable){

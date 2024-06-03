@@ -39,7 +39,6 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
         if (listarTurma.isEmpty()) {
-            Toast.makeText(this, "Passando aqui", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);
             finish();

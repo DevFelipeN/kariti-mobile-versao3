@@ -19,18 +19,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
     private List<String> dataList;
     private List<String> dataListFull; // Lista completa para pesquisa
     private LayoutInflater inflater;
+    private OnItemClickListener clickListener;
+    private OnItemLongClickListener longClickListener;
 
-    public MyAdapter(Context context, List<String> data) {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
+    }
+
+    public MyAdapter(Context context, List<String> data, final OnItemClickListener clickListener, final OnItemLongClickListener longClickListener) {
         this.dataList = data;
         this.dataListFull = new ArrayList<>(data); // Cria uma cópia da lista original
         this.inflater = LayoutInflater.from(context);
+        this.clickListener = clickListener;
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.list_escola, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, clickListener, longClickListener);
     }
 
     @Override
@@ -83,9 +94,33 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, final OnItemClickListener clickListener, final OnItemLongClickListener longClickListener) {
             super(itemView);
             textView = itemView.findViewById(R.id.textViewNomeScol);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (clickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            clickListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (longClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            longClickListener.onItemLongClick(position);
+                            return true; // Indica que o evento foi consumido
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

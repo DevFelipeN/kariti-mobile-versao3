@@ -288,12 +288,15 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkEmailDAluno(String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select email from aluno where email = ?", new String[]{email});
+        Cursor cursor = base_dados.rawQuery("Select email from aluno where email = ? and id_usuario = ?", new String[]{email, BancoDados.USER_ID.toString()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
+            Log.e("kariti", "ok");
             return true;
-        }else
+        }else {
+            Log.e("kariti", "Errio");
             return false;
+        }
     }
     public String pegaNome(String id_usuario) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -332,7 +335,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and id_usuario = ?", new String[]{id_aluno, BancoDados.USER_ID.toString()});
+        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and id_usuario = ? and status = ?", new String[]{id_aluno, BancoDados.USER_ID.toString(), "1"});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return cursor.getString(1);

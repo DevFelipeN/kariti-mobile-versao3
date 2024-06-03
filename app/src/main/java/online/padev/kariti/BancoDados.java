@@ -164,17 +164,6 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
-    public Boolean deleteDadosResultadoCorrecao(Integer id_prova){
-        try {
-            SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
-            SQLiteStatement stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_prova);
-            stmt.executeUpdateDelete();
-            base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-        return true;
-    }
     public Boolean deletarTurma(String turma){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -477,9 +466,9 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return false;
     }
-    public Boolean checkProvaCorrigida(String id_prova){
+    public Boolean checkCorrigida(String id_prova){
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova});
+        Cursor cursor = database.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova});
         if (cursor.getCount() > 0)
             return true;
         else

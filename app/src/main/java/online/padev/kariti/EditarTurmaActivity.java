@@ -1,7 +1,9 @@
 package online.padev.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -61,6 +63,8 @@ public class EditarTurmaActivity extends AppCompatActivity {
         qtdAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         editTurma.setText(pegaTurma);
         novosAlAnonimos.setText(qtdAnonimos.toString());
+
+        informAnonimos(qtdAnonimos);
 
         //Lista os aluno cadastrados nesta turma.
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
@@ -183,6 +187,17 @@ public class EditarTurmaActivity extends AppCompatActivity {
                 Toast.makeText(EditarTurmaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public void informAnonimos(Integer anonimos) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("KARITI");
+        builder.setMessage("Esta turma possui "+anonimos+" alunos anônimos cadastrados, caso deseje alterar essa quantidade, basta informar um novo valor no campo referente 'Incluir Alunos Anônimos'");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
 }

@@ -140,37 +140,41 @@ public class EditarTurmaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String turmaedit = editTurma.getText().toString();
-                Integer an = Integer.valueOf(novosAlAnonimos.getText().toString());
-                bancoDados.upadateTurma(turmaedit, an, Integer.valueOf(id_turma)); //Alterando Dados da turma
-                bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
-                for(int n = 0; n < idsAlTurma.size(); n++){
-                    bancoDados.deletaAnonimos(idsAlTurma.get(n));//Deleta todos os alunos Anonimos pertecentes a essa turma
-                }
-                if(!editAlTurma.isEmpty()) {
-                    int num = listView.getAdapter().getCount();
-                    selecionados = (ArrayList<String>) editAlTurma;
-                    for (int i = 0; i < num; i++) {
-                        Integer id_aluno = bancoDados.pegaIdAluno(editAlTurma.get(i));
-                        bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), id_aluno);
+                if(!turmaedit.isEmpty()) {
+                    Integer an = Integer.valueOf(novosAlAnonimos.getText().toString());
+                    bancoDados.upadateTurma(turmaedit, an, Integer.valueOf(id_turma)); //Alterando Dados da turma
+                    bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
+                    for (int n = 0; n < idsAlTurma.size(); n++) {
+                        bancoDados.deletaAnonimos(idsAlTurma.get(n));//Deleta todos os alunos Anonimos pertecentes a essa turma
                     }
-                }
-                if(!an.equals(0)){
-                    anonimos = new ArrayList<>();
-                    for(int x = 1; x <= an; x++){
-                        String anonimo = "Aluno "+turmaedit+" "+x;
-                        anonimos.add(anonimo);
-                        bancoDados.inserirDadosAluno(anonimo, null, 0);
+                    if (!editAlTurma.isEmpty()) {
+                        int num = listView.getAdapter().getCount();
+                        selecionados = (ArrayList<String>) editAlTurma;
+                        for (int i = 0; i < num; i++) {
+                            Integer id_aluno = bancoDados.pegaIdAluno(editAlTurma.get(i));
+                            bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), id_aluno);
+                        }
                     }
-                    for(int a = 0; a < anonimos.size(); a++){
-                        Integer idAnonimo = bancoDados.pegaIdAnonimo(anonimos.get(a));
-                        bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), idAnonimo);
+                    if (!an.equals(0)) {
+                        anonimos = new ArrayList<>();
+                        for (int x = 1; x <= an; x++) {
+                            String anonimo = "Aluno " + turmaedit + " " + x;
+                            anonimos.add(anonimo);
+                            bancoDados.inserirDadosAluno(anonimo, null, 0);
+                        }
+                        for (int a = 0; a < anonimos.size(); a++) {
+                            Integer idAnonimo = bancoDados.pegaIdAnonimo(anonimos.get(a));
+                            bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), idAnonimo);
+                        }
                     }
+                    Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), DadosTurmaActivity.class);
+                    intent.putExtra("idTurma", Integer.valueOf(id_turma));
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(EditarTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), DadosTurmaActivity.class);
-                intent.putExtra("idTurma", Integer.valueOf(id_turma));
-                startActivity(intent);
-                finish();
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

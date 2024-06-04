@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
     Button btnEscDesativada;
-    ImageView iconHelp;
+    ImageButton iconHelp;
     private Toolbar toolbar;
     ArrayList<String> listEscola;
 

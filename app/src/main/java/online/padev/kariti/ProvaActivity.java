@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import online.padev.kariti.R;
 
 public class ProvaActivity extends AppCompatActivity {
-    ImageButton voltar;
+    ImageButton voltar, iconHelpProva;
     Button cadProva, gerarCartao, corrigirProva, visuProva;
     ArrayList<String> listeTurmas;
     BancoDados bancoDados;
@@ -40,11 +40,19 @@ public class ProvaActivity extends AppCompatActivity {
         }
 
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelpProva = findViewById(R.id.iconHelp);
         cadProva = findViewById(R.id.buttonCadProva);
         gerarCartao = findViewById(R.id.buttonGerarCatao);
         corrigirProva = findViewById(R.id.buttonCorrigirProva);
         visuProva = findViewById(R.id.buttonVisuProva);
+
+        iconHelpProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelpDetalhes();
+            }
+        });
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +119,18 @@ public class ProvaActivity extends AppCompatActivity {
         builder.setTitle("Atenção!");
         builder.setMessage("Não existem turmas cadastradas. " +
                 "Para realizar o cadastro de provas, realize o cadastro das turma em que atua e/ou que será aplicada a prova.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void dialogHelpDetalhes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Adcionar Mensagem Prova!");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

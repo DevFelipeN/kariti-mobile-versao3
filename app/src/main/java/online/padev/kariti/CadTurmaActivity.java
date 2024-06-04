@@ -21,7 +21,7 @@ import online.padev.kariti.R;
 import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity{
-    ImageButton voltar;
+    ImageButton voltar, iconHelpCadturma;
     Toolbar toolbar;
     EditText nomeTurma, alunosAnonimos;
     ImageView menosAnonimos, maisAnonimos;
@@ -42,7 +42,8 @@ public class CadTurmaActivity extends AppCompatActivity{
 
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelpCadturma = findViewById(R.id.iconHelp);
         listarAlunos = findViewById(R.id.listViewCadTurma);
 
         nomeTurma = findViewById(R.id.editTextTurmaCad);
@@ -59,6 +60,12 @@ public class CadTurmaActivity extends AppCompatActivity{
         spinnerBuscAluno.setAdapter(adapter);
         spinnerBuscAluno.setSelection(0);
 
+        iconHelpCadturma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelpDetalhes();
+            }
+        });
         spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -180,5 +187,17 @@ public class CadTurmaActivity extends AppCompatActivity{
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void dialogHelpDetalhes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Adcionar Mensagem CadTurma!");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

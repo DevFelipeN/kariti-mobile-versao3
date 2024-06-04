@@ -34,11 +34,12 @@
             android:textSize="34sp" />
 
         <!-- Componente alinhado à direita -->
-        <ImageView
+        <ImageButton
             android:id="@+id/iconHelp"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:padding="8dp"
+            android:contentDescription="@string/textAjuda"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/tranparente"
             android:src="@mipmap/question"
             android:layout_marginEnd="7dp"
             />

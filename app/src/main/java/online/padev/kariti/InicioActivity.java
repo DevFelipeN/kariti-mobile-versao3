@@ -1,7 +1,9 @@
 package online.padev.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 import online.padev.kariti.R;
 
 public class InicioActivity extends AppCompatActivity {
-    ImageButton imageButtonInicio;
+    ImageButton imageButtonInicio, iconHelInicio;
     BancoDados bancoDados;
 
     Button cadastrarEscola, visualizarEscola;
@@ -26,11 +28,19 @@ public class InicioActivity extends AppCompatActivity {
         cadastrarEscola = findViewById(R.id.buttonCadEscola);
         visualizarEscola = findViewById(R.id.buttonVisualizarEscola);
         bancoDados = new BancoDados(this);
+        iconHelInicio = findViewById(R.id.iconHelpLogout);
 
         if(!bancoDados.checkEscola("Escola Teste1")) {
             bancoDados.inserirDadosEscola("Escola Teste1", "centro", 1);
             bancoDados.inserirDadosEscola("Escola Desativada1", "centro", 0);
         }
+
+        iconHelInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelpDetalhes();
+            }
+        });
 
         imageButtonInicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,5 +76,17 @@ public class InicioActivity extends AppCompatActivity {
     public void mudarParaTelaVisulEscola(){
         Intent intent = new Intent(this, VisualEscolaActivity.class);
         startActivity(intent);
+    }
+
+    public void dialogHelpDetalhes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Adicionar Mensagem!");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

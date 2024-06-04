@@ -21,7 +21,7 @@ import online.padev.kariti.R;
 import java.util.ArrayList;
 
 public class EditarTurmaActivity extends AppCompatActivity {
-    ImageButton voltar;
+    ImageButton voltar, iconHelpEditTurma;
     ImageView maisAn, menosAn;
     ListView listView;
     EditText editTurma, novosAlAnonimos;
@@ -44,11 +44,19 @@ public class EditarTurmaActivity extends AppCompatActivity {
         maisAn = findViewById(R.id.imageViewMaisNovosAnonimos);
         menosAn = findViewById(R.id.imageViewMenosNovosAnonimos);
         novosAlAnonimos = findViewById(R.id.editTextNovosAlunosAnonimos);
-        voltar = findViewById(R.id.imgBtnVoltar);
         spinnerBuscAlun = findViewById(R.id.spinnerBuscAlunoNovos);
         salvar = findViewById(R.id.buttonSalvarTurma);
         bancoDados = new BancoDados(this);
         editAlTurma = new ArrayList<>();
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelpEditTurma = findViewById(R.id.iconHelp);
+
+        iconHelpEditTurma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelpDetalhes();
+            }
+        });
 
         //Lista todos os alunos no Spinner
         alunosSpinner = (ArrayList<String>) bancoDados.obterNomesAlunos();
@@ -196,6 +204,18 @@ public class EditarTurmaActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("KARITI");
         builder.setMessage("Esta turma possui "+anonimos+" alunos anônimos cadastrados, caso deseje alterar essa quantidade, basta informar um novo valor no campo referente 'Incluir Alunos Anônimos'");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void dialogHelpDetalhes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Adcionar Mensagem EditTurma!");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

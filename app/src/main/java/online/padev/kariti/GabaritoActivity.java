@@ -32,7 +32,7 @@ import java.util.Map;
 public class GabaritoActivity extends AppCompatActivity {
     TextView notaProva, nProva,nturma, ndata, txtTeste;
     Button cadProva;
-    ImageButton voltar;
+    ImageButton voltar, iconHelpGabarito;
     BancoDados bancoDados;
     Map<String, Object> info;
     LinearLayout layoutHorizontal;
@@ -44,7 +44,9 @@ public class GabaritoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gabarito);
 
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        voltar = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelpGabarito = findViewById(R.id.iconHelp);
+
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);
         nturma = findViewById(R.id.textViewTurma);
@@ -65,6 +67,13 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva.setText(String.format("Prova: %s", prova));
         nturma.setText("Turma: "+turma);
         ndata.setText("Data: "+data);
+
+        iconHelpGabarito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogHelpDetalhes();
+            }
+        });
         cadProva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -244,5 +253,17 @@ public class GabaritoActivity extends AppCompatActivity {
         }
 
         notaProva.setText("Nota total da prova " + notas + " pontos.");
+    }
+
+    public void dialogHelpDetalhes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Adcionar Mensagem Gabarito!");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

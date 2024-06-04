@@ -20,8 +20,8 @@ import online.padev.kariti.R;
 import java.util.ArrayList;
 
 public class EscolaDesativadaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
-    ImageButton btnVoltar;
-    ImageView btnMenu, iconHelp;
+    ImageButton btnVoltar, iconHelp;
+    ImageView btnMenu;
     BancoDados bancoDados;
     VisualEscolaActivity atualiza;
     ArrayList<String> listeDesativadas;

@@ -63,7 +63,7 @@ public class TurmaActivity extends AppCompatActivity {
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("Adcionar Mensagem Turma!");
+        builder.setMessage("Nesta tela você pode selecionar 'Cadastrar Turma' para cadastrar uma nova turma com seus respectivos alunos ou 'Visualizar Turma' para exibir as turmas já cadastradas.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

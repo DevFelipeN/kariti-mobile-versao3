@@ -73,8 +73,8 @@ public class AlunoActivity extends AppCompatActivity {
 
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("Adcionar Mensagem Aluno!");
+        builder.setTitle("KARITI");
+        builder.setMessage("Nesta tela você pode cadastrar novos alunos ou visualizar os alunos já cadastrados, selecionando uma das opções sugeridas.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

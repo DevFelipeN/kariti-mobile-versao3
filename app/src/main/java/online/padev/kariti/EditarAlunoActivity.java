@@ -34,6 +34,8 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         salvar = findViewById(R.id.buttonSalvarEditAluno);
         bancoDados = new BancoDados(this);
 
+        infoEditarAluno();
+
         id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
         aluno = bancoDados.pegaNomeAluno(id_aluno);
         email = bancoDados.pegaEmailAluno(id_aluno);
@@ -54,6 +56,22 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                     if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
                         if (!emailAtual.equals("")) {
                             if (Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
+                                Boolean checkAluno = bancoDados.checkAluno(nomAtual);
+                                if(!checkAluno) {
+                                    Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
+                                    if (alteraDadoAluno.equals(true)) {
+                                        Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else
+                                        Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
+                                }else
+                                    Toast.makeText(EditarAlunoActivity.this, "Esse aluno já esta cadastrado ", Toast.LENGTH_SHORT).show();
+                            }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Boolean checkAluno = bancoDados.checkAluno(nomAtual);
+                            if(!checkAluno) {
                                 Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
                                 if (alteraDadoAluno.equals(true)) {
                                     Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
@@ -61,17 +79,9 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                                     startActivity(intent);
                                     finish();
                                 }else
-                                    Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
-                            }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
-                            if (alteraDadoAluno.equals(true)) {
-                                Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }else
                                 Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
+                            }else
+                                Toast.makeText(EditarAlunoActivity.this, "Esse aluno já esta cadastrado ", Toast.LENGTH_SHORT).show();
                         }
                     } else
                         Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
@@ -119,6 +129,13 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         } else {
             return false;
         }
+    }
+    public void infoEditarAluno(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
+        builder.setTitle("KARITI!")
+                .setMessage("Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
 

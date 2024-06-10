@@ -192,7 +192,12 @@ public class CadTurmaActivity extends AppCompatActivity{
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("Adcionar Mensagem CadTurma!");
+        builder.setMessage("Bem vindo(a) ao cadastro de turma! \n\n" +
+                "Nesta tela são solicitados alguns dados para cadastrar um nova turma.\n\n" +
+                "1 - Nome: deve ser informado o nome da turma *obrigatório* \n\n" +
+                "2 - Alunos: podem ser incluídos alunos para essa turma selecionando-os no campo 'Selecione os Alunos', os quais antecipadamente já devem estar cadastrados no KARITI na tela de cadastro de alunos. Todos os alunos selecionados são listados no campo 'Alunos'. Caso selecione algum aluno errado, basta clicar no nome do aluno para remove-lo da lista. \n\n" +
+                "3 - Anônimos: caso não deseje cadastrar alunos para essa turma, podem ser incluidos alunos anônimos no campo 'Incluir Alunos Anônimos', informando a quantidade no campo sugerido, sem a necessidade de cadastrar todos ou nenhum aluno como descrito na opção 2. \n\n" +
+                "Obs. A Turma não pode ser cadastrada sem alunos.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

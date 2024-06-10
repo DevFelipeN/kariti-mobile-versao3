@@ -81,7 +81,7 @@ public class InicioActivity extends AppCompatActivity {
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("Adicionar Mensagem!");
+        builder.setMessage("Olá, nesta tela são sugeridas duas opções importantes para funcionalidade do KARITI. Para acesso completo ao app, é necessário cadastrar a(s) escola(s) em que atua. Após essa etapa, basta selecionar a opção 'Selecionar Escola' e clicar na desejada para acessar as demais funcionalidades da aplicação! ");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

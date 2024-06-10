@@ -19,7 +19,7 @@ public class Compactador{
     public static boolean compactador(){
         List<String> arquivos = new ArrayList<>();
         for(int x = 0; x < listCartoes.size(); x++) {
-            arquivos.add("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/"+listCartoes.get(x));
+            arquivos.add("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/"+listCartoes.get(x)); //Carregando as imagens
         }
         return compactar("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip", arquivos); //retorna true se funcionou
     }

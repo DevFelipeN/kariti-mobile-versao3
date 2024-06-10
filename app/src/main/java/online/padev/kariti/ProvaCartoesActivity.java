@@ -180,6 +180,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             //} else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
                             File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                             BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
                             builder.setTitle("Por favor, Aguarde!")
                                     .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");

@@ -29,12 +29,13 @@ public class InicioActivity extends AppCompatActivity {
         visualizarEscola = findViewById(R.id.buttonVisualizarEscola);
         bancoDados = new BancoDados(this);
         iconHelInicio = findViewById(R.id.iconHelpLogout);
+        /*
 
         if(!bancoDados.checkEscola("Escola Teste1")) {
             bancoDados.inserirDadosEscola("Escola Teste1", "centro", 1);
             bancoDados.inserirDadosEscola("Escola Desativada1", "centro", 0);
         }
-
+         */
         iconHelInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

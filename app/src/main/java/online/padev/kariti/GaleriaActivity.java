@@ -1,8 +1,11 @@
 package online.padev.kariti;
 
+import static online.padev.kariti.Compactador.listCartoes;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -56,8 +59,8 @@ public class GaleriaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         nomeCartao = getIntent().getExtras().getString("nomeImagem") ;
-        if(!Compactador.listCartoes.contains(nomeCartao))
-            Compactador.listCartoes.add(nomeCartao);
+        if(!listCartoes.contains(nomeCartao))
+            listCartoes.add(nomeCartao);
 
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +79,7 @@ public class GaleriaActivity extends AppCompatActivity {
                         File fileZip = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
-                        Compactador.listCartoes.clear();
+                        listCartoes.clear();
                         telaProva();
 
                     } catch (Exception e) {
@@ -89,30 +92,55 @@ public class GaleriaActivity extends AppCompatActivity {
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Compactador.listCartoes.clear();
+                listCartoes.clear();
                 onBackPressed();
             }
         });
 
         //Recebendo o byte array e nome da foto TELA ANTERIOR
         //byte[] byteArray = getIntent().getByteArrayExtra("photo");
-        String nomeFotoAnterior = getIntent().getStringExtra("nomeImagem");
-        String caminhoDaImagemAter = getIntent().getStringExtra("caminhoImagem");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String dataImagemAnt = sdf.format(System.currentTimeMillis());
+//        String nomeFotoAnterior = getIntent().getStringExtra("nomeImagem");
+//        String caminhoDaImagemAter = getIntent().getStringExtra("caminhoImagem");
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+//        String dataImagemAnt = sdf.format(System.currentTimeMillis());
 
         recyclerView = findViewById(R.id.recyclerViewFotos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        nomePhoto.add(nomeFotoAnterior);
-        dataImg.add(dataImagemAnt);
-        caminhoDaImagem.add(caminhoDaImagemAter);
-        //adapter.notifyDataSetChanged();
+//        nomePhoto.add(nomeFotoAnterior);
+//        dataImg.add(dataImagemAnt);
+//        caminhoDaImagem.add(caminhoDaImagemAter);
 
+        //adapter.notifyDataSetChanged();
+        carregarFotos();
         adapter = new AdapterGaleria(this, nomePhoto, dataImg, caminhoDaImagem);
         recyclerView.setAdapter(adapter);
     }
+
+    private void carregarFotos() {
+        // Caminho da pasta onde as fotos estão armazenadas
+        String caminhoDaPasta = Environment.getExternalStorageDirectory() + "/Android/media/online.padev.kariti/CameraXApp/";
+        File diretorio = new File(caminhoDaPasta);
+        if (diretorio.exists() && diretorio.isDirectory()) {
+            File[] arquivos = diretorio.listFiles();
+            if (arquivos != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                for (File arquivo : arquivos) {
+                    if (arquivo.isFile() && arquivo.getName().endsWith(".jpg") && listCartoes.contains(arquivo.getName())) {
+                        caminhoDaImagem.add(arquivo.getAbsolutePath());
+                        nomePhoto.add(arquivo.getName());
+                        dataImg.add(sdf.format(arquivo.lastModified()));
+                    }
+                }
+                // Notificar o adaptador que os dados mudaram
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
 
     public void telaProva(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -130,7 +158,7 @@ public class GaleriaActivity extends AppCompatActivity {
         alertDialog.show();
     }
     public void onBackPressed() {
-        Compactador.listCartoes.clear();
+        listCartoes.clear();
         super.onBackPressed();
     }
     public static String leitor(String path) throws IOException {

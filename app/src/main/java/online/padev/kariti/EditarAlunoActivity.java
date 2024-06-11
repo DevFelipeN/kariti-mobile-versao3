@@ -132,7 +132,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
     }
     public void infoEditarAluno(){
         AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
-        builder.setTitle("KARITI!")
+        builder.setTitle("Ajuda")
                 .setMessage("Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -184,6 +185,12 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
                             builder.setTitle("Por favor, Aguarde!")
                                     .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
 

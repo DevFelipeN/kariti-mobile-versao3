@@ -128,10 +128,10 @@ public class ProvaActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("Tela principal de prova.\n\n" +
-                "> Cadastrar Prova - Selecionando essa opção, será derecionado a tela que solicita as informações necessárias para elaboração da prova e, em seguida solicita o preenchimento do gabarito.\n\n" +
-                "> Gerar Cartões - Nesta opção podera realizar o download dos cartões resposta de uma prova já cadastrada na opção anterior.\n\n" +
-                "> Corrigir Prova - Após seleciodada essa opção, basta realizar os passos sugeriodos pelo KARITI, iniciar correção clicando no botão 'Sacannear Cartão', capturar o QrCode da prova e capturar a imagem do cartão resposta, em seguida são listadas as provas capurada na proxima tela juntamente com duas opções continuar capturando mais provas ou finalizar a correção.\n\n" +
-                "> Visualizar Prova - Nesta opção pode ser visualizado o resultado da correção das provas informando a quantidade de acertos e nota de cada aluno.");
+                "• Cadastrar Prova - Selecionando essa opção, será derecionado a tela que solicita as informações necessárias para elaboração da prova e, em seguida solicita o preenchimento do gabarito.\n\n" +
+                "• Gerar Cartões - Nesta opção podera realizar o download dos cartões resposta de uma prova já cadastrada na opção anterior.\n\n" +
+                "• Corrigir Prova - Após seleciodada essa opção, basta realizar os passos sugeriodos pelo KARITI, iniciar correção clicando no botão 'Sacannear Cartão', capturar o QrCode da prova e capturar a imagem do cartão resposta, em seguida são listadas as provas capurada na proxima tela juntamente com duas opções continuar capturando mais provas ou finalizar a correção.\n\n" +
+                "• Visualizar Prova - Nesta opção pode ser visualizado o resultado da correção das provas informando a quantidade de acertos e nota de cada aluno.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

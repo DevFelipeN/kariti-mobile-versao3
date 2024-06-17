@@ -77,7 +77,11 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         int num = listIdAlTurma.size();
                         for(int x = 0; x < num; x++){
                             String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                            alunolist.add(bancoDados.pegaNomeAluno(id_aluno));
+                            String alunoCadastrado = bancoDados.pegaNomeAluno(id_aluno);
+                            if(alunoCadastrado != null){
+                                alunolist.add(alunoCadastrado);
+                            }
+
                         }
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);

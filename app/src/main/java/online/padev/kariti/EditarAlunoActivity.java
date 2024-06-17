@@ -54,10 +54,10 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                 String emailAtual = emailAluno.getText().toString();
                 if(!nomAtual.equals("")) {
                     if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
+                        Boolean checkAluno = bancoDados.checkAluno(nomAtual);
                         if (!emailAtual.equals("")) {
                             if (Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
-                                Boolean checkAluno = bancoDados.checkAluno(nomAtual);
-                                if(!checkAluno) {
+                                if(!checkAluno || !emailAtual.equals(email)) {
                                     Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
                                     if (alteraDadoAluno.equals(true)) {
                                         Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
@@ -67,26 +67,24 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                                     } else
                                         Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
                                 }else
-                                    Toast.makeText(EditarAlunoActivity.this, "Esse aluno já esta cadastrado ", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditarAlunoActivity.this, "Dados já existentes! ", Toast.LENGTH_SHORT).show();
                             }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
                         }else {
-                            Boolean checkAluno = bancoDados.checkAluno(nomAtual);
                             if(!checkAluno) {
                                 Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
-                                if (alteraDadoAluno.equals(true)) {
+                                if (alteraDadoAluno.equals(true)){
                                     Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
                                     startActivity(intent);
                                     finish();
-                                }else
-                                Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
+                                }else Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
                             }else
                                 Toast.makeText(EditarAlunoActivity.this, "Esse aluno já esta cadastrado ", Toast.LENGTH_SHORT).show();
                         }
                     } else
                         Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(EditarAlunoActivity.this, "Por favor, preencher o campo aluno!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarAlunoActivity.this, "Por favor, Informe um nome de Aluno!", Toast.LENGTH_SHORT).show();
                 }
             }
        });

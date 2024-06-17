@@ -129,7 +129,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         builder.setTitle("Ajuda");
         builder.setMessage("• Para continuar navegando nas funcionalidades do app, clique no campo com a escola desejada. \n\n" +
                 "• Cada escola possui suas informações que são restritas a outras. \n\n" +
-                "• Para desativar uma escola, selecionar a escola desejada e confirmar a ação. " +
+                "• Para desativar uma escola, basta selecionar a escola desejada e confirmar a ação. " +
                 "Posteriormente, você poderá encontrar suas escolas desativadas clicando no botão 'Escolas Desativadas'.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

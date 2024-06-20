@@ -1,11 +1,16 @@
 package online.padev.kariti;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import online.padev.kariti.R;
 
@@ -18,7 +23,6 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
         requestPermissions(permissions, 101);
 
         botaoCadastro = findViewById(R.id.buttonCadastroW);
@@ -41,6 +45,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 mudarParaTelaLogin();
             }
         });
+    }
+
+    private void readFile() {
     }
 
     public void mudarParaTelaWelcome(){

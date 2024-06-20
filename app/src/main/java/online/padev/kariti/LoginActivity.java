@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         email.setText("karitimobile@gmail.com");
         password.setText("user1");
 
-
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -56,6 +56,7 @@ public class CadTurmaActivity extends AppCompatActivity{
 
         nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
         nomesAluno.add(0, "Selecione os Alunos");
+        nomesAluno.add(1, "Todos");
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
         spinnerBuscAluno.setAdapter(adapter);
         spinnerBuscAluno.setSelection(0);
@@ -71,21 +72,31 @@ public class CadTurmaActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
-                    int i = 0;
-                    for(int a = 0; a < selectedAlunos.size(); a++){
-                        if(alunoSelecionado.equals(selectedAlunos.get(a))) {
-                            i = 1;
-                            Toast.makeText(CadTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-
-                    }
-                    if(i != 1) {
-                        selectedAlunos.add(alunoSelecionado);
+                    if(alunoSelecionado.equals("Todos")){
+                        selectedAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
                         al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
                         listarAlunos.setAdapter(al);
-                    }
+                        al.notifyDataSetChanged();
+                        spinnerBuscAluno.setSelection(0);
+                    }else {
+                        int i = 0;
+                        for (int a = 0; a < selectedAlunos.size(); a++) {
+                            if (alunoSelecionado.equals(selectedAlunos.get(a))) {
+                                i = 1;
+                                Toast.makeText(CadTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
+                                spinnerBuscAluno.setSelection(0);
+                                break;
+                            }
 
+                        }
+                        if (i != 1) {
+                            selectedAlunos.add(alunoSelecionado);
+                            al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
+                            listarAlunos.setAdapter(al);
+                            al.notifyDataSetChanged();
+                            spinnerBuscAluno.setSelection(0);
+                        }
+                    }
                 }
             }
             @Override
@@ -100,8 +111,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
            }
         });
-
-
         menosAnonimos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +120,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                 alunosAnonimos.setText(menos.toString());
             }
         });
-
         maisAnonimos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,7 +169,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                 }else{
                     Toast.makeText(CadTurmaActivity.this, "Por favor, informe o nome da turma!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +192,6 @@ public class CadTurmaActivity extends AppCompatActivity{
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");

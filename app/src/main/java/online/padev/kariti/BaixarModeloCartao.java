@@ -12,27 +12,74 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.DataOutputStream;
+//import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URLConnection;
-import java.net.URL;
-import java.io.OutputStream;
+//import java.io.FileInputStream;
+//import java.io.IOException;
+//import java.net.URLConnection;
+//import java.net.URL;
+//import java.io.OutputStream;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.io.OutputStreamWriter;
+//import java.io.PrintWriter;
+//import java.net.HttpURLConnection;
+//import java.io.OutputStreamWriter;
 import java.io.InputStream;
 import java.util.List;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 
 //faz download das folhas de respostas a serem preenchidas
 public class BaixarModeloCartao {
     public static void main(String[] args){
     }
+    public static void solicitarCartoesResposta(File arquivo, FileOutputStream fos, File fSaida, String filePdf, DownloadManager baixarPdf) {
+        Thread thread = new Thread(new Runnable() {
 
+            @Override
+            public void run() {
+                try {
+                    Log.e("kariti", "L1");
+                    String URL = "http://kariti.online/src/services/download_template/download.php";
+                    HttpClient client = new DefaultHttpClient();
+                    Log.e("kariti", "L2");
+                    HttpPost post = new HttpPost(URL);
+                    Log.e("kariti", "L3");
+
+                    MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+                    entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    Log.e("kariti", "L4");
+                        //entityBuilder.addBinaryBody("userfile[]", arquivo);
+                    FileBody x = new FileBody(arquivo);
+                    entityBuilder.addPart("userfile[]", x);
+                    Log.e("kariti", "L5");
+                    HttpEntity entity = entityBuilder.build();
+                    post.setEntity(entity);
+                    Log.e("kariti", "L6");
+                    HttpResponse response = client.execute(post);
+                    Log.e("kariti", "L7");
+                    HttpEntity httpEntity = response.getEntity();
+                    Log.e("kariti", "L8");
+                    InputStream is = httpEntity.getContent();
+                    Log.e("kariti", "L9");
+                    int inByte;
+                    byte[]buffer = new byte[1024];
+                    while((inByte = is.read(buffer)) != -1)
+                        fos.write(buffer, 0, inByte);
+                    Log.e("kariti", "L10");
+                    is.close();
+                    Log.e("kariti", "L11");
+                    fos.close();
+                    baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
+                    Log.e("Kariti", "Fim");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("kariti", e.toString());
+                }
+            }
+        });
+        thread.start();
+    }
+    /*
     public static boolean baixarProvas(FileInputStream is, String nomeCSV, FileOutputStream outputStream){
         try{
             String url = "http://kariti.online/src/services/download_template/download.php";
@@ -97,6 +144,7 @@ public class BaixarModeloCartao {
             return false;
         }
     }
+
     public static void copy(InputStream in, OutputStream out) throws IOException {
         try {
             //OutputStream out = new FileOutputStream(dst);
@@ -114,57 +162,5 @@ public class BaixarModeloCartao {
             in.close();
         }
     }
-    public static void solicitarCartoesResposta(File arquivo, FileOutputStream fos, File fSaida, String filePdf, DownloadManager baixarPdf) {
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    try {
-                        Log.e("kariti", "L1");
-                        String URL = "http://kariti.online/src/services/download_template/download.php";
-                        HttpClient client = new DefaultHttpClient();
-                        Log.e("kariti", "L2");
-                        HttpPost post = new HttpPost(URL);
-                        Log.e("kariti", "L3");
-
-                        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-                        entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                        Log.e("kariti", "L4");
-                        //entityBuilder.addBinaryBody("userfile[]", arquivo);
-                        FileBody x = new FileBody(arquivo);
-
-                        entityBuilder.addPart("userfile[]", x);
-                        Log.e("kariti", "L5");
-                        HttpEntity entity = entityBuilder.build();
-                        post.setEntity(entity);
-                        Log.e("kariti", "L6");
-                        HttpResponse response = client.execute(post);
-                        Log.e("kariti", "L7");
-                        HttpEntity httpEntity = response.getEntity();
-                        Log.e("kariti", "L8");
-                        InputStream is = httpEntity.getContent();
-                        Log.e("kariti", "L9");
-                        String filePath = "sample.txt";
-                        //FileOutputStream fos = new FileOutputStream(new File(filePath));
-                        int inByte;
-                        while((inByte = is.read()) != -1)
-                            fos.write(inByte);
-                        Log.e("kariti", "L10");
-                        is.close();
-                        Log.e("kariti", "L11");
-                        fos.close();
-                        baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
-                        Log.e("Kariti", "Fim");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e("kariti", e.toString());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
+     */
 }

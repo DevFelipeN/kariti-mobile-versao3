@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GabaritoActivity extends AppCompatActivity {
-    TextView notaProva, nProva,nturma, ndata, txtTeste;
+    TextView notaProva, nProva,nturma, ndata;
     Button cadProva;
     ImageButton voltar, iconHelpGabarito;
     BancoDados bancoDados;
@@ -119,7 +119,7 @@ public class GabaritoActivity extends AppCompatActivity {
             }
        });
 
-       //sayury
+       //Sayury
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
         notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");

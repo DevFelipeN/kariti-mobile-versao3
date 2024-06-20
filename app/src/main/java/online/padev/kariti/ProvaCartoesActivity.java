@@ -8,10 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -177,12 +180,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             File filecsv = null;
                             String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
                             String filePdf = nomeProva + dateCart + ".pdf";
-                            //String estado = Environment.getExternalStorageState();
-                            //if (estado.equals(Environment.MEDIA_MOUNTED)) {
-                            //filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
                             filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                            //} else Toast.makeText(ProvaCartoesActivity.this, "Erro: Espaço de Armazenamento indisponível!", Toast.LENGTH_SHORT).show();
                             File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                             BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
 
@@ -200,7 +199,14 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
                         } catch (Exception e) {
                             Log.e("Kariti", e.toString());
-                            Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                            pedirPermissao();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                if (!Environment.isExternalStorageManager()) {
+                                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                    startActivity(intent);
+                                }
+                            }
+                            //Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
                 }else Toast.makeText(ProvaCartoesActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
@@ -213,17 +219,19 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             }
         });
     }
-    private void downloadPDF(String pdfURF){
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(pdfURF));
-        request.setTitle("PDF Download");
-        request.setDescription("Downloading the PDF File");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pdf_file.pdf");
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
-    }
     private boolean isOnline() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+    public void pedirPermissao(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Kariti");
+        builder.setMessage("Permitir que o Kariti acesse os arquivos do dispositivo");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

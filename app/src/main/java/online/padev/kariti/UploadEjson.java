@@ -33,7 +33,6 @@ public class UploadEjson {
 
                         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
                         entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                        //entityBuilder.addBinaryBody("userfile[]", arquivo);
                         FileBody x = new FileBody(arquivo);
 
                         entityBuilder.addPart("userfile[]", x);
@@ -42,8 +41,6 @@ public class UploadEjson {
                         HttpResponse response = client.execute(post);
                         HttpEntity httpEntity = response.getEntity();
                         InputStream is = httpEntity.getContent();
-                        String filePath = "sample.txt";
-                        //FileOutputStream fos = new FileOutputStream(new File(filePath));
                         int inByte;
                         while((inByte = is.read()) != -1)
                             fos.write(inByte);
@@ -65,7 +62,6 @@ public class UploadEjson {
         try {
             String situacao = Environment.getExternalStorageState();
             if (situacao.equals(Environment.MEDIA_MOUNTED)) {
-                //File dir = getExternalFilesDir(null);
                 String result = GaleriaActivity.leitor(dir+"/json.json");
                 JSONArray json = new JSONArray(result);
                 for (int x = 0; x < json.length(); x++){
@@ -75,22 +71,29 @@ public class UploadEjson {
                     Integer id_aluno = objJson.getInt("id_aluno");
                     String mensagem = objJson.getString("mensagem");
                     if(resultCorrect.equals(0)){
-                        //String mensagem = "(1, 2),(2, 3),(3, 4),(4, 3),(5, 2),(6, 3),(7, 1),(8, 4),(9, 5),(10, 1)";
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
                         mensagem = mensagem.replaceAll("\\(", "");
                         mensagem = mensagem.replaceAll(" ", "");
                         String[] itens = mensagem.split(";");
-                        //mensagem = "";
+                        Integer questAnterior = null;
+                        Integer respostaAnterior = null;
                         for(String item : itens){
                             String[] sep = item.split(",");
                             questao = Integer.valueOf(sep[0]);
                             respostaDada = Integer.valueOf(sep[1]);
-                            if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno, questao)){
+                            if(questao.equals(questAnterior)){ // Em caso de duas alternativas marcadas para uma questão
+                                String respostaDupla = (respostaAnterior.toString()) + (respostaDada.toString()); // Concatenando as duas respostas
+                                respostaDada = Integer.valueOf(respostaDupla);
+                            }
+                            if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno, questao)){ //Caso prova já corregida anteriormente, realiza UPDATE
                                 bancoDados.upadateResultadoCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }else{
                                 bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }
+                            questAnterior = questao;
+                            respostaAnterior = respostaDada;
+
                         }
                     }
 

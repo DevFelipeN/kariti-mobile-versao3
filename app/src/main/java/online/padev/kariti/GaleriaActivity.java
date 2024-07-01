@@ -73,7 +73,7 @@ public class GaleriaActivity extends AppCompatActivity {
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean teste = Compactador.compactador();
+                boolean teste = Compactador.compactador();
                 if(teste) {
                     try {
                         File fileZip = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip");
@@ -81,10 +81,9 @@ public class GaleriaActivity extends AppCompatActivity {
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
                         listCartoes.clear();
                         telaProva();
-
                     } catch (Exception e) {
                         Log.e("Kariti", e.toString());
-                        Toast.makeText(GaleriaActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(GaleriaActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }else Toast.makeText(GaleriaActivity.this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
             }
@@ -96,23 +95,9 @@ public class GaleriaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        //Recebendo o byte array e nome da foto TELA ANTERIOR
-        //byte[] byteArray = getIntent().getByteArrayExtra("photo");
-//        String nomeFotoAnterior = getIntent().getStringExtra("nomeImagem");
-//        String caminhoDaImagemAter = getIntent().getStringExtra("caminhoImagem");
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-//        String dataImagemAnt = sdf.format(System.currentTimeMillis());
-
         recyclerView = findViewById(R.id.recyclerViewFotos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-//        nomePhoto.add(nomeFotoAnterior);
-//        dataImg.add(dataImagemAnt);
-//        caminhoDaImagem.add(caminhoDaImagemAter);
-
-        //adapter.notifyDataSetChanged();
         carregarFotos();
         adapter = new AdapterGaleria(this, nomePhoto, dataImg, caminhoDaImagem);
         recyclerView.setAdapter(adapter);

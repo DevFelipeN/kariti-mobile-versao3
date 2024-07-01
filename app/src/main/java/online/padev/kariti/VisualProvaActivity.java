@@ -87,9 +87,11 @@ public class    VisualProvaActivity extends AppCompatActivity {
             return;
         }
         provaSelected = spinnerProva.getSelectedItem().toString();
-        if(bancoDados.checkCorrigida(bancoDados.pegaIdProva(provaSelected).toString())){
+        Integer id_prova = bancoDados.pegaIdProva(provaSelected);
+        if(bancoDados.checkCorrigida(id_prova.toString())){
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", provaSelected);
+            intent.putExtra("id_prova", id_prova);
             startActivity(intent);
         }else {
             Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();

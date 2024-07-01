@@ -1,8 +1,10 @@
 package online.padev.kariti;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import online.padev.kariti.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -26,7 +29,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ArrayList<Integer> listIdsAlunos, listAcertos, listNotaDaluno, listQuestoes;
     BancoDados bancoDados;
     Integer id_prova;
-    String provaSelected;
+    String prova;
     TextView provaResult;
 
     @Override
@@ -40,9 +43,9 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
 
-        provaSelected = getIntent().getExtras().getString("prova");
-        provaResult.setText(provaSelected);
-        id_prova = bancoDados.pegaIdProva(provaSelected);
+        prova = Objects.requireNonNull(getIntent().getExtras()).getString("prova");
+        id_prova = getIntent().getExtras().getInt("id_prova");
+        provaResult.setText(prova);
         listIdsAlunos = (ArrayList<Integer>) bancoDados.listAluno(id_prova);
         for(int x = 0; x < listIdsAlunos.size(); x++) {
             float nota = 0;
@@ -53,11 +56,10 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 Integer questao = listQuestoes.get(i);
                 Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, questao);
                 Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, questao);
-                if(respostaDada == respostaGabarito){
+                if(respostaDada.equals(respostaGabarito)){
                     nota += bancoDados.pegaNotaQuestao(id_prova, questao);
                     acertos += 1;
                 }
-                //Toast.makeText(this, "Passando aqui 3333333", Toast.LENGTH_SHORT).show();
             }
 
             TableLayout tableLayout = findViewById(R.id.tableLayout);
@@ -65,26 +67,27 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
             row.setLayoutParams(layoutParams);
 
-            // Cria uma célula para a nova linha
+            // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            cell1.setText(bancoDados.pegaNomeAluno(id_aluno.toString()));
+            cell1.setText(bancoDados.pegaAlunoProvaCorrigida(id_aluno.toString()));
             cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
 
-            // Cria outra célula para a nova linha
+            // Cria outra célula para a nova linha para armazenar o total de acertos do aluno na prova
             TextView cell2 = new TextView(this);
             cell2.setText(String.valueOf(acertos));
             cell2.setGravity(Gravity.CENTER);
             row.addView(cell2);
 
+            // Cria outra célula para a nova linha para armazenar a nota total do aluno
             TextView cell3 = new TextView(this);
-            //cell3.setText(String.valueOf(nota));
             cell3.setText(String.valueOf(nota));
             cell3.setGravity(Gravity.CENTER);
             row.addView(cell3);
             // Adiciona a nova linha à tabela
             tableLayout.addView(row);
         }
+        carregaGabarito();
         btnBaixar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,4 +117,18 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             }
         });
     }
+    public void carregaGabarito(){
+        String gabarito = bancoDados.mostraGabarito(id_prova);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Gabarito");
+        builder.setMessage(gabarito);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+        });
+        builder.show();
+
+    }
+
 }

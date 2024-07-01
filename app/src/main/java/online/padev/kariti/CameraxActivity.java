@@ -30,6 +30,7 @@ import online.padev.kariti.R;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,7 +55,7 @@ public class CameraxActivity extends AppCompatActivity {
         toggleFlash = findViewById(R.id.buttonFlashX);
         aroundCamera = findViewById(R.id.aroundCameraX);
 
-        nomeImagemx = getIntent().getExtras().getString("nomeImagem");
+        nomeImagemx = Objects.requireNonNull(getIntent().getExtras()).getString("nomeImagem");
 
         // Inicializar o launcher para solicitação de permissão
         requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
@@ -75,7 +76,6 @@ public class CameraxActivity extends AppCompatActivity {
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
         }
-
             aroundCamera.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -100,7 +100,6 @@ public class CameraxActivity extends AppCompatActivity {
             }
         });
     }
-
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
@@ -152,9 +151,8 @@ public class CameraxActivity extends AppCompatActivity {
         imageCapture.takePicture(outputFileOptions, executorService, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                String msg = "Imagem salva em: " + photoFile.getAbsolutePath();
-                runOnUiThread(() -> Toast.makeText(CameraxActivity.this, msg, Toast.LENGTH_SHORT).show());
-
+                //String msg = "Imagem salva em: " + photoFile.getAbsolutePath();
+                //runOnUiThread(() -> Toast.makeText(CameraxActivity.this, msg, Toast.LENGTH_SHORT).show());
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
                 intent.putExtra("nomeImagem", nomeImagemx);
                 intent.putExtra("caminhoImagem", photoFile.getAbsolutePath());

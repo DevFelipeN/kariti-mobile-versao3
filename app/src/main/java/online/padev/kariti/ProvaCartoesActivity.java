@@ -177,14 +177,14 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                         }
                         try {
-                            File filecsv = null;
+                            //File filecsv = null;
+                            //filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
                             String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
                             String filePdf = nomeProva + dateCart + ".pdf";
-                            filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
+                            File filecsv  = new File(getExternalFilesDir(null), "/dadosProva.csv");
                             GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
                             File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
                             BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
-
                             AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
                             builder.setTitle("Por favor, Aguarde!")
                                     .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");

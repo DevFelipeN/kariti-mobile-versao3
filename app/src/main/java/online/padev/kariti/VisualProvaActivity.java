@@ -92,6 +92,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", provaSelected);
             intent.putExtra("id_prova", id_prova);
+            intent.putExtra("turma", turmaSelecionada);
             startActivity(intent);
         }else {
             Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();

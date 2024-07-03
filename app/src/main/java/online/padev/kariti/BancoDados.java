@@ -342,6 +342,15 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return null;
     }
+    public String pegaAlunoProvaCorrigida(String id_aluno) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select nomeAluno from aluno where id_aluno = ? and id_usuario = ? ORDER BY nomeAluno", new String[]{id_aluno, BancoDados.USER_ID.toString()});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }else
+            return null;
+    }
     public String alunosGerarProva(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ?", new String[]{id_aluno});
@@ -363,7 +372,9 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = base_dados.rawQuery("Select id_aluno from Aluno where nomeAluno = ?", new String[]{nomeAluno});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(0);
+        Integer retorno = cursor.getInt(0);
+        base_dados.close();
+        return retorno;
     }
     public Integer pegaIdEscola(String nomeEscola) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -400,12 +411,12 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getInt(0);
     }
-    public Integer pegaqtdQuestoes(String id_prova) {
+    public Integer pegaqtdQuestoes(String id_prova){
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from prova where id_prova = ?", new String[]{id_prova});
+        Cursor cursor = base_dados.rawQuery("Select qtdQuestoes from prova where id_prova = ?", new String[]{id_prova});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(3);
+        return cursor.getInt(0);
     }
     public Integer pegaqtdAlternativas(String id_prova) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -484,15 +495,6 @@ public class BancoDados extends SQLiteOpenHelper {
             return true;
         else
             return false;
-    }
-    public Integer checkEscolaDesativada(String nomeScolDesativada){
-        SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM escolasDesativadas WHERE nomeScolDesativada = ? and id_usuario", new String[]{nomeScolDesativada, BancoDados.USER_ID.toString()});
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            return cursor.getInt(0);
-        }else
-            return null;
     }
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -604,11 +606,11 @@ public class BancoDados extends SQLiteOpenHelper {
         int notaTot = 0;
         //ArrayList<Integer>  notas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM gabarito where id_prova = ?", new String[]{id_prova});
+        Cursor cursor = db.rawQuery("SELECT nota FROM gabarito where id_prova = ?", new String[]{id_prova});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo
-                Integer nota = cursor.getInt(4);
+                int nota = cursor.getInt(0);
                 notaTot = notaTot + nota;
                 //notas.add(nota);
             } while (cursor.moveToNext());
@@ -620,7 +622,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public List<Integer> listAluno(Integer id_prova){
         ArrayList<Integer> ids_alunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova.toString()});
+        Cursor cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 Integer id_aluno = cursor.getInt(0);
@@ -630,21 +632,6 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         db.close();
         return ids_alunos;
-    }
-    public List<Integer> listNotaAluno(String id_prova) {
-        ArrayList<Integer>  notas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ?", new String[]{id_prova});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer nota = cursor.getInt(4);
-
-                notas.add(nota);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return notas;
     }
     public List<Integer> listQuestoes(Integer id_prova, Integer id_aluno) {
         ArrayList<Integer>  questoes = new ArrayList<>();
@@ -688,66 +675,68 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return escolas;
     }
-
-
-/*
-    SQLiteDatabase database = bancoDados.getReadableDatabase();
-    String [] projection = {"nomeAluno", "id_aluno"};
-    Cursor cursor = database.query("aluno", projection, "id_escola="+BancoDados.ID_ESCOLA, null, null, null, null);
-    ArrayList<String> alunos = new ArrayList<>();
-    ArrayList<String> idsAlunos = new ArrayList<>();
-    int nomeColumIndex = cursor.getColumnIndex("nomeAluno");
-        if (nomeColumIndex != -1){
-        while (cursor.moveToNext()){
-            String nome = cursor.getString(0);
-            String idAluno = cursor.getString(1);
-            alunos.add(nome);
-            idsAlunos.add(idAluno);
+    //AKI
+    public String mostraGabarito(Integer id_prova) {
+        String gabarito = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                char r = (char) (Integer.parseInt(resposta)-1+'A');
+                gabarito += r + "\n";
+            } while (cursor.moveToNext());
+            cursor.close();
         }
-    }else{
-        Log.e("VisualAlunoActivity", "A coluna 'nome' não foi encontrada no cursor.");
+        db.close();
+        return gabarito;
     }
-        cursor.close();
-        database.close();
-
-
-         SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeEscola", "id_escola"};
-        Cursor cursor = database.query("escola", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
-        ArrayList<String> nomesEscolas = new ArrayList<>();
-        ArrayList<String> idsEscolas = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeEscola");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nomeEscola = cursor.getString(0);
-                String idEscola = cursor.getString(1);
-                nomesEscolas.add(nomeEscola);
-                idsEscolas.add(idEscola);
-            }
-        }else{
-            Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");
+    public String listRespostasAluno(String id_prova, String id_aluno) {
+        String respostasDadas = "";
+        String ultimaQuestao = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT respostaDada, questao FROM resultadoCorrecao where id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova, id_aluno});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                String questao = cursor.getString(1);
+                if(!respostasDadas.isEmpty() && !questao.equals(ultimaQuestao)){
+                    respostasDadas += ",";
+                }
+                respostasDadas += resposta;
+                ultimaQuestao = questao;
+            } while (cursor.moveToNext());
+            cursor.close();
         }
-        cursor.close();
-        database.close();
-
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        String [] projection = {"nomeScolDesativada", "id_scolDesativadas"};
-        Cursor cursor = database.query("escolasDesativadas", projection, "id_usuario="+BancoDados.USER_ID, null, null, null, null);
-        ArrayList<String> nomesEscolasDesativadas = new ArrayList<>();
-        ArrayList<String> idsEscolasDesativadas = new ArrayList<>();
-        int nomeColumIndex = cursor.getColumnIndex("nomeScolDesativada");
-        if (nomeColumIndex != -1){
-            while (cursor.moveToNext()){
-                String nomeEscola = cursor.getString(0);
-                String idEscola = cursor.getString(1);
-                nomesEscolasDesativadas.add(nomeEscola);
-                idsEscolasDesativadas.add(idEscola);
-            }
-        }else{Log.e("VisualEscolaActivity", "A coluna 'nomeEscola' não foi encontrada no cursor.");}
-        cursor.close();
-        database.close();
-
- */
-
-
+        db.close();
+        return respostasDadas;
+    }
+    public String listRespostasGabarito(String id_prova) {
+        String respostasGabarito = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                respostasGabarito += resposta;
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return respostasGabarito;
+    }
+    public String listNotaQuestao(String id_prova) {
+        String notasQuestoes = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String nota = cursor.getString(0);
+                notasQuestoes += nota;
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return notasQuestoes;
+    }
 }

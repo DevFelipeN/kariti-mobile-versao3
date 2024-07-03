@@ -27,6 +27,8 @@ public class AlunoActivity extends AppCompatActivity {
         btnCadAluno = findViewById(R.id.buttonCadAluno);
         btnVisualizarAluno = findViewById(R.id.buttonVisualAluno);
 
+
+
         /*
         Id do AppBar
          */
@@ -73,8 +75,27 @@ public class AlunoActivity extends AppCompatActivity {
 
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI");
-        builder.setMessage("Nesta tela você pode cadastrar novos alunos ou visualizar os alunos já cadastrados, selecionando uma das opções sugeridas.");
+        builder.setTitle("Ajuda");
+        builder.setMessage("Nesta tela você pode cadastrar novos alunos ou visualizar os alunos já cadastrados, selecionando uma das opções sugeridas.\n\n" +
+                "IMPORTANTE!\n\n" +
+                "O kariti possibilita que seus usuários possam cadastrar provas sem a necessidade de cadastro dos alunos nesta etapa.\n\n" +
+                "Para isso, basta selecionar a opção 'Turma -> Cadastrar Turma' informar o nome da turma e quantidade de alunos no campo 'Incluir Alunos Anônimos'.\n" +
+                "Dessa forma será criada uma turma com seus alunos anônimos (alunos com identificação unica gerada pelo KARITI).");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void informeAnonimo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Caso seja seu primeiro acesso!" +
+                "");
+        builder.setMessage("O kariti possibilita que seus usuários possam cadastrar provas sem a necessidade de cadastro dos alunos nesta etapa.\n\n" +
+                "Para isso, basta selecionar a opção 'Turma -> Cadastrar Turma' informar o nome da turma e quantidade de alunos no campo 'Incluir Alunos Anônimos'.\n" +
+                "Dessa forma será possivel cadastrar as provas para essa turma com alunos anônimos (o KARITI gera uma identificação unica para cada prova)");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

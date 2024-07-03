@@ -165,7 +165,7 @@
         android:ems="10"
         android:hint="Informe a nova senha"
         android:inputType="textPassword"
-        android:maxLength="8"
+        android:maxLength="16"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

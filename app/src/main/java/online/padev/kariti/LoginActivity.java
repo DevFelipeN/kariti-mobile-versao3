@@ -45,10 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
         codSenhaActivity = new CodSenhaActivity();
-/*
-        email.setText("karitimobile@gmail.com");
-        password.setText("user1");
- */
+
+        //email.setText("karitimobile@gmail.com");
+        //password.setText("user1");
 
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override

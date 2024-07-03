@@ -122,7 +122,7 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("prova", null, contentValues);
         return inserir != -1;
     }
-    public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Integer nota){
+    public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Double nota){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id_prova", id_prova);

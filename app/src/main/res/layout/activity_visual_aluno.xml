@@ -26,10 +26,9 @@
 
     <EditText
         android:id="@+id/editTextBuscar"
-        android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_width="359dp"
+        android:layout_height="49dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="16dp"
         android:autofillHints=""
         android:background="@drawable/border_radio"
         android:ems="10"
@@ -39,8 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="0.644" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <ImageView
         android:id="@+id/imageView14"

@@ -102,14 +102,6 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("resultadoCorrecao", null, contentValues);
         return inserir != -1;
     }
-    public Boolean checkCorrecao(Long id) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from resultadoCorrecao where id_resultado = ?", new String[]{id.toString()});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
-    }
     public Boolean inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -758,8 +750,11 @@ public class BancoDados extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String resposta = cursor.getString(0);
-                char r = (char) (Integer.parseInt(resposta)-1+'A');
-                respostasDadas.add(String.valueOf(r));
+                String aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0)))-1 +'A'));
+                    for(int i = 1; i < resposta.length(); i++){
+                        aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i)))-1 +'A'));
+                    }
+                respostasDadas.add(aux);
             } while (cursor.moveToNext());
             cursor.close();
         }

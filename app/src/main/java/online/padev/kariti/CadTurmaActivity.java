@@ -30,7 +30,6 @@ public class CadTurmaActivity extends AppCompatActivity{
     BancoDados bancoDados;
     Spinner spinnerBuscAluno;
     String alunoSelecionado;
-    Boolean checkList;
     Integer id_turma = 0;
     AdapterExclAluno al;
     ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno, anonimos;

@@ -76,7 +76,7 @@ public class CadProvaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Integer alter = Integer.valueOf(qtdAlter.getText().toString());
-                if(alter < 10)
+                if(alter < 7)
                     alter ++;
                 qtdAlter.setText(alter.toString());
             }

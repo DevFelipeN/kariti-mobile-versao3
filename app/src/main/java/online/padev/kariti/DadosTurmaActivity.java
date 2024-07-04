@@ -44,9 +44,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
         Integer pegaAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         turmaCad.setText(pegaTurma);
-        qtdAnonimos.setText("Alunos Anônimos: "+pegaAnonimos.toString());
 
         idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
+        qtdAnonimos.setText("Alunos Anônimos: "+pegaAnonimos.toString() + "\n Total de alunos: "+idsAlTurma.size());
         int num = idsAlTurma.size();
         for(int y = 0; y < num; y++) {
             String id_aluno = String.valueOf(idsAlTurma.get(y));

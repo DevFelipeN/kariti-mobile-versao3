@@ -5,6 +5,16 @@
     <string name="email">E-mail*</string>
     <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>
+    <string name="Acerto">Acerto </string>
+    <string name="Nota">Nota </string>
+    <string name="Ver">Ver</string>
+    <string name="Questao">Questão </string>
+    <string name="Marcada">Marcada </string>
+    <string name="Gabarito">Gabarito </string>
+    <string name="ButtonRetornar">Retornar</string>
+    <string name="RespostaEsperada">Status </string>
+    <string name="NotaDetalhe">Peso </string>
+    <string name="Detalhes">Detalhes</string>
     <string name="cpf">CPF</string>
     <string name="acessoSenha">Digite sua senha</string>
     <string name="repetirSenha">Repita a senha</string>

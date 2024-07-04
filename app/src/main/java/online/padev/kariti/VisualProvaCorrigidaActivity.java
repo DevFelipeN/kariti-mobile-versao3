@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -59,6 +63,12 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         id_prova = getIntent().getExtras().getInt("id_prova");
         turma = Objects.requireNonNull(getIntent().getExtras()).getString("turma");
         provaResult.setText(prova);
+
+        ShapeDrawable border = new ShapeDrawable(new RectShape());
+        border.getPaint().setColor(0xFF000000); // Cor da borda
+        border.getPaint().setStrokeWidth(1); // Largura da borda
+        border.getPaint().setStyle(Paint.Style.STROKE);
+
         listIdsAlunos = (ArrayList<Integer>) bancoDados.listAluno(id_prova);
         for(int x = 0; x < listIdsAlunos.size(); x++) {
             float nota = 0;
@@ -77,37 +87,52 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
             TableLayout tableLayout = findViewById(R.id.tableLayout);
             TableRow row = new TableRow(this);
+            row.setBackground(border);
             TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
             row.setLayoutParams(layoutParams);
 
             // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            cell1.setText(bancoDados.pegaAlunoProvaCorrigida(id_aluno.toString()));
-            cell1.setGravity(Gravity.CENTER);
+            cell1.setText(" " + bancoDados.pegaAlunoProvaCorrigida(id_aluno.toString()));
+            //cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
 
             // Cria outra célula para a nova linha para armazenar o total de acertos do aluno na prova
             TextView cell2 = new TextView(this);
             cell2.setText(String.valueOf(acertos));
             cell2.setGravity(Gravity.CENTER);
+            cell2.setTextSize(16);
             row.addView(cell2);
 
             // Cria outra célula para a nova linha para armazenar a nota total do aluno
             TextView cell3 = new TextView(this);
             cell3.setText(String.valueOf(nota));
             cell3.setGravity(Gravity.CENTER);
+            cell3.setTextSize(16);
             row.addView(cell3);
 
             // Cria outra célula para a nova linha com botão para exibir detalhamento da nota do aluno
-            TextView cell4 = new TextView(this);
-            cell4.setText("detalhes");
+            Button cell4 = new Button(this);
+            cell4.setId(id_aluno);
+            cell4.setText("Ver");
             cell4.setGravity(Gravity.CENTER);
+            cell4.setPadding(4,4,4,4);
             row.addView(cell4);
 
             // Adiciona a nova linha à tabela
             tableLayout.addView(row);
+
+            cell4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
+                    intent.putExtra("id_aluno", v.getId());
+                    intent.putExtra("id_prova", id_prova);
+                    startActivity(intent);
+                }
+            });
         }
-        carregaGabarito();
+        //carregaGabarito();
         btnBaixar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,17 +214,20 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         builder.show();
 
     }
-    public void dadosCorrecao(String dado){
+    public void carregaDetalhes(Integer id_aluno){
+        String detalhe = bancoDados.detalhePorAluno(id_prova, id_aluno);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Dados");
-        builder.setMessage(dado);
+        builder.setTitle("Aluno: "+bancoDados.pegaNomeParaDetalhe(id_aluno.toString()));
+        builder.setMessage(detalhe);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
         builder.show();
-
+    }
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 }

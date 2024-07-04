@@ -342,6 +342,15 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return null;
     }
+    public String pegaNomeParaDetalhe(String id_aluno) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = base_dados.rawQuery("Select nomeAluno from aluno where id_aluno = ? and id_usuario = ?", new String[]{id_aluno, BancoDados.USER_ID.toString()});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }else
+            return null;
+    }
     public String pegaAlunoProvaCorrigida(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select nomeAluno from aluno where id_aluno = ? and id_usuario = ? ORDER BY nomeAluno", new String[]{id_aluno, BancoDados.USER_ID.toString()});
@@ -619,6 +628,27 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return notaTot;
     }
+
+    /**
+     * Este método obtém as notas de cada questão de uma prova.
+     * @param id_prova codigo da prova que se deseja saber as notas das questões.
+     * @return lista com um item de texto para cada questão correspondendo a nota.
+     * */
+    public List<String> listNotaPorQuetao(Integer id_prova) {
+        ArrayList<String>  notas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nota FROM gabarito where id_prova = ? ORDER BY questao", new String[]{id_prova.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // O índice 0 corresponde à coluna 'nome' no exemplo
+                String nota = cursor.getString(0);
+                notas.add(nota);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return notas;
+    }
     public List<Integer> listAluno(Integer id_prova){
         ArrayList<Integer> ids_alunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -690,6 +720,51 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return gabarito;
+    }
+    public List<String> carregaGabarito(Integer id_prova) {
+        ArrayList<String> respostasEsperadas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                char r = (char) (Integer.parseInt(resposta)-1+'A');
+                respostasEsperadas.add(String.valueOf(r));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return respostasEsperadas;
+    }
+    public String detalhePorAluno(Integer id_prova, Integer id_aluno) {
+        String detalhes = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                char r = (char) (Integer.parseInt(resposta)-1+'A');
+                detalhes += r + "\n";
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return detalhes;
+    }
+    public List<String> respostasDadas(Integer id_prova, Integer id_aluno) {
+        ArrayList<String> respostasDadas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                char r = (char) (Integer.parseInt(resposta)-1+'A');
+                respostasDadas.add(String.valueOf(r));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return respostasDadas;
     }
     public String listRespostasAluno(String id_prova, String id_aluno) {
         String respostasDadas = "";

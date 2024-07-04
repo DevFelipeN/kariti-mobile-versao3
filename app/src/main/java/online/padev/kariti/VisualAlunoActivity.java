@@ -31,7 +31,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     EditText pesquisarAlunos;
     ArrayList<String> listAlunos;
     MyAdapter adapter;
-    TextView tituloAppBarAlunos;
+    TextView tituloAppBarAlunos, totalAlunos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +41,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
         RecyclerView recyclerView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
+        totalAlunos = findViewById(R.id.totalAlunos);
 
         tituloAppBarAlunos = findViewById(R.id.toolbar_title);
         tituloAppBarAlunos.setText("Alunos");
@@ -52,6 +53,8 @@ public class VisualAlunoActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        totalAlunos.setText("Total de Alunos: "+listAlunos.size());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyAdapter(this, listAlunos, this::onItemClick, this::onItemLongClick);

@@ -47,7 +47,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         tituloAppBarAlunos.setText("Alunos");
 
         listAlunos = (ArrayList<String>) bancoDados.listAlunos();
-        if (listAlunos.size() == 0) {
+        if (listAlunos.isEmpty()) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);
             finish();

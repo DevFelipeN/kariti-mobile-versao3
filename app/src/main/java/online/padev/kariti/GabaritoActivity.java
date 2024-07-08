@@ -174,7 +174,7 @@ public class GabaritoActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             EditText editTextPontos = new EditText(this);
-            editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             editTextPontos.setText(String.valueOf(1));
             editTextPontos.setGravity(Gravity.CENTER);
             editTextPontos.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
@@ -232,8 +232,8 @@ public class GabaritoActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void calcularNotaTotal() {
-        int notas = 0;
-        ArrayList<Integer> nPquest = new ArrayList<>();
+        double notas = 0;
+        ArrayList<Double> nPquest = new ArrayList<>();
         info.put("notaQuest", nPquest);
 
         //modificado
@@ -242,7 +242,7 @@ public class GabaritoActivity extends AppCompatActivity {
             EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
             String nt = pontosEditText.getText().toString();
             if (!nt.isEmpty()) {
-                Integer n = Integer.valueOf(nt);
+                Double n = Double.valueOf(nt);
                 nPquest.add(n);
                 notas += n;
             }

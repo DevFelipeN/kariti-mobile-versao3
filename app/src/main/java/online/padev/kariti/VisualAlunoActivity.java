@@ -45,7 +45,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         tituloAppBarAlunos = findViewById(R.id.toolbar_title);
         tituloAppBarAlunos.setText("Alunos");
 
-        listAlunos = (ArrayList<String>) bancoDados.listAlunos();
+        listAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
         if (listAlunos.isEmpty()) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);
@@ -56,56 +56,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyAdapter(this, listAlunos, this::onItemClick, this::onItemLongClick);
         recyclerView.setAdapter(adapter);
-
-        /*
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                // Exibir a caixa de diálogo
-                AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
-                builder.setTitle("Atenção!")
-                        .setMessage("Deseja excluir aluno?")
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Integer id_aluno = bancoDados.pegaIdAluno(adapter.getItem(position));
-                                Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(id_aluno);
-                                if(!checkAlEmTurma){
-                                    Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
-                                    if (deletAluno) {
-                                        listAlunos.remove(position);
-                                        adapter.notifyDataSetChanged();
-                                        Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
-                                    }else
-                                        Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
-                                }else avisoNotExluirAluno();
-                            }
-                        })
-                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //cancelou
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
-            }
-        });
-
-
-        recyclerView.setOnClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Integer id_aluno = bancoDados.pegaIdAluno(adapter.toString(i));
-                Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
-                intent.putExtra("id_aluno", id_aluno);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-         */
 
         pesquisarAlunos.addTextChangedListener(new TextWatcher(){
             @Override

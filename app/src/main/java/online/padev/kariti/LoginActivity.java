@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String emailConf = email.getText().toString();
                 String pass = password.getText().toString();
-                if(emailConf.equals("")||pass.equals(""))
+                if(emailConf.equals(" ")||pass.equals(" "))
                     Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
                 else{
                     if(!emailConf.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailConf).matches()) {

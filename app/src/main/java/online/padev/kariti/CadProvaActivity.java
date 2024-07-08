@@ -54,40 +54,41 @@ public class CadProvaActivity extends AppCompatActivity {
         listTurmaEmProva.add(0, "Selecione a Turma");
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmaEmProva);
         spinnerTurma.setAdapter(adapter);
+
         questMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer quest = Integer.valueOf(qtdQuest.getText().toString());
+                int quest = Integer.parseInt(qtdQuest.getText().toString());
                 if(quest < 20)
                     quest ++;
-                qtdQuest.setText(quest.toString());
+                qtdQuest.setText(String.valueOf(quest));
             }
         });
         questMenos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer quest = Integer.valueOf(qtdQuest.getText().toString());
+                int quest = Integer.parseInt(qtdQuest.getText().toString());
                 if(quest > 0)
                     quest --;
-                qtdQuest.setText(quest.toString());
+                qtdQuest.setText(String.valueOf(quest));
             }
         });
         altMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer alter = Integer.valueOf(qtdAlter.getText().toString());
+                int alter = Integer.parseInt(qtdAlter.getText().toString());
                 if(alter < 7)
                     alter ++;
-                qtdAlter.setText(alter.toString());
+                qtdAlter.setText(String.valueOf(alter));
             }
         });
         altMenos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer alter = Integer.valueOf(qtdAlter.getText().toString());
+                int alter = Integer.parseInt(qtdAlter.getText().toString());
                 if(alter > 0)
                     alter --;
-                qtdAlter.setText(alter.toString());
+                qtdAlter.setText(String.valueOf(alter));
             }
         });
         btnGerProva.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +107,7 @@ public class CadProvaActivity extends AppCompatActivity {
                     Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!prova.equals("")){
+                if(!prova.isEmpty()){
                     id_turma = bancoDados.pegaIdTurma(turma);
                     Boolean existTurma = bancoDados.checkprovasNome(prova, id_turma.toString());
                     if(!existTurma) {

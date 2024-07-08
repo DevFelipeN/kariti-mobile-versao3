@@ -32,8 +32,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     String alunoSelecionado;
     Integer id_turma = 0;
     AdapterExclAluno al;
-    ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno, anonimos;
-    Integer idAnonimos;
+    ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +85,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                                 spinnerBuscAluno.setSelection(0);
                                 break;
                             }
-
                         }
                         if (i != 1) {
                             selectedAlunos.add(alunoSelecionado);
@@ -131,15 +129,15 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 String turma = nomeTurma.getText().toString();
-                if(!turma.equals("")) {
-                    if (selectedAlunos.size() != 0 || !alunosAnonimos.getText().toString().equals("0")) {
+                if(!turma.equals(" ")) {
+                    if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
                         Integer an = Integer.valueOf(alunosAnonimos.getText().toString());
                         Boolean checkTurma = bancoDados.checkTurma(turma);
                         if (!checkTurma) {
                             Boolean cadTurma = bancoDados.inserirTurma(turma, an);
                             if (cadTurma) {
                                 id_turma = bancoDados.pegaIdTurma(turma);
-                                if (selectedAlunos.size() != 0) {
+                                if (!selectedAlunos.isEmpty()) {
                                     int num = listarAlunos.getAdapter().getCount();
                                     for (int i = 0; i < num; i++) {
                                         Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
@@ -147,15 +145,10 @@ public class CadTurmaActivity extends AppCompatActivity{
                                     }
                                 }
                                 if (!an.equals(0)) {
-                                    anonimos = new ArrayList<>();
                                     for (int x = 1; x <= an; x++) {
-                                        String anonimo = "Aluno "+turma+" "+ x;
-                                        anonimos.add(anonimo);
-                                        bancoDados.inserirDadosAluno(anonimo, null, 0);
-                                    }
-                                    for (int a = 0; a < anonimos.size(); a++) {
-                                        idAnonimos = bancoDados.pegaIdAnonimo(anonimos.get(a));
-                                        bancoDados.inserirAlunosNaTurma(id_turma, idAnonimos);
+                                        String anonimo = "Aluno "+ x;
+                                        Integer id_anonimo = bancoDados.inserirNovoAluno(anonimo, null, 0);
+                                        bancoDados.inserirAlunosNaTurma(id_turma, id_anonimo);
                                     }
                                 }
                                 Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();

@@ -9,23 +9,19 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import online.padev.kariti.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
-    ImageView menuPnt;
     TextView turmaCad, txtAonimos, qtdAnonimos;
     BancoDados bancoDados;
     ListView listView;
-    ArrayList<String> listAlunosDturma = new ArrayList<>();
-    ArrayList<Integer> idsAlTurma;
+    ArrayList<String> listTodosAlunosDaTurma;
+    ArrayList<Integer> qtdAlunosAnonimatos;
     String id_turma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,34 +29,22 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         setContentView(R.layout.activity_dados_turma);
 
         voltar = findViewById(R.id.imgBtnVoltarDados);
-        //menuPnt = findViewById(R.id.menu_icon);
         listView = findViewById(R.id.listViewDados);
         qtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
         turmaCad = findViewById(R.id.textViewTurmaCad);
 //        txtAonimos = findViewById(R.id.textViewAlunosAnonimos);
         bancoDados = new BancoDados(this);
 
-        id_turma = String.valueOf(getIntent().getExtras().getInt("idTurma"));
+        id_turma = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
         String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
-        Integer pegaAnonimos = bancoDados.pegaqtdAnonimos(id_turma);
         turmaCad.setText(pegaTurma);
 
-        idsAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(id_turma);
-        qtdAnonimos.setText("Alunos Anônimos: "+pegaAnonimos.toString() + "\n Total de alunos: "+idsAlTurma.size());
-        int num = idsAlTurma.size();
-
-        qtdAnonimos.setText(
-                "Alunos Anônimos: "+pegaAnonimos.toString() +
-                        "\nTotal de Alunos: "+idsAlTurma.size());
-        for(int y = 0; y < num; y++) {
-            String id_aluno = String.valueOf(idsAlTurma.get(y));
-            String aluno = bancoDados.pegaNomeAluno(id_aluno);
-            if (aluno != null) {
-                listAlunosDturma.add(aluno);
-            }
-        }
-        DesativadaAdapter adapter = new DesativadaAdapter(this, listAlunosDturma, listAlunosDturma);
+        listTodosAlunosDaTurma = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(id_turma);
+        qtdAlunosAnonimatos = (ArrayList<Integer>) bancoDados.qtdAlunosAnonimatos(id_turma);
+        qtdAnonimos.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s",qtdAlunosAnonimatos.size(), listTodosAlunosDaTurma.size()));
+        DesativadaAdapter adapter = new DesativadaAdapter(this, listTodosAlunosDaTurma, listTodosAlunosDaTurma);
         listView.setAdapter(adapter);
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

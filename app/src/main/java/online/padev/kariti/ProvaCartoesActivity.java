@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,42 +22,41 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
     Button baixarCartoes;
     Integer id_turma, endereco, idTurmaSelect;
     String prova, turma, turmaSelecionada, idAluno;
-    ArrayList<String> provalist, turmalist, alunolist;
+    ArrayList<String> listagemProvas, turmalist, alunolist;
     List<String[]> dados;
-    ArrayList<Integer> listIdAlTurma, listIdsAlunos;
+    ArrayList<Integer> listIdsAlunos;
     BancoDados bancoDados;
+    Spinner spinnerTurma, spinnerProva, spinnerAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova_cartoes);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        Spinner spinnerTurma = findViewById(R.id.spinnerTurma);
-        Spinner spinnerProva = findViewById(R.id.spinnerProva);
-        Spinner spinnerAluno = findViewById(R.id.spinnerAlunos);
+        spinnerTurma = findViewById(R.id.spinnerTurma);
+        spinnerProva = findViewById(R.id.spinnerProva);
+        spinnerAluno = findViewById(R.id.spinnerAlunos);
         baixarCartoes = findViewById(R.id.baixarcatoes);
-
         bancoDados = new BancoDados(this);
 
-        endereco = getIntent().getExtras().getInt("endereco");
+        endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
-
         turmalist = (ArrayList<String>) bancoDados.obterNomeTurmas();
-        if(endereco.equals(02)){
+
+        if(endereco.equals(2)){
             turmalist.add(0,"Selecione a turma");
             SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
             spinnerTurma.setAdapter(adapterTurma);
@@ -69,54 +67,35 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     if(position!=0){
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                         idTurmaSelect = bancoDados.pegaIdTurma(turmaSelecionada);
-                        provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
-                        //provalist.add(0, "Selecione a prova");
-                        SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, provalist);
+
+                        listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
+                        SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
                         spinnerProva.setAdapter(adapterProva);
 
-                        alunolist = new ArrayList<>();
-                        listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurmaSelect));
+                        alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(idTurmaSelect.toString());
                         alunolist.add(0, "Alunos");
-                        int num = listIdAlTurma.size();
-                        for(int x = 0; x < num; x++){
-                            String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                            String alunoCadastrado = bancoDados.pegaNomeAluno(id_aluno);
-                            if(alunoCadastrado != null){
-                                alunolist.add(alunoCadastrado);
-                            }
-
-                        }
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);
-
                     }
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-
-        }else if(endereco.equals(01)){
+        }else if(endereco.equals(1)){
             id_turma = getIntent().getExtras().getInt("id_turma");
             turma = bancoDados.pegaNomeTurma(String.valueOf(id_turma));
             turmalist.add(0, turma);
             SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
             spinnerTurma.setAdapter(adapterTurma);
-
-            provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(id_turma));
-            provalist.add(0, prova);
-            SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, provalist);
+            //Lista todas provas pertecentes a turma selecionada
+            listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(id_turma));
+            listagemProvas.add(0, prova);
+            SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
             spinnerProva.setAdapter(adapterProva);
-
-            alunolist = new ArrayList<>();
-            listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(id_turma));
+            //Lista todos os alunos pertecentes a turma selecionada
+            alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(id_turma.toString());
             alunolist.add(0, "Alunos");
-            int num = listIdAlTurma.size();
-            for(int x = 0; x < num; x++){
-                String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                alunolist.add(bancoDados.pegaNomeAluno(id_aluno));
-            }
             SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
             spinnerAluno.setAdapter(adapterAluno);
 
@@ -126,19 +105,14 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     if(position!=0){
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                         idTurmaSelect = bancoDados.pegaIdTurma(turmaSelecionada);
-                        provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
-                        provalist.add(0, "Selecione a prova");
-                        SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, provalist);
+                        //Lista todas provas pertecentes a turma selecionada
+                        listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
+                        listagemProvas.add(0, "Selecione a prova");
+                        SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
                         spinnerProva.setAdapter(adapterProva);
-
-                        alunolist = new ArrayList<>();
-                        listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(idTurmaSelect));//pegando Ids dos alunos
+                        //Lista todos os alunos pertencentes a turma selecionada
+                        alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(idTurmaSelect.toString());
                         alunolist.add(0, "Alunos");
-                        int num = listIdAlTurma.size();
-                        for(int x = 0; x < num; x++){
-                            String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                            alunolist.add(bancoDados.alunosGerarProva(id_aluno));
-                        }
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);
 

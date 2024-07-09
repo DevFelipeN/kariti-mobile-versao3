@@ -14,32 +14,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-<!--    <View-->
-<!--        android:id="@+id/divider4"-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="1dp"-->
-<!--        android:background="?android:attr/listDivider"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/include"-->
-<!--        tools:layout_editor_absoluteX="2dp"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/imgBtnVoltaDediturma"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:background="@color/tranparente"-->
-<!--        android:contentDescription="@string/btnVoltar"-->
-<!--        android:src="@mipmap/setaleft"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
     <EditText
         android:id="@+id/editTextEditTurma"
         android:layout_width="400dp"
@@ -66,20 +40,32 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma">
-
     </Spinner>
 
-        <ListView
-            android:id="@+id/listViewEditarTurma"
-            android:layout_width="match_parent"
-            android:layout_height="700dp"
-            android:layout_margin="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.524"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAlunoNovos"
-            android:background="@drawable/borda_botao"
-            android:layout_marginTop="25dp"/>
+    <TextView
+        android:layout_marginTop="15dp"
+        android:textSize="18dp"
+        android:id="@+id/txtVieAlunos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewAlunos"
+        app:layout_constraintEnd_toEndOf="@id/listViewEditarTurma"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/listViewEditarTurma"
+        app:layout_constraintTop_toBottomOf="@id/spinnerBuscAlunoNovos" />
+
+
+    <ListView
+        android:id="@+id/listViewEditarTurma"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtVieAlunos"
+        android:background="@drawable/borda_botao" />
 
     <LinearLayout
         android:id="@+id/layoutEditIncluirAlun"
@@ -118,8 +104,8 @@
 
             <EditText
                 android:id="@+id/editTextNovosAlunosAnonimos"
-                android:layout_width="50dp"
-                android:layout_height="35dp"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"

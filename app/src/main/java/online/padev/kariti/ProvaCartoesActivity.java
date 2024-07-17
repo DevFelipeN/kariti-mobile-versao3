@@ -54,7 +54,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
         endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
-        turmalist = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        turmalist = (ArrayList<String>) bancoDados.listTurmasPorProva();
 
         if(endereco.equals(2)){
             turmalist.add(0,"Selecione a turma");

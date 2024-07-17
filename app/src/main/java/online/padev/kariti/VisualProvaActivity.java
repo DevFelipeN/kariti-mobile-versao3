@@ -38,7 +38,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        turmalist = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        turmalist = (ArrayList<String>) bancoDados.listTurmasPorProva();
         turmalist.add(0, "Selecione a turma");
         SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
         spinnerTurma.setAdapter(adapterTurma);
@@ -50,10 +50,15 @@ public class    VisualProvaActivity extends AppCompatActivity {
                     turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                     id_turma = bancoDados.pegaIdTurma(turmaSelecionada);
 
-                    provalist = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(id_turma));
+                    provalist = (ArrayList<String>) bancoDados.obterNomeProvas(id_turma.toString());
                     SpinnerAdapter adapterProva = new SpinnerAdapter(VisualProvaActivity.this, provalist);
                     spinnerProva.setAdapter(adapterProva);
 
+                    alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(id_turma.toString());
+                    alunolist.add(0, "Alunos");
+                    SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, alunolist);
+                    spinnerAluno.setAdapter(adapterAluno);
+/*
                     alunolist = new ArrayList<>();
                     listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(id_turma));
                     int num = listIdAlTurma.size();
@@ -63,6 +68,8 @@ public class    VisualProvaActivity extends AppCompatActivity {
                     }
                     SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, alunolist);
                     spinnerAluno.setAdapter(adapterAluno);
+
+ */
                 }
             }
             @Override

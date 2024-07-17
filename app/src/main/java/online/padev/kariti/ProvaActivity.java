@@ -98,8 +98,7 @@ public class ProvaActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void telaCorrigirProva(){
-        Intent intent = new Intent(this, ProvaCorrigirActivity.class);
-        startActivity(intent);
+        instrucaoDeCorrecao();
     }
     public void telaVisuProva(){
         Intent intent = new Intent(this, VisualProvaActivity.class);
@@ -134,6 +133,23 @@ public class ProvaActivity extends AppCompatActivity {
                 "• Visualizar Prova - Nesta opção pode ser visualizado o resultado da correção das provas informando a quantidade de acertos e nota de cada aluno.");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+    private void instrucaoDeCorrecao(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("INSTRUÇÕES IMPORTATES!");
+        builder.setMessage("Para garantir melhor desempenho do KARITI nas correções, é essencial que a imagem do cartão resposta seja capturada:\n\n" +
+                "• Em superfície com fundo escuro e uniforme\n\n" +
+                "• Em ambientes com boa iluminação\n\n" +
+                "• De forma que o cartão seja enquadrado por inteiro na imagem\n\n" +
+                "• Com boa visibilidade\n");
+        builder.setPositiveButton("Iniciar Correção", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), ProvaCorrigirActivity.class);
+                startActivity(intent);
                 dialog.dismiss();
             }
         });

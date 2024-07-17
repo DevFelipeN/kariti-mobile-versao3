@@ -73,8 +73,8 @@ public class GaleriaActivity extends AppCompatActivity {
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean teste = Compactador.compactador();
-                if(teste) {
+                boolean compact = Compactador.compactador();
+                if(compact) {
                     try {
                         File fileZip = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");

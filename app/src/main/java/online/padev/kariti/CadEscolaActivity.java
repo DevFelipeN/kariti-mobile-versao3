@@ -27,6 +27,7 @@ public class CadEscolaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cad_escola);
+
         nomeEscola = findViewById(R.id.editTextNomeEscola);
         bairr0 = findViewById(R.id.editTextBairro);
         cadastrarEscola = findViewById(R.id.button);

@@ -17,11 +17,11 @@ import java.util.Objects;
 
 public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
-    TextView turmaCad, txtAonimos, qtdAnonimos;
+    TextView turmaCad, qtdAnonimos;
     BancoDados bancoDados;
     ListView listView;
     ArrayList<String> listTodosAlunosDaTurma;
-    ArrayList<Integer> qtdAlunosAnonimatos;
+    ArrayList<Integer> qtdAlunosAnonimatos, provasPorTurma;
     String id_turma;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,6 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         listView = findViewById(R.id.listViewDados);
         qtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
         turmaCad = findViewById(R.id.textViewTurmaCad);
-//        txtAonimos = findViewById(R.id.textViewAlunosAnonimos);
         bancoDados = new BancoDados(this);
 
         id_turma = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
@@ -62,25 +61,38 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuEditar) {
-                telaEditar();
+            telaEditar();
             return true;
         }
         return true;
     }
 
     public void telaEditar(){
-        Boolean checkTurmaEmProva = bancoDados.checkTurmaEmProva(Integer.valueOf(id_turma));
-        if(!checkTurmaEmProva) {
+        boolean status = false;
+        //Boolean checkTurmaEmProva = bancoDados.checkTurmaEmProva(Integer.valueOf(id_turma));
+        provasPorTurma = (ArrayList<Integer>) bancoDados.listProvasPorTurma(id_turma);
+        if(!provasPorTurma.isEmpty()){
+            for(int a : provasPorTurma){
+                Boolean checkCorrigida = bancoDados.checkCorrigida(String.valueOf(a));
+                if(checkCorrigida) {
+                    status = true;
+                    break;
+                }
+            }
+        }
+        if(!status){
             Intent intent = new Intent(this, EditarTurmaActivity.class);
             intent.putExtra("id_turma", id_turma);
             startActivity(intent);
             finish();
-        }else avisoNotExluir();
+        }else{
+            avisoNotExluir();
+        }
     }
     public void avisoNotExluir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(DadosTurmaActivity.this);
         builder.setTitle("Atenção!")
-                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível editar!");
+                .setMessage("Esta turma possui vínculo com uma ou mais prova(s) já corrigidas, não sendo possível editar!");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

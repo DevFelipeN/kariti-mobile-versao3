@@ -74,15 +74,21 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             float nota = 0;
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);
-            listQuestoes = (ArrayList<Integer>) bancoDados.listQuestoes(id_prova, id_aluno);
-            for(int i = 0; i < listQuestoes.size(); i++){
-                Integer questao = listQuestoes.get(i);
-                Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, questao);
-                Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, questao);
-                if(respostaDada.equals(respostaGabarito)){
-                    nota += bancoDados.pegaNotaQuestao(id_prova, questao);
-                    acertos += 1;
+            Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
+            if(!situacao.equals(-1)) {
+                listQuestoes = (ArrayList<Integer>) bancoDados.listQuestoes(id_prova, id_aluno);
+                for (int i = 0; i < listQuestoes.size(); i++) {
+                    Integer questao = listQuestoes.get(i);
+                    Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, questao);
+                    Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, questao);
+                    if (respostaDada.equals(respostaGabarito)) {
+                        nota += bancoDados.pegaNotaQuestao(id_prova, questao);
+                        acertos += 1;
+                    }
                 }
+            }else{
+                nota = -1;
+                acertos = -1;
             }
 
             TableLayout tableLayout = findViewById(R.id.tableLayout);
@@ -93,20 +99,28 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
             // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            cell1.setText(" " + bancoDados.pegaAlunoProvaCorrigida(id_aluno.toString()));
+            cell1.setText(String.format("  %s", bancoDados.pegaAlunoProvaCorrigida(id_aluno)));
             //cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
 
             // Cria outra célula para a nova linha para armazenar o total de acertos do aluno na prova
             TextView cell2 = new TextView(this);
-            cell2.setText(String.valueOf(acertos));
+            if(acertos != -1){
+                cell2.setText(String.valueOf(acertos));
+            }else{
+                cell2.setText(" - ");}
             cell2.setGravity(Gravity.CENTER);
             cell2.setTextSize(16);
             row.addView(cell2);
 
             // Cria outra célula para a nova linha para armazenar a nota total do aluno
             TextView cell3 = new TextView(this);
-            cell3.setText(String.valueOf(nota));
+            if(nota != -1){
+                cell3.setText(String.valueOf(nota));
+            }else{
+                cell3.setText(" - ");
+            }
+
             cell3.setGravity(Gravity.CENTER);
             cell3.setTextSize(16);
             row.addView(cell3);
@@ -125,10 +139,16 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             cell4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
-                    intent.putExtra("id_aluno", v.getId());
-                    intent.putExtra("id_prova", id_prova);
-                    startActivity(intent);
+                    Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
+                    if(situacao != -1){
+                        Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
+                        intent.putExtra("id_aluno", v.getId());
+                        intent.putExtra("id_prova", id_prova);
+                        startActivity(intent);
+                    }else{
+                        informeProvaNaoCorrigida();
+                    }
+
                 }
             });
         }
@@ -143,14 +163,17 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
                 String dataProva = bancoDados.pegaData(id_prova.toString());
                 for(int id_aluno: listIdsAlunos) {
-                    String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(String.valueOf(id_aluno));
-                    String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
-                    //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                    String respostasEsperadas = bancoDados.listRespostasGabarito(id_prova.toString());
-                    respostasEsperadas = respostasEsperadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                    String notasQuestoes = bancoDados.listNotaQuestao(id_prova.toString());
-                    notasQuestoes = notasQuestoes.replaceAll("(?<=\\d)(?=\\d)", ",");
-                    dadosProvaCorrigida.add(new String[]{id_prova.toString(), prova, prof, turma, dataProva, qtdQuestoes.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
+                    Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
+                    if(situacao != -1) {
+                        String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(id_aluno);
+                        String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
+                        //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
+                        String respostasEsperadas = bancoDados.listRespostasGabarito(id_prova.toString());
+                        respostasEsperadas = respostasEsperadas.replaceAll("(?<=\\d)(?=\\d)", ",");
+                        String notasQuestoes = bancoDados.listNotaQuestao(id_prova.toString());
+                        notasQuestoes = notasQuestoes.replaceAll("(?<=\\d)(?=\\d)", ",");
+                        dadosProvaCorrigida.add(new String[]{id_prova.toString(), prova, prof, turma, dataProva, qtdQuestoes.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
+                    }
                 }
                 //File filecsv = null;
                 //filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosCorrecao.csv");
@@ -214,11 +237,16 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         builder.show();
 
     }
-    public void carregaDetalhes(Integer id_aluno){
-        String detalhe = bancoDados.detalhePorAluno(id_prova, id_aluno);
+    public void informeProvaNaoCorrigida(){
+        //String detalhe = bancoDados.detalhePorAluno(id_prova, id_aluno);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Aluno: "+bancoDados.pegaNomeParaDetalhe(id_aluno.toString()));
-        builder.setMessage(detalhe);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n" +
+                "• Fundo da imagem com ruidos ou diferente do padrão uniforme \n\n" +
+                "• Cartão resposta não estava visível totalmente na imagem\n\n" +
+                "• Ambiente com pouca luminosidade\n\n" +
+                "• imagem ofuscada\n\n" +
+                "Para ter melhor resultado na correção é essencial que sejam seguidas as orientações destacadas na fase de correção!");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

@@ -175,8 +175,6 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                         dadosProvaCorrigida.add(new String[]{id_prova.toString(), prova, prof, turma, dataProva, qtdQuestoes.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
                     }
                 }
-                //File filecsv = null;
-                //filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosCorrecao.csv");
                 try {
                     File filecsv  = new File(getExternalFilesDir(null), "/dadosCorrecao.csv");
                     String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
@@ -238,7 +236,6 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
     }
     public void informeProvaNaoCorrigida(){
-        //String detalhe = bancoDados.detalhePorAluno(id_prova, id_aluno);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n" +

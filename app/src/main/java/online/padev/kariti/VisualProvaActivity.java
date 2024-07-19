@@ -58,18 +58,6 @@ public class    VisualProvaActivity extends AppCompatActivity {
                     alunolist.add(0, "Alunos");
                     SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, alunolist);
                     spinnerAluno.setAdapter(adapterAluno);
-/*
-                    alunolist = new ArrayList<>();
-                    listIdAlTurma = (ArrayList<Integer>) bancoDados.listAlunosDturma(String.valueOf(id_turma));
-                    int num = listIdAlTurma.size();
-                    for (int x = 0; x < num; x++) {
-                        String id_aluno = String.valueOf(listIdAlTurma.get(x));
-                        alunolist.add(bancoDados.pegaNomeAluno(id_aluno));
-                    }
-                    SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, alunolist);
-                    spinnerAluno.setAdapter(adapterAluno);
-
- */
                 }
             }
             @Override

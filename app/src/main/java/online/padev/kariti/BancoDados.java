@@ -112,14 +112,15 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("prova", null, contentValues);
         return Math.toIntExact(inserir);
     }
-    public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Integer nota){
+    public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Integer nota){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id_prova", id_prova);
         contentValues.put("questao", questao);
         contentValues.put("resposta", resposta);
         contentValues.put("nota", nota);
-        base_dados.insert("gabarito", null, contentValues);
+        long inserir = base_dados.insert("gabarito", null, contentValues);
+        return inserir != -1;
     }
     public Boolean inserirDadosAluno(String nomeAluno, String email, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -780,6 +781,7 @@ public List<Integer> listProvasPorTurma(String id_turma) {
         db.close();
         return respostasEsperadas;
     }
+    //Restorna os dados do Gabarito
     public String detalhePorAluno(Integer id_prova, Integer id_aluno) {
         String detalhes = "";
         SQLiteDatabase db = this.getReadableDatabase();

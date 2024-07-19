@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -102,13 +103,22 @@ public class GabaritoActivity extends AppCompatActivity {
                     }
                 }
                 if (respostaSelecionada && respostasNotasPreenchidas) {
+                    Log.e("Kariti","X1");
                     id_turma = bancoDados.pegaIdTurma(turma);
+                    Log.e("Kariti","X2");
                     id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
+                    Log.e("Kariti","X3");
                     ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
+                    Log.e("Kariti","X4");
                     if(!nPquest.isEmpty() && !id_prova.equals(null)){
+                        Log.e("Kariti","X5");
                         for(int i = 0; i < quest; i++){
+                            Log.e("Kariti","Loop"+i);
                             Integer resp = alternativasEscolhidas.get(i);
-                            bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
+                            Log.e("kariti", "quest: "+(i+1));
+                            Log.e("kariti", "marcada: "+(resp+1));
+                            Boolean retorno = bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
+                            Log.e("Kariti", "msg"+retorno);
                         }
                         dialogProvaSucess();
                     }

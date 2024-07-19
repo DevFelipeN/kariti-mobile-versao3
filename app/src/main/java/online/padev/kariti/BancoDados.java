@@ -112,15 +112,14 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("prova", null, contentValues);
         return Math.toIntExact(inserir);
     }
-    public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Integer nota){
+    public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Double nota){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id_prova", id_prova);
         contentValues.put("questao", questao);
         contentValues.put("resposta", resposta);
         contentValues.put("nota", nota);
-        long inserir = base_dados.insert("gabarito", null, contentValues);
-        return inserir != -1;
+        base_dados.insert("gabarito", null, contentValues);
     }
     public Boolean inserirDadosAluno(String nomeAluno, String email, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();

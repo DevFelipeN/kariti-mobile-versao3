@@ -79,7 +79,8 @@
     <!--    Prova-->
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
-    <string name="buttonVisuProva">Visualizar Prova</string>
+    <string name="buttonVisuProva">Provas Corrigidas</string>
+    <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
     <string name="editTextNomeProva">Digite o nome  da Prova</string>
     <string name="textViewDataProva">Data da Prova</string>
@@ -98,7 +99,7 @@
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="btnEnvCartao">Enviar Cartão</string>
     <string name="btnAbrirGaleria">Carregar da Galeria</string>
-    <string name="btnAbrirCamera">Scannear Cartão</string>
+    <string name="btnAbrirCamera">SCANNEAR QRCODE</string>
     <string name="txtProva1">Prova 1</string>
     <string name="btnEnviarParaAluno">Enviar Para Aluno</string>
     <string name="btnEnviarParaProf">Enviar Para Professor</string>

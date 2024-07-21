@@ -27,6 +27,7 @@ public class CadEscolaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cad_escola);
+
         nomeEscola = findViewById(R.id.editTextNomeEscola);
         bairr0 = findViewById(R.id.editTextBairro);
         cadastrarEscola = findViewById(R.id.button);
@@ -80,15 +81,5 @@ public class CadEscolaActivity extends AppCompatActivity {
         BancoDados.USER_ID = null;
         Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
-
-        nomeEscola = findViewById(R.id.editTextNomeEscola);
-        bairr0 = findViewById(R.id.editTextBairro);
-        cadastrarEscola = findViewById(R.id.buttonSalvarEdit);
-
-        cadastrarEscola.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-            }
-        });
     }
 }

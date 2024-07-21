@@ -1,9 +1,11 @@
 package online.padev.kariti;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +29,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.buttonCamera);
         voltar = findViewById(R.id.imgBtnVoltar);
         bancoDados = new BancoDados(this);
+
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

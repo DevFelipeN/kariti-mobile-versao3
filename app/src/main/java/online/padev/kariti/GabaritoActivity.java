@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -104,7 +105,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 if (respostaSelecionada && respostasNotasPreenchidas) {
                     id_turma = bancoDados.pegaIdTurma(turma);
                     id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
-                    ArrayList<Integer> nPquest = (ArrayList<Integer>)info.get("notaQuest");
+                    ArrayList<Double> nPquest = (ArrayList<Double>)info.get("notaQuest");
                     if(!nPquest.isEmpty() && !id_prova.equals(null)){
                         for(int i = 0; i < quest; i++){
                             Integer resp = alternativasEscolhidas.get(i);

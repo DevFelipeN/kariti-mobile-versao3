@@ -17,10 +17,13 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class UploadEjson {
     static Integer questao, respostaDada;
+    static ArrayList<Integer[]> naoCorrigidas = new ArrayList<>();
     public static void enviarArquivosP(File arquivo, FileOutputStream fos, File dir, BancoDados bancoDados) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -70,6 +73,11 @@ public class UploadEjson {
                     Integer id_prova = objJson.getInt("id_prova");
                     Integer id_aluno = objJson.getInt("id_aluno");
                     String mensagem = objJson.getString("mensagem");
+
+                    //EM DESENVOLVIMENTO
+                    if(!resultCorrect.equals(0)){
+                        naoCorrigidas.add(new Integer[]{id_prova, id_aluno});//Para provas que o Kariti não conseguiu corrigir
+                    }
                     if(resultCorrect.equals(0)){
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
@@ -96,7 +104,15 @@ public class UploadEjson {
 
                         }
                     }
-
+                }
+                if(!naoCorrigidas.isEmpty()){
+                    for(Integer[] i : naoCorrigidas){
+                        Integer id_prova = i[0];
+                        Integer id_aluno = i[1];
+                        questao = -1;
+                        respostaDada = -1;
+                        bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
+                    }
                 }
             }
         }catch (Exception e){

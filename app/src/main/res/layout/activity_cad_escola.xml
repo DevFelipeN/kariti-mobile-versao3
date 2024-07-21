@@ -25,7 +25,7 @@
     <EditText
         android:id="@+id/editTextNomeEscola"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="51dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -41,8 +41,8 @@
 
     <EditText
         android:id="@+id/editTextBairro"
-        android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_width="318dp"
+        android:layout_height="53dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -56,18 +56,21 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextNomeEscola" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/button"
+        style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/buttonCadastrar"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextBairro"
-        app:layout_constraintVertical_bias="0.094" />
+        app:layout_constraintVertical_bias="0.284" />
 
     <ImageView
         android:id="@+id/imageView6"

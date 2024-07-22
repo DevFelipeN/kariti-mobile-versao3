@@ -8,24 +8,6 @@
     android:layout_margin="0dp"
     tools:context="online.padev.kariti.CadEscolaActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,12 +16,6 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="5dp">
 
-        <!-- Título da ActionBar -->
-
-        <!--             Título da ActionBar -->
-
-
-        <!-- Ícone do home -->
         <ImageButton
             android:id="@+id/imgBtnVoltar"
             android:layout_width="64dp"

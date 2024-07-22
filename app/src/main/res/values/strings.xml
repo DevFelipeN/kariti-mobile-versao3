@@ -59,6 +59,9 @@
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
     <string name="textViewProva">Prova</string>
+    <string name="textViewEditProva">Editar Prova</string>
+    <string name="buttonProximo">Próximo >>> </string>
+    <string name="textInstrucao">Selecione a prova que deseja editar:</string>
     <string name="buttonCadAluno">Cadastrar Aluno</string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>

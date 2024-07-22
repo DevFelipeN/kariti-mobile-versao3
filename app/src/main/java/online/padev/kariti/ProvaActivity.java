@@ -10,15 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import online.padev.kariti.R;
-
 public class ProvaActivity extends AppCompatActivity {
     ImageButton voltar, iconHelpProva;
-    Button cadProva, gerarCartao, corrigirProva, visuProva;
+    Button cadProva, gerarCartao, corrigirProva, provaCorrigida, editarProva;
     ArrayList<String> listeTurmas;
     BancoDados bancoDados;
     @Override
@@ -45,7 +42,8 @@ public class ProvaActivity extends AppCompatActivity {
         cadProva = findViewById(R.id.buttonCadProva);
         gerarCartao = findViewById(R.id.buttonGerarCatao);
         corrigirProva = findViewById(R.id.buttonCorrigirProva);
-        visuProva = findViewById(R.id.buttonVisuProva);
+        provaCorrigida = findViewById(R.id.buttonVisuProva);
+        editarProva = findViewById(R.id.buttonEdicaoProva);
 
         iconHelpProva.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,10 +69,17 @@ public class ProvaActivity extends AppCompatActivity {
                 telaCorrigirProva();
             }
         });
-        visuProva.setOnClickListener(new View.OnClickListener() {
+        provaCorrigida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 telaVisuProva();
+            }
+        });
+        editarProva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditarProva.class);
+                startActivity(intent);
             }
         });
 
@@ -138,7 +143,7 @@ public class ProvaActivity extends AppCompatActivity {
         });
         builder.show();
     }
-    private void instrucaoDeCorrecao(){
+    public void instrucaoDeCorrecao(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("INSTRUÇÕES IMPORTATES!");
         builder.setMessage("Para garantir melhor desempenho do KARITI nas correções, é essencial que a imagem do cartão resposta seja capturada:\n\n" +

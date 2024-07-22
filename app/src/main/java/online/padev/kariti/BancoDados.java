@@ -294,38 +294,38 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaNome(String id_usuario) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from usuario where id_usuario = ?", new String[]{id_usuario});
+        Cursor cursor = base_dados.rawQuery("Select nomeUsuario from usuario where id_usuario = ?", new String[]{id_usuario});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getString(1);
+        return cursor.getString(0);
     }
     public Integer pegaRespostaDada(Integer id_prova, Integer id_aluno, Integer questao) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
+        Cursor cursor = base_dados.rawQuery("Select respostaDada from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(4);
+        return cursor.getInt(0);
     }
     public Integer pegaRespostaQuestao(Integer id_prova, Integer questao) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
+        Cursor cursor = base_dados.rawQuery("Select resposta from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(3);
+        return cursor.getInt(0);
     }
     public Float pegaNotaQuestao(Integer id_prova, Integer questao) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
+        Cursor cursor = base_dados.rawQuery("Select nota from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getFloat(4);
+        return cursor.getFloat(0);
     }
     public String pegaNomeTurma(String id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from turma where id_turma = ?", new String[]{id_turma});
+        Cursor cursor = base_dados.rawQuery("Select nomeTurma from turma where id_turma = ?", new String[]{id_turma});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getString(2);
+        return cursor.getString(0);
     }
     public String pegaNomeAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -804,9 +804,11 @@ public List<Integer> listProvasPorTurma(String id_turma) {
             do {
                 String resposta = cursor.getString(0);
                 String aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0)))-1 +'A'));
-                    for(int i = 1; i < resposta.length(); i++){
-                        aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i)))-1 +'A'));
-                    }
+                if(aux.equals("0"))
+                    aux = " - ";
+                for(int i = 1; i < resposta.length(); i++){
+                    aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i)))-1 +'A'));
+                }
                 respostasDadas.add(aux);
             } while (cursor.moveToNext());
             cursor.close();

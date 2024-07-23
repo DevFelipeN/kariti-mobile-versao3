@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.R;
@@ -27,6 +28,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
     Button btnEscDesativada;
     ImageButton iconHelp;
     private Toolbar toolbar;
+    private TextView titulo;
     ArrayList<String> listEscola;
 
     BancoDados bancoDados;
@@ -44,6 +46,9 @@ public class VisualEscolaActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listViewEscolas);
         bancoDados = new BancoDados(this);
         iconHelp = findViewById(R.id.iconHelp);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Escolas");
 
         if (!bancoDados.haEscolasCadastradas()) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);

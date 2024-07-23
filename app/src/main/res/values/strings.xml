@@ -125,7 +125,7 @@
 
     <string name="descritionScroll">Bloco do Gabarito</string>
 
-    <string name="btnGaleriaFinalizar">Finalizar</string>
+    <string name="btnGaleriaFinalizar">Finalizar e Corrigir</string>
 
     <!--    Camera-->
     <string name="informacaoCamera">Agora tire a foto do Gabarito</string>

@@ -15,22 +15,25 @@
         android:layout_marginLeft="10dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 <!--100-->
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="58dp"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/imageViewGaleria"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="146dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/imageViewGaleria"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/nomeDaFoto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:text="101_80_15_5.png"
             android:textColor="@color/white"
@@ -39,11 +42,10 @@
         <TextView
             android:id="@+id/dataDafoto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:text="2024-04-20 19:50"
-            android:textColor="@color/white"
-            />
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <ImageButton

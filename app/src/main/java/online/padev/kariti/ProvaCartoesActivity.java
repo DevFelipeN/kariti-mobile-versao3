@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     ArrayList<Integer> listIdsAlunos;
     BancoDados bancoDados;
     Spinner spinnerTurma, spinnerProva, spinnerAluno;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,10 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         spinnerProva = findViewById(R.id.spinnerProva);
         spinnerAluno = findViewById(R.id.spinnerAlunos);
         baixarCartoes = findViewById(R.id.baixarcatoes);
+        titulo = findViewById(R.id.toolbar_title);
         bancoDados = new BancoDados(this);
+
+        titulo.setText("Cartões");
 
         endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
         prova = getIntent().getExtras().getString("prova");

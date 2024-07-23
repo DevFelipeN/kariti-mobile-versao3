@@ -413,7 +413,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = base_dados.rawQuery("Select qtdAlternativas from prova where id_prova = ?", new String[]{id_prova});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getInt(4);
+        return cursor.getInt(0);
     }
     public String pegaEmailAluno(String id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -810,15 +810,17 @@ public class BancoDados extends SQLiteOpenHelper {
         return detalhes;
     }
     public List<String> respostasDadas(Integer id_prova, Integer id_aluno) {
+        String aux;
         ArrayList<String> respostasDadas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String resposta = cursor.getString(0);
-                String aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0)))-1 +'A'));
-                if(aux.equals("0"))
+                if(resposta.equals("0")) {
                     aux = " - ";
+                }else
+                    aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0)))-1 +'A'));
                 for(int i = 1; i < resposta.length(); i++){
                     aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i)))-1 +'A'));
                 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -20,6 +21,7 @@ public class EditarProva extends AppCompatActivity {
     private ArrayList<String> listTurma, lisProva;
     private String turmaSelecionada, provaSelecionada;
     private Integer id_turma, id_prova;
+    private TextView titulo;
     BancoDados bancoDados;
 
 
@@ -31,6 +33,9 @@ public class EditarProva extends AppCompatActivity {
         prova = findViewById(R.id.spinnerProva2);
         turma = findViewById(R.id.spinnerTurma2);
         proximo = findViewById(R.id.buttonProximo);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Editar Prova");
 
         bancoDados = new BancoDados(this);
 
@@ -73,8 +78,6 @@ public class EditarProva extends AppCompatActivity {
         intent.putExtra("prova", provaSelecionada);
         intent.putExtra("id_prova", id_prova);
         intent.putExtra("id_turma", id_turma);
-        Log.e("kariti", "Passei aqui 1");
         startActivity(intent);
-        Log.e("kariti", "Passei aqui 2");
     }
 }

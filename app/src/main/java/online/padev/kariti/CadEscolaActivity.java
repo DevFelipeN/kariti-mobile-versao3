@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ public class CadEscolaActivity extends AppCompatActivity {
     EditText nomeEscola, bairr0;
     Button cadastrarEscola;
     BancoDados bancoDados;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,9 @@ public class CadEscolaActivity extends AppCompatActivity {
         nomeEscola = findViewById(R.id.editTextNomeEscola);
         bairr0 = findViewById(R.id.editTextBairro);
         cadastrarEscola = findViewById(R.id.button);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Escola");
 
         bancoDados = new BancoDados(this); // --> Conexão com o banco de dados.
         cadastrarEscola.setOnClickListener(new View.OnClickListener() {

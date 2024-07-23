@@ -32,6 +32,7 @@ public class CadProvaActivity extends AppCompatActivity {
     ImageButton voltar, questMenos, questMais, altMais, altMenos;
     String dataform;
     Integer id_turma;
+    private  TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,9 @@ public class CadProvaActivity extends AppCompatActivity {
         altMenos = findViewById(R.id.imgBtnMenoAlter);
         spinnerTurma = findViewById(R.id.spinnerTurmaPprova);
         bancoDados = new BancoDados(this);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Nova Prova");
 
         listTurmaEmProva = (ArrayList<String>) bancoDados.obterNomeTurmas();
         listTurmaEmProva.add(0, "Selecione a Turma");

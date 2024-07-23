@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     Spinner spinnerBuscAlun;
     Button salvar;
     Integer id_aluno;
+    private TextView titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class EditarTurmaActivity extends AppCompatActivity {
         alunosDaTurmaSemAnonimos = new ArrayList<>();
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconHelpEditTurma = findViewById(R.id.iconHelp);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Edição");
 
         iconHelpEditTurma.setOnClickListener(new View.OnClickListener() {
             @Override

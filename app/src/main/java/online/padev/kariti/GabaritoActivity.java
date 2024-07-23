@@ -40,6 +40,7 @@ public class GabaritoActivity extends AppCompatActivity {
     LinearLayout layoutHorizontal;
     String prova, turma, data, dataForm;
     Integer id_turma, id_prova, quest, alter, totNota;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,9 @@ public class GabaritoActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconHelpGabarito = findViewById(R.id.iconHelp);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Gabarito");
 
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);

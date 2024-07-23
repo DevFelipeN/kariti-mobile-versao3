@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import online.padev.kariti.R;
 
 public class TurmaActivity extends AppCompatActivity {
     ImageButton voltar, iconHelTurma;
     Button cadTurma, visuTurma;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,9 @@ public class TurmaActivity extends AppCompatActivity {
         iconHelTurma = findViewById(R.id.iconHelp);
         cadTurma = findViewById(R.id.buttonCadAluno);
         visuTurma = findViewById(R.id.buttonVisuTurma);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Turma");
 
         iconHelTurma.setOnClickListener(new View.OnClickListener() {
             @Override

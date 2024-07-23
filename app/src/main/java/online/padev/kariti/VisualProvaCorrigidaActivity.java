@@ -47,6 +47,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     String prova, turma;
     TextView provaResult;
     List<String[]> dadosProvaCorrigida;
+    private TextView titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,11 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         btnBaixar = findViewById(R.id.buttonBaixarResultado);
         provaResult = findViewById(R.id.textViewProvaResult);
+        titulo = findViewById(R.id.toolbar_title);
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
+
+        titulo.setText("Resultado");
 
         prova = Objects.requireNonNull(getIntent().getExtras()).getString("prova");
         id_prova = getIntent().getExtras().getInt("id_prova");

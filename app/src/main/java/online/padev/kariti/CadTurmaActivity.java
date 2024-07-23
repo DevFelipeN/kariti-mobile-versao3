@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.R;
@@ -32,6 +33,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     String alunoSelecionado;
     Integer id_turma = 0;
     AdapterExclAluno al;
+    private TextView titulo;
     ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class CadTurmaActivity extends AppCompatActivity{
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconHelpCadturma = findViewById(R.id.iconHelp);
         listarAlunos = findViewById(R.id.listViewCadTurma);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Turma");
 
         nomeTurma = findViewById(R.id.editTextTurmaCad);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);

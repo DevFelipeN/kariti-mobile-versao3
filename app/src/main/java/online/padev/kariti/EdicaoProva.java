@@ -33,6 +33,7 @@ public class EdicaoProva extends AppCompatActivity {
     private Calendar calendar;
     private String dataFormatada, prova, nomeTurma;
     private Integer id_prova, id_turma;
+    private TextView titulo;
     BancoDados bancoDados;
     private ArrayList<String> listTurma;
 
@@ -44,22 +45,31 @@ public class EdicaoProva extends AppCompatActivity {
         data = findViewById(R.id.NovaData);
         nomeProva = findViewById(R.id.EdicaoProva);
         turma = findViewById(R.id.EdicaoTurma);
+        titulo = findViewById(R.id.toolbar_title);
+        questoes = findViewById(R.id.qtdQuestoes);
+        alternativas = findViewById(R.id.qtdAlternativas);
+        menosQuestoes = findViewById(R.id.menosquest);
+        maisQuestoes = findViewById(R.id.maisquest);
+        menosAlternativas = findViewById(R.id.menosAlter);
+        maisQuestoes = findViewById(R.id.maisAlter);
+        proximo = findViewById(R.id.btnEditProximo);
+
+        titulo.setText("Edição");
 
         bancoDados = new BancoDados(this);
-        Log.e("kariti", "Aqui 3");
 
         id_prova = getIntent().getExtras().getInt("id_prova");
         prova = getIntent().getExtras().getString("prova");
         id_turma = getIntent().getExtras().getInt("id_turma");
         nomeTurma = bancoDados.pegaNomeTurma(id_turma.toString());
         nomeProva.setText(prova);
-        Log.e("kariti", "Aqui 4");
 
         listTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
         listTurma.add(0, nomeTurma);
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurma);
         turma.setAdapter(adapter);
-        Log.e("kariti", "Aqui 5");
+
+
 
         calendar = Calendar.getInstance();
         data.setOnClickListener(new View.OnClickListener() {

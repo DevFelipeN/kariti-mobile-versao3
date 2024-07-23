@@ -18,6 +18,7 @@ public class ProvaActivity extends AppCompatActivity {
     Button cadProva, gerarCartao, corrigirProva, provaCorrigida, editarProva;
     ArrayList<String> listeTurmas;
     BancoDados bancoDados;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,9 @@ public class ProvaActivity extends AppCompatActivity {
         corrigirProva = findViewById(R.id.buttonCorrigirProva);
         provaCorrigida = findViewById(R.id.buttonVisuProva);
         editarProva = findViewById(R.id.buttonEdicaoProva);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Prova");
 
         iconHelpProva.setOnClickListener(new View.OnClickListener() {
             @Override

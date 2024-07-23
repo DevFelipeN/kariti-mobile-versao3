@@ -107,7 +107,7 @@ public class CadProvaActivity extends AppCompatActivity {
                     Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!prova.isEmpty()){
+                if(!prova.trim().isEmpty()){
                     id_turma = bancoDados.pegaIdTurma(turma);
                     Boolean existTurma = bancoDados.checkprovasNome(prova, id_turma.toString());
                     if(!existTurma) {

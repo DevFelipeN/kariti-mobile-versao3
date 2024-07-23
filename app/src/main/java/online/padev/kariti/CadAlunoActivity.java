@@ -35,12 +35,12 @@ public class CadAlunoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nome = nomeAluno.getText().toString();
                 String email = emailAluno.getText().toString();
-                if (nome.equals("")) {
+                if (nome.trim().isEmpty()) {
                     Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean checkAluno = bancoDados.checkAluno(nome);
                     if (!checkAluno) {
-                        if (!email.equals("")) {
+                        if (!email.trim().isEmpty()) {
                             if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && !bancoDados.checkEmailDAluno(email)) {
                                 Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, 1);
                                 if (insertAluno) {

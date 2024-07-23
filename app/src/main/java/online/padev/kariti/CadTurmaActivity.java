@@ -134,7 +134,7 @@ public class CadTurmaActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 String turma = nomeTurma.getText().toString();
-                if(!turma.equals(" ")) {
+                if(!turma.trim().isEmpty()) {
                     if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
                         Integer an = Integer.valueOf(alunosAnonimos.getText().toString());
                         Boolean checkTurma = bancoDados.checkTurma(turma);

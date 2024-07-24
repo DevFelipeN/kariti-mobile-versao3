@@ -184,6 +184,36 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
     }
+    public void deletaGabarito(Integer id_prova){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String deleta = "DELETE FROM gabarito WHERE id_prova = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt.bindLong(1, id_prova);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+    public void deletaProva(Integer id_prova){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String deleta = "DELETE FROM prova WHERE id_prova = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt.bindLong(1, id_prova);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+    public void deletaCorrecao(Integer id_prova){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt.bindLong(1, id_prova);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
     public void deletaAnonimos(Integer id_turma){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -215,6 +245,21 @@ public class BancoDados extends SQLiteOpenHelper {
             stmt.bindString(1, turma);
             stmt.bindLong(2, qtdAnonimos);
             stmt.bindLong(3, id_turma);
+            stmt.executeUpdateDelete();
+            base_dados.close();
+        }catch (Exception e){e.printStackTrace();}
+    }
+    public void upadateProva(Integer id_prova, String nomeProva, String dataProva, Integer id_turma, Integer questoes, Integer alternativas){
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            String altera = "UPDATE prova SET nomeProva = ?, dataProva = ?, qtdQuestoes = ?, qtdAlternativas = ?, id_turma = ?  WHERE id_prova = ?";
+            SQLiteStatement stmt = base_dados.compileStatement(altera);
+            stmt.bindString(1, nomeProva);
+            stmt.bindString(2, dataProva);
+            stmt.bindLong(3, questoes);
+            stmt.bindLong(4, alternativas);
+            stmt.bindLong(5, id_turma);
+            stmt.bindLong(6, id_prova);
             stmt.executeUpdateDelete();
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}

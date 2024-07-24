@@ -115,12 +115,17 @@ public class GabaritoActivity extends AppCompatActivity {
                     }
                 }
                 if (respostaSelecionada && respostasNotasPreenchidas) {
-                    id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
-                    ArrayList<Double> nPquest = (ArrayList<Double>)info.get("notaQuest");
+                    if(status.equals(false)) {
+                        id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
+                    }else{
+                        bancoDados.upadateProva(id_prova, prova, dataForm, id_turma, quest, alter);
+                        bancoDados.deletaGabarito(id_prova);
+                    }
+                    ArrayList<Double> nPquest = (ArrayList<Double>) info.get("notaQuest");
                     if(!nPquest.isEmpty() && !id_prova.equals(null)){
-                        for(int i = 0; i < quest; i++){
-                            Integer resp = alternativasEscolhidas.get(i);
-                            bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
+                        for(int i = 1; i <= quest; i++){
+                            Integer resp = alternativasEscolhidas.get(i-1);
+                            bancoDados.inserirGabarito(id_prova, i, resp, nPquest.get(i-1));
                         }
                         dialogProvaSucess();
                     }

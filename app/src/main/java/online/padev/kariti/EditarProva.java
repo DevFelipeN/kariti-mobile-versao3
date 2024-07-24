@@ -1,27 +1,28 @@
 package online.padev.kariti;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 public class EditarProva extends AppCompatActivity {
     private Spinner prova, turma;
-    private Button proximo;
+    private Button editar, apagar;
     private ArrayList<String> listTurma, lisProva;
     private String turmaSelecionada, provaSelecionada;
-    private Integer id_turma, id_prova;
-    private TextView titulo;
+    private Integer id_turma;
+    private ImageButton voltar;
     BancoDados bancoDados;
 
 
@@ -30,12 +31,14 @@ public class EditarProva extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_prova);
 
+        voltar = findViewById(R.id.imgBtnVoltar);
         prova = findViewById(R.id.spinnerProva2);
         turma = findViewById(R.id.spinnerTurma2);
-        proximo = findViewById(R.id.buttonProximo);
-        titulo = findViewById(R.id.toolbar_title);
+        editar = findViewById(R.id.buttonEditar);
+        apagar = findViewById(R.id.buttonApagar);
+        TextView titulo = findViewById(R.id.toolbar_title);
 
-        titulo.setText("Editar Prova");
+        titulo.setText("Mais Opções");
 
         bancoDados = new BancoDados(this);
 
@@ -60,23 +63,96 @@ public class EditarProva extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        proximo.setOnClickListener(new View.OnClickListener() {
+        editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                telaVisualProvaSelecionada();
+                editarProva();
+            }
+        });
+        apagar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                apagarProva();
+            }
+        });
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                finish();
             }
         });
     }
-    public void telaVisualProvaSelecionada(){
+    public void editarProva(){
         if(prova.getSelectedItem() == null){
             return;
         }
         provaSelecionada = (String) prova.getSelectedItem();
-        id_prova = bancoDados.pegaIdProva(provaSelecionada);
+        Integer id_prova = bancoDados.pegaIdProva(provaSelecionada);
         Intent intent = new Intent(this, EdicaoProva.class);
         intent.putExtra("prova", provaSelecionada);
         intent.putExtra("id_prova", id_prova);
         intent.putExtra("id_turma", id_turma);
         startActivity(intent);
+    }
+    public void apagarProva(){
+        if(prova.getSelectedItem() == null)
+            return;
+        provaSelecionada = (String) prova.getSelectedItem();
+        Integer id_prova = bancoDados.pegaIdProva(provaSelecionada);
+        if(bancoDados.checkCorrigida(id_prova.toString())){
+            avisoSeApagar(id_prova);
+        }else{
+            bancoDados.deletaGabarito(id_prova);
+            bancoDados.deletaProva(id_prova);
+            provaApagada();
+        }
+
+    }
+
+    private void deteteProva(Integer id_prova){
+        bancoDados.deletaGabarito(id_prova);
+        bancoDados.deletaCorrecao(id_prova);
+        bancoDados.deletaProva(id_prova);
+        provaApagada();
+
+    }
+    private void avisoSeApagar(Integer id_prova){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO")
+                .setMessage("Esta prova já foi corrigida. Deseja realmente " +
+                        "apagá-la? Caso confirme essa ação, todos os " +
+                        "dados relacionados a essa prova, inclusive as correções, serão apagados.\n\nDeseja continuar? ")
+                .setPositiveButton("Apagar tudo", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deteteProva(id_prova);
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private void provaApagada(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Kariti")
+                .setMessage("Prova apagada com sucesso!")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

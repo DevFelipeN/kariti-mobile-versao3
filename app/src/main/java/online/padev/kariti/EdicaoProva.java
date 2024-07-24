@@ -25,7 +25,7 @@ public class EdicaoProva extends AppCompatActivity {
     private EditText nomeProva;
     private TextView questoesAtuais, alternativas;
     private Spinner spinnerTurma;
-    private ImageButton menosQuestoes, maisQuestoes, menosAlternativas, maisAlternativas;
+    private ImageButton menosQuestoes, maisQuestoes, menosAlternativas, maisAlternativas, voltar;
     private Button proximo, dataAtual;
     private Calendar calendar;
     private String dataFormatada, dataBD, provaBD, turmaBD, novaProva, novaTurma, novaData;
@@ -40,6 +40,7 @@ public class EdicaoProva extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edicao_prova);
 
+        voltar = findViewById(R.id.imgBtnVoltar);
         dataAtual = findViewById(R.id.NovaData);
         nomeProva = findViewById(R.id.EdicaoProva);
         spinnerTurma = findViewById(R.id.EdicaoTurma);
@@ -177,6 +178,13 @@ public class EdicaoProva extends AppCompatActivity {
                 }
             }
         });
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                finish();
+            }
+        });
     }
     private String formatDate(Calendar calendar) {
         String dateFormat = "dd/MM/yyyy";
@@ -223,4 +231,9 @@ public class EdicaoProva extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

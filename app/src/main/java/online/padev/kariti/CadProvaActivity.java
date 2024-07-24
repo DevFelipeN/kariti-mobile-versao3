@@ -120,10 +120,12 @@ public class CadProvaActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
                                 intent.putExtra("nomeProva", prova);
                                 intent.putExtra("turma", turma);
+                                intent.putExtra("id_turma", id_turma);
                                 intent.putExtra("data", data);
                                 intent.putExtra("dataForm", dataform);
                                 intent.putExtra("quest", quest);
                                 intent.putExtra("alter", alter);
+                                intent.putExtra("status", false);
                                 startActivity(intent);
                                 finish();
                             }else

@@ -1,9 +1,9 @@
 package online.padev.kariti;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,31 +12,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class EdicaoProva extends AppCompatActivity {
     private EditText nomeProva;
-    private TextView questoes, alternativas;
-    private Spinner turma;
+    private TextView questoesAtuais, alternativas;
+    private Spinner spinnerTurma;
     private ImageButton menosQuestoes, maisQuestoes, menosAlternativas, maisAlternativas;
-    private Button proximo, data;
+    private Button proximo, dataAtual;
     private Calendar calendar;
-    private String dataFormatada, dataCadastrada, prova, nomeTurma;
-    private Integer id_prova, id_turma;
+    private String dataFormatada, dataBD, provaBD, turmaBD, novaProva, novaTurma, novaData;
+    private Integer id_provaBD, id_turmaBD, novaQuestao, novaAlternativa;
     private TextView titulo;
     BancoDados bancoDados;
-    private Integer qtdQuestoesCadastradas, qtdAlternativasCadastradas;
+    private Integer qtdQuestoesBD, qtdAlternativasBD;
     private ArrayList<String> listTurma;
 
     @Override
@@ -44,58 +40,58 @@ public class EdicaoProva extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edicao_prova);
 
-        data = findViewById(R.id.NovaData);
+        dataAtual = findViewById(R.id.NovaData);
         nomeProva = findViewById(R.id.EdicaoProva);
-        turma = findViewById(R.id.EdicaoTurma);
+        spinnerTurma = findViewById(R.id.EdicaoTurma);
         titulo = findViewById(R.id.toolbar_title);
-        questoes = findViewById(R.id.qtdQuestoes);
+        questoesAtuais = findViewById(R.id.qtdQuestoes);
         alternativas = findViewById(R.id.qtdAlternativas);
         menosQuestoes = findViewById(R.id.menosquest);
         maisQuestoes = findViewById(R.id.maisquest);
         menosAlternativas = findViewById(R.id.menosAlter);
-        maisQuestoes = findViewById(R.id.maisAlter);
+        maisAlternativas = findViewById(R.id.maisAlter);
         proximo = findViewById(R.id.btnEditProximo);
 
         titulo.setText("Edição");
 
         bancoDados = new BancoDados(this);
 
-        id_prova = Objects.requireNonNull(getIntent().getExtras()).getInt("id_prova");
-        prova = getIntent().getExtras().getString("prova");
-        id_turma = getIntent().getExtras().getInt("id_turma");
-        nomeTurma = bancoDados.pegaNomeTurma(id_turma.toString());
-        qtdQuestoesCadastradas = bancoDados.pegaqtdQuestoes(id_prova.toString());
-        qtdAlternativasCadastradas = bancoDados.pegaqtdAlternativas(id_prova.toString());
-        dataCadastrada = bancoDados.pegaData(id_prova.toString());
+        id_provaBD = Objects.requireNonNull(getIntent().getExtras()).getInt("id_prova");
+        provaBD = getIntent().getExtras().getString("prova");
+        id_turmaBD = getIntent().getExtras().getInt("id_turma");
+        turmaBD = bancoDados.pegaNomeTurma(id_turmaBD.toString());
+        qtdQuestoesBD = bancoDados.pegaqtdQuestoes(id_provaBD.toString());
+        qtdAlternativasBD = bancoDados.pegaqtdAlternativas(id_provaBD.toString());
+        dataBD = bancoDados.pegaData(id_provaBD.toString());
 
-        this.dataCadastrada = formataDataCadastrada(dataCadastrada);
+        this.dataBD = formataDataCadastrada(dataBD);
 
-        nomeProva.setText(prova);
-        questoes.setText(String.valueOf(qtdQuestoesCadastradas));
-        alternativas.setText(String.valueOf(qtdAlternativasCadastradas));
-        data.setText(dataCadastrada);
+        nomeProva.setText(provaBD);
+        questoesAtuais.setText(String.valueOf(qtdQuestoesBD));
+        alternativas.setText(String.valueOf(qtdAlternativasBD));
+        dataAtual.setText(dataBD);
 
         listTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
-        listTurma.add(0, nomeTurma);
+        listTurma.add(0, turmaBD);
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurma);
-        turma.setAdapter(adapter);
+        spinnerTurma.setAdapter(adapter);
 
         maisQuestoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int quest = Integer.parseInt(questoes.getText().toString());
+                int quest = Integer.parseInt(questoesAtuais.getText().toString());
                 if(quest < 20)
                     quest ++;
-                questoes.setText(String.valueOf(quest));
+                questoesAtuais.setText(String.valueOf(quest));
             }
         });
         menosQuestoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int quest = Integer.parseInt(questoes.getText().toString());
+                int quest = Integer.parseInt(questoesAtuais.getText().toString());
                 if(quest > 0)
                     quest --;
-                questoes.setText(String.valueOf(quest));
+                questoesAtuais.setText(String.valueOf(quest));
             }
         });
         maisAlternativas.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +114,7 @@ public class EdicaoProva extends AppCompatActivity {
         });
 
         calendar = Calendar.getInstance();
-        data.setOnClickListener(new View.OnClickListener() {
+        dataAtual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Cria um DatePickerDialog com a data atual
@@ -128,7 +124,7 @@ public class EdicaoProva extends AppCompatActivity {
                             // Atualiza a data no calendário quando o usuário seleciona uma nova data
                             calendar.set(year, monthOfYear, dayOfMonth);
                             // Atualiza o texto do botão com a data selecionada
-                            data.setText(formatDate(calendar));
+                            dataAtual.setText(formatDate(calendar));
                             dataFormatada = formatDateBanco(calendar);
                         },
                         calendar.get(Calendar.YEAR),
@@ -143,27 +139,36 @@ public class EdicaoProva extends AppCompatActivity {
         proximo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String novaProva = nomeProva.getText().toString();
-                String novaTurma = turma.getSelectedItem().toString();
-                String novaData = data.getText().toString();
-                Integer novaQuestao = Integer.valueOf(questoes.getText().toString());
-                Integer novaAlternativa = Integer.valueOf(alternativas.getText().toString());
+                novaProva = nomeProva.getText().toString();
+                novaTurma = spinnerTurma.getSelectedItem().toString(); // nome da turma não tem como ser vazio!
+                id_turmaBD = bancoDados.pegaIdTurma(novaTurma);
+                novaData = dataAtual.getText().toString();
+                novaQuestao = Integer.valueOf(questoesAtuais.getText().toString());
+                novaAlternativa = Integer.valueOf(alternativas.getText().toString());
                 if(!novaProva.trim().isEmpty()){ //verifica se o campo prova esta vazio
-                    if(!novaProva.equals(prova) || !novaTurma.equals(nomeTurma) || !novaData.equals(dataCadastrada) || !novaQuestao.equals(qtdQuestoesCadastradas) || !novaAlternativa.equals(qtdAlternativasCadastradas)){
-                        id_turma = bancoDados.pegaIdTurma(novaTurma); //pega o id da turma
+                    if(!novaProva.equals(provaBD) || !novaTurma.equals(turmaBD) || !novaData.equals(dataBD) || !novaQuestao.equals(qtdQuestoesBD) || !novaAlternativa.equals(qtdAlternativasBD)){
                         if(novaQuestao.equals(0) || novaAlternativa.equals(0)){
-                            Toast.makeText(EdicaoProva.this, "Quantidade de questões e/ou alternativas, não pode ser igual a 0.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EdicaoProva.this, "Quantidade de questões e/ou alternativas, não podem ser igual a 0.", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                        intent.putExtra("id_prova", id_prova);
-                        intent.putExtra("status", true);
-                        startActivity(intent);
-                        finish();
+                        if(!novaProva.equals(provaBD) || !novaTurma.equals(turmaBD)){
+                            if(bancoDados.checkprovasNome(novaProva, id_turmaBD.toString())) {
+                                Toast.makeText(EdicaoProva.this, "Esta turma já pussui uma prova cadastrada com esse nome, " + novaProva, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                        confirmeAlteracaoDados();
                     }else{
                         Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                        intent.putExtra("id_prova", id_prova);
-                        intent.putExtra("status", false);
+                        intent.putExtra("id_prova", id_provaBD);
+                        intent.putExtra("nomeProva", novaProva);
+                        intent.putExtra("id_turma", id_turmaBD);
+                        intent.putExtra("turma", novaTurma);
+                        intent.putExtra("data", novaData);
+                        intent.putExtra("dataForm", dataFormatada);
+                        intent.putExtra("quest", novaQuestao);
+                        intent.putExtra("alter", novaAlternativa);
+                        intent.putExtra("status", true);
                         startActivity(intent);
                         finish();
                     }
@@ -188,4 +193,34 @@ public class EdicaoProva extends AppCompatActivity {
         String dataFor = itens[2]+"/"+itens[1]+"/"+itens[0];
         return dataFor;
     }
+    private void confirmeAlteracaoDados(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO")
+                .setMessage("Confirma as alterações realizadas para esta prova? ")
+                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                        intent.putExtra("id_prova", id_provaBD);
+                        intent.putExtra("nomeProva", novaProva);
+                        intent.putExtra("id_turma", id_turmaBD);
+                        intent.putExtra("turma", novaTurma);
+                        intent.putExtra("data", novaData);
+                        intent.putExtra("dataForm", dataFormatada);
+                        intent.putExtra("quest", novaQuestao);
+                        intent.putExtra("alter", novaAlternativa);
+                        intent.putExtra("status", true);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 }

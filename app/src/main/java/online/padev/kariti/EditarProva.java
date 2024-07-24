@@ -73,7 +73,6 @@ public class EditarProva extends AppCompatActivity {
         }
         provaSelecionada = (String) prova.getSelectedItem();
         id_prova = bancoDados.pegaIdProva(provaSelecionada);
-        Toast.makeText(this, "Passando aquiiiiiiii", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, EdicaoProva.class);
         intent.putExtra("prova", provaSelecionada);
         intent.putExtra("id_prova", id_prova);

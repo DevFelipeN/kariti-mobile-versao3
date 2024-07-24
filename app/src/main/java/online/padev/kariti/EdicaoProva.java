@@ -1,6 +1,7 @@
 package online.padev.kariti;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,10 +32,11 @@ public class EdicaoProva extends AppCompatActivity {
     private ImageButton menosQuestoes, maisQuestoes, menosAlternativas, maisAlternativas;
     private Button proximo, data;
     private Calendar calendar;
-    private String dataFormatada, prova, nomeTurma;
+    private String dataFormatada, dataCadastrada, prova, nomeTurma;
     private Integer id_prova, id_turma;
     private TextView titulo;
     BancoDados bancoDados;
+    private Integer qtdQuestoesCadastradas, qtdAlternativasCadastradas;
     private ArrayList<String> listTurma;
 
     @Override
@@ -58,18 +60,62 @@ public class EdicaoProva extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        id_prova = getIntent().getExtras().getInt("id_prova");
+        id_prova = Objects.requireNonNull(getIntent().getExtras()).getInt("id_prova");
         prova = getIntent().getExtras().getString("prova");
         id_turma = getIntent().getExtras().getInt("id_turma");
         nomeTurma = bancoDados.pegaNomeTurma(id_turma.toString());
+        qtdQuestoesCadastradas = bancoDados.pegaqtdQuestoes(id_prova.toString());
+        qtdAlternativasCadastradas = bancoDados.pegaqtdAlternativas(id_prova.toString());
+        dataCadastrada = bancoDados.pegaData(id_prova.toString());
+
+        this.dataCadastrada = formataDataCadastrada(dataCadastrada);
+
         nomeProva.setText(prova);
+        questoes.setText(String.valueOf(qtdQuestoesCadastradas));
+        alternativas.setText(String.valueOf(qtdAlternativasCadastradas));
+        data.setText(dataCadastrada);
 
         listTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
         listTurma.add(0, nomeTurma);
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurma);
         turma.setAdapter(adapter);
 
-
+        maisQuestoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quest = Integer.parseInt(questoes.getText().toString());
+                if(quest < 20)
+                    quest ++;
+                questoes.setText(String.valueOf(quest));
+            }
+        });
+        menosQuestoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quest = Integer.parseInt(questoes.getText().toString());
+                if(quest > 0)
+                    quest --;
+                questoes.setText(String.valueOf(quest));
+            }
+        });
+        maisAlternativas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int alter = Integer.parseInt(alternativas.getText().toString());
+                if(alter < 7)
+                    alter ++;
+                alternativas.setText(String.valueOf(alter));
+            }
+        });
+        menosAlternativas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int alter = Integer.parseInt(alternativas.getText().toString());
+                if(alter > 0)
+                    alter --;
+                alternativas.setText(String.valueOf(alter));
+            }
+        });
 
         calendar = Calendar.getInstance();
         data.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +140,38 @@ public class EdicaoProva extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+        proximo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String novaProva = nomeProva.getText().toString();
+                String novaTurma = turma.getSelectedItem().toString();
+                String novaData = data.getText().toString();
+                Integer novaQuestao = Integer.valueOf(questoes.getText().toString());
+                Integer novaAlternativa = Integer.valueOf(alternativas.getText().toString());
+                if(!novaProva.trim().isEmpty()){ //verifica se o campo prova esta vazio
+                    if(!novaProva.equals(prova) || !novaTurma.equals(nomeTurma) || !novaData.equals(dataCadastrada) || !novaQuestao.equals(qtdQuestoesCadastradas) || !novaAlternativa.equals(qtdAlternativasCadastradas)){
+                        id_turma = bancoDados.pegaIdTurma(novaTurma); //pega o id da turma
+                        if(novaQuestao.equals(0) || novaAlternativa.equals(0)){
+                            Toast.makeText(EdicaoProva.this, "Quantidade de questões e/ou alternativas, não pode ser igual a 0.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                        intent.putExtra("id_prova", id_prova);
+                        intent.putExtra("status", true);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                        intent.putExtra("id_prova", id_prova);
+                        intent.putExtra("status", false);
+                        startActivity(intent);
+                        finish();
+                    }
+                }else{
+                    Toast.makeText(EdicaoProva.this, "Informe o nome da Prova!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     private String formatDate(Calendar calendar) {
         String dateFormat = "dd/MM/yyyy";
@@ -104,5 +182,10 @@ public class EdicaoProva extends AppCompatActivity {
         String dateFormat = "yyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+    private String formataDataCadastrada(String data){
+        String[] itens = data.split("-");
+        String dataFor = itens[2]+"/"+itens[1]+"/"+itens[0];
+        return dataFor;
     }
 }

@@ -130,7 +130,7 @@ public class CadProvaActivity extends AppCompatActivity {
                                 Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else
                             Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                    }else Toast.makeText(CadProvaActivity.this, "Turma ja pussui "+prova+" cadastrada!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, "+prova, Toast.LENGTH_SHORT).show();
                 }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
             }
         });

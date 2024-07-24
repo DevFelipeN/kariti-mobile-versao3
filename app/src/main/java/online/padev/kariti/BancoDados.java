@@ -365,10 +365,10 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public String pegaData(String id_prova) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from prova where id_prova = ?", new String[]{id_prova});
+        Cursor cursor = base_dados.rawQuery("Select dataProva from prova where id_prova = ?", new String[]{id_prova});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
-        return cursor.getString(2);
+        return cursor.getString(0);
     }
     public Integer pegaIdAluno(String nomeAluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();

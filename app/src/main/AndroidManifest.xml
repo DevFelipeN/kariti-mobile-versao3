@@ -31,6 +31,9 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
         <activity
+            android:name=".Teste"
+            android:exported="false" />
+        <activity
             android:name=".EdicaoProva"
             android:exported="false" />
         <activity

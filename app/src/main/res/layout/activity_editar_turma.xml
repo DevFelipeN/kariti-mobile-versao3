@@ -42,8 +42,8 @@
 
     <EditText
         android:id="@+id/editTextEditTurma"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="239dp"
+        android:layout_height="55dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -134,8 +134,8 @@
 
             <EditText
                 android:id="@+id/editTextNovosAlunosAnonimos"
-                android:layout_width="50dp"
-                android:layout_height="35dp"
+                android:layout_width="62dp"
+                android:layout_height="47dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"

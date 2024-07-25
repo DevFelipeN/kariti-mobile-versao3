@@ -146,7 +146,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String turmaEditada = editTurma.getText().toString();
-                if(!turmaEditada.isEmpty()) {
+                if(!turmaEditada.trim().isEmpty()) {
                     Integer an = Integer.valueOf(novosAlAnonimos.getText().toString());
                     //Editar essa linha após realização de segunda fase da segunda bateria de testes
                     bancoDados.upadateTurma(turmaEditada, an, Integer.valueOf(id_turma)); //Alterando Dados da turma

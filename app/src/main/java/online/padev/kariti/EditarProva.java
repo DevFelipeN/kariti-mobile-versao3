@@ -54,7 +54,7 @@ public class EditarProva extends AppCompatActivity {
                     turmaSelecionada = turma.getSelectedItem().toString();
                     id_turma = bancoDados.pegaIdTurma(turmaSelecionada);
 
-                    lisProva = (ArrayList<String>) bancoDados.listProvasNCorrigidas(id_turma);
+                    lisProva = (ArrayList<String>) bancoDados.obterNomeProvas(id_turma.toString());
                     SpinnerAdapter adapterProva = new SpinnerAdapter(EditarProva.this, lisProva);
                     prova.setAdapter(adapterProva);
                 }
@@ -89,11 +89,15 @@ public class EditarProva extends AppCompatActivity {
         }
         provaSelecionada = (String) prova.getSelectedItem();
         Integer id_prova = bancoDados.pegaIdProva(provaSelecionada);
-        Intent intent = new Intent(this, EdicaoProva.class);
-        intent.putExtra("prova", provaSelecionada);
-        intent.putExtra("id_prova", id_prova);
-        intent.putExtra("id_turma", id_turma);
-        startActivity(intent);
+        if(bancoDados.checkCorrigida(id_prova.toString())){
+            naoEditavel();
+        }else {
+            Intent intent = new Intent(this, EdicaoProva.class);
+            intent.putExtra("prova", provaSelecionada);
+            intent.putExtra("id_prova", id_prova);
+            intent.putExtra("id_turma", id_turma);
+            startActivity(intent);
+        }
     }
     public void apagarProva(){
         if(prova.getSelectedItem() == null)
@@ -107,9 +111,7 @@ public class EditarProva extends AppCompatActivity {
             bancoDados.deletaProva(id_prova);
             provaApagada();
         }
-
     }
-
     private void deteteProva(Integer id_prova){
         bancoDados.deletaGabarito(id_prova);
         bancoDados.deletaCorrecao(id_prova);
@@ -149,7 +151,18 @@ public class EditarProva extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
+    private void naoEditavel(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO")
+                .setMessage("Esta prova já foi corrigida.\n\n" +
+                        "Não é possivel editar provas já corrigidas!")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

@@ -2,9 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="cinzaClaro">#D8A6A5A5</color>
+    <color name="cinzaClaro">#A1887F</color>
+    <color name="cinzaLabel">#8D6E63</color>
+    <color name="cinzaPlaceholder">#757575</color>
+    <color name="cinzaClaroPlace">#A1887F</color>
     <color name="tranparente">#00FAF6F6</color>
-    <color name="corLinks">#007FFF</color>
+    <color name="corLinks">#0277BD</color>
     <color name="corErroRed">#FF0000</color>
 
 <!--    Cores do Tema Escuro-->

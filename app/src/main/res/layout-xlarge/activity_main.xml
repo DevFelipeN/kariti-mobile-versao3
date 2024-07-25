@@ -9,6 +9,7 @@
     tools:context="online.padev.kariti.MainActivity">
 
     <ImageView
+        android:contentDescription="@string/imagemUser"
         android:id="@+id/imageViewPerson"
         android:layout_width="144dp"
         android:layout_height="120dp"
@@ -35,6 +36,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="60dp"
         android:layout_marginBottom="16dp"
+        android:autofillHints="name"
         android:background="@drawable/borda_botao"
         android:ems="10"
         android:hint="@string/nomeCompleto"
@@ -51,6 +53,7 @@
         android:layout_width="400dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
+        android:autofillHints="emailAddress"
         android:background="@drawable/borda_botao"
         android:ems="10"
         android:hint="@string/email"
@@ -102,15 +105,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma"
+        tools:ignore="Autofill" />
 
     <ImageButton
         android:id="@+id/imgBtnVoltaEscola"
         android:layout_width="48dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
+        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -136,6 +140,7 @@
         app:layout_constraintVertical_bias="0.213" />
 
     <ImageView
+        android:contentDescription="@string/iconeUser"
         android:id="@+id/imageView5"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -147,6 +152,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
+        android:contentDescription="@string/iconeEmail"
         android:id="@+id/imageView4"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -158,9 +164,10 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
+        android:contentDescription="@string/iconeSenhaOculta"
         android:id="@+id/imgButtonSenhaOFF"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
@@ -187,21 +194,24 @@
         android:maxLength="8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAcessoSenha" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewAcessoSenha"
+        tools:ignore="Autofill" />
 
     <ImageButton
         android:id="@+id/senhaoculta"
-        android:layout_width="43dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="5dp"
         android:background="#00FFFFFF"
+        android:contentDescription="@string/iconeSenhaOculta"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/editTextNovaSenha"
         app:layout_constraintEnd_toEndOf="@+id/editTextNovaSenha"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextNovaSenha"
         app:layout_constraintTop_toTopOf="@+id/editTextNovaSenha"
-        app:srcCompat="@mipmap/senhaoff" />
+        app:srcCompat="@mipmap/senhaoff"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

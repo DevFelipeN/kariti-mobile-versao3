@@ -9,13 +9,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.R;
 
 public class InicioActivity extends AppCompatActivity {
-    ImageButton imageButtonInicio, iconHelInicio;
+    private ImageButton imageButtonInicio, iconHelInicio;
     BancoDados bancoDados;
+    private TextView titulo;
 
     Button cadastrarEscola, visualizarEscola;
 
@@ -29,6 +31,9 @@ public class InicioActivity extends AppCompatActivity {
         visualizarEscola = findViewById(R.id.buttonVisualizarEscola);
         bancoDados = new BancoDados(this);
         iconHelInicio = findViewById(R.id.iconHelpLogout);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Início");
         /*
 
         if(!bancoDados.checkEscola("Escola Teste1")) {

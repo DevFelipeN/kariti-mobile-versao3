@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.R;
@@ -25,6 +26,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
     BancoDados bancoDados;
     VisualEscolaActivity atualiza;
     ArrayList<String> listeDesativadas;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,9 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
 
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         ListView listView = findViewById(R.id.listViewEscDesativadas);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Desativadas");
 
         bancoDados = new BancoDados(this);
         atualiza = new VisualEscolaActivity();

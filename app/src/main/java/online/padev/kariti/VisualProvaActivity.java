@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.R;
@@ -25,6 +26,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
     BancoDados bancoDados;
     ArrayList<Integer> listIdAlTurma;
     ArrayList<String> provalist, turmalist, alunolist;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,9 @@ public class    VisualProvaActivity extends AppCompatActivity {
         spinnerTurma = findViewById(R.id.spinnerTurma1);
         spinnerProva = findViewById(R.id.spinnerProva1);
         spinnerAluno = findViewById(R.id.spinnerAlunos1);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Corrigidas");
 
         bancoDados = new BancoDados(this);
 

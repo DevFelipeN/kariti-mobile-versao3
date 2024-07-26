@@ -30,6 +30,7 @@ public class DetalheCorrecao extends AppCompatActivity {
     BancoDados bancoDados;
     TextView alunoDetalhe, notaTotal;
     ArrayList<String> respostasDadas, gabarito, peso;
+    private TextView titulo;
     float nota = 0;
 
     @Override
@@ -40,7 +41,10 @@ public class DetalheCorrecao extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         alunoDetalhe  = (TextView) findViewById(R.id.textViewDetalheAluno);
         notaTotal = (TextView) findViewById(R.id.textViewNotaTotalDetalhe);
+        titulo = findViewById(R.id.toolbar_title);
         bancoDados = new BancoDados(this);
+
+        titulo.setText("Detalhes");
 
         id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         nomeAluno = bancoDados.pegaNomeParaDetalhe(id_aluno.toString());

@@ -89,7 +89,8 @@ public class BancoDados extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("id_turma", id_turma);
         contentValues.put("id_aluno", id_aluno);
-        long inserir = base_dados.insert("alunosTurma", null, contentValues);
+        base_dados.insert("alunosTurma", null, contentValues);
+        base_dados.close();
     }
     public void inserirResultCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -98,7 +99,8 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("id_aluno", id_aluno);
         contentValues.put("questao", questao);
         contentValues.put("respostaDada", respostaDada);
-        long inserir = base_dados.insert("resultadoCorrecao", null, contentValues);
+        base_dados.insert("resultadoCorrecao", null, contentValues);
+        base_dados.close();
     }
     public Integer inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -389,7 +391,7 @@ public class BancoDados extends SQLiteOpenHelper {
 
     public Integer pegaIdProva(String provacad) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from prova where nomeProva = ?", new String[]{provacad});
+        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ?", new String[]{provacad});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);

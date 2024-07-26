@@ -69,8 +69,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         border.getPaint().setStrokeWidth(1); // Largura da borda
         border.getPaint().setStyle(Paint.Style.STROKE);
 
-        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunoPorProvaCorrigida(id_prova);
-        for(int x = 0; x < listIdsAlunos.size(); x++) {
+        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunoPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
+        for(int x = 0; x < listIdsAlunos.size(); x++) { // interage sob esses alunos
             float nota = 0;
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);

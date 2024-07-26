@@ -74,11 +74,10 @@ public class UploadEjson {
                     Integer id_aluno = objJson.getInt("id_aluno");
                     String mensagem = objJson.getString("mensagem");
 
-                    //EM DESENVOLVIMENTO
-                    if(!resultCorrect.equals(0)){
-                        naoCorrigidas.add(new Integer[]{id_prova, id_aluno});//Para provas que o Kariti não conseguiu corrigir
-                    }
                     if(resultCorrect.equals(0)){
+                        if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)){
+                            //em de
+                        }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
                         mensagem = mensagem.replaceAll("\\(", "");
@@ -103,6 +102,8 @@ public class UploadEjson {
                             respostaAnterior = respostaDada;
 
                         }
+                    }else if(!bancoDados.checkCorrigida(id_prova.toString())){
+                        naoCorrigidas.add(new Integer[]{id_prova, id_aluno});
                     }
                 }
                 if(!naoCorrigidas.isEmpty()){

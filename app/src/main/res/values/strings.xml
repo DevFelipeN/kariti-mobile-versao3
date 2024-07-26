@@ -116,7 +116,7 @@
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>
     <string name="imgProfessor">Imagem Professor</string>
-    <string name="imgBtnSeta">Imagem Seta Prox</string>
+    <string name="imgBtnSeta">Icone Seta Prox</string>
     <string name="msgCodigo">Código de validação ENVIADO para</string>
     <string name="imgDelete">Botão de Deletar</string>
     <string name="txtViewNomeTurma">Nome da Turma</string>
@@ -129,10 +129,13 @@
     <string name="config">Configuração</string>
     <string name="descritionScroll">Bloco do Gabarito</string>
     <string name="iconeTurma">Icone de Turma</string>
+    <string name="iconeSearch">Icone de Pesquisa</string>
     <string name="iconeAluno">Icone de Aluno</string>
     <string name="iconeProva">Icone de Prova</string>
     <string name="iconeEmail">Icone do email</string>
     <string name="iconeUser">Icone do user</string>
+    <string name="iconeAdd">Icone de adicionar</string>
+    <string name="iconeMenos">Icone de menos</string>
     <string name="imagemUser">Imagem do user</string>
     <string name="iconeSenhaOculta">Botão de senha oculta</string>
 
@@ -143,5 +146,6 @@
     <string name="CapturaCamera">Capturar</string>
 
     <string name="testeTotalAlunos">Total de Alunos: 14</string>
+    <string name="txtAlunosAno">Total de Alunos: 14</string>
 
 </resources>

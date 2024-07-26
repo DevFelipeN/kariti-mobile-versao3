@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
@@ -38,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:ignore="Autofill" />
 
 
     <Spinner
@@ -57,7 +58,7 @@
         android:id="@+id/textViewalun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/textViewAlunos"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,11 +70,10 @@
     <ListView
         android:id="@+id/listViewCadTurma"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
         android:background="@drawable/borda_botao"
+        app:layout_constraintBottom_toTopOf="@+id/layoutIncluirAlunos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,29 +86,26 @@
         android:layout_height="60dp"
         android:text="@string/buttonCadTurma"
         android:textSize="18sp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutIncluirAlunos"
-        app:layout_constraintVertical_bias="0.388" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/layoutIncluirAlunos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listViewCadTurma">
+        app:layout_constraintBottom_toTopOf="@+id/buttonCadastrarTurma"
+        app:layout_constraintEnd_toEndOf="@+id/listViewCadTurma"
+        app:layout_constraintStart_toStartOf="@+id/listViewCadTurma">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/textViewAlunoAnonim"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -124,6 +121,7 @@
             app:layout_constraintTop_toBottomOf="@id/listViewCadTurma">
 
             <ImageView
+                android:contentDescription="@string/iconeMenos"
                 android:id="@+id/imageViewMenosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
@@ -131,19 +129,21 @@
 
             <EditText
                 android:id="@+id/editTextAlunosAnonimos"
-                android:layout_width="50dp"
-                android:layout_height="35dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/borda_botao"
                 android:ems="10"
+                android:importantForAutofill="no"
                 android:inputType="number"
-                android:text="0"
+                android:text="@string/valorZero"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
             <ImageView
+                android:contentDescription="@string/iconeAdd"
                 android:id="@+id/imageViewMaisAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"

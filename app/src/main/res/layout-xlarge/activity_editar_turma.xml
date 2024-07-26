@@ -28,7 +28,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:ignore="Autofill" />
 
     <Spinner
         android:id="@+id/spinnerBuscAlunoNovos"
@@ -43,8 +44,8 @@
     </Spinner>
 
     <TextView
-        android:layout_marginTop="15dp"
-        android:textSize="18dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
         android:id="@+id/txtVieAlunos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,31 +60,31 @@
         android:id="@+id/listViewEditarTurma"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
+        android:layout_margin="30dp"
+        android:background="@drawable/borda_botao"
+        app:layout_constraintBottom_toTopOf="@+id/layoutEditIncluirAlun"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtVieAlunos"
-        android:background="@drawable/borda_botao" />
+        app:layout_constraintTop_toBottomOf="@+id/txtVieAlunos" />
 
     <LinearLayout
         android:id="@+id/layoutEditIncluirAlun"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listViewEditarTurma">
+        app:layout_constraintBottom_toTopOf="@+id/buttonSalvarTurma"
+        app:layout_constraintEnd_toEndOf="@+id/listViewEditarTurma"
+        app:layout_constraintStart_toStartOf="@+id/listViewEditarTurma">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:text="@string/textViewAlunoAnonim"
             android:textSize="18sp"
-            android:layout_marginRight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -100,26 +101,30 @@
                 android:id="@+id/imageViewMenosNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/iconeMenos"
+                android:importantForAutofill="no"
                 app:srcCompat="@mipmap/subtract" />
 
             <EditText
                 android:id="@+id/editTextNovosAlunosAnonimos"
                 android:layout_width="120dp"
-                android:layout_height="50dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/borda_botao"
                 android:ems="10"
                 android:inputType="number"
-                android:text="0"
+                android:text="@string/valorZero"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="Autofill" />
 
             <ImageView
                 android:id="@+id/imageViewMaisNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/iconeAdd"
                 app:srcCompat="@mipmap/btnadicionar" />
         </LinearLayout>
     </LinearLayout>
@@ -129,13 +134,11 @@
         style="@style/BUTTONSTYLE"
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/buttonSalvTurma"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutEditIncluirAlun"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

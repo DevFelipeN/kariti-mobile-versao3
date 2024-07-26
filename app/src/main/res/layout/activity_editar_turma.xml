@@ -14,36 +14,10 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-<!--    <View-->
-<!--        android:id="@+id/divider4"-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="1dp"-->
-<!--        android:background="?android:attr/listDivider"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/include"-->
-<!--        tools:layout_editor_absoluteX="2dp"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/imgBtnVoltaDediturma"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:background="@color/tranparente"-->
-<!--        android:contentDescription="@string/btnVoltar"-->
-<!--        android:src="@mipmap/setaleft"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
     <EditText
         android:id="@+id/editTextEditTurma"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
@@ -54,7 +28,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:ignore="Autofill" />
 
     <Spinner
         android:id="@+id/spinnerBuscAlunoNovos"
@@ -97,21 +72,20 @@
 
     <LinearLayout
         android:id="@+id/layoutEditIncluirAlun"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/listViewEditarTurma"
+        app:layout_constraintStart_toStartOf="@+id/listViewEditarTurma"
         app:layout_constraintTop_toBottomOf="@id/listViewEditarTurma">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/textViewAlunoAnonim"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -130,26 +104,30 @@
                 android:id="@+id/imageViewMenosNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/iconeMenos"
+                android:importantForAutofill="no"
                 app:srcCompat="@mipmap/subtract" />
 
             <EditText
                 android:id="@+id/editTextNovosAlunosAnonimos"
                 android:layout_width="50dp"
-                android:layout_height="35dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/borda_botao"
                 android:ems="10"
                 android:inputType="number"
-                android:text="0"
+                android:text="@string/valorZero"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="Autofill,VisualLintBounds" />
 
             <ImageView
                 android:id="@+id/imageViewMaisNovosAnonimos"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/iconeAdd"
                 app:srcCompat="@mipmap/btnadicionar" />
         </LinearLayout>
     </LinearLayout>

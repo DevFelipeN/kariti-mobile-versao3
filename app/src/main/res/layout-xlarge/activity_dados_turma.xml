@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="@string/textViewAlunos"
         android:layout_marginTop="50dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@id/listViewDados"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/listViewDados"
@@ -52,11 +52,9 @@
         android:id="@+id/listViewDados"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="30dp"
         android:background="@drawable/borda_botao"
-        app:layout_constraintBottom_toTopOf="@+id/textViewAlunosAnonimos"
+        app:layout_constraintBottom_toTopOf="@+id/textViewqtdAnonimos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,33 +62,15 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textViewAlunosAnonimos"
+        android:id="@+id/textViewqtdAnonimos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="84dp"
-        android:text="Alunos Anônimos: "
+        android:layout_marginBottom="16dp"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/listViewDados" />
-
-    <TextView
-        android:id="@+id/textViewqtdAnonimos"
-        android:layout_width="45dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="84dp"
-        android:text="0"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewAlunosAnonimos"
-        app:layout_constraintTop_toBottomOf="@+id/listViewDados"
-        app:layout_constraintVertical_bias="1.0" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

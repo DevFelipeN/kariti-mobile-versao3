@@ -77,9 +77,9 @@ public class UploadEjson {
                     //EM DESENVOLVIMENTO
                     if(resultCorrect.equals(0)){
                         Boolean seCorrigida = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
-                        if(seCorrigida.equals(true)) {
-                            if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)) { // caso na tentativa anterior nao corrigiu apaga resultado do banco
-                                bancoDados.deletaCorrecao(id_prova);
+                        if(seCorrigida.equals(true)){
+                            if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)){ // caso na tentativa anterior não corrigiu, apaga o resultado do banco
+                                bancoDados.deletaCorrecaoPorAluno(id_prova, id_aluno);
                             }
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");

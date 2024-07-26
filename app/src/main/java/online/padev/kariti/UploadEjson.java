@@ -76,7 +76,7 @@ public class UploadEjson {
 
                     if(resultCorrect.equals(0)){
                         if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)){
-                            //em de
+                            bancoDados.deletaCorrecao(id_prova);
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");

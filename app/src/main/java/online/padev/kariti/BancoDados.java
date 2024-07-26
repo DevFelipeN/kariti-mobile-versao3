@@ -869,7 +869,6 @@ public class BancoDados extends SQLiteOpenHelper {
         return detalhes;
     }
     public List<String> respostasDadas(Integer id_prova, Integer id_aluno) {
-        String aux;
         ArrayList<String> respostasDadas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});

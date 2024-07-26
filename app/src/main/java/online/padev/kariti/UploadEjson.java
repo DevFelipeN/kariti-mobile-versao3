@@ -75,10 +75,13 @@ public class UploadEjson {
                     String mensagem = objJson.getString("mensagem");
 
                     //EM DESENVOLVIMENTO
-                    if(!resultCorrect.equals(0)){
-                        naoCorrigidas.add(new Integer[]{id_prova, id_aluno});//Para provas que o Kariti não conseguiu corrigir
-                    }
                     if(resultCorrect.equals(0)){
+                        Boolean seCorrigida = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
+                        if(seCorrigida.equals(true)) {
+                            if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)) { // caso na tentativa anterior nao corrigiu apaga resultado do banco
+                                bancoDados.deletaCorrecao(id_prova);
+                            }
+                        }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
                         mensagem = mensagem.replaceAll("\\(", "");
@@ -94,7 +97,7 @@ public class UploadEjson {
                                 String respostaDupla = (respostaAnterior.toString()) + (respostaDada.toString()); // Concatenando as duas respostas
                                 respostaDada = Integer.valueOf(respostaDupla);
                             }
-                            if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno, questao)){ //Caso prova já corregida anteriormente, realiza UPDATE
+                            if(seCorrigida.equals(true) || questao.equals(questAnterior)){ //Caso prova já corregida anteriormente, realiza UPDATE
                                 bancoDados.upadateResultadoCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }else{
                                 bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
@@ -103,6 +106,8 @@ public class UploadEjson {
                             respostaAnterior = respostaDada;
 
                         }
+                    }else if(!bancoDados.checkResultadoCorrecao(id_prova, id_aluno)){
+                        naoCorrigidas.add(new Integer[]{id_prova, id_aluno});
                     }
                 }
                 if(!naoCorrigidas.isEmpty()){

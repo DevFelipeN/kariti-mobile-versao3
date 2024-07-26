@@ -310,9 +310,9 @@ public class BancoDados extends SQLiteOpenHelper {
         else
             return false;
     }
-    public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno, Integer questao) {
+    public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
+        Cursor cursor = base_dados.rawQuery("Select id_prova from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
         if (cursor.getCount() > 0)
             return true;
         else

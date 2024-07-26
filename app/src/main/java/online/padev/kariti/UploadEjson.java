@@ -78,7 +78,7 @@ public class UploadEjson {
                         Boolean seCorrigida = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
                         if(seCorrigida.equals(true)) {
                             if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)) { // caso na tentativa anterior nao corrigiu apaga resultado do banco
-                                bancoDados.deletaCorrecao(id_prova);
+                                bancoDados.deletaCorrecaoPorAluno(id_prova, id_aluno);
                             }
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
@@ -103,7 +103,6 @@ public class UploadEjson {
                             }
                             questAnterior = questao;
                             respostaAnterior = respostaDada;
-
                         }
                     }else if(!bancoDados.checkResultadoCorrecao(id_prova, id_aluno)){
                         naoCorrigidas.add(new Integer[]{id_prova, id_aluno});

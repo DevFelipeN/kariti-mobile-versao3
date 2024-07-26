@@ -36,6 +36,7 @@ public class InicioActivity extends AppCompatActivity {
             bancoDados.inserirDadosEscola("Escola Desativada1", "centro", 0);
         }
          */
+
         iconHelInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

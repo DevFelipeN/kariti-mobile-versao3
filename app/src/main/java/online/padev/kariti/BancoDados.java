@@ -186,12 +186,13 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
     }
-    public void deletaCorrecao(Integer id_prova){
+    public void deletaCorrecaoPorAluno(Integer id_prova, Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
+            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_prova);
+            stmt.bindLong(2, id_aluno);
             stmt.executeUpdateDelete();
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
@@ -792,6 +793,7 @@ public List<Integer> listProvasPorTurma(String id_turma) {
         db.close();
         return respostasEsperadas;
     }
+
     //Restorna os dados do Gabarito
     public String detalhePorAluno(Integer id_prova, Integer id_aluno) {
         String detalhes = "";
@@ -814,10 +816,13 @@ public List<Integer> listProvasPorTurma(String id_turma) {
         Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
         if (cursor != null && cursor.moveToFirst()) {
             do {
+                String aux = "";
                 String resposta = cursor.getString(0);
-                String aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0)))-1 +'A'));
-                if(aux.equals("0"))
+                if(resposta.equals("0")) {
                     aux = " - ";
+                }else {
+                    aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
+                }
                 for(int i = 1; i < resposta.length(); i++){
                     aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i)))-1 +'A'));
                 }

@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
@@ -63,7 +63,7 @@
                 android:background="@drawable/borda_botao"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:text="Acertos"
+                android:text="@string/txtAcertos"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -72,7 +72,7 @@
                 android:background="@drawable/borda_botao"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="Nota "
+                android:text="@string/Nota"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />

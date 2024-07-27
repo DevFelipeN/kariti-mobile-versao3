@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/buttonCadProva"
-        android:layout_width="400dp"
+        android:layout_width="320dp"
         android:layout_height="60dp"
         android:layout_marginTop="250dp"
         android:background="@drawable/button_selector"
@@ -31,7 +31,7 @@
 
     <Button
         android:id="@+id/buttonGerarCatao"
-        android:layout_width="400dp"
+        android:layout_width="320dp"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/button_selector"
@@ -45,7 +45,7 @@
 
     <Button
         android:id="@+id/buttonCorrigirProva"
-        android:layout_width="400dp"
+        android:layout_width="320dp"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/button_selector"
@@ -60,7 +60,7 @@
 
     <Button
         android:id="@+id/buttonVisuProva"
-        android:layout_width="400dp"
+        android:layout_width="320dp"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/button_selector"
@@ -120,6 +120,7 @@
         app:srcCompat="@mipmap/ic_arrownext" />
 
     <ImageView
+        android:contentDescription="@string/iconeProva"
         android:id="@+id/imageView12"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -130,6 +131,7 @@
         app:srcCompat="@mipmap/prova" />
 
     <ImageView
+        android:contentDescription="@string/iconeProva"
         android:id="@+id/imageView14"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -140,6 +142,7 @@
         app:srcCompat="@mipmap/prova" />
 
     <ImageView
+        android:contentDescription="@string/iconeCorrigir"
         android:id="@+id/imageView15"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -150,6 +153,7 @@
         app:srcCompat="@mipmap/edit" />
 
     <ImageView
+        android:contentDescription="@string/iconeSearch"
         android:id="@+id/imageView13"
         android:layout_width="24dp"
         android:layout_height="24dp"

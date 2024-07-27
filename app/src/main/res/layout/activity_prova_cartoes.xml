@@ -90,6 +90,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSpinnAluno2" />
 
     <ImageView
+        android:contentDescription="@string/iconeProva"
         android:id="@+id/imageView15"
         android:layout_width="24dp"
         android:layout_height="24dp"

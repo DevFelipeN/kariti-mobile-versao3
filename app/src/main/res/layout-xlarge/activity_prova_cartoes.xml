@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
@@ -93,6 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSpinnAluno2" />
 
     <ImageView
+        android:contentDescription="@string/iconeProva"
         android:id="@+id/imageView15"
         android:layout_width="24dp"
         android:layout_height="24dp"

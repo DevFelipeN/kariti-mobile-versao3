@@ -20,7 +20,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/imageViewIcon"
-            android:text="Nome da Escola"
+            android:text="@string/nomeSchool"
             android:textSize="18sp"
             tools:ignore="NotSibling" />
 

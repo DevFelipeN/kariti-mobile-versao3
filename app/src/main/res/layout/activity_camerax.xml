@@ -28,13 +28,13 @@
     </androidx.camera.view.PreviewView>
 
     <ImageButton
+        android:contentDescription="@string/iconeCaptura"
         android:id="@+id/buttonCaptureX"
         android:layout_width="81dp"
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="30sp"
-
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_camera_24"
         style="@style/BUTTONSTYLEdark"
@@ -42,9 +42,10 @@
         app:tint="@color/white" />
 
     <ImageButton
+        android:contentDescription="@string/iconeFlash"
         android:id="@+id/buttonFlashX"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+        android:layout_width="48sp"
+        android:layout_height="48sp"
         android:layout_below="@+id/txtViewinfoCameraX"
         android:layout_alignParentEnd="true"
         android:layout_margin="20sp"
@@ -53,9 +54,10 @@
         app:tint="@color/white"/>
     
     <ImageButton
+        android:contentDescription="@string/iconeAround"
         android:id="@+id/aroundCameraX"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+        android:layout_width="48sp"
+        android:layout_height="48sp"
         android:layout_below="@id/buttonFlashX"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="20sp"

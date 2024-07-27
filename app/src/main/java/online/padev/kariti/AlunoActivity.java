@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import online.padev.kariti.R;
 
@@ -17,6 +18,7 @@ public class AlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar, iconHelpInfor;
     Button btnCadAluno, btnVisualizarAluno;
     private Toolbar toolbar;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,14 +28,11 @@ public class AlunoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         btnCadAluno = findViewById(R.id.buttonCadAluno);
         btnVisualizarAluno = findViewById(R.id.buttonVisualAluno);
-
-
-
-        /*
-        Id do AppBar
-         */
+        titulo = findViewById(R.id.toolbar_title);
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         iconHelpInfor = findViewById(R.id.iconHelp);
+
+        titulo.setText("Aluno");
 
         iconHelpInfor.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -39,9 +40,9 @@ public class GaleriaActivity extends AppCompatActivity {
     ArrayList<String> nomePhoto = new ArrayList<>();
     ArrayList<String> caminhoDaImagem = new ArrayList<>();
     ArrayList<String> dataImg = new ArrayList<>();
-    ArrayList<byte[]> photoTelaAnterior = new ArrayList<>();
     RecyclerView.Adapter adapter;
     String nomeCartao;
+    private TextView titulo;
     BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +55,14 @@ public class GaleriaActivity extends AppCompatActivity {
             return insets;
         });
         btnVoltar = findViewById(R.id.imgBtnVoltar);
+        titulo = findViewById(R.id.toolbar_title);
         btnFinalizar = findViewById(R.id.buttonFinalizar);
         btnAdcionarFoto = findViewById(R.id.buttonAdicionarFoto);
         bancoDados = new BancoDados(this);
+
+        titulo.setText("Correção");
+
+
 
         nomeCartao = getIntent().getExtras().getString("nomeImagem") ;
         if(!listCartoes.contains(nomeCartao))
@@ -125,8 +131,6 @@ public class GaleriaActivity extends AppCompatActivity {
             }
         }
     }
-
-
     public void telaProva(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Provas enviadas para correção!")

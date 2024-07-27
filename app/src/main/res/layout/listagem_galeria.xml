@@ -16,6 +16,7 @@
         android:layout_marginStart="10dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 <!--100-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +31,7 @@
         <TextView
             android:id="@+id/nomeDaFoto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:text="@string/txtExemplo"
             android:textColor="@color/white"
@@ -40,7 +41,7 @@
         <TextView
             android:id="@+id/dataDafoto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:text="@string/txtExemplo"
             android:textColor="@color/white"

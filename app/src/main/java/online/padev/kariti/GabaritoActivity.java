@@ -39,7 +39,9 @@ public class GabaritoActivity extends AppCompatActivity {
     Map<String, Object> info;
     LinearLayout layoutHorizontal;
     String prova, turma, data, dataForm;
-    Integer id_turma, id_prova, quest, alter, totNota;
+    Integer id_turma, id_prova, quest, alter;
+    private Boolean status;
+    private TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,9 @@ public class GabaritoActivity extends AppCompatActivity {
 
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconHelpGabarito = findViewById(R.id.iconHelp);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Gabarito");
 
         cadProva = findViewById(R.id.btnCadProva);
         nProva = findViewById(R.id.textViewProva);
@@ -61,7 +66,10 @@ public class GabaritoActivity extends AppCompatActivity {
         HashMap<Integer, Integer> alternativasEscolhidas = new HashMap<>();
 
         prova = Objects.requireNonNull(getIntent().getExtras()).getString("nomeProva");
+        id_prova = getIntent().getExtras().getInt("id_prova");
+        status = getIntent().getExtras().getBoolean("status");
         turma = getIntent().getExtras().getString("turma");
+        id_turma = getIntent().getExtras().getInt("id_turma");
         data = getIntent().getExtras().getString("data");
         dataForm = getIntent().getExtras().getString("dataForm");
         quest = getIntent().getExtras().getInt("quest");
@@ -69,6 +77,10 @@ public class GabaritoActivity extends AppCompatActivity {
         nProva.setText(String.format("Prova: %s", prova));
         nturma.setText(String.format("Turma: %s", turma));
         ndata.setText(String.format("Data: %s", data));
+
+        if(status.equals(true)){
+            cadProva.setText("Salvar");
+        }
 
         iconHelpGabarito.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,13 +115,17 @@ public class GabaritoActivity extends AppCompatActivity {
                     }
                 }
                 if (respostaSelecionada && respostasNotasPreenchidas) {
-                    id_turma = bancoDados.pegaIdTurma(turma);
-                    id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
-                    ArrayList<Double> nPquest = (ArrayList<Double>)info.get("notaQuest");
+                    if(status.equals(false)) {
+                        id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
+                    }else{
+                        bancoDados.upadateProva(id_prova, prova, dataForm, id_turma, quest, alter);
+                        bancoDados.deletaGabarito(id_prova);
+                    }
+                    ArrayList<Double> nPquest = (ArrayList<Double>) info.get("notaQuest");
                     if(!nPquest.isEmpty() && !id_prova.equals(null)){
-                        for(int i = 0; i < quest; i++){
-                            Integer resp = alternativasEscolhidas.get(i);
-                            bancoDados.inserirGabarito(id_prova, i+1, resp+1, nPquest.get(i));
+                        for(int i = 1; i <= quest; i++){
+                            Integer resp = alternativasEscolhidas.get(i-1);
+                            bancoDados.inserirGabarito(id_prova, i, resp, nPquest.get(i-1));
                         }
                         dialogProvaSucess();
                     }

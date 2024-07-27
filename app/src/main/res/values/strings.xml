@@ -66,6 +66,11 @@
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
     <string name="textViewProva">Prova</string>
+    <string name="textViewEditProva">Mais Opções </string>
+    <string name="buttonEditar">Editar </string>
+    <string name="buttonProximo">Proximo >> </string>
+    <string name="buttonApagar">Apagar </string>
+    <string name="textInstrucao">Aqui você pode editar ou apagar uma prova!</string>
     <string name="buttonCadAluno">Cadastrar Aluno</string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
@@ -86,7 +91,7 @@
     <!--    Prova-->
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
-    <string name="buttonVisuProva">Provas Corrigidas</string>
+    <string name="buttonVisuProva">Visualizar Correção</string>
     <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
     <string name="editTextNomeProva">Digite o nome  da prova*</string>
@@ -149,7 +154,7 @@
     <string name="iconeCaptura">Icone de captura</string>
     <string name="iconeAround">Icone de rotacionar câmera</string>
 
-    <string name="btnGaleriaFinalizar">Finalizar</string>
+    <string name="btnGaleriaFinalizar">Finalizar e Corrigir</string>
 
     <!--    Camera-->
     <string name="informacaoCamera">Agora tire a foto do Gabarito</string>

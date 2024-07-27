@@ -43,10 +43,11 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ArrayList<String> listAlunos, respostasDadas, respostasEsperadas, notasQuestoes;
     ArrayList<Integer> listIdsAlunos, listQuestoes;
     BancoDados bancoDados;
-    Integer id_prova;
+    Integer id_prova, qtdQuestoes;
     String prova, turma;
     TextView provaResult;
     List<String[]> dadosProvaCorrigida;
+    private TextView titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,33 +57,36 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltar);
         btnBaixar = findViewById(R.id.buttonBaixarResultado);
         provaResult = findViewById(R.id.textViewProvaResult);
+        titulo = findViewById(R.id.toolbar_title);
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
+
+        titulo.setText("Resultado");
 
         prova = Objects.requireNonNull(getIntent().getExtras()).getString("prova");
         id_prova = getIntent().getExtras().getInt("id_prova");
         turma = Objects.requireNonNull(getIntent().getExtras()).getString("turma");
         provaResult.setText(prova);
 
+        qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
+
         ShapeDrawable border = new ShapeDrawable(new RectShape());
         border.getPaint().setColor(0xFF000000); // Cor da borda
         border.getPaint().setStrokeWidth(1); // Largura da borda
         border.getPaint().setStyle(Paint.Style.STROKE);
 
-        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunoPorProvaCorrigida(id_prova);
-        for(int x = 0; x < listIdsAlunos.size(); x++) {
+        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunoPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
+        for(int x = 0; x < listIdsAlunos.size(); x++) { // interage sob esses alunos
             float nota = 0;
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);
             Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
             if(!situacao.equals(-1)) {
-                listQuestoes = (ArrayList<Integer>) bancoDados.listQuestoes(id_prova, id_aluno);
-                for (int i = 0; i < listQuestoes.size(); i++) {
-                    Integer questao = listQuestoes.get(i);
-                    Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, questao);
-                    Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, questao);
+                for (int i = 1; i <= qtdQuestoes; i++) {
+                    Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
+                    Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, i);
                     if (respostaDada.equals(respostaGabarito)) {
-                        nota += bancoDados.pegaNotaQuestao(id_prova, questao);
+                        nota += bancoDados.pegaNotaQuestao(id_prova, i);
                         acertos += 1;
                     }
                 }
@@ -99,7 +103,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
             // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            cell1.setText(String.format("  %s", bancoDados.pegaAlunoProvaCorrigida(id_aluno)));
+            String nomeAluno = editaNomeAluno(bancoDados.pegaAlunoProvaCorrigida(id_aluno));
+            cell1.setText(String.format("  %s", nomeAluno));
             //cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
 
@@ -158,7 +163,6 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dadosProvaCorrigida = new ArrayList<>();
                 String prof = bancoDados.pegaUsuario(BancoDados.USER_ID.toString());
-                Integer qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
                 String qtdAlternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova.toString()));
                 String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
                 String dataProva = bancoDados.pegaData(id_prova.toString());
@@ -204,6 +208,15 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+    private String editaNomeAluno(String aluno){
+        String[] separa = aluno.trim().split("\\s+");
+        //String novoNome = "";
+        if(separa.length > 2) {
+            return separa[0] + " " + separa[1];
+        }else{
+            return aluno;
+        }
     }
     private boolean isOnline(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

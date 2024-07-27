@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         gerarCodigo = new GerarCodigoValidacao();
         codSenhaActivity = new CodSenhaActivity();
 
-        email.setText("clickfelipeweb@gmail.com");
-        password.setText("123");
+        //email.setText("clickfelipeweb@gmail.com");
+        //password.setText("123");
 
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -32,6 +32,7 @@ public class CadProvaActivity extends AppCompatActivity {
     ImageButton voltar, questMenos, questMais, altMais, altMenos;
     String dataform;
     Integer id_turma;
+    private  TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,9 @@ public class CadProvaActivity extends AppCompatActivity {
         altMenos = findViewById(R.id.imgBtnMenoAlter);
         spinnerTurma = findViewById(R.id.spinnerTurmaPprova);
         bancoDados = new BancoDados(this);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText("Nova Prova");
 
         listTurmaEmProva = (ArrayList<String>) bancoDados.obterNomeTurmas();
         listTurmaEmProva.add(0, "Selecione a Turma");
@@ -116,17 +120,19 @@ public class CadProvaActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
                                 intent.putExtra("nomeProva", prova);
                                 intent.putExtra("turma", turma);
+                                intent.putExtra("id_turma", id_turma);
                                 intent.putExtra("data", data);
                                 intent.putExtra("dataForm", dataform);
                                 intent.putExtra("quest", quest);
                                 intent.putExtra("alter", alter);
+                                intent.putExtra("status", false);
                                 startActivity(intent);
                                 finish();
                             }else
                                 Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                         }else
                             Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                    }else Toast.makeText(CadProvaActivity.this, "Turma ja pussui "+prova+" cadastrada!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, "+prova, Toast.LENGTH_SHORT).show();
                 }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -170,5 +176,11 @@ public class CadProvaActivity extends AppCompatActivity {
         String dateFormat = "yyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

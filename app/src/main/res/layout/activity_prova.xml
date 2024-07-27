@@ -18,7 +18,7 @@
         android:id="@+id/buttonCadProva"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="92dp"
         android:background="@drawable/button_selector"
         android:padding="5dp"
         android:text="@string/buttonCadProva"
@@ -77,6 +77,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCorrigirProva"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/buttonEdicaoProva"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/textViewEditProva"
+        android:textColor="@color/cinzaClaro"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonVisuProva"
+        app:layout_constraintVertical_bias="0.015" />
 
     <ImageView
         android:id="@+id/imageView8"

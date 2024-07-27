@@ -41,11 +41,13 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="0"
+            android:hint="@string/valorZero"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="34sp" />
+            android:textColorHint="@color/cinzaClaroPlace"
+            android:textSize="34sp"
+            tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
 
         <EditText
             android:id="@+id/editTextNumber2"
@@ -53,11 +55,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:ems="10"
-            android:hint="0"
+            android:hint="@string/valorZero"
+            android:textColorHint="@color/cinzaClaroPlace"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/editTextNumber3"
@@ -65,11 +69,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:ems="10"
-            android:hint="0"
+            android:textColorHint="@color/cinzaClaroPlace"
+            android:hint="@string/valorZero"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/editTextNumber4"
@@ -77,11 +83,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:ems="10"
-            android:hint="0"
+            android:textColorHint="@color/cinzaClaroPlace"
+            android:hint="@string/valorZero"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            tools:ignore="Autofill" />
 
     </LinearLayout>
 

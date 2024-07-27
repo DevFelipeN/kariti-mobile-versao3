@@ -46,7 +46,8 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="Digite o nome da prova*"
+        android:hint="@string/editTextNomeProva"
+        android:importantForAutofill="no"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +83,7 @@
         android:id="@+id/datePickerButton"
         style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="36dp"
@@ -120,10 +121,12 @@
 
         <ImageButton
             android:id="@+id/imageButtonMenosQuest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@color/tranparente"
+            android:contentDescription="@string/iconeMenos"
             app:srcCompat="@mipmap/subtract"
+            tools:ignore="DuplicateSpeakableTextCheck"
             tools:layout_editor_absoluteX="133dp"
             tools:layout_editor_absoluteY="332dp" />
 
@@ -139,10 +142,12 @@
 
         <ImageButton
             android:id="@+id/imageButtonMaisQuest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@color/tranparente"
+            android:contentDescription="@string/iconeAdd"
             app:srcCompat="@mipmap/btnadicionar"
+            tools:ignore="DuplicateSpeakableTextCheck"
             tools:layout_editor_absoluteX="86dp"
             tools:layout_editor_absoluteY="267dp" />
     </LinearLayout>
@@ -175,9 +180,10 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageButton
+            android:contentDescription="@string/iconeMenos"
             android:id="@+id/imgBtnMenoAlter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@color/tranparente"
             app:srcCompat="@mipmap/subtract"
             tools:layout_editor_absoluteX="133dp"
@@ -194,9 +200,10 @@
             android:textSize="20sp" />
 
         <ImageButton
+            android:contentDescription="@string/iconeAdd"
             android:id="@+id/imgBtnMaisAlter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@color/tranparente"
             app:srcCompat="@mipmap/btnadicionar"
             tools:layout_editor_absoluteX="86dp"

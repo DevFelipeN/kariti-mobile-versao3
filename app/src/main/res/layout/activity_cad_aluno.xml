@@ -9,10 +9,10 @@
     <ImageButton
         android:id="@+id/imgBtnVoltaEscola"
         android:layout_width="48dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
+        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,11 +49,12 @@
     <EditText
         android:id="@+id/editTextAlunoCad"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
         android:hint="@string/nomeCompleto"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -65,11 +66,12 @@
     <EditText
         android:id="@+id/editTextEmailCad"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="E-mail"
+        android:hint="@string/emailNoRequired"
+        android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -96,6 +98,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
+        android:contentDescription="@string/iconeUser"
         android:id="@+id/imageView5"
         android:layout_width="30dp"
         android:layout_height="30dp"

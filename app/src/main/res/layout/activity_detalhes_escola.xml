@@ -7,9 +7,9 @@
     tools:context="online.padev.kariti.DetalhesEscolaActivity">
 
     <GridLayout
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
+        android:layout_margin="20dp"
         android:columnCount="2"
         android:rowCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,6 +19,7 @@
         app:layout_constraintVertical_bias="0.22000003">
 
         <ImageView
+            android:contentDescription="@string/iconeAluno"
             android:id="@+id/imageButton9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,6 +35,7 @@
             android:textSize="16sp" />
 
         <ImageView
+            android:contentDescription="@string/iconeTurma"
             android:id="@+id/imageButton6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,6 +56,7 @@
             app:layout_constraintTop_toBottomOf="@+id/buttonAluno" />
 
         <ImageView
+            android:contentDescription="@string/iconeProva"
             android:id="@+id/imageButton8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,7 +72,7 @@
             android:id="@+id/btnProva"
             style="@style/BUTTONSTYLE"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="70dp"
             android:text="@string/textViewProva"
@@ -88,7 +91,7 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:padding="8dp"
-        android:text="Escola Teste"
+        android:text="@string/escolaTeste"
         android:textAlignment="center"
         android:textColor="@color/cinzaClaro"
         android:textSize="24sp"
@@ -103,11 +106,9 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
+        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola"

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="online.padev.kariti.VisualAlunoActivity">
+    tools:context="online.padev.kariti.VisualAlunoActivity"
+    tools:ignore="VisualLintBounds">
 
     <include
         android:id="@+id/include"
@@ -25,7 +26,7 @@
 
     <EditText
         android:id="@+id/editTextBuscar"
-        android:layout_width="600dp"
+        android:layout_width="488dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:autofillHints=""
@@ -37,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -69,13 +71,13 @@
         android:id="@+id/totalAlunos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total de Alunos: 14"
+        android:text="@string/testeTotalAlunos"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/listSelecAluno"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/listSelecAluno" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

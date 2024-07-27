@@ -23,13 +23,14 @@
             <!-- Título da ActionBar -->
             <ImageButton
                 android:id="@+id/imageButtonInicio"
-                android:layout_width="56dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="@color/tranparente"
                 android:contentDescription="@string/btnVoltar"
                 android:textColor="@android:color/black"
                 app:showAsAction="always"
-                app:srcCompat="@drawable/baseline_exit_to_app_24" />
+                app:srcCompat="@drawable/baseline_exit_to_app_24"
+                android:contentDescription="@string/iconeVoltar" />
 
 <!--             Título da ActionBar -->
 

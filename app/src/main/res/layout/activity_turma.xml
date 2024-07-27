@@ -45,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonCadAluno" />
 
     <ImageView
+        android:contentDescription="@string/imgBtnSeta"
         android:id="@+id/imageView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,6 +56,7 @@
         app:srcCompat="@mipmap/ic_arrownext" />
 
     <ImageView
+        android:contentDescription="@string/imgBtnSeta"
         android:id="@+id/imageView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,6 +68,7 @@
         app:srcCompat="@mipmap/ic_arrownext" />
 
     <ImageView
+        android:contentDescription="@string/iconeTurma"
         android:id="@+id/imageView12"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -76,6 +79,7 @@
         app:srcCompat="@mipmap/student" />
 
     <ImageView
+        android:contentDescription="@string/iconeSearch"
         android:id="@+id/imageView13"
         android:layout_width="24dp"
         android:layout_height="24dp"

@@ -66,10 +66,10 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="0dp"
         android:layout_margin="50dp"
-
         android:contentDescription="@string/descritionScroll"
+        app:layout_constraintBottom_toTopOf="@+id/txtViewNotaProva"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
 
                 <LinearLayout
                     android:id="@+id/layoutHorizontalAlternat"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"></LinearLayout>
             </HorizontalScrollView>
@@ -99,13 +99,13 @@
         android:id="@+id/txtViewNotaProva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/txtViewNotaT"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnCadProva"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
         android:id="@+id/btnCadProva"
@@ -113,11 +113,10 @@
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:text="@string/buttonCadProva"
-        android:layout_marginTop="30dp"
+        android:layout_margin="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewNotaProva"
         app:layout_constraintVertical_bias="0.072" />
 
 

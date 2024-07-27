@@ -15,11 +15,12 @@
 
         <ImageButton
             android:id="@+id/imgBtnVoltaDescola"
-            android:layout_width="66dp"
-            android:layout_height="52dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@color/tranparente"
             android:contentDescription="@string/btnVoltar"
             android:src="@mipmap/setaleft"
+            android:contentDescription="@string/iconeVoltar"/>
             android:textColor="@android:color/black" />
 
         <TextView

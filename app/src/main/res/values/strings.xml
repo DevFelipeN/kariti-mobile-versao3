@@ -3,6 +3,7 @@
     <string name="buttonvoltarTela">VOLTAR</string>
     <string name="nomeCompleto">Nome Completo*</string>
     <string name="email">E-mail*</string>
+    <string name="emailNoRequired">E-mail</string>
     <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>
     <string name="Acerto">Acerto </string>
@@ -17,10 +18,13 @@
     <string name="Detalhes">Detalhes</string>
     <string name="cpf">CPF</string>
     <string name="acessoSenha">Digite sua senha</string>
+    <string name="novaSenha">Nova senha</string>
+    <string name="informeNovaSenha">Informe a nova senha</string>
     <string name="repetirSenha">Repita a senha</string>
     <string name="textViewsenha">Senha de Acesso</string>
     <string name="textViewconfirmar">Confirmar Senha</string>
     <string name="buttonCadastrar">Cadastrar</string>
+    <string name="criaConta">Criar conta</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -45,16 +49,19 @@
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="voidSchool">Nenhum Dado Cadastrado!</string>
-
+    <string name="valorZero">0</string>
+    <!--Escola-->
     <string name="buttonCadastroEscola">Cadastrar Escola</string>
     <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
     <string name="nomeSchool">Nome da Escola*</string>
     <string name="bairroSchool">Bairro</string>
-    <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="senhahint">********</string>
     <string name="btnAlterarSenha">Alterar Senha</string>
+    <string name="selecionarEsc">Selecionar Escola</string>
     <string name="btnEscolaDesativada">Escolas Desativadas</string>
+    <string name="escolaTeste">Esola Teste</string>
     <!--    Aluno-->
+    <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="textViewAluno"> Aluno</string>
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
@@ -87,7 +94,7 @@
     <string name="buttonVisuProva">Visualizar Correção</string>
     <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
-    <string name="editTextNomeProva">Digite o nome  da Prova</string>
+    <string name="editTextNomeProva">Digite o nome  da prova*</string>
     <string name="textViewDataProva">Data da Prova</string>
     <string name="textViewQuantQuestoes">Quant. de Questões</string>
     <string name="textViewQuantAltern">Quant. de Alternativas</string>
@@ -110,27 +117,51 @@
     <string name="btnEnviarParaProf">Enviar Para Professor</string>
     <string name="btnBaixarProva">Baixar Resultado</string>
     <string name="btnCompartilhar">Compartilhar</string>
+    <string name="txtAcertos">Acertos</string>
     <!--    Descrição das Imagens-->
+    <string name="dialogImage">Dialog Imagem</string>
     <string name="btnVoltar">Button Voltar</string>
+    <string name="iconeVoltar">Botão de Voltar</string>
     <string name="btnHome">Button Home</string>
     <string name="btnMenuPontos">Button Menu</string>
-    <string name="imgProfessor">ImagemProfessor</string>
-    <string name="imgBtnSeta">ImagemSetaProx</string>
+    <string name="iconeMenuPontos">Icone de Menu</string>
+    <string name="imgProfessor">Imagem Professor</string>
+    <string name="imgBtnSeta">Icone Seta Prox</string>
     <string name="msgCodigo">Código de validação ENVIADO para</string>
     <string name="imgDelete">Botão de Deletar</string>
     <string name="txtViewNomeTurma">Nome da Turma</string>
     <string name="btnFlutuante">Adicionar Fotos</string>
     <string name="textAjuda">Ajuda</string>
-
+    <string name="imgEscolaSelec">Imagem Chapeu formatura</string>
+    <string name="imgEscolaCad">Imagem de Escola</string>
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>
-
+    <string name="config">Configuração</string>
     <string name="descritionScroll">Bloco do Gabarito</string>
+    <string name="iconeTurma">Icone de Turma</string>
+    <string name="iconeSearch">Icone de Pesquisa</string>
+    <string name="iconeAluno">Icone de Aluno</string>
+    <string name="iconeProva">Icone de Prova</string>
+    <string name="iconeEmail">Icone do email</string>
+    <string name="iconeUser">Icone do user</string>
+    <string name="iconeAdd">Icone de adicionar</string>
+    <string name="iconeCorrigir">Icone de corrigir</string>
+    <string name="iconeMenos">Icone de menos</string>
+    <string name="imagemUser">Imagem do user</string>
+    <string name="iconeSenhaOculta">Botão de senha oculta</string>
+    <string name="iconeLixeira">Icone de lixeira</string>
+    <string name="iconeFlash">Icone de flash da camera</string>
+    <string name="iconeCaptura">Icone de captura</string>
+    <string name="iconeAround">Icone de rotacionar câmera</string>
 
     <string name="btnGaleriaFinalizar">Finalizar e Corrigir</string>
 
     <!--    Camera-->
     <string name="informacaoCamera">Agora tire a foto do Gabarito</string>
     <string name="CapturaCamera">Capturar</string>
+
+    <string name="testeTotalAlunos">Total de Alunos: 14</string>
+    <string name="txtAlunosAno">Total de Alunos: 14</string>
+    <string name="txtExemplo">Texto de exemplo</string>
 
 </resources>

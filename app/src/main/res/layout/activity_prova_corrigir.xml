@@ -23,32 +23,12 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imgBtnVoltarDacorrecao"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:background="@color/tranparente"-->
-<!--        android:contentDescription="@string/btnVoltar"-->
-<!--        android:src="@mipmap/setaleft"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-<!--        app:layout_constraintVertical_bias="0.012"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
     <Button
         android:id="@+id/buttonCamera"
         style="@style/BUTTONSTYLE"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
         android:text="@string/btnAbrirCamera"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -10,10 +10,10 @@
     <ImageButton
         android:id="@+id/imgBtnVoltaAttSenha"
         android:layout_width="48dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
+        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,6 +25,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
+        android:contentDescription="@string/imagemUser"
         android:id="@+id/imageViewPerson"
         android:layout_width="144dp"
         android:layout_height="120dp"
@@ -47,6 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPerson" />
 
     <EditText
+        android:autofillHints="name"
         android:id="@+id/editTextAttSenha"
         android:layout_width="400dp"
         android:layout_height="50dp"
@@ -66,6 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
+        android:autofillHints="emailAddress"
         android:id="@+id/editTextEmailAttSenha"
         android:layout_width="400dp"
         android:layout_height="50dp"
@@ -100,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="Nova Senha"
+        android:text="@string/novaSenha"
         android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -123,7 +126,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewSenhaConfirma"
+        tools:ignore="Autofill" />
 
     <Button
         android:id="@+id/buttonAttSenha"
@@ -140,9 +144,10 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextConfirmAttSenha" />
 
     <ImageButton
+        android:contentDescription="@string/iconeSenhaOculta"
         android:id="@+id/imgButtonSenhaOFF"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
@@ -162,7 +167,7 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="Informe a nova senha"
+        android:hint="@string/informeNovaSenha"
         android:inputType="textPassword"
         android:maxLength="8"
         android:textAlignment="center"
@@ -170,13 +175,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAcessoSenha" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewAcessoSenha"
+        tools:ignore="Autofill" />
 
     <ImageButton
         android:id="@+id/senhaoculta"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="#00FFFFFF"
+        android:contentDescription="@string/iconeSenhaOculta"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/editTextNovaAttSenha"
         app:layout_constraintEnd_toEndOf="@+id/editTextNovaAttSenha"
@@ -184,6 +191,6 @@
         app:layout_constraintStart_toStartOf="@+id/editTextNovaAttSenha"
         app:layout_constraintTop_toTopOf="@+id/editTextNovaAttSenha"
         app:srcCompat="@mipmap/senhaoff"
-        tools:ignore="UnknownId" />
+        tools:ignore="UnknownId,DuplicateSpeakableTextCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

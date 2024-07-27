@@ -26,6 +26,7 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:contentDescription="@string/imgEscolaCad"
             android:id="@+id/imageButton3"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -59,6 +60,7 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:contentDescription="@string/imgEscolaSelec"
             android:id="@+id/imageButton4"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -71,7 +73,7 @@
             style="@style/BUTTONSTYLE"
             android:layout_width="250dp"
             android:layout_height="60dp"
-            android:text="Selecionar Escola"
+            android:text="@string/selecionarEsc"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -86,6 +88,7 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:contentDescription="@string/config"
             android:id="@+id/imageButton2"
             android:layout_width="50dp"
             android:layout_height="50dp"

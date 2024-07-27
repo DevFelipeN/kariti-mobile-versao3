@@ -143,6 +143,7 @@
         app:srcCompat="@mipmap/ic_arrownext" />
 
     <ImageView
+        android:contentDescription="@string/iconeProva"
         android:id="@+id/imageView12"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -153,6 +154,7 @@
         app:srcCompat="@mipmap/prova" />
 
     <ImageView
+        android:contentDescription="@string/iconeProva"
         android:id="@+id/imageView14"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -163,6 +165,7 @@
         app:srcCompat="@mipmap/prova" />
 
     <ImageView
+        android:contentDescription="@string/iconeCorrigir"
         android:id="@+id/imageView15"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -173,6 +176,7 @@
         app:srcCompat="@mipmap/edit" />
 
     <ImageView
+        android:contentDescription="@string/iconeSearch"
         android:id="@+id/imageView13"
         android:layout_width="24dp"
         android:layout_height="24dp"

@@ -21,7 +21,7 @@
             android:layout_width="64dp"
             android:layout_height="49dp"
             android:background="@color/tranparente"
-            android:contentDescription="@string/btnVoltar"
+            android:contentDescription="@string/iconeVoltar"
             android:src="@mipmap/setaleft"
             android:textColor="@android:color/black" />
 

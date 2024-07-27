@@ -144,6 +144,7 @@
     <string name="iconeMenos">Icone de menos</string>
     <string name="imagemUser">Imagem do user</string>
     <string name="iconeSenhaOculta">Botão de senha oculta</string>
+    <string name="iconeLixeira">Icone de lixeira</string>
     <string name="iconeFlash">Icone de flash da camera</string>
     <string name="iconeCaptura">Icone de captura</string>
     <string name="iconeAround">Icone de rotacionar câmera</string>
@@ -156,5 +157,6 @@
 
     <string name="testeTotalAlunos">Total de Alunos: 14</string>
     <string name="txtAlunosAno">Total de Alunos: 14</string>
+    <string name="txtExemplo">Texto de exemplo</string>
 
 </resources>

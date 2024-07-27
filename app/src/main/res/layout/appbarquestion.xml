@@ -18,10 +18,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@color/tranparente"
-            android:contentDescription="@string/btnVoltar"
             android:src="@mipmap/setaleft"
             android:contentDescription="@string/iconeVoltar"/>
-            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -29,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:hint="Kariti"
+            android:hint="@string/app_name"
+            android:textColorHint="@color/cinzaClaro"
             android:hyphenationFrequency="none"
             android:textAlignment="center"
             android:textColor="@color/black"

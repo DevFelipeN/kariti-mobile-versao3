@@ -23,22 +23,6 @@
         tools:layout_editor_absoluteX="2dp"
         tools:ignore="MissingConstraints" />
 
-    <!--    <ImageButton-->
-    <!--        android:id="@+id/imgBtnVoltar"-->
-    <!--        android:layout_width="48dp"-->
-    <!--        android:layout_height="40dp"-->
-    <!--        android:layout_marginStart="5dp"-->
-    <!--        android:background="@color/tranparente"-->
-    <!--        android:contentDescription="@string/btnVoltar"-->
-    <!--        android:src="@mipmap/setaleft"-->
-    <!--        android:textColor="@android:color/black"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.0"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider4"-->
-    <!--        app:layout_constraintVertical_bias="0.0"/>-->
-
     <EditText
         android:id="@+id/EdicaoProva"
         android:layout_width="320dp"
@@ -46,7 +30,7 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
-        android:hint="Digite o nome da prova*"
+        android:hint="@string/editTextNomeProva"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"

@@ -8,12 +8,12 @@
     tools:context="online.padev.kariti.AtualizarSenha">
 
     <ImageButton
+        android:contentDescription="@string/iconeVoltar"
         android:id="@+id/imgBtnVoltaAttSenha"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:background="@color/tranparente"
-        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,8 +21,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.023"/>
 
     <ImageView
         android:contentDescription="@string/imagemUser"

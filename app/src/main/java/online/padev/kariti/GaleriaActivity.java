@@ -138,7 +138,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), ProvaActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
                         startActivity(intent);
                         finish();
                     }

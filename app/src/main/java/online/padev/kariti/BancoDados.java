@@ -219,7 +219,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public void deletaCorrecaoPorAluno(Integer id_prova, Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
+            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? and id_aluno";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_prova);
             stmt.bindLong(2, id_aluno);

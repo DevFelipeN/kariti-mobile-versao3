@@ -1,6 +1,7 @@
 package online.padev.kariti;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.Camera;
@@ -205,6 +207,37 @@ public class CameraxActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         executorService.shutdown(); // Encerrar o executor quando a atividade for destruída
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(Compactador.listCartoes.isEmpty()){
+            super.onBackPressed();
+            finish();
+        }else{
+            avidoDeCancelamento();
+        }
+    }
+    public void avidoDeCancelamento(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO!")
+                .setMessage("Caso confirme essa ação, o processo de correção em andamento, será cancelado!\n\n" +
+                        "Deseja realmente voltar")
+                .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Compactador.listCartoes.clear();
+                        onBackPressed();
+                        finish();
+                    }
+                })
+                .setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Código para lidar com o clique no botão Cancelar, se necessário
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
 

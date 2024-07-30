@@ -44,8 +44,12 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Compactador.listCartoes.clear();
-                onBackPressed();
+                if(Compactador.listCartoes.isEmpty()){
+                    onBackPressed();
+                    finish();
+                }else{
+                    avidoDeCancelamento();
+                }
             }
         });
     }
@@ -94,7 +98,32 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         });
     }
     public void onBackPressed() {
-        Compactador.listCartoes.clear();
-        super.onBackPressed();
+        if(Compactador.listCartoes.isEmpty()){
+            super.onBackPressed();
+            finish();
+        }else{
+            avidoDeCancelamento();
+        }
+    }
+    public void avidoDeCancelamento(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO!")
+                .setMessage("Caso confirme essa ação, o processo de correção em andamento, será cancelado!\n\n" +
+                    "Deseja realmente voltar")
+                .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Compactador.listCartoes.clear();
+                        onBackPressed();
+                        finish();
+                    }
+                })
+                .setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Código para lidar com o clique no botão Cancelar, se necessário
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

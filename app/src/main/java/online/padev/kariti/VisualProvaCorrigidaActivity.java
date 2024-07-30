@@ -213,7 +213,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         String[] separa = aluno.trim().split("\\s+");
         //String novoNome = "";
         if(separa.length > 2) {
-            return separa[0] + " " + separa[1];
+            return separa[0] + " " + separa[separa.length - 1];
         }else{
             return aluno;
         }
@@ -236,7 +236,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         });
     }
     public void carregaGabarito(){
-        String gabarito = bancoDados.mostraGabarito(id_prova);
+        String gabarito = bancoDados.mostraGabaritoInt(id_prova);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Gabarito");
         builder.setMessage(gabarito);
@@ -256,6 +256,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 "• Cartão resposta não estava visível totalmente na imagem\n\n" +
                 "• Ambiente com pouca luminosidade\n\n" +
                 "• imagem ofuscada\n\n" +
+                "• Cartão resposta Rasurado\n\n" +
                 "Para ter melhor resultado na correção é essencial que sejam seguidas as orientações destacadas na fase de correção!");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

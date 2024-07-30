@@ -118,7 +118,7 @@ public class UploadEjson {
                         bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
                     }
                 }
-
+                AnimacaoCorrecao.encerra();
             }
         }catch (Exception e){
             Log.e("Kariti", e.toString());

@@ -103,6 +103,10 @@ public class CadProvaActivity extends AppCompatActivity {
                 Integer quest = Integer.valueOf(qtdQuest.getText().toString());
                 Integer alter = Integer.valueOf(qtdAlter.getText().toString());
                 String turma = spinnerTurma.getSelectedItem().toString();
+                if(prova.trim().isEmpty()){
+                    Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(spinnerTurma.getSelectedItem() == "Selecione a Turma"){
                     Toast.makeText(CadProvaActivity.this, "Selecione uma turma!", Toast.LENGTH_SHORT).show();
                     return;
@@ -111,29 +115,31 @@ public class CadProvaActivity extends AppCompatActivity {
                     Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!prova.trim().isEmpty()){
-                    id_turma = bancoDados.pegaIdTurma(turma);
-                    Boolean existTurma = bancoDados.checkprovasNome(prova, id_turma.toString());
-                    if(!existTurma) {
-                        if(!quest.equals(0)){
-                            if(!alter.equals(0)){
-                                Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                                intent.putExtra("nomeProva", prova);
-                                intent.putExtra("turma", turma);
-                                intent.putExtra("id_turma", id_turma);
-                                intent.putExtra("data", data);
-                                intent.putExtra("dataForm", dataform);
-                                intent.putExtra("quest", quest);
-                                intent.putExtra("alter", alter);
-                                intent.putExtra("status", false);
-                                startActivity(intent);
-                                finish();
-                            }else
-                                Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
-                        }else
-                            Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                    }else Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, "+prova, Toast.LENGTH_SHORT).show();
-                }else Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
+                if(quest.equals(0)){
+                    Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(alter.equals(0)){
+                    Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                id_turma = bancoDados.pegaIdTurma(turma);
+                Boolean existTurma = bancoDados.checkprovasNome(prova, id_turma.toString());
+                if(existTurma) {
+                    Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, "+prova, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+                intent.putExtra("nomeProva", prova);
+                intent.putExtra("turma", turma);
+                intent.putExtra("id_turma", id_turma);
+                intent.putExtra("data", data);
+                intent.putExtra("dataForm", dataform);
+                intent.putExtra("quest", quest);
+                intent.putExtra("alter", alter);
+                intent.putExtra("status", false);
+                startActivity(intent);
+                finish();
             }
         });
         // Obtém a instância do calendário com a data atual

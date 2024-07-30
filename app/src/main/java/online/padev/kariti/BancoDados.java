@@ -109,7 +109,7 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("dataProva", dataProva);
         contentValues.put("qtdQuestoes", qtdQuestoes);
         contentValues.put("qtdAlternativas", qtdAlternativas);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+        contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
         contentValues.put("id_turma", id_turma);
         long inserir = base_dados.insert("prova", null, contentValues);
         return Math.toIntExact(inserir);
@@ -830,6 +830,20 @@ public class BancoDados extends SQLiteOpenHelper {
                 String resposta = cursor.getString(0);
                 char r = (char) (Integer.parseInt(resposta)-1+'A');
                 gabarito += r + "\n";
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return gabarito;
+    }
+    public String mostraGabaritoInt(Integer id_prova) {
+        String gabarito = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String resposta = cursor.getString(0);
+                gabarito += resposta + "\n";
             } while (cursor.moveToNext());
             cursor.close();
         }

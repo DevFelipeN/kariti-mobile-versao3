@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 public class GaleriaActivity extends AppCompatActivity {
     AppCompatButton btnFinalizar;
@@ -64,7 +65,7 @@ public class GaleriaActivity extends AppCompatActivity {
 
 
 
-        nomeCartao = getIntent().getExtras().getString("nomeImagem") ;
+        nomeCartao = Objects.requireNonNull(getIntent().getExtras()).getString("nomeImagem") ;
         if(!listCartoes.contains(nomeCartao))
             listCartoes.add(nomeCartao);
 
@@ -97,8 +98,12 @@ public class GaleriaActivity extends AppCompatActivity {
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listCartoes.clear();
-                onBackPressed();
+                if(Compactador.listCartoes.isEmpty()){
+                    onBackPressed();
+                    finish();
+                }else{
+                    avidoDeCancelamento();
+                }
             }
         });
         recyclerView = findViewById(R.id.recyclerViewFotos);
@@ -131,10 +136,12 @@ public class GaleriaActivity extends AppCompatActivity {
             }
         }
     }
+
     public void telaProva(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Provas enviadas para correção!")
-                .setMessage("Para visualizar o resultado da correção, selecione a opção 'Visualizar Prova'.")
+                .setMessage("Aguarde alguns instantes para sua prova ser corrigida.\n" +
+                        "Após a correção da prova, o resultado poderá ser visualizado na opção 'Visualizar Correção'.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -146,9 +153,21 @@ public class GaleriaActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    /*
+    public void telaProva(){
+        Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
+        startActivity(intent);
+        finish();
+    }
+
+     */
     public void onBackPressed() {
-        listCartoes.clear();
-        super.onBackPressed();
+        if(Compactador.listCartoes.isEmpty()){
+            super.onBackPressed();
+            finish();
+        }else{
+            avidoDeCancelamento();
+        };
     }
     public static String leitor(String path) throws IOException {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
@@ -162,5 +181,26 @@ public class GaleriaActivity extends AppCompatActivity {
         }
         buffRead.close();
         return texto;
+    }
+    public void avidoDeCancelamento(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO!")
+                .setMessage("Caso confirme essa ação, o processo de correção em andamento, será cancelado!\n\n" +
+                        "Deseja realmente voltar")
+                .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Compactador.listCartoes.clear();
+                        onBackPressed();
+                        finish();
+                    }
+                })
+                .setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Código para lidar com o clique no botão Cancelar, se necessário
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

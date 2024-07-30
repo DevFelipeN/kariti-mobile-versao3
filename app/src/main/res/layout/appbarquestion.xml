@@ -28,10 +28,10 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:hint="@string/app_name"
-            android:textColorHint="@color/cinzaClaro"
             android:hyphenationFrequency="none"
             android:textAlignment="center"
             android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:textSize="34sp" />
 
         <!-- Componente alinhado à direita -->

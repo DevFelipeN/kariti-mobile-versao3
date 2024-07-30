@@ -125,7 +125,7 @@ public class GabaritoActivity extends AppCompatActivity {
                     if(!nPquest.isEmpty() && !id_prova.equals(null)){
                         for(int i = 1; i <= quest; i++){
                             Integer resp = alternativasEscolhidas.get(i-1);
-                            bancoDados.inserirGabarito(id_prova, i, resp, nPquest.get(i-1));
+                            bancoDados.inserirGabarito(id_prova, i, resp+1, nPquest.get(i-1));
                         }
                         dialogProvaSucess();
                     }

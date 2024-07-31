@@ -78,18 +78,17 @@ public class CameraxActivity extends AppCompatActivity {
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
         }
-            aroundCamera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (cameraFacing == CameraSelector.LENS_FACING_BACK){
-                        cameraFacing = CameraSelector.LENS_FACING_FRONT;
-                    }else {
-                        cameraFacing = CameraSelector.LENS_FACING_BACK;
-                    }
-                    startCamera();
+        aroundCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cameraFacing == CameraSelector.LENS_FACING_BACK){
+                    cameraFacing = CameraSelector.LENS_FACING_FRONT;
+                }else {
+                    cameraFacing = CameraSelector.LENS_FACING_BACK;
                 }
-             });
-
+                startCamera();
+            }
+        });
         // Configurar o listener do botão de captura
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override

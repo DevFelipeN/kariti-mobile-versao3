@@ -63,11 +63,10 @@ public class GaleriaActivity extends AppCompatActivity {
 
         titulo.setText("Correção");
 
-
-
         nomeCartao = Objects.requireNonNull(getIntent().getExtras()).getString("nomeImagem") ;
-        if(!listCartoes.contains(nomeCartao))
+        if(!listCartoes.contains(nomeCartao)) {
             listCartoes.add(nomeCartao);
+        }
 
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +136,7 @@ public class GaleriaActivity extends AppCompatActivity {
         }
     }
 
+    /*
     public void telaProva(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Provas enviadas para correção!")
@@ -153,14 +153,12 @@ public class GaleriaActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    /*
+    */
     public void telaProva(){
         Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
         startActivity(intent);
         finish();
     }
-
-     */
     public void onBackPressed() {
         if(Compactador.listCartoes.isEmpty()){
             super.onBackPressed();

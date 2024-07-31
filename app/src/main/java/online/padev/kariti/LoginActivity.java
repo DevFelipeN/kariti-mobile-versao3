@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //email.setText("clickfelipeweb@gmail.com");
         //password.setText("123");
+        //bancoDados.deletaCorrecao(1);
 
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -219,7 +219,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public void deletaCorrecaoPorAluno(Integer id_prova, Integer id_aluno){
         try {
             SQLiteDatabase base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? and id_aluno";
+            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ?";
             SQLiteStatement stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_prova);
             stmt.bindLong(2, id_aluno);
@@ -325,7 +325,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_prova from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+        Cursor cursor = base_dados.rawQuery("Select id_prova, id_aluno from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
         if (cursor.getCount() > 0)
             return true;
         else

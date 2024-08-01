@@ -32,18 +32,19 @@
         tools:targetApi="26">
         <activity
             android:name=".AnimacaoCorrecao"
-            android:exported="false" />
-        <activity
-            android:name=".Teste"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".EdicaoProva"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".EditarProva"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".DetalheCorrecao"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".CameraxActivity"

@@ -54,6 +54,7 @@ public class UploadEjson {
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("kariti", e.toString());
+                        AnimacaoCorrecao.encerra();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -74,12 +75,17 @@ public class UploadEjson {
                     Integer id_prova = objJson.getInt("id_prova");
                     Integer id_aluno = objJson.getInt("id_aluno");
                     String mensagem = objJson.getString("mensagem");
+                    Log.e("kariti", "resultado: " +result);
+                    Log.e("kariti", "resultado2: " +resultCorrect);
+                    Log.e("kariti", "mensagem: "+mensagem);
 
                     if(resultCorrect.equals(0)){
                         Boolean seCorrigida = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
                         if(seCorrigida.equals(true)) {
-                            if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)) { // caso na tentativa anterior nao corrigiu apaga resultado do banco
+                            Integer status = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
+                            if(status.equals(-1)) {
                                 bancoDados.deletaCorrecaoPorAluno(id_prova, id_aluno);
+                                Log.e("Kariti", "DELETOU");
                             }
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
@@ -89,6 +95,7 @@ public class UploadEjson {
                         String[] itens = mensagem.split(";");
                         Integer questAnterior = null;
                         Integer respostaAnterior = null;
+                        Boolean verificaCorrecao = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
                         for(String item : itens){
                             String[] sep = item.split(",");
                             questao = Integer.valueOf(sep[0]);
@@ -97,7 +104,7 @@ public class UploadEjson {
                                 String respostaDupla = (respostaAnterior.toString()) + (respostaDada.toString()); // Concatenando as duas respostas
                                 respostaDada = Integer.valueOf(respostaDupla);
                             }
-                            if(seCorrigida.equals(true) || questao.equals(questAnterior)){ //Caso prova já corregida anteriormente, realiza UPDATE
+                            if(verificaCorrecao.equals(true) || questao.equals(questAnterior)){ //Caso prova já corregida anteriormente, realiza UPDATE
                                 bancoDados.upadateResultadoCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }else{
                                 bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
@@ -105,7 +112,7 @@ public class UploadEjson {
                             questAnterior = questao;
                             respostaAnterior = respostaDada;
                         }
-                    }else if(!bancoDados.checkResultadoCorrecao(id_prova, id_aluno)){
+                    }else if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno).equals(false)){
                         naoCorrigidas.add(new Integer[]{id_prova, id_aluno});
                     }
                 }

@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                     String emails = email.getText().toString();
                     String password = senha.getText().toString();
                     String repassword = confirmarSenha.getText().toString();
-
                     if (usernome.equals("") || password.equals("") || repassword.equals("") || emails.equals("")) {
                         Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
                     }else{

@@ -29,9 +29,9 @@
         android:id="@+id/textViewDetalheAluno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -41,20 +41,22 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="361dp"
+        android:layout_width="0dp"
         android:layout_height="387dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDetalheAluno">
+        app:layout_constraintTop_toBottomOf="@+id/textViewDetalheAluno"
+        app:layout_constraintVertical_bias="0.066">
 
         <TableLayout
             android:id="@+id/tableLayoutDetalheCorrecao"
-            android:layout_width="352dp"
-            android:layout_height="401dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
@@ -69,7 +71,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:layout_width="43dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/Questao"
                     android:textAlignment="center"
@@ -77,7 +79,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="40dp"
+                    android:layout_width="73dp"
                     android:layout_height="match_parent"
                     android:text="@string/Marcada"
                     android:textAlignment="center"
@@ -85,7 +87,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="39dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/Gabarito"
                     android:textAlignment="center"
@@ -117,16 +119,16 @@
         android:id="@+id/textViewNotaTotalDetalhe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.068"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView"
-        app:layout_constraintVertical_bias="0.208" />
+        app:layout_constraintVertical_bias="0.21" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

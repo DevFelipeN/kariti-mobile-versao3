@@ -85,7 +85,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 for (int i = 1; i <= qtdQuestoes; i++) {
                     Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
                     Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, i);
-                    if (respostaDada.equals(respostaGabarito)) {
+                    if (respostaGabarito.equals(respostaDada)) {
                         nota += bancoDados.pegaNotaQuestao(id_prova, i);
                         acertos += 1;
                     }

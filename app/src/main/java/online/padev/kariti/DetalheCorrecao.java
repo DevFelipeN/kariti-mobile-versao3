@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -52,10 +53,12 @@ public class DetalheCorrecao extends AppCompatActivity {
         qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
 
         alunoDetalhe.setText(nomeAluno);
-
+        //Carrega todas as respostas ordenadas por questao
         respostasDadas = (ArrayList<String>) bancoDados.respostasDadas(id_prova, id_aluno);
+        Log.e("kariti", "respostasDadas - "+respostasDadas);
         gabarito = (ArrayList<String>) bancoDados.carregaGabarito(id_prova);
         peso = (ArrayList<String>) bancoDados.listNotaPorQuetao(id_prova);
+        Log.e("kariti", "passei aqui");
 
         ShapeDrawable border = new ShapeDrawable(new RectShape());
         border.getPaint().setColor(0xFF000000); // Cor da borda
@@ -64,10 +67,12 @@ public class DetalheCorrecao extends AppCompatActivity {
 
         for(int x = 1; x <= qtdQuestoes; x++) {
             Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, x);
+            Log.e("kariti", "respostaDada = "+respostaDada);
             Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, x);
-            if(respostaDada.equals(respostaGabarito)){
+            if(respostaGabarito.equals(respostaDada)){
                 nota += bancoDados.pegaNotaQuestao(id_prova, x);
             }
+            Log.e("kariti", "Questao = "+x);
 
             TableLayout tableLayout = findViewById(R.id.tableLayoutDetalheCorrecao);
             TableRow row = new TableRow(this);
@@ -84,6 +89,9 @@ public class DetalheCorrecao extends AppCompatActivity {
 
             // Cria outra célula para a nova linha para armazenar a resposta marcada pelo aluno
             TextView cell2 = new TextView(this);
+            if(respostaDada == null){
+                respostasDadas.add(x-1, "-");
+            }
             cell2.setText(respostasDadas.get(x-1));
             cell2.setGravity(Gravity.CENTER);
             cell2.setTextSize(16);

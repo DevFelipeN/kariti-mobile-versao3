@@ -64,8 +64,8 @@ public class GaleriaActivity extends AppCompatActivity {
         titulo.setText("Correção");
 
         nomeCartao = Objects.requireNonNull(getIntent().getExtras()).getString("nomeImagem") ;
-        if(!listCartoes.contains(nomeCartao)) {
-            listCartoes.add(nomeCartao);
+        if(!Compactador.listCartoes.contains(nomeCartao)) {
+            Compactador.listCartoes.add(nomeCartao);
         }
 
         btnAdcionarFoto.setOnClickListener(new View.OnClickListener() {
@@ -81,11 +81,11 @@ public class GaleriaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean compact = Compactador.compactador();
                 if(compact) {
+                    listCartoes.clear();
                     try {
                         File fileZip = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip");
                         File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
-                        listCartoes.clear();
                         telaProva();
                     } catch (Exception e) {
                         Log.e("Kariti", e.toString());

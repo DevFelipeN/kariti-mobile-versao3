@@ -54,6 +54,7 @@ public class UploadEjson {
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("kariti", e.toString());
+                        AnimacaoCorrecao.encerra();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -74,12 +75,17 @@ public class UploadEjson {
                     Integer id_prova = objJson.getInt("id_prova");
                     Integer id_aluno = objJson.getInt("id_aluno");
                     String mensagem = objJson.getString("mensagem");
+                    Log.e("kariti", "resultado: " +result);
+                    Log.e("kariti", "resultado2: " +resultCorrect);
+                    Log.e("kariti", "mensagem: "+mensagem);
 
                     if(resultCorrect.equals(0)){
                         Boolean seCorrigida = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
                         if(seCorrigida.equals(true)) {
-                            if(bancoDados.checkSituacaoCorrecao(id_prova, id_aluno).equals(-1)) {
+                            Integer status = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
+                            if(status.equals(-1)) {
                                 bancoDados.deletaCorrecaoPorAluno(id_prova, id_aluno);
+                                Log.e("Kariti", "DELETOU");
                             }
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
@@ -91,7 +97,6 @@ public class UploadEjson {
                         Integer respostaAnterior = null;
                         Boolean verificaCorrecao = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
                         for(String item : itens){
-                            Log.e("kariti", "Aqui tambem6");
                             String[] sep = item.split(",");
                             questao = Integer.valueOf(sep[0]);
                             respostaDada = Integer.valueOf(sep[1]);

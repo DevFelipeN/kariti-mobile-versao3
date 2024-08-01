@@ -318,17 +318,19 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkNome(String nome, String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select nomeUsuario from usuario where nomeUsuario =? and email = ?", new String[]{nome, email});
-        if (cursor.getCount() > 0)
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
             return true;
-        else
+        }else
             return false;
     }
     public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_prova, id_aluno from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
-        if (cursor.getCount() > 0)
+        Cursor cursor = base_dados.rawQuery("Select id_prova from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
             return true;
-        else
+        }else
             return false;
     }
     public Integer checkemail(String email) {
@@ -357,6 +359,7 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(0);
     }
+    /*
     public Integer pegaRespostaDada(Integer id_prova, Integer id_aluno, Integer questao) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select respostaDada from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
@@ -364,6 +367,24 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getInt(0);
     }
+     */
+    public Integer pegaRespostaDada(Integer id_prova, Integer id_aluno, Integer questao) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = null;
+        Integer respostaDada = null;
+        try {
+            cursor = base_dados.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ? AND questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                respostaDada = cursor.getInt(0);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return respostaDada;
+    }
+
     public Integer pegaRespostaQuestao(Integer id_prova, Integer questao) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("Select resposta from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
@@ -891,18 +912,23 @@ public class BancoDados extends SQLiteOpenHelper {
                 String aux = "";
                 String resposta = cursor.getString(0);
                 if(resposta.equals("0")) {
-                    aux = " - ";
+                    aux = "-";
                 }else {
                     aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
                 }
                 for(int i = 1; i < resposta.length(); i++){
-                    aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i)))-1 +'A'));
+                    Log.e("kariti", "respostasss: "+String.valueOf(resposta.charAt(i)));
+                    if(!String.valueOf(resposta.charAt(i)).equals("0")) {
+                        aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                    }
                 }
                 respostasDadas.add(aux);
+                //Log.e("kariti", "Aqui 5");
             } while (cursor.moveToNext());
             cursor.close();
         }
         db.close();
+        //Log.e("kariti", "Aqui 6");
         return respostasDadas;
     }
     public String listRespostasAluno(String id_prova, String id_aluno) {

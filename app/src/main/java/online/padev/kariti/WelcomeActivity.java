@@ -1,22 +1,13 @@
 package online.padev.kariti;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
-import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import online.padev.kariti.R;
 
 public class WelcomeActivity extends AppCompatActivity {
     BancoDados bancoDados;
-    AppCompatButton botaoCadastro, botaoLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,38 +16,35 @@ public class WelcomeActivity extends AppCompatActivity {
         String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
         requestPermissions(permissions, 101);
 
-        botaoCadastro = findViewById(R.id.buttonCadastroW);
-        botaoLogin = findViewById(R.id.buttonLoginW);
+        AppCompatButton botaoCadastro = findViewById(R.id.buttonCadastroW);
+        AppCompatButton botaoLogin = findViewById(R.id.buttonLoginW);
         bancoDados = new BancoDados(this);
 
-        if(bancoDados.checkemail("karitimobile@gmail.com") == null) {
-            bancoDados.insertData("Master user", "user1", "karitimobile@gmail.com");
+        if(bancoDados.verificaEmail("karitimobile@gmail.com") == null) {
+            bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
         }
 
-        botaoCadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mudarParaTelaWelcome();
-            }
+        botaoCadastro.setOnClickListener(v -> {
+            mudarParaTelaCadastro();
         });
-        botaoLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mudarParaTelaLogin();
-            }
+        botaoLogin.setOnClickListener(v -> {
+            mudarParaTelaLogin();
         });
     }
 
-    private void readFile() {
-    }
-
-    public void mudarParaTelaWelcome(){
+    /**
+     *Este método carrega a tela de cadastro de usuário
+     */
+    private void mudarParaTelaCadastro(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-    public void mudarParaTelaLogin(){
+
+    /**
+     * Este método carrega a tela de Login
+     */
+    private void mudarParaTelaLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-        finish();
     }
 }

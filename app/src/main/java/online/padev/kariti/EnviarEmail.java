@@ -44,7 +44,6 @@ public class EnviarEmail {
         } catch (Exception e) {
             return false;
         }
-
         return true;
     }
 }

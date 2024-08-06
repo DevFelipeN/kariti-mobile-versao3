@@ -55,16 +55,34 @@ public class BancoDados extends SQLiteOpenHelper {
         }
 
     }
-    public Boolean insertData(String nome, String password, String email){
-            SQLiteDatabase base_dados = this.getWritableDatabase();
+
+    /**
+     * Este metodo cadastra novos usuários na tabela usuário.
+     * @param nome nome do novo usuário que se deseja cadastrar
+     * @param password senha do novo usuário que se deseja cadastrar
+     * @param email email do novo usuário que se deseja cadastrar
+     * @return
+     */
+    public boolean cadastrarUsuario(String nome, String password, String email) {
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put("nomeUsuario", nome);
             contentValues.put("password", to256(password));
             contentValues.put("email", email);
             long inserir = base_dados.insert("usuario", null, contentValues);
-            if (inserir == -1) return false;
-            else {return true;}
+            return inserir != -1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()) {
+                base_dados.close(); // Fecha o banco de dados para liberar recursos
+            }
+        }
     }
+
     public Boolean inserirDadosEscola(String nomeEscola, String bairro, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -238,17 +256,35 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.close();
         }catch (Exception e){e.printStackTrace();}
     }
-    public Boolean upadateSenha(String password, Integer id){
+
+    /**
+     * Este método altera a senha do usuario no banco
+     * @param password parâmetro esperado para substituir a senha antiga
+     * @param id_usuario parâmetro esperado para determinar de qual usuário se deseja alterar a senha
+     * @return retorna true em caso de sucesso e false caso contrário
+     */
+    public Boolean alterarSenha(String password, Integer id_usuario){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
         try {
-            SQLiteDatabase base_dados = this.getWritableDatabase();
-            String altera = "UPDATE usuario SET password=? WHERE id_usuario=?";
-            SQLiteStatement stmt = base_dados.compileStatement(altera);
+            base_dados = this.getWritableDatabase();
+            String altera = "UPDATE usuario SET password = ? WHERE id_usuario = ?";
+            stmt = base_dados.compileStatement(altera);
             stmt.bindString(1, to256(password));
-            stmt.bindLong(2, id);
+            stmt.bindLong(2, id_usuario);
             stmt.executeUpdateDelete();
-            base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-       return true;
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (base_dados != null) {
+                base_dados.close();
+            }
+        }
     }
     public void upadateTurma(String turma, Integer qtdAnonimos, Integer id_turma){
         try {
@@ -315,14 +351,25 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
-    public Boolean checkNome(String nome, String email) {
+
+    /**
+     *Este método verifica a existencia de determinado usuario cadastrado no banco de dados.
+     * @param email email do usuario que se deseja saber se já esta cadastrado
+     * @return retorna true se usuario está cadastrado e falso caso contrário
+     */
+    public Boolean checkNome(String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select nomeUsuario from usuario where nomeUsuario =? and email = ?", new String[]{nome, email});
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            return true;
-        }else
-            return false;
+        Cursor cursor = null;
+        boolean exists = false;
+        try {
+            cursor = base_dados.rawQuery("SELECT email FROM usuario WHERE email = ?", new String[]{email});
+            exists = cursor.moveToFirst();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return exists;
     }
     public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -333,14 +380,28 @@ public class BancoDados extends SQLiteOpenHelper {
         }else
             return false;
     }
-    public Integer checkemail(String email) {
+
+    /**
+     * Este método verifica se determinado email está cadstrado no banco de dados
+     * @param email parâmetro usado para verificar se existe o email no banco
+     * @return retorna o id do usuario, caso exista o email e null caso contrário
+     */
+    public Integer verificaEmail(String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from usuario where email = ?", new String[]{email});
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            return cursor.getInt(0);
-        }else
-            return null;
+        Cursor cursor = null;
+        Integer id_usuario = null;
+        try {
+            cursor = base_dados.rawQuery("SELECT id_usuario FROM usuario WHERE email = ?", new String[]{email});
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                id_usuario = cursor.getInt(0);
+            }
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return id_usuario;
     }
     public Boolean checkEmailDAluno(String email) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -352,22 +413,13 @@ public class BancoDados extends SQLiteOpenHelper {
             return false;
         }
     }
-    public String pegaNome(String id_usuario) {
+    public String pegaNome(Integer id_usuario) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select nomeUsuario from usuario where id_usuario = ?", new String[]{id_usuario});
+        Cursor cursor = base_dados.rawQuery("Select nomeUsuario from usuario where id_usuario = ?", new String[]{id_usuario.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getString(0);
     }
-    /*
-    public Integer pegaRespostaDada(Integer id_prova, Integer id_aluno, Integer questao) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select respostaDada from resultadoCorrecao where id_prova = ? and id_aluno = ? and questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getInt(0);
-    }
-     */
     public Integer pegaRespostaDada(Integer id_prova, Integer id_aluno, Integer questao) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = null;
@@ -515,16 +567,31 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getString(1);
     }
-    //Verifica se a senha Ligada ao email é a mesma informada
-    public Integer checkemailpass(String email, String password){
+
+    /**
+     * Este método verifica se o email e senha informado pelo usuário são validos
+     * @param email parameto usado para vericar se existe no banco
+     * @param password parametro usado para analisa se pertence ao email informado
+     * @return retorna o id do usuario caso os dados de autenticação sejam validos ou null caso contrário
+     */
+    public Integer verificaAutenticacao(String email, String password){
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from usuario where email =? and password = ?", new String[] {email, to256(password)});
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            return cursor.getInt(0);
-        }else
-            return null;
+        Cursor cursor = null;
+        Integer id_usuario = null;
+        try {
+            cursor = base_dados.rawQuery("Select id_usuario from usuario where email =? and password = ?", new String[] {email, to256(password)});
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                id_usuario = cursor.getInt(0);
+            }
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return id_usuario;
     }
+
     public Boolean checkEscola(String nomeEscola){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         Cursor cursor = base_dados.rawQuery("SELECT * FROM escola WHERE nomeEscola = ? and id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});

@@ -1,23 +1,22 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 public class AtualizarSenha extends AppCompatActivity {
-
-    EditText editTextNome, editTextEmail, novaSenha, confNovaSenha;
-    Button alterar;
+    private Integer id_usuario;
+    String nomeUsuario, emailUsuario, novaSenha, confNovaSenha;
+    EditText editTextNome, editTextEmail, editTextNovaSenha, editTextConfNovaSenha;
+    Button btnAlterar;
     BancoDados bancoDados;
     ImageButton ocultarSenha, ocultarSenha2, voltar;
 
@@ -27,70 +26,85 @@ public class AtualizarSenha extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atualizar_senha);
 
-        editTextNome = (EditText) findViewById(R.id.editTextAttSenha);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmailAttSenha);
-        novaSenha = (EditText) findViewById(R.id.editTextNovaAttSenha);
-        confNovaSenha = (EditText) findViewById(R.id.editTextConfirmAttSenha);
-        alterar = (Button) findViewById(R.id.buttonAttSenha);
-        voltar = (ImageButton) findViewById(R.id.imgBtnVoltaAttSenha);
+        editTextNome = findViewById(R.id.editTextAttSenha);
+        editTextEmail = findViewById(R.id.editTextEmailAttSenha);
+        editTextNovaSenha = findViewById(R.id.editTextNovaAttSenha);
+        editTextConfNovaSenha = findViewById(R.id.editTextConfirmAttSenha);
+        btnAlterar = findViewById(R.id.buttonAttSenha);
+        voltar = findViewById(R.id.imgBtnVoltaAttSenha);
+        ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
+        ocultarSenha = findViewById(R.id.senhaoculta);
+
         bancoDados = new BancoDados(this);
 
-        Integer id = getIntent().getExtras().getInt("id");
-        String nome = getIntent().getExtras().getString("nome");
-        String emails = getIntent().getExtras().getString("email");
-        editTextNome.setText(nome);
-        editTextEmail.setText(emails);
+        id_usuario = getIntent().getExtras().getInt("id_usuario");
+        nomeUsuario = getIntent().getExtras().getString("nome");
+        emailUsuario = getIntent().getExtras().getString("email");
+        editTextNome.setText(nomeUsuario);
+        editTextEmail.setText(emailUsuario);
 
-        alterar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String senha = novaSenha.getText().toString();
-                Boolean alterarSenha = bancoDados.upadateSenha(senha, id);
-                if (alterarSenha==true) {
-                    Toast.makeText(AtualizarSenha.this, "Senha Alterada Com Sucesso!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                }
+        btnAlterar.setOnClickListener(v -> {
+            novaSenha = editTextNovaSenha.getText().toString();
+            confNovaSenha = editTextConfNovaSenha.getText().toString();
+            if(novaSenha.trim().isEmpty() || confNovaSenha.trim().isEmpty()){
+                Toast.makeText(this, "Informe a senha nos dois campos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(!novaSenha.equals(confNovaSenha)){
+                Toast.makeText(this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (bancoDados.alterarSenha(novaSenha, id_usuario)) {
+                mudarParaTelaLogin();
             }
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {onBackPressed(); }
+        voltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
         });
-        ocultarSenha = findViewById(R.id.senhaoculta);
-        novaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
 
-        ocultarSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Verifica se a senha está visivel ou oculta.
-                if(novaSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+        editTextNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        ocultarSenha.setOnClickListener(v -> {
+//           Verifica se a senha está visivel ou oculta.
+            if(editTextNovaSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
 //                  Se a senha está visivel ou oculta.
-                    novaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha.setImageResource(R.mipmap.senhaoff);
-                } else {
-                    novaSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha.setImageResource(R.mipmap.senhaon);
-                }
-                novaSenha.setSelection(novaSenha.getText().length());
+                editTextNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha.setImageResource(R.mipmap.senhaoff);
+            } else {
+                editTextNovaSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha.setImageResource(R.mipmap.senhaon);
             }
+            editTextNovaSenha.setSelection(editTextNovaSenha.getText().length());
         });
-        ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
-        confNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        ocultarSenha2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Verifica se a senha está visivel ou oculta.
-                if(confNovaSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+
+        editTextConfNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        ocultarSenha2.setOnClickListener(v -> {
+//          Verifica se a senha está visivel ou oculta.
+            if(editTextConfNovaSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
 //                  Se a senha está visivel ou oculta.
-                    confNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha2.setImageResource(R.mipmap.senhaoff);
-                } else {
-                    confNovaSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha2.setImageResource(R.mipmap.senhaon);
-                }
-                confNovaSenha.setSelection(confNovaSenha.getText().length());
+                editTextConfNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha2.setImageResource(R.mipmap.senhaoff);
+            } else {
+                editTextConfNovaSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha2.setImageResource(R.mipmap.senhaon);
             }
+            editTextConfNovaSenha.setSelection(editTextConfNovaSenha.getText().length());
         });
+    }
+
+    /**
+     * Método usado para inicializar a tela de login.
+     */
+    private void mudarParaTelaLogin(){
+        Toast.makeText(AtualizarSenha.this, "Senha alterada com sucesso!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

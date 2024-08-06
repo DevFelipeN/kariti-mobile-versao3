@@ -1,32 +1,28 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 public class MainActivity extends AppCompatActivity {
 
-    EditText nome, email, senha, confirmarSenha;
-    Button cadastro;
-    ImageButton ocultarSenha, ocultarSenha2, voltar;
+    private EditText editTextnome, editTextemail, editTextsenha, editTextconfirmarSenha;
+    private ImageButton ocultarSenha;
+    private ImageButton ocultarSenha2;
+    private String nome, email, senha, confirmacaoSenha, codigo;
 
     BancoDados bancoDados;
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
-    CodSenhaActivity codSenha;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -34,109 +30,108 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nome = findViewById(R.id.editTextNome);
-        email = findViewById(R.id.editTextEmail);
-        senha = findViewById(R.id.editTextNovaSenha);
-        confirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
-        cadastro = findViewById(R.id.buttonSalvarEdit);
+        //acessa os dados dos campos do xml
+        editTextnome = findViewById(R.id.editTextNome);
+        editTextemail = findViewById(R.id.editTextEmail);
+        editTextsenha = findViewById(R.id.editTextNovaSenha);
+        editTextconfirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
+        ocultarSenha = findViewById(R.id.senhaoculta);
+        ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
+        ImageButton voltar = findViewById(R.id.imgBtnVoltaEscola);
+        Button cadastro = findViewById(R.id.buttonSalvarEdit);
 
+        //cria uma instancia de outras classes
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
         gerarCodigo = new GerarCodigoValidacao();
-        codSenha = new CodSenhaActivity();
 
+        cadastro.setOnClickListener(v ->{
 
-        cadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isOnline()) {
-                    String usernome = nome.getText().toString();
-                    String emails = email.getText().toString();
-                    String password = senha.getText().toString();
-                    String repassword = confirmarSenha.getText().toString();
-                    if (usernome.equals("") || password.equals("") || repassword.equals("") || emails.equals("")) {
-                        Toast.makeText(MainActivity.this, "Por favor preencher todos os campos!", Toast.LENGTH_SHORT).show();
-                    }else{
-                        if (!emails.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emails).matches())
-                            if (password.equals(repassword)) {
-                                Boolean checkuserMail = bancoDados.checkNome(usernome, emails);
-                                if (checkuserMail == false) {
-                                    String cod = gerarCodigo.gerarVerificador();
-                                    Boolean mandaEmail = enviarEmail.enviaCodigo(emails, cod);
-                                    if (mandaEmail == true) {
-                                        Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
-                                        proxima.putExtra("identificador", 0);
-                                        proxima.putExtra("nome", usernome);
-                                        proxima.putExtra("email", emails);
-                                        proxima.putExtra("senha", password);
-                                        proxima.putExtra("cod", cod);
-                                        startActivity(proxima);
-                                        finish();
-                                    } else {
-                                        Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Usuário já existe!", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(MainActivity.this, "Senhas Divergentes!", Toast.LENGTH_SHORT).show();
-                            }
-                        else {
-                            Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+            if (!VerificaConexaoInternet.verificaConexao(MainActivity.this)) {
+                Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            nome = editTextnome.getText().toString();
+            email = editTextemail.getText().toString();
+            senha = editTextsenha.getText().toString();
+            confirmacaoSenha = editTextconfirmarSenha.getText().toString();
+            if (nome.trim().isEmpty() || senha.trim().isEmpty() || confirmacaoSenha.trim().isEmpty() || email.trim().isEmpty()) {
+                Toast.makeText(MainActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(!email.trim().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                if (senha.equals(confirmacaoSenha)){
+                    Boolean verificaSeExisteBD = bancoDados.checkNome(email); //verifica se existe este usuario no banco
+                    if (verificaSeExisteBD.equals(false)) {
+                        codigo = gerarCodigo.gerarVerificador();
+                        if (enviarEmail.enviaCodigo(email, codigo)) {
+                            carregarTelaCodigo();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Toast.makeText(MainActivity.this, "Já existe um usuário associado a esse e-mail, cadastrado!", Toast.LENGTH_SHORT).show();
                     }
-                }else{
-                    Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
                 }
+            else {
+                Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        ocultarSenha = findViewById(R.id.senhaoculta);
-        senha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editTextsenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        ocultarSenha.setOnClickListener(v -> {
+                // Verifica se a senha está visivel ou oculta.
+            if(editTextsenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+                //Se a senha está visivel ou oculta.
+                editTextsenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha.setImageResource(R.mipmap.senhaoff);
+            } else {
+                editTextsenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha.setImageResource(R.mipmap.senhaon);
+            }
+            editTextsenha.setSelection(editTextsenha.getText().length());
+        });
+        editTextconfirmarSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        ocultarSenha2.setOnClickListener(v -> {
+//                Verifica se a senha está visivel ou oculta.
+            if(editTextconfirmarSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+//                  Se a senha está visivel ou oculta.
+                editTextconfirmarSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha2.setImageResource(R.mipmap.senhaoff);
+            } else {
+                editTextconfirmarSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                ocultarSenha2.setImageResource(R.mipmap.senhaon);
+            }
+            editTextconfirmarSenha.setSelection(editTextconfirmarSenha.getText().length());
+        });
 
-        ocultarSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Verifica se a senha está visivel ou oculta.
-                if(senha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
-//                  Se a senha está visivel ou oculta.
-                    senha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha.setImageResource(R.mipmap.senhaoff);
-                } else {
-                    senha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha.setImageResource(R.mipmap.senhaon);
-                }
-                senha.setSelection(senha.getText().length());
-            }
+        voltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
         });
-        ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
-        confirmarSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        ocultarSenha2.setOnClickListener(new View.OnClickListener() {
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-//                Verifica se a senha está visivel ou oculta.
-                if(confirmarSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
-//                  Se a senha está visivel ou oculta.
-                    confirmarSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha2.setImageResource(R.mipmap.senhaoff);
-                } else {
-                    confirmarSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    ocultarSenha2.setImageResource(R.mipmap.senhaon);
-                }
-                confirmarSenha.setSelection(confirmarSenha.getText().length());
-            }
-        });
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
     }
-    private boolean isOnline() {
-        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isConnectedOrConnecting();
+
+    /**
+     * Este método inicializa a tela de verificação de codigo, para autenticação de cadastro do usuário.
+     */
+    private void carregarTelaCodigo(){
+        Intent proxima = new Intent(this, CodSenhaActivity.class);
+        proxima.putExtra("identificador", 0);
+        proxima.putExtra("nome", nome);
+        proxima.putExtra("email", email);
+        proxima.putExtra("senha", senha);
+        proxima.putExtra("codigo", codigo);
+        startActivity(proxima);
+        finish();
     }
 }
 

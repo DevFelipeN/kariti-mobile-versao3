@@ -50,18 +50,19 @@
         android:layout_marginTop="30dp"
         android:text="@string/buttonCadastreSe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDesKariti" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginW" />
 
     <androidx.appcompat.widget.AppCompatButton
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonLoginW"
+        style="@style/BUTTONSTYLE"
         android:layout_width="220dp"
         android:layout_height="48dp"
         android:layout_marginTop="30dp"
         android:text="@string/buttonLogin"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCadastroW" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewDesKariti" />
 </androidx.constraintlayout.widget.ConstraintLayout>

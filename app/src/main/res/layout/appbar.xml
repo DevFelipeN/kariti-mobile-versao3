@@ -31,8 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:hint="Kariti"
-            android:textColor="#0F0E0E"
+            android:textColor="@color/black"
             android:textSize="34sp" />
 
         <ImageButton

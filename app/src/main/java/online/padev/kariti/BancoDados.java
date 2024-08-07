@@ -61,7 +61,7 @@ public class BancoDados extends SQLiteOpenHelper {
      * @param nome nome do novo usuário que se deseja cadastrar
      * @param password senha do novo usuário que se deseja cadastrar
      * @param email email do novo usuário que se deseja cadastrar
-     * @return
+     * @return retorna verdadeiro de cadastrado com sucesso falso, caso contrario
      */
     public boolean cadastrarUsuario(String nome, String password, String email) {
         SQLiteDatabase base_dados = null;
@@ -83,15 +83,33 @@ public class BancoDados extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Este método insere uma nova escola no banco
+     * @param nomeEscola parametro esperado como nome da escola a ser cadastrada
+     * @param bairro parametro esperado contendo o bairro da escola
+     * @param status paramentro indicativo que a escola sera ativa
+     * @return retorna true se a inserção for bem sucedida ou falso, caso contrario
+     */
     public Boolean inserirDadosEscola(String nomeEscola, String bairro, Integer status){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeEscola", nomeEscola);
-        contentValues.put("bairro", bairro);
-        contentValues.put("status", status);
-        contentValues.put("id_usuario", BancoDados.USER_ID);
-        long inserir = base_dados.insert("escola", null, contentValues);
-        return inserir != -1;
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("nomeEscola", nomeEscola);
+            contentValues.put("bairro", bairro);
+            contentValues.put("status", status);
+            contentValues.put("id_usuario", BancoDados.USER_ID);
+            long inserir = base_dados.insert("escola", null, contentValues);
+            return inserir != -1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
+
     }
     public Boolean inserirTurma(String nomeTurma, Integer an){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -161,16 +179,34 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("aluno", null, contentValues);
         return Math.toIntExact(inserir);
     }
+
+    /**
+     * Este método deleta uma escola do banco
+     * @param id_escola
+     * @return
+     */
     public Boolean deletarEscola(Integer id_escola){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
         try {
-            SQLiteDatabase base_dados = this.getWritableDatabase();
+            base_dados = this.getWritableDatabase();
             String deleta = "DELETE FROM escola WHERE id_escola = ?";
-            SQLiteStatement stmt = base_dados.compileStatement(deleta);
+            stmt = base_dados.compileStatement(deleta);
             stmt.bindLong(1, id_escola);
             stmt.executeUpdateDelete();
             base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-        return true;
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            if(base_dados != null){
+                base_dados.close();
+            }
+            if(stmt != null){
+                stmt.close();
+            }
+        }
     }
     public Boolean deletarAluno(Integer id_aluno){
         try {
@@ -339,17 +375,36 @@ public class BancoDados extends SQLiteOpenHelper {
         }catch (Exception e){e.printStackTrace();}
         return true;
     }
-    public Boolean upadateStatusEscola(Integer id_escola, Integer status){
+
+    /**
+     * Este método altera o status da escola para ativa ou desativada.
+     * @param id_escola parametro usado para determinar qual escola sera realizada a ação
+     * @param status parametro de identificação que determina se a escola será ativada(1) ou desativada(0).
+     * @return retorna true se execução bem sucedida e false caso contrário
+     */
+    public Boolean alterarStatusEscola(Integer id_escola, Integer status){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
         try {
-            SQLiteDatabase base_dados = this.getWritableDatabase();
+            base_dados = this.getWritableDatabase();
             String altera = "UPDATE escola SET status = ? WHERE id_escola = ?";
-            SQLiteStatement stmt = base_dados.compileStatement(altera);
+            stmt = base_dados.compileStatement(altera);
             stmt.bindLong(1, status);
             stmt.bindLong(2, id_escola);
             stmt.executeUpdateDelete();
             base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-        return true;
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            if(base_dados != null){
+                base_dados.close();
+            }
+            if(stmt != null){
+                stmt.close();
+            }
+        }
     }
 
     /**
@@ -510,12 +565,28 @@ public class BancoDados extends SQLiteOpenHelper {
         base_dados.close();
         return retorno;
     }
+
+    /**
+     * Este método pega id de uma determinda escola
+     * @param nomeEscola parâmetro usado para identificar o id de qual escola esta sendo solicitado.
+     * @return retorna o id da escola do tipo inteiro
+     */
     public Integer pegaIdEscola(String nomeEscola) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_escola from escola where nomeEscola = ? and id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getInt(0);
+        Cursor cursor = null;
+        Integer id_escola = null;
+        try {
+            cursor = base_dados.rawQuery("SELECT id_escola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                id_escola = cursor.getInt(0);
+            }
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return id_escola;
     }
 
     public Integer pegaIdProva(String provacad) {
@@ -579,7 +650,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         Integer id_usuario = null;
         try {
-            cursor = base_dados.rawQuery("Select id_usuario from usuario where email =? and password = ?", new String[] {email, to256(password)});
+            cursor = base_dados.rawQuery("SELECT id_usuario FROM usuario WHERE email = ? and password = ?", new String[] {email, to256(password)});
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 id_usuario = cursor.getInt(0);
@@ -592,21 +663,24 @@ public class BancoDados extends SQLiteOpenHelper {
         return id_usuario;
     }
 
-    public Boolean checkEscola(String nomeEscola){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("SELECT * FROM escola WHERE nomeEscola = ? and id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
-    }
-    public Boolean haEscolasCadastradas() {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("SELECT COUNT(*) FROM escola WHERE id_usuario = " + BancoDados.USER_ID, null);
-        cursor.moveToFirst();
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count > 0;
+    /**
+     * Este método verifica se existe um determinada escola cadastrada no banco
+     * @param nomeEscola parametro usado para saber qual escola esta sendo pesquisada
+     * @return restorna true se a escola já estiver cadastrada ou false caso contrario
+     */
+    public Boolean verificaEscola(String nomeEscola){
+        Cursor cursor = null;
+        boolean status = false;
+        try {
+            SQLiteDatabase base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE nomeEscola = ? and id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
+            status = cursor.moveToFirst();
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return status;
     }
     public Boolean checkprovasNome(String nomeProva, String id_turma) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -895,18 +969,31 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return questoes;
     }
+
+    /**
+     * Este método lista todas as escolas do banco de dados pertecentes a um determinado usuário
+     * @param status parametro que determina se as escolas listadas serão as ativas ou as desativadas
+     * @return retorna uma lista de string contendo todas as escolas pertencentes ao usuario
+     * logado caso não tenha, retorna uma lista vazia.
+     */
     public List<String> listEscolas(Integer status) {
         ArrayList<String> escolas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM escola WHERE id_usuario = ? and status = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString(), status.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String escola = cursor.getString(1);
-                escolas.add(escola);
-            } while (cursor.moveToNext());
-            cursor.close();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT nomeEscola FROM escola WHERE id_usuario = ? AND status = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString(), status.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String escola = cursor.getString(0);
+                    escolas.add(escola);
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+            db.close();
         }
-        db.close();
         return escolas;
     }
     public String mostraGabarito(Integer id_prova) {

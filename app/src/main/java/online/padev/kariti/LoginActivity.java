@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         EditTextSenha = findViewById(R.id.editTextSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
 
+        EditTextEmail.setText(String.format("%s","felipemartinsdonascimento4@gmail.com"));
+        EditTextSenha.setText(String.format("%s","123"));
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
@@ -57,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             Integer autenticacao_id = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
-            if (autenticacao_id!=null) {
+            if (autenticacao_id != null) {
                 BancoDados.USER_ID = autenticacao_id;
                 carregarTelaInicial();
             } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
@@ -73,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                alerteEsqueciSenha();
             }else{
                 id_usuario = bancoDados.verificaEmail(emailInformado);
+                Log.e("kariti","id_usuario "+id_usuario);
                 if(id_usuario != null) {
                     codigo = gerarCodigo.gerarVerificador();
                     if (enviarEmail.enviaCodigo(emailInformado, codigo)) {

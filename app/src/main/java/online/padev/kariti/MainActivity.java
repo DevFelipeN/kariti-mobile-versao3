@@ -59,24 +59,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(!email.trim().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches())
-                if (senha.equals(confirmacaoSenha)){
-                    Boolean verificaSeExisteBD = bancoDados.checkNome(email); //verifica se existe este usuario no banco
-                    if (verificaSeExisteBD.equals(false)) {
-                        codigo = gerarCodigo.gerarVerificador();
-                        if (enviarEmail.enviaCodigo(email, codigo)) {
-                            carregarTelaCodigo();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
-                        }
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (senha.equals(confirmacaoSenha)){
+                Boolean verificaSeExisteBD = bancoDados.checkNome(email); //verifica se existe este usuario no banco
+                if (verificaSeExisteBD.equals(false)) {
+                    codigo = gerarCodigo.gerarVerificador();
+                    if (enviarEmail.enviaCodigo(email, codigo)) {
+                        carregarTelaCodigo();
                     } else {
-                        Toast.makeText(MainActivity.this, "Já existe um usuário associado a esse e-mail, cadastrado!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Email não Enviado", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Já existe um usuário associado a esse e-mail, cadastrado!", Toast.LENGTH_SHORT).show();
                 }
-            else {
-                Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
             }
         });
 

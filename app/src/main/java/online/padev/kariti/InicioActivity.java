@@ -1,24 +1,20 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 public class InicioActivity extends AppCompatActivity {
-    private ImageButton imageButtonInicio, iconHelInicio;
+    ImageButton imageButtonInicio, iconHelInicio;
     BancoDados bancoDados;
-    private TextView titulo;
-
+    TextView titulo;
     Button cadastrarEscola, visualizarEscola;
 
     @Override
@@ -29,50 +25,27 @@ public class InicioActivity extends AppCompatActivity {
         imageButtonInicio = findViewById(R.id.imageButtonInicio);
         cadastrarEscola = findViewById(R.id.buttonCadEscola);
         visualizarEscola = findViewById(R.id.buttonVisualizarEscola);
-        bancoDados = new BancoDados(this);
         iconHelInicio = findViewById(R.id.iconHelpLogout);
         titulo = findViewById(R.id.toolbar_title);
 
-        titulo.setText("Início");
-        /*
+        bancoDados = new BancoDados(this);
 
-        if(!bancoDados.checkEscola("Escola Teste1")) {
-            bancoDados.inserirDadosEscola("Escola Teste1", "centro", 1);
-            bancoDados.inserirDadosEscola("Escola Desativada1", "centro", 0);
-        }
-         */
+        titulo.setText(String.format("%s","Inicio"));
 
-        iconHelInicio.setOnClickListener(new View.OnClickListener() {
+        iconHelInicio.setOnClickListener(v -> ajuda());
+        imageButtonInicio.setOnClickListener(v -> voltarTelaIncial());
+        cadastrarEscola.setOnClickListener(v -> mudarParaTelaCadEscola());
+        visualizarEscola.setOnClickListener(v -> mudarParaTelaVisualEscola());
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                dialogHelpDetalhes();
-            }
-        });
-
-        imageButtonInicio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void handleOnBackPressed() {
                 voltarTelaIncial();
-            }
-        });
-        cadastrarEscola.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { mudarParaTelaCadEscola();}
-        });
-        visualizarEscola.setOnClickListener(new View.OnClickListener() {
-            @Override
-            //Local modificado
-            public void onClick(View view) {
-                Intent intencion = new Intent(getApplicationContext(), VisualEscolaActivity.class);
-                startActivity(intencion);
-                Toast.makeText(InicioActivity.this, "Selecione uma Escola", Toast.LENGTH_SHORT).show();
             }
         });
     }
     public void voltarTelaIncial(){
         BancoDados.USER_ID = null;
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        startActivity(intent);
         finish();
         Toast.makeText(InicioActivity.this, "Usuário desconectado", Toast.LENGTH_SHORT).show();
     }
@@ -80,20 +53,15 @@ public class InicioActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CadEscolaActivity.class);
         startActivity(intent);
     }
-    public void mudarParaTelaVisulEscola(){
+    public void mudarParaTelaVisualEscola(){
         Intent intent = new Intent(this, VisualEscolaActivity.class);
         startActivity(intent);
     }
-
-    public void dialogHelpDetalhes() {
+    public void ajuda() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("Olá, nesta tela são sugeridas duas opções importantes para funcionalidade do KARITI. Para acesso completo ao app, é necessário cadastrar a(s) escola(s) em que atua. Após essa etapa, basta selecionar a opção 'Selecionar Escola' e clicar no campo com a escola desejada para acessar as demais funcionalidades da aplicação! ");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

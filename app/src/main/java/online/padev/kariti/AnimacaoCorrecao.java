@@ -4,12 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class AnimacaoCorrecao extends AppCompatActivity {
     private TextView titulo, informativo;
@@ -26,9 +21,10 @@ public class AnimacaoCorrecao extends AppCompatActivity {
         titulo = findViewById(R.id.toolbar_title);
         informativo = findViewById(R.id.textViewInformativo);
 
-        informativo.setText("Provas enviadas para correção!\n\n" +
-                "Em instantes sua prova será corrigida. Após a correção, o resultado poderá ser visualizado na opção 'Visualizar Correção'\n\n" +
-                "Aguarde");
+        informativo.setText(String.format("%s","Provas enviadas para correção!\n\n" +
+                "Em instantes sua prova será corrigida. Após a correção, o resultado" +
+                " poderá ser visualizado na opção 'Visualizar Correção'\n\n" +
+                "Aguarde"));
 
         titulo.setText("Corrigindo");
         btnVoltar.setOnClickListener(new View.OnClickListener() {

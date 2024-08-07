@@ -1,79 +1,61 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import online.padev.kariti.R;
-
 public class TurmaActivity extends AppCompatActivity {
-    ImageButton voltar, iconHelTurma;
-    Button cadTurma, visuTurma;
-    private TextView titulo;
+    ImageButton voltar, iconeAjuda;
+    Button btnCadastrarTurma, btnVisualizarTurma;
+    TextView textViewTitulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turma);
 
         voltar = findViewById(R.id.imgBtnVoltaDescola);
-        iconHelTurma = findViewById(R.id.iconHelp);
-        cadTurma = findViewById(R.id.buttonCadAluno);
-        visuTurma = findViewById(R.id.buttonVisuTurma);
-        titulo = findViewById(R.id.toolbar_title);
+        iconeAjuda = findViewById(R.id.iconHelp);
+        btnCadastrarTurma = findViewById(R.id.buttonCadAluno);
+        btnVisualizarTurma = findViewById(R.id.buttonVisuTurma);
+        textViewTitulo = findViewById(R.id.toolbar_title);
 
-        titulo.setText("Turma");
+        textViewTitulo.setText(String.format("%s","Turma"));
 
-        iconHelTurma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogHelpDetalhes();
-            }
+        btnCadastrarTurma.setOnClickListener(v -> carregarTelaCadastrarTurma());
+        btnVisualizarTurma.setOnClickListener(v -> carregarTelaVisualTurma());
+        iconeAjuda.setOnClickListener(v -> ajuda());
+
+        voltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        cadTurma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                telaCadTurma();
-            }
-        });
-        visuTurma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                telaVisualTurma();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
     }
-    public void telaCadTurma(){
+    private void carregarTelaCadastrarTurma(){
         Intent intent = new Intent(this, CadTurmaActivity.class);
         startActivity(intent);
     }
 
-    public void telaVisualTurma(){
+    private void carregarTelaVisualTurma(){
         Intent intent = new Intent(this, VisualTurmaActivity.class);
         startActivity(intent);
     }
 
-    public void dialogHelpDetalhes() {
+    private void ajuda() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("Olá, nesta tela você pode selecionar 'Cadastrar Turma' para cadastrar uma nova turma com seus respectivos alunos ou 'Visualizar Turma' para exibir as turmas já cadastradas.");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

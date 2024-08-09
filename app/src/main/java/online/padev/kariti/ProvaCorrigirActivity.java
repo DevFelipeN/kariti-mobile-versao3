@@ -22,7 +22,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     String nomeDaFoto;
     BancoDados bancoDados;
     Integer qtdQuestoes, qtdAlternativas;
-    private TextView titulo;
+    TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +57,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     private void iniciarScannerQRCode() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setOrientationLocked(false);// rotação do scanner
-        intentIntegrator.setPrompt("Escaneie o QR CODE da Prova");
+        intentIntegrator.setPrompt("ESCANEIE O QR CODE DA PROVA");
         intentIntegrator.setBeepEnabled(true);              // som ao scanear
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); //especifica o qrcode
         intentIntegrator.initiateScan();                     //iniciar o scan

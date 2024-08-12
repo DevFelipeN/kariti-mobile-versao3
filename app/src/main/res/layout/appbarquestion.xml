@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/myToolBarMenu"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:id="@+id/myToolBarMenu"
+    android:background="#7D41E9"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/imgBtnVoltaDescola"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@color/tranparente"
-            android:src="@mipmap/setaleft"
-            android:contentDescription="@string/iconeVoltar"/>
+            android:contentDescription="@string/iconeVoltar"
+            android:src="@mipmap/setaleft" />
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -32,18 +32,17 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:textSize="34sp" />
+            android:textSize="24sp" />
 
         <!-- Componente alinhado à direita -->
         <ImageButton
             android:id="@+id/iconHelp"
-            android:contentDescription="@string/textAjuda"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@color/tranparente"
-            android:src="@mipmap/question"
             android:layout_marginEnd="7dp"
-            />
+            android:background="@color/tranparente"
+            android:contentDescription="@string/textAjuda"
+            android:src="@mipmap/question" />
 
     </LinearLayout>
 

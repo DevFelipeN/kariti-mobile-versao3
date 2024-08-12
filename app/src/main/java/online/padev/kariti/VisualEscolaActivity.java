@@ -11,12 +11,16 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class VisualEscolaActivity extends AppCompatActivity {
-    ImageButton btnVoltar;
+    ImageButton iconeSair;
     Button btnEscolaDesativada;
     ImageButton iconeAjuda;
+    FloatingActionButton btnCadastrarEscola;
     TextView titulo;
     ListView listViewEscolas;
     EscolaAdapter adapter;
@@ -31,15 +35,16 @@ public class VisualEscolaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_escola);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
+        iconeSair = findViewById(R.id.imageButtonInicio);
         btnEscolaDesativada = findViewById(R.id.buttonEscDesativada);
         listViewEscolas = findViewById(R.id.listViewEscolas);
-        iconeAjuda = findViewById(R.id.iconHelp);
+        iconeAjuda = findViewById(R.id.iconHelpLogout);
+        btnCadastrarEscola = findViewById(R.id.buttonCadastrarEscola);
         titulo = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);
 
-        titulo.setText(String.format("%s","Escolas"));
+        titulo.setText(String.format("%s","Acessar com:"));
 
         listEscolaBD = (ArrayList<String>) bancoDados.listEscolas(1); //carrega todas as escolas ativadas para o usuario logado
         if(listEscolaBD.isEmpty()){
@@ -54,6 +59,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         //parei aqui
 
+        btnCadastrarEscola.setOnClickListener(v -> mudarParaTelaCadEscola());
         btnEscolaDesativada.setOnClickListener(v -> telaEscolaDesativada());
         iconeAjuda.setOnClickListener(v -> ajuda());
         listViewEscolas.setOnItemClickListener((parent, view, position, id) -> {
@@ -86,14 +92,11 @@ public class VisualEscolaActivity extends AppCompatActivity {
             // Retorna true para indicar que o evento de long press foi consumido
             return true;
         });
-        btnVoltar.setOnClickListener(v -> {
-            getOnBackPressedDispatcher();
-            finish();
-        });
+        iconeSair.setOnClickListener(v -> sair());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
+                sair();
             }
         });
     }
@@ -105,6 +108,11 @@ public class VisualEscolaActivity extends AppCompatActivity {
             startActivity(getIntent());
         }
     }
+    private void sair(){
+        BancoDados.USER_ID = null;
+        finish();
+        Toast.makeText(VisualEscolaActivity.this, "Usuário desconectado", Toast.LENGTH_SHORT).show();
+    }
     private void ajuda() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
@@ -114,6 +122,11 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 "Posteriormente, você poderá encontrar suas escolas desativadas clicando no botão 'Escolas Desativadas'.");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+    public void mudarParaTelaCadEscola(){
+        Intent intent = new Intent(this, CadEscolaActivity.class);
+        intent.putExtra("status","continue");
+        startActivityForResult(intent, REQUEST_CODE);
     }
     private void carregarDetalhesEscola(){
         Intent intent = new Intent(this, DetalhesEscolaActivity.class);

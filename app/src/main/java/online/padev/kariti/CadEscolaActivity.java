@@ -3,6 +3,8 @@ package online.padev.kariti;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +33,7 @@ public class CadEscolaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        textViewTitulo.setText(String.format("%s","Escola"));
+        textViewTitulo.setText(String.format("%s","Cadastrar Escola"));
         
         btCadastrarEscola.setOnClickListener(v -> {
             nomeEscola = editTextNomeEscola.getText().toString();
@@ -44,24 +46,46 @@ public class CadEscolaActivity extends AppCompatActivity {
                 informacao();
                 return;
             }
-            if (bancoDados.inserirDadosEscola(nomeEscola, bairroEscola, 1)) {
+            if (bancoDados.inserirDadosEscola(nomeEscola, bairroEscola, 1)){
                 Toast.makeText(CadEscolaActivity.this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-                finish();
+                if(getIntent().getExtras().getString("status").equals("primeiroAcesso")){
+                    carregarVisualEscola();
+                }else{
+                    recarregarVisualEscola();
+                }
             }else{
                 Toast.makeText(CadEscolaActivity.this, "Falha no cadastro da escola!", Toast.LENGTH_SHORT).show();
             }
         });
         //btnVoltar.setVisibility(View.VISIBLE);
         btnVoltar.setOnClickListener(v -> {
-            getOnBackPressedDispatcher();
-            finish();
+            if(getIntent().getExtras().getString("status").equals("primeiroAcesso")){
+                getOnBackPressedDispatcher();
+                finish();
+            }else{
+                recarregarVisualEscola();
+            }
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
+                if(getIntent().getExtras().getString("status").equals("primeiroAcesso")){
+                    getOnBackPressedDispatcher();
+                    finish();
+                }else{
+                    recarregarVisualEscola();
+                }
             }
         });
+    }
+    private void carregarVisualEscola(){
+        Intent intent = new Intent(this, VisualEscolaActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    private void recarregarVisualEscola(){
+        setResult(RESULT_OK);
+        finish();
     }
     private void informacao(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

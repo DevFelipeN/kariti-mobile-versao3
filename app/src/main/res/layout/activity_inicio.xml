@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,80 +15,54 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonCadEscola"
+        style="@style/BUTTONSTYLE"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="70dp"
         android:text="@string/buttonCadastroEscola"
+        app:layout_constraintBottom_toTopOf="@+id/buttonVisualizarEscola"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includeLogout" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.657" />
 
     <Button
-        style="@style/BUTTONSTYLE"
         android:id="@+id/buttonVisualizarEscola"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="70dp"
-        android:text="@string/selecionarEsc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCadEscola" />
-
-    <Button
         style="@style/BUTTONSTYLE"
-        android:id="@+id/buttonConfii"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="70dp"
-        android:text="@string/buttonConfig"
+        android:text="@string/selecionarEsc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@+id/buttonVisualizarEscola"
-        app:layout_constraintVertical_bias="0.005" />
+        app:layout_constraintStart_toEndOf="@+id/imageButton4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.552" />
 
     <ImageButton
-        android:contentDescription="@string/config"
-        android:id="@+id/imageButton2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:background="#05FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonConfii"
-        app:layout_constraintHorizontal_bias="0.733"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton4"
-        app:layout_constraintVertical_bias="0.0"
-        android:visibility="invisible"
-        app:srcCompat="@mipmap/config" />
-
-    <ImageButton
-        android:contentDescription="@string/imgEscolaCad"
         android:id="@+id/imageButton3"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="150dp"
         android:background="#00FFFFFF"
+        android:contentDescription="@string/imgEscolaCad"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton4"
         app:layout_constraintEnd_toStartOf="@+id/buttonCadEscola"
-        app:layout_constraintHorizontal_bias="0.762"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includeLogout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.656"
         app:srcCompat="@mipmap/escola" />
 
     <ImageButton
-        android:contentDescription="@string/imgEscolaSelec"
         android:id="@+id/imageButton4"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
         android:background="#03FFFFFF"
+        android:contentDescription="@string/imgEscolaSelec"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonVisualizarEscola"
-        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintHorizontal_bias="0.588"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCadEscola"
+        app:layout_constraintVertical_bias="0.277"
         app:srcCompat="@mipmap/graduate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

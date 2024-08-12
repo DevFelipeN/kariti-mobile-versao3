@@ -40,7 +40,7 @@
                 android:hint="@string/app_name"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
-                android:textSize="34sp" />
+                android:textSize="25sp" />
 
             <ImageButton
                 android:id="@+id/iconHelpLogout"

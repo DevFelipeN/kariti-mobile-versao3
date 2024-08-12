@@ -153,8 +153,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".VisualEscolaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
         <activity
             android:name=".CadEscolaActivity"
             android:exported="false"

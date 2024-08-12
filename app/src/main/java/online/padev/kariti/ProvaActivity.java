@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProvaActivity extends AppCompatActivity {
     ImageButton voltar, iconeAjuda;
@@ -89,6 +90,10 @@ public class ProvaActivity extends AppCompatActivity {
         builder.show();
     }
     private void carregaTelaCorrecao(){
+        if(!VerificaConexaoInternet.verificaConexao(this)){
+            Toast.makeText(this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("INSTRUÇÕES IMPORTATES!");
         builder.setMessage("Para garantir melhor desempenho do KARITI nas correções, é essencial que a imagem do cartão resposta seja capturada:\n\n" +

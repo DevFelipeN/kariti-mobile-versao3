@@ -21,7 +21,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import online.padev.kariti.R;
 
 import java.io.BufferedReader;
 import java.io.File;

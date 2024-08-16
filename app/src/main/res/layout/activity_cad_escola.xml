@@ -16,17 +16,29 @@
         android:id="@+id/imageView2"
         android:layout_width="90dp"
         android:layout_height="70dp"
-        android:layout_marginTop="130dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextNomeEscola"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/escola" />
+
+    <Button
+        android:id="@+id/button"
+        style="@style/BUTTONSTYLE"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonCadastrar"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/include"
-        app:srcCompat="@mipmap/escola" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextBairro" />
 
     <EditText
         android:id="@+id/editTextNomeEscola"
         android:layout_width="320dp"
         android:layout_height="51dp"
-        android:layout_marginTop="100dp"
         android:background="@drawable/borda_botao"
         android:ems="10"
         android:hint="@string/nomeSchool"
@@ -34,8 +46,8 @@
         android:paddingStart="5dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextBairro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
@@ -43,53 +55,40 @@
         android:id="@+id/editTextBairro"
         android:layout_width="318dp"
         android:layout_height="53dp"
-        android:layout_marginTop="30dp"
         android:background="@drawable/borda_botao"
-        android:ems="10"
+        android:ems="5"
         android:hint="@string/bairroSchool"
         android:inputType="text"
         android:paddingStart="5dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNomeEscola" />
-
-    <Button
-        android:id="@+id/button"
-        style="@style/BUTTONSTYLE"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/buttonCadastrar"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBairro"
-        app:layout_constraintVertical_bias="0.284" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextNomeEscola"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNomeEscola"
+        app:layout_constraintHorizontal_bias="0.017"
         app:layout_constraintStart_toStartOf="@+id/editTextNomeEscola"
         app:layout_constraintTop_toTopOf="@+id/editTextNomeEscola"
+        app:layout_constraintVertical_bias="0.38"
         app:srcCompat="@mipmap/usuario" />
 
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextBairro"
+        app:layout_constraintEnd_toEndOf="@+id/editTextBairro"
+        app:layout_constraintHorizontal_bias="0.017"
         app:layout_constraintStart_toStartOf="@+id/editTextBairro"
         app:layout_constraintTop_toTopOf="@+id/editTextBairro"
+        app:layout_constraintVertical_bias="0.347"
         app:srcCompat="@mipmap/usuario" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

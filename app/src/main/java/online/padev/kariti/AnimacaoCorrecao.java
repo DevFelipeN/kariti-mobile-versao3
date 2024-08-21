@@ -23,8 +23,8 @@ public class AnimacaoCorrecao extends AppCompatActivity {
 
         informativo.setText(String.format("%s","Provas enviadas para correção!\n\n" +
                 "Em instantes sua prova será corrigida. Após a correção, o resultado" +
-                " poderá ser visualizado na opção 'Visualizar Correção'\n\n" +
-                "Aguarde"));
+                "poderá ser visualizado na opção 'Visualizar Correção'\n\n" +
+                "Por favor, aguarde..."));
 
         titulo.setText("Corrigindo");
         btnVoltar.setOnClickListener(new View.OnClickListener() {

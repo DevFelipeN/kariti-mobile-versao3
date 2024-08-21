@@ -21,14 +21,14 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_escola);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltaEscola);
+        btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         btnVoltar.setVisibility(View.VISIBLE);
-        iconeAjuda = findViewById(R.id.iconHelpDetalhesSchool);
+        iconeAjuda = findViewById(R.id.iconHelp);
 
         btnTurma = findViewById(R.id.btnTurma);
         btnAluno = findViewById(R.id.buttonAluno);
         btnProva = findViewById(R.id.btnProva);
-        textViewEscola = findViewById(R.id.textViewNomeEscola);
+        textViewEscola = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);
 

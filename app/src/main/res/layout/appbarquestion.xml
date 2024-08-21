@@ -4,12 +4,13 @@
     android:id="@+id/myToolBarMenu"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="#7D41E9"
+    android:background="#2196F3"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#2196F3"
         android:gravity="center"
         android:orientation="horizontal">
 

@@ -18,41 +18,38 @@
 
     <ListView
         android:id="@+id/listViewEscolas"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCadastrarEscola"
+        android:layout_width="406dp"
+        android:layout_height="657dp"
+        app:layout_constraintBottom_toTopOf="@+id/iconarquivadas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/buttonEscDesativada"
-        style="@style/BUTTONSTYLE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnEscolaDesativada"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonCadastrarEscola"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewEscolas"
-        app:layout_constraintVertical_bias="0.21" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buttonCadastrarEscola"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/btnFlutuante"
-        android:src="@drawable/ic_add"
+    <ImageView
+        android:id="@+id/iconarquivadas"
+        android:layout_width="71dp"
+        android:layout_height="47dp"
+        android:contentDescription="@string/escolaArquivada"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonEscDesativada"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.964" />
+        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconmaisescolas"
+        app:srcCompat="@drawable/baseline_folder_off_black_48" />
+
+    <ImageView
+        android:id="@+id/iconmaisescolas"
+        android:layout_width="71dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/iconarquivadas"
+        android:contentDescription="@string/maisEscola"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listViewEscolas"
+        app:srcCompat="@drawable/baseline_add_home_black_48" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

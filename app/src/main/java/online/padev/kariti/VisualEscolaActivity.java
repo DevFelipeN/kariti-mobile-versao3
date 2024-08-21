@@ -6,21 +6,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton iconeSair;
-    Button btnEscolaDesativada;
+    ImageView btnEscolaDesativada, btnCadastrarEscola;
     ImageButton iconeAjuda;
-    FloatingActionButton btnCadastrarEscola;
     TextView titulo;
     ListView listViewEscolas;
     EscolaAdapter adapter;
@@ -36,10 +33,10 @@ public class VisualEscolaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visual_escola);
 
         iconeSair = findViewById(R.id.imageButtonInicio);
-        btnEscolaDesativada = findViewById(R.id.buttonEscDesativada);
+        btnEscolaDesativada = findViewById(R.id.iconarquivadas);
         listViewEscolas = findViewById(R.id.listViewEscolas);
         iconeAjuda = findViewById(R.id.iconHelpLogout);
-        btnCadastrarEscola = findViewById(R.id.buttonCadastrarEscola);
+        btnCadastrarEscola = findViewById(R.id.iconmaisescolas);
         titulo = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);

@@ -17,6 +17,9 @@
     <string name="NotaDetalhe">Peso </string>
     <string name="Detalhes">Detalhes</string>
     <string name="cpf">CPF</string>
+    <string name="nomeEscola">Nome da Escola</string>
+    <string name="escolaArquivada">Escolas arquivadas</string>
+    <string name="maisEscola">Mais Escolas</string>
     <string name="acessoSenha">Digite sua senha</string>
     <string name="novaSenha">Nova senha</string>
     <string name="informeNovaSenha">Informe a nova senha</string>

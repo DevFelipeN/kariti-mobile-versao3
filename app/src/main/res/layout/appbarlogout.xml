@@ -14,47 +14,51 @@
         android:layout_height="?attr/actionBarSize"
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <!-- Título da ActionBar -->
-            <ImageButton
-                android:id="@+id/imageButtonInicio"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/tranparente"
-                android:textColor="@android:color/black"
-                app:showAsAction="always"
-                app:srcCompat="@drawable/baseline_exit_to_app_24"
-                android:contentDescription="@string/iconeVoltar" />
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:hint="@string/app_name"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="25sp" />
-
-            <ImageButton
-                android:id="@+id/iconHelpLogout"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="7dp"
-                android:background="@color/tranparente"
-                android:src="@mipmap/question"
-                android:contentDescription="@string/textAjuda" />
-
-        </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-<!--    <View-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#2196F3"
+        android:backgroundTint="#2196F3"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="18dp">
+
+        <!-- Título da ActionBar -->
+        <ImageButton
+            android:id="@+id/imageButtonInicio"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/tranparente"
+            android:contentDescription="@string/iconeVoltar"
+            android:textColor="@android:color/black"
+            app:showAsAction="always"
+            app:srcCompat="@drawable/baseline_exit_to_app_24" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/app_name"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="25sp" />
+
+        <ImageButton
+            android:id="@+id/iconHelpLogout"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="7dp"
+            android:background="@color/tranparente"
+            android:contentDescription="@string/textAjuda"
+            android:src="@mipmap/question" />
+
+    </LinearLayout>
+
+    <!--    <View-->
 <!--        android:id="@+id/divider3"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="2dp"-->

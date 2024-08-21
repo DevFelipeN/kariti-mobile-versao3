@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/myToolBarMenuHamburg"
-    android:layout_height="?attr/actionBarSize">
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="#2196F3">
 
     <ImageButton
         android:id="@+id/imgBtnVoltarDados"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@color/tranparente"
-        android:textColor="@android:color/black"
+        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
-        android:contentDescription="@string/iconeVoltar"/>
+        android:textColor="@android:color/black" />
 
     <ImageView
         android:id="@+id/menu_icon"
@@ -21,8 +21,8 @@
         android:layout_height="48dp"
         android:layout_gravity="end"
         android:contentDescription="@string/iconeMenuPontos"
-        android:padding="8dp"
         android:onClick="PopMenu"
+        android:padding="8dp"
         android:src="@mipmap/menuptn" />
 
 </androidx.appcompat.widget.Toolbar>

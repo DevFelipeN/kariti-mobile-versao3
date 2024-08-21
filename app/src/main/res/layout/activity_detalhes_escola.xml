@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context="online.padev.kariti.DetalhesEscolaActivity">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/appbarquestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
     <GridLayout
         android:layout_width="320dp"
         android:layout_height="wrap_content"
@@ -14,15 +22,16 @@
         android:rowCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.648"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewNomeEscola"
-        app:layout_constraintVertical_bias="0.22000003">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.343">
 
         <ImageView
-            android:contentDescription="@string/iconeAluno"
             android:id="@+id/imageButton9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/iconeAluno"
             app:layout_constraintEnd_toStartOf="@+id/buttonAluno"
             app:srcCompat="@mipmap/student" />
 
@@ -35,11 +44,11 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:contentDescription="@string/iconeTurma"
             android:id="@+id/imageButton6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="58dp"
+            android:contentDescription="@string/iconeTurma"
             app:layout_constraintEnd_toStartOf="@+id/btnTurma"
             app:srcCompat="@mipmap/turma" />
 
@@ -56,12 +65,12 @@
             app:layout_constraintTop_toBottomOf="@+id/buttonAluno" />
 
         <ImageView
-            android:contentDescription="@string/iconeProva"
             android:id="@+id/imageButton8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="25dp"
+            android:contentDescription="@string/iconeProva"
             app:layout_constraintEnd_toStartOf="@+id/btnProva"
             app:layout_constraintHorizontal_bias="0.987"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,49 +93,4 @@
 
     </GridLayout>
 
-    <TextView
-        android:id="@+id/textViewNomeEscola"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/borda_botao"
-        android:padding="8dp"
-        android:text="@string/escolaTeste"
-        android:textAlignment="center"
-        android:textColor="@color/cinzaClaro"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/imgBtnVoltaEscola"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/tranparente"
-        android:contentDescription="@string/iconeVoltar"
-        android:src="@mipmap/setaleft"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ImageButton
-        android:contentDescription="@string/textAjuda"
-        android:id="@+id/iconHelpDetalhesSchool"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="5dp"
-        android:background="@color/tranparente"
-        android:src="@mipmap/question"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/imgBtnVoltaEscola"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeEscola"
-        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

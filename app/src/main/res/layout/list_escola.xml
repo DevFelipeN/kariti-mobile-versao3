@@ -6,19 +6,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:background="@drawable/borda_botao"
-        android:padding="10dp"
-        android:layout_marginTop="10dp">
+        android:padding="10dp">
 
-            <TextView
-            style="@style/COLORTEXT"
+        <TextView
             android:id="@+id/textViewNomeScol"
-            android:layout_width="wrap_content"
+            style="@style/COLORTEXT"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/imageViewIcon"
-            android:text="Nome da Escola"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/imageViewIcon"
+            android:text="@string/nomeEscola"
             android:textSize="18sp" />
 
         <ImageView
@@ -26,8 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="10dp"
             android:src="@mipmap/ic_arrownext" />
 
     </RelativeLayout>

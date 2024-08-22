@@ -2,10 +2,14 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Kariti" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-<!--         <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/azul</item>
     </style>
 
     <style name="Theme.Kariti" parent="Base.Theme.Kariti" />
+
+    <style name="BUTTONSFLUTUANTES">
+        <item name="android:backgroundTint">@color/azul</item>
+    </style>
 
     <style name="BACKGROUND">
         <item name="android:background">@android:color/background_light</item>

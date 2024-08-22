@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Base.Theme.Kariti"
     tools:context="online.padev.kariti.VisualEscolaActivity"
     tools:ignore="VisualLintBounds">
 
@@ -18,38 +19,66 @@
 
     <ListView
         android:id="@+id/listViewEscolas"
-        android:layout_width="406dp"
-        android:layout_height="657dp"
-        app:layout_constraintBottom_toTopOf="@+id/iconarquivadas"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+    <!--
     <ImageView
         android:id="@+id/iconarquivadas"
         android:layout_width="71dp"
         android:layout_height="47dp"
-        android:contentDescription="@string/escolaArquivada"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconmaisescolas"
         app:srcCompat="@drawable/baseline_folder_off_black_48" />
 
     <ImageView
         android:id="@+id/iconmaisescolas"
         android:layout_width="71dp"
         android:layout_height="45dp"
+        android:contentDescription="@string/escolaArquivada"
         app:layout_constraintBottom_toTopOf="@+id/iconarquivadas"
-        android:contentDescription="@string/maisEscola"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewEscolas"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@drawable/baseline_add_home_black_48" />
+    -->
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/iconmaisescolas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/maisEscola"
+        android:src="@drawable/icon_add_escola"
+        app:layout_constraintBottom_toTopOf="@+id/iconarquivadas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955"
+        style="@style/BUTTONSFLUTUANTES"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/iconarquivadas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/escolaArquivada"
+        android:src="@drawable/icon_escola_desativada"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.934"
+        style="@style/BUTTONSFLUTUANTES"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

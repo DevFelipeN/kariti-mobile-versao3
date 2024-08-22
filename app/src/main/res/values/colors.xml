@@ -9,6 +9,7 @@
     <color name="tranparente">#00FAF6F6</color>
     <color name="corLinks">#0277BD</color>
     <color name="corErroRed">#FF0000</color>
+    <color name="azul">#2196F3</color>
 
 <!--    Cores do Tema Escuro-->
     <color name="corFundoCinza">#1c1b20</color>

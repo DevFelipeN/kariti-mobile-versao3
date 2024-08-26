@@ -41,7 +41,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     ArrayList<Integer> listIdsAlunos;
     BancoDados bancoDados;
     Spinner spinnerTurma, spinnerProva, spinnerAluno;
-    private TextView titulo;
+    TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         prova = getIntent().getExtras().getString("prova");
         turmalist = (ArrayList<String>) bancoDados.listTurmasPorProva();
 
-        if(endereco.equals(2)){
+        if(endereco.equals(2)){ //para quando a activity que a chamou foi ProvaActivity
             turmalist.add(0,"Selecione a turma");
             SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
             spinnerTurma.setAdapter(adapterTurma);
@@ -87,7 +87,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-        }else if(endereco.equals(1)){
+        }else if(endereco.equals(1)){ //para quando a activity que chamou for Gabarito
             id_turma = getIntent().getExtras().getInt("id_turma");
             turma = bancoDados.pegaNomeTurma(String.valueOf(id_turma));
             turmalist.add(0, turma);
@@ -135,8 +135,9 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 if (isOnline()) {
                     if(spinnerProva.getSelectedItem() != null) {
                         String nomeProva = spinnerProva.getSelectedItem().toString();
-                        String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva));
                         String nomeTurma = spinnerTurma.getSelectedItem().toString();
+                        id_turma = bancoDados.pegaIdTurma(nomeTurma);
+                        String id_prova = String.valueOf(bancoDados.pegaIdProvaTESTEEEEE(nomeProva, id_turma));
                         String id_usuario = String.valueOf(BancoDados.USER_ID);
                         String prof = bancoDados.pegaUsuario(id_usuario);
                         String data = bancoDados.pegaData(id_prova);

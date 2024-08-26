@@ -75,17 +75,11 @@ public class UploadEjson {
                     Integer id_prova = objJson.getInt("id_prova");
                     Integer id_aluno = objJson.getInt("id_aluno");
                     String mensagem = objJson.getString("mensagem");
-                    Log.e("kariti", "resultado: " +result);
-                    Log.e("kariti", "resultado2: " +resultCorrect);
-                    Log.e("kariti", "mensagem: "+mensagem);
-
                     if(resultCorrect.equals(0)){
-                        Boolean seCorrigida = bancoDados.checkResultadoCorrecao(id_prova, id_aluno);
-                        if(seCorrigida.equals(true)) {
+                        if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno)) {
                             Integer status = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
                             if(status.equals(-1)) {
                                 bancoDados.deletaCorrecaoPorAluno(id_prova, id_aluno);
-                                Log.e("Kariti", "DELETOU");
                             }
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");

@@ -141,18 +141,31 @@ public class BancoDados extends SQLiteOpenHelper {
         base_dados.close();
     }
     public Integer inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeProva", nomeProva);
-        contentValues.put("dataProva", dataProva);
-        contentValues.put("qtdQuestoes", qtdQuestoes);
-        contentValues.put("qtdAlternativas", qtdAlternativas);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
-        contentValues.put("id_turma", id_turma);
-        long inserir = base_dados.insert("prova", null, contentValues);
-        return Math.toIntExact(inserir);
+        SQLiteDatabase base_dados = null;
+        Integer id_prova = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("nomeProva", nomeProva);
+            contentValues.put("dataProva", dataProva);
+            contentValues.put("qtdQuestoes", qtdQuestoes);
+            contentValues.put("qtdAlternativas", qtdAlternativas);
+            contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
+            contentValues.put("id_turma", id_turma);
+            long inserir = base_dados.insert("prova", null, contentValues);
+            int convert = (int) inserir; //remover gambiarra após segunda bateria de testes
+            id_prova = Integer.valueOf(convert);
+            return id_prova;
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }finally {
+            if (base_dados != null && base_dados.isOpen()) {
+                base_dados.close();
+            }
+        }
     }
-    public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Double nota){
+    public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Float nota){
         SQLiteDatabase base_dados = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id_prova", id_prova);
@@ -160,6 +173,8 @@ public class BancoDados extends SQLiteOpenHelper {
         contentValues.put("resposta", resposta);
         contentValues.put("nota", nota);
         base_dados.insert("gabarito", null, contentValues);
+        base_dados.close();
+        Log.e("kariti","Cadastrado");
     }
     public Boolean inserirDadosAluno(String nomeAluno, String email, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -349,6 +364,7 @@ public class BancoDados extends SQLiteOpenHelper {
             stmt.bindLong(6, id_prova);
             stmt.executeUpdateDelete();
             base_dados.close();
+            Log.e("kariti","Alterado");
         }catch (Exception e){e.printStackTrace();}
     }
     public void upadateResultadoCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
@@ -430,7 +446,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean checkResultadoCorrecao(Integer id_prova, Integer id_aluno) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_prova from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+        Cursor cursor = base_dados.rawQuery("Select id_resultado from resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return true;
@@ -598,12 +614,31 @@ public class BancoDados extends SQLiteOpenHelper {
             cursor.moveToFirst();
         return cursor.getInt(0);
     }
-    public Integer pegaIdTurma(String nomeTurma) {
+
+    public Integer pegaIdProvaTESTEEEEE(String provacad, @NonNull Integer id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_turma from turma where nomeTurma = ?", new String[]{nomeTurma});
+        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ? and id_turma = ?", new String[]{provacad, id_turma.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);
+    }
+    //AQUI
+    public Integer pegaIdTurma(String nomeTurma) {
+        SQLiteDatabase base_dados = this.getWritableDatabase();
+        Cursor cursor = null;
+        Integer id_turma = null;
+        try {
+            cursor = base_dados.rawQuery("Select id_turma from turma where nomeTurma = ? and id_escola = ?", new String[]{nomeTurma, BancoDados.ID_ESCOLA.toString()});
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                id_turma = cursor.getInt(0);
+            }
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return id_turma;
     }
     public Integer pegaqtdQuestoes(String id_prova){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -907,15 +942,16 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return ids_anonimos;
     }
-    public Integer listNota(String id_prova) {
-        int notaTot = 0;
+    public Float listNota(String id_prova) {
+        float notaTot = 0;
         //ArrayList<Integer>  notas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT nota FROM gabarito where id_prova = ?", new String[]{id_prova});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // O índice 0 corresponde à coluna 'nome' no exemplo
-                int nota = cursor.getInt(0);
+                float nota = cursor.getFloat(0);
+                Log.e("kariti","Nota = "+nota);
                 notaTot = notaTot + nota;
                 //notas.add(nota);
             } while (cursor.moveToNext());
@@ -1069,18 +1105,21 @@ public class BancoDados extends SQLiteOpenHelper {
             do {
                 String aux = "";
                 String resposta = cursor.getString(0);
-                if(resposta.equals("0")) {
-                    aux = "-";
-                }else {
-                    aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
-                }
-                for(int i = 1; i < resposta.length(); i++){
-                    Log.e("kariti", "respostasss: "+String.valueOf(resposta.charAt(i)));
-                    if(!String.valueOf(resposta.charAt(i)).equals("0")) {
-                        aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                if(!resposta.equals("-1")) {
+                    Log.e("kariti", resposta);
+                    if (resposta.equals("0")) {
+                        aux = "-";
+                    } else {
+                        aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
                     }
+                    for (int i = 1; i < resposta.length(); i++) {
+                        Log.e("kariti", "respostasss: " + String.valueOf(resposta.charAt(i)));
+                        if (!String.valueOf(resposta.charAt(i)).equals("0")) {
+                            aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                        }
+                    }
+                    respostasDadas.add(aux);
                 }
-                respostasDadas.add(aux);
                 //Log.e("kariti", "Aqui 5");
             } while (cursor.moveToNext());
             cursor.close();

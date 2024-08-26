@@ -20,11 +20,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class DetalheCorrecao extends AppCompatActivity {
 
+    private static final org.apache.commons.logging.Log log = LogFactory.getLog(DetalheCorrecao.class);
     ImageButton voltar;
     String nomeAluno, status;
     Integer id_aluno, id_prova, qtdQuestoes;
@@ -40,9 +43,10 @@ public class DetalheCorrecao extends AppCompatActivity {
         setContentView(R.layout.activity_detalhe_correcao);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        alunoDetalhe  = (TextView) findViewById(R.id.textViewDetalheAluno);
-        notaTotal = (TextView) findViewById(R.id.textViewNotaTotalDetalhe);
+        alunoDetalhe  = findViewById(R.id.textViewDetalheAluno);
+        notaTotal = findViewById(R.id.textViewNotaTotalDetalhe);
         titulo = findViewById(R.id.toolbar_title);
+
         bancoDados = new BancoDados(this);
 
         titulo.setText("Detalhes");
@@ -51,6 +55,8 @@ public class DetalheCorrecao extends AppCompatActivity {
         nomeAluno = bancoDados.pegaNomeParaDetalhe(id_aluno.toString());
         id_prova = getIntent().getExtras().getInt("id_prova");
         qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
+
+        Log.e("kariti","PASSEI AQUI---------");
 
         alunoDetalhe.setText(nomeAluno);
         //Carrega todas as respostas ordenadas por questao

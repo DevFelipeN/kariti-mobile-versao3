@@ -17,10 +17,9 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
+        style="@style/BARRASPRINCIPAIS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#2196F3"
-        android:backgroundTint="#2196F3"
         android:gravity="center"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="18dp">

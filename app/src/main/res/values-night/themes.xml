@@ -9,6 +9,27 @@
         <item name="android:backgroundTint">@color/azul</item>
     </style>
 
+    <style name="COLORTEXTINSERT">
+        <item name="android:textColorHint">@color/cinzaText</item>
+    </style>
+    
+    <style name="FUNDONOMES">
+        <item name="android:background">@color/cinzaClaroPlace</item>
+    </style>
+
+    <style name="BORDACAMPOS">
+        <item name="android:backgroundTint">@color/azul</item>
+    </style>
+
+    <style name="SETADIRECIONAL">
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="BARRASPRINCIPAIS">
+        <item name="android:backgroundTint">@color/azul</item>
+        <item name="android:background">@color/azul</item>
+    </style>
+
     <style name="BACKGROUND">
         <item name="android:background">@color/corFundoCinza</item>
     </style>

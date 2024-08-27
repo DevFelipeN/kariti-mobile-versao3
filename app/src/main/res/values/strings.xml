@@ -26,7 +26,9 @@
     <string name="repetirSenha">Repita a senha</string>
     <string name="textViewsenha">Senha de Acesso</string>
     <string name="textViewconfirmar">Confirmar Senha</string>
+    <string name="EditTextInfoEscola">Informe o nome da escola</string>
     <string name="buttonCadastrar">Cadastrar</string>
+    <string name="cadEscola">Cadastrar Escola</string>
     <string name="criaConta">Criar conta</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
@@ -54,14 +56,14 @@
     <string name="voidSchool">Nenhum Dado Cadastrado!</string>
     <string name="valorZero">0</string>
     <!--Escola-->
-    <string name="buttonCadastroEscola">Cadastrar Escola</string>
+    <string name="buttonCadastroEscola">Cadastrar escola</string>
     <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
     <string name="nomeSchool">Nome da Escola*</string>
     <string name="bairroSchool">Bairro</string>
     <string name="senhahint">********</string>
     <string name="btnAlterarSenha">Alterar Senha</string>
     <string name="selecionarEsc">Selecionar Escola</string>
-    <string name="btnEscolaDesativada">Escolas Desativadas</string>
+    <string name="btnEscolaDesativada">Escolas desativadas</string>
     <string name="escolaTeste">Esola Teste</string>
     <!--    Aluno-->
     <string name="buscNameAluno">Pesquisar aluno</string>

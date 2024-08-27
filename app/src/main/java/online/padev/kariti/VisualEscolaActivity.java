@@ -4,8 +4,15 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,24 +21,26 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton iconeSair;
     FloatingActionButton btnEscolaDesativada, btnCadastrarEscola;
     ImageButton iconeAjuda;
-    TextView titulo;
+    TextView titulo, txtDescricaoDesativadas, txtDescricaoNovaEscola;
     ListView listViewEscolas;
     EscolaAdapter adapter;
     private ArrayList<String> listEscolaBD;
     BancoDados bancoDados;
     private static final int REQUEST_CODE = 1;
-
-    Integer id_escola;
+    private Integer id_escola;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_escola);
+
+        ConstraintLayout layoutPrincipal = findViewById(R.id.layoutPrincipal);
 
         iconeSair = findViewById(R.id.imageButtonInicio);
         btnEscolaDesativada = findViewById(R.id.iconarquivadas);
@@ -39,6 +48,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
         iconeAjuda = findViewById(R.id.iconHelpLogout);
         btnCadastrarEscola = findViewById(R.id.iconmaisescolas);
         titulo = findViewById(R.id.toolbar_title);
+        txtDescricaoDesativadas = findViewById(R.id.txtDescricaoDesativadas);
+        txtDescricaoNovaEscola = findViewById(R.id.txtDescricaoNovaEscola);
 
         bancoDados = new BancoDados(this);
 
@@ -49,17 +60,12 @@ public class VisualEscolaActivity extends AppCompatActivity {
             if(!bancoDados.listEscolas(0).isEmpty()){
                 carregaEscolasDesativadas();
             }else{
-                ilustracao();
+                cadastrarNovaEscola();
             }
         }
         adapter = new EscolaAdapter(this, listEscolaBD, listEscolaBD);
         listViewEscolas.setAdapter(adapter);
 
-        //parei aqui
-
-        btnCadastrarEscola.setOnClickListener(v -> mudarParaTelaCadEscola());
-        btnEscolaDesativada.setOnClickListener(v -> telaEscolaDesativada());
-        iconeAjuda.setOnClickListener(v -> ajuda());
         listViewEscolas.setOnItemClickListener((parent, view, position, id) -> {
             BancoDados.ID_ESCOLA = bancoDados.pegaIdEscola(adapter.getItem(position));
             carregarDetalhesEscola();
@@ -97,6 +103,26 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 sair();
             }
         });
+
+        layoutPrincipal.setOnClickListener(v -> {
+            // Exibir o texto sobre o botão
+            txtDescricaoDesativadas.setVisibility(View.VISIBLE);
+            txtDescricaoNovaEscola.setVisibility(View.VISIBLE);
+            // Ocultar o texto após 3 segundos
+            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
+            new Handler().postDelayed(() -> txtDescricaoNovaEscola.setVisibility(View.INVISIBLE), 3000);
+        });
+        btnEscolaDesativada.setOnClickListener(v -> {
+            txtDescricaoDesativadas.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
+            telaEscolaDesativada();
+        });
+        btnCadastrarEscola.setOnClickListener(v -> {
+            txtDescricaoNovaEscola.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
+            cadastrarNovaEscola();
+        });
+        iconeAjuda.setOnClickListener(v -> ajuda());
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -121,28 +147,58 @@ public class VisualEscolaActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    public void mudarParaTelaCadEscola(){
-        Intent intent = new Intent(this, CadEscolaActivity.class);
-        intent.putExtra("status","continue");
-        startActivityForResult(intent, REQUEST_CODE);
-    }
     private void carregarDetalhesEscola(){
         Intent intent = new Intent(this, DetalhesEscolaActivity.class);
         startActivity(intent);
     }
-
     private void telaEscolaDesativada() {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
-    }
-    private void ilustracao(){
-        Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
-        startActivity(intent);
-        finish();
     }
     private void carregaEscolasDesativadas() {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
         startActivity(intent);
         finish();
+    }
+    private void cadastrarNovaEscola() {
+        // Inflar o layout customizado
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.cadastrar_escola_dialog, null);
+
+        // Inicializar os elementos do layout
+        FloatingActionButton cancelarFlut = dialogView.findViewById(R.id.btnvoltarflutuante);
+        EditText editTextEscola = dialogView.findViewById(R.id.editTextNomeEscolaDialog);
+        Button btnCadastrar = dialogView.findViewById(R.id.buttonDialog);
+
+        // Criar o AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(dialogView);
+        // Mostrar o diálogo
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        btnCadastrar.setOnClickListener(v -> {
+            String nomeEscola = editTextEscola.getText().toString();
+            if (!nomeEscola.trim().isEmpty()) {
+                if (!bancoDados.verificaEscola(nomeEscola)) {
+                    if (bancoDados.inserirDadosEscola(nomeEscola, null, 1)) {
+                        listEscolaBD.add(nomeEscola);
+                        Collections.sort(listEscolaBD);
+                        adapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        Toast.makeText(this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Atenção: Escola já cadastrada!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Informe o nome da escola!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        cancelarFlut.setOnClickListener(v -> {
+            if(listEscolaBD.isEmpty()) finish();
+            dialog.dismiss();//Fecha o diálogo
+        });
     }
 }

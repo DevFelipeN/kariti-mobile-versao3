@@ -2,13 +2,21 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Kariti" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/azul</item>
+        <item name="colorPrimary">@color/corLinks</item>
     </style>
 
     <style name="Theme.Kariti" parent="Base.Theme.Kariti" />
 
     <style name="BUTTONSFLUTUANTES">
-        <item name="android:backgroundTint">@color/azul</item>
+        <item name="android:backgroundTint">@color/corLinks</item>
+    </style>
+
+    <style name="BARRASPRINCIPAIS">
+        <item name="android:background">@color/corLinks</item>
+    </style>
+
+    <style name="COLORTEXTINSERT">
+        <item name="android:textColorHint">@color/cinzaText</item>
     </style>
 
     <style name="BACKGROUND">

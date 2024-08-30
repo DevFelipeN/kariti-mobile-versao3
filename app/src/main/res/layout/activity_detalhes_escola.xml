@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BACKGROUND"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Base.Theme.Kariti"
-    style="@style/BACKGROUND"
     tools:context="online.padev.kariti.DetalhesEscolaActivity">
 
     <include
@@ -27,10 +27,11 @@
         app:layout_constraintHorizontal_bias="0.648"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.343">
+        app:layout_constraintVertical_bias="0.421">
 
         <ImageView
             android:id="@+id/imageButton9"
+            style="@style/COLORIMGICONE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/iconeAluno"
@@ -47,6 +48,7 @@
 
         <ImageView
             android:id="@+id/imageButton6"
+            style="@style/COLORIMGICONE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="58dp"
@@ -68,6 +70,7 @@
 
         <ImageView
             android:id="@+id/imageButton8"
+            style="@style/COLORIMGICONE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"

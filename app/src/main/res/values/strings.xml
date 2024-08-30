@@ -21,6 +21,7 @@
     <string name="escolaArquivada">Escolas arquivadas</string>
     <string name="maisEscola">Mais Escolas</string>
     <string name="acessoSenha">Digite sua senha</string>
+    <string name="descricioniconwelcome">Icone Welcome</string>
     <string name="novaSenha">Nova senha</string>
     <string name="informeNovaSenha">Informe a nova senha</string>
     <string name="repetirSenha">Repita a senha</string>
@@ -154,6 +155,8 @@
     <string name="iconeMenos">Icone de menos</string>
     <string name="imagemUser">Imagem do user</string>
     <string name="iconeSenhaOculta">Botão de senha oculta</string>
+    <string name="texticondirecional">Seta direcional</string>
+    <string name="iconeSenhaOculta2">Botão de senha oculta2</string>
     <string name="iconeLixeira">Icone de lixeira</string>
     <string name="iconeFlash">Icone de flash da camera</string>
     <string name="iconeCaptura">Icone de captura</string>

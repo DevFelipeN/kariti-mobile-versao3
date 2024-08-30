@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class AtualizarSenha extends AppCompatActivity {
+public class AtualizarSenha extends AppCompatActivity{
     private Integer id_usuario;
     String nomeUsuario, emailUsuario, novaSenha, confNovaSenha;
     EditText editTextNome, editTextEmail, editTextNovaSenha, editTextConfNovaSenha;

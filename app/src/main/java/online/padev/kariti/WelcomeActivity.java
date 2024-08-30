@@ -23,12 +23,8 @@ public class WelcomeActivity extends AppCompatActivity {
         if(bancoDados.verificaEmail("karitimobile@gmail.com") == null) {
             bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
         }
-        botaoCadastro.setOnClickListener(v -> {
-            mudarParaTelaCadastro();
-        });
-        botaoLogin.setOnClickListener(v -> {
-            mudarParaTelaLogin();
-        });
+        botaoCadastro.setOnClickListener(v -> mudarParaTelaCadastro());
+        botaoLogin.setOnClickListener(v -> mudarParaTelaLogin());
     }
 
     /**

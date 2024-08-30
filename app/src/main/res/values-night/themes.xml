@@ -9,6 +9,10 @@
         <item name="android:backgroundTint">@color/azul</item>
     </style>
 
+    <style name="BACKGROUNDBARRA">
+        <item name="android:background">@color/azul</item>
+    </style>
+
     <style name="COLORTEXTINSERT">
         <item name="android:textColorHint">@color/cinzaText</item>
     </style>
@@ -17,8 +21,13 @@
         <item name="android:background">@color/cinzaClaroPlace</item>
     </style>
 
-    <style name="BORDACAMPOS">
+    <style name="BORDABOTOES">
         <item name="android:backgroundTint">@color/azul</item>
+    </style>
+
+    <style name="CAMPOSEDITTEXT">
+        <item name="android:backgroundTint">@color/azul</item>
+        <item name="android:textColorHint">@color/cinzaText</item>
     </style>
 
     <style name="SETADIRECIONAL">
@@ -26,12 +35,19 @@
     </style>
 
     <style name="BARRASPRINCIPAIS">
-        <item name="android:backgroundTint">@color/azul</item>
         <item name="android:background">@color/azul</item>
     </style>
 
     <style name="BACKGROUND">
         <item name="android:background">@color/corFundoCinza</item>
+    </style>
+
+    <style name="COLORIMGICONE">
+        <item name="android:tint">@color/azul</item>
+    </style>
+
+    <style name="ICONSENHA">
+        <item name="android:tint">@color/cinzaText</item>
     </style>
 
     <style name="BUTTONSTYLE" parent="Widget.AppCompat.Button">

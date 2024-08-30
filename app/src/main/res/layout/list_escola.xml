@@ -31,8 +31,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
             android:src="@mipmap/ic_arrownext"
-            style="@style/SETADIRECIONAL"
-            />
+            android:contentDescription="@string/texticondirecional"
+            style="@style/SETADIRECIONAL" />
 
     </RelativeLayout>
 

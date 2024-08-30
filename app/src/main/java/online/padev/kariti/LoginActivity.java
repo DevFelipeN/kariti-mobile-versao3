@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         esqueciSenha.setOnClickListener(v -> {
-            if(!VerificaConexaoInternet.verificaConexao(LoginActivity.this)) {
+            if(!VerificaConexaoInternet.verificaConexao(LoginActivity.this)){
                 Toast.makeText(LoginActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -112,21 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, VisualEscolaActivity.class);
         startActivity(intent);
         finish();
-        /*if(!bancoDados.listEscolas(1).isEmpty()){
-            Toast.makeText(this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, VisualEscolaActivity.class);
-            startActivity(intent);
-            finish();
-        }else if(!bancoDados.listEscolas(0).isEmpty()){
-            Intent intent = new Intent(this, EscolaDesativadaActivity.class);
-            startActivity(intent);
-        }else{
-            Intent intent = new Intent(this, CadEscolaActivity.class);
-            intent.putExtra("status", "primeiroAcesso");
-            startActivity(intent);
-            finish();
-        }
-         */
     }
     private void mudarParaTelaCadastro(){
         Intent intent = new Intent(this, MainActivity.class);

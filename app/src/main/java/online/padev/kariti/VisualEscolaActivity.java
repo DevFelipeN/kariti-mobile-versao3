@@ -4,8 +4,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,9 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -39,8 +35,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_escola);
-
-        ConstraintLayout layoutPrincipal = findViewById(R.id.layoutPrincipal);
 
         iconeSair = findViewById(R.id.imageButtonInicio);
         btnEscolaDesativada = findViewById(R.id.iconarquivadas);
@@ -96,6 +90,26 @@ public class VisualEscolaActivity extends AppCompatActivity {
             // Retorna true para indicar que o evento de long press foi consumido
             return true;
         });
+
+        //Exibir o texto sobre o botão
+        txtDescricaoNovaEscola.setVisibility(View.VISIBLE);
+        txtDescricaoDesativadas.setVisibility(View.VISIBLE);
+        // Ocultar o texto após 3 segundos
+        new Handler().postDelayed(() -> txtDescricaoNovaEscola.setVisibility(View.INVISIBLE), 10000);
+        new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 10000);
+
+        btnCadastrarEscola.setOnClickListener(v -> {
+            txtDescricaoNovaEscola.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() -> txtDescricaoNovaEscola.setVisibility(View.INVISIBLE), 3000);
+            cadastrarNovaEscola();
+        });
+
+        btnEscolaDesativada.setOnClickListener(v -> {
+            txtDescricaoDesativadas.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
+            telaEscolaDesativada();
+        });
+        iconeAjuda.setOnClickListener(v -> ajuda());
         iconeSair.setOnClickListener(v -> sair());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -103,26 +117,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 sair();
             }
         });
-
-        layoutPrincipal.setOnClickListener(v -> {
-            // Exibir o texto sobre o botão
-            txtDescricaoDesativadas.setVisibility(View.VISIBLE);
-            txtDescricaoNovaEscola.setVisibility(View.VISIBLE);
-            // Ocultar o texto após 3 segundos
-            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
-            new Handler().postDelayed(() -> txtDescricaoNovaEscola.setVisibility(View.INVISIBLE), 3000);
-        });
-        btnEscolaDesativada.setOnClickListener(v -> {
-            txtDescricaoDesativadas.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
-            telaEscolaDesativada();
-        });
-        btnCadastrarEscola.setOnClickListener(v -> {
-            txtDescricaoNovaEscola.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(() -> txtDescricaoDesativadas.setVisibility(View.INVISIBLE), 3000);
-            cadastrarNovaEscola();
-        });
-        iconeAjuda.setOnClickListener(v -> ajuda());
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -152,8 +146,12 @@ public class VisualEscolaActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void telaEscolaDesativada() {
-        Intent intent = new Intent(this, EscolaDesativadaActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
+        if(!bancoDados.listEscolas(0).isEmpty()) {
+            Intent intent = new Intent(this, EscolaDesativadaActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        }else{
+            avisoSemEscolasDesativadas();
+        }
     }
     private void carregaEscolasDesativadas() {
         Intent intent = new Intent(this, EscolaDesativadaActivity.class);
@@ -200,5 +198,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
             if(listEscolaBD.isEmpty()) finish();
             dialog.dismiss();//Fecha o diálogo
         });
+    }
+    private void avisoSemEscolasDesativadas() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("KARITI");
+        builder.setMessage("Aqui você encontra todas as suas escolas desativas.\n\n" +
+                "Obs. Você não possui escolas desativadas até o momento!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

@@ -14,7 +14,7 @@
         android:layout_margin="0dp"
         android:columnCount="1"
         android:rowCount="3"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLoginW"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +67,8 @@
 
     </GridLayout>
 
+    <!--
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLoginW"
         style="@style/BUTTONSTYLE"
@@ -92,6 +94,44 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLoginW" />
+        -->
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="152dp"
+        android:columnCount="1"
+        android:rowCount="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridwelcome">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonLoginW"
+            style="@style/BUTTONSTYLE"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="25dp"
+            android:text="@string/buttonLogin"
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="491dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonCadastroW"
+            style="@style/BUTTONSTYLE"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/buttonCadastreSe"
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="565dp" />
+
+
+    </GridLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,8 +18,8 @@ import java.io.FileOutputStream;
 
 public class CameraNoAppActivity extends AppCompatActivity {
     private Camera camera;
-    private CameraPreview cameraPreview;
-    private Button btnCapturar;
+    CameraPreview cameraPreview;
+    Button btnCapturar;
     String nomeImagem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

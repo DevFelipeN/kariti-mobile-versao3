@@ -156,8 +156,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                         }
                         try {
-                            //File filecsv = null;
-                            //filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
                             String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
                             String filePdf = nomeProva + dateCart + ".pdf";
                             File filecsv  = new File(getExternalFilesDir(null), "/dadosProva.csv");

@@ -5,20 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import online.padev.kariti.R;
-
 import java.util.ArrayList;
 
 public class AdapterExclAluno extends ArrayAdapter<String> {
 
-    private ArrayList<String> alunos;
-    private Context context;
+    ArrayList<String> alunos;
+    Context context;
 
     public AdapterExclAluno(Context context, ArrayList<String> alunos) {
         super(context, R.layout.list_alunos_delete, alunos);
@@ -32,11 +29,11 @@ public class AdapterExclAluno extends ArrayAdapter<String> {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.list_alunos_delete, null);
+            view = inflater.inflate(R.layout.list_alunos_delete,null);
         }
 
         TextView textViewNome = view.findViewById(R.id.textViewNomeAluno);
-        ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
+        //ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
         textViewNome.setText(alunos.get(position));
 
 

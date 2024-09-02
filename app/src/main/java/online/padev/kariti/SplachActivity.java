@@ -10,9 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import online.padev.kariti.R;
-
-public class SplachActivity extends AppCompatActivity {
+public class
+SplachActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

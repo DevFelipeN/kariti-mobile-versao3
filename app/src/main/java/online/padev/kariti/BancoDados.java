@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
     public static Integer USER_ID;
@@ -182,8 +183,8 @@ public class BancoDados extends SQLiteOpenHelper {
 
     /**
      * Este método deleta uma escola do banco
-     * @param id_escola
-     * @return
+     * @param id_escola parametro contendo o id da prova que se deseja deletar
+     * @return retorna o resultado da execução
      */
     public Boolean deletarEscola(Integer id_escola){
         SQLiteDatabase base_dados = null;
@@ -685,18 +686,12 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkprovasNome(String nomeProva, String id_turma) {
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT nomeProva FROM prova WHERE nomeProva = ? and id_turma = ?", new String[]{nomeProva, id_turma});
-        if (cursor.getCount() > 0){
-            return true;
-        }else
-            return false;
+        return cursor.getCount() > 0;
     }
     public Boolean checkCorrigida(String id_prova){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() > 0;
     }
     public Boolean checkprovaId(String id_prova){
         SQLiteDatabase database = this.getWritableDatabase();

@@ -152,14 +152,11 @@ public class CameraxActivity extends AppCompatActivity {
         imageCapture.takePicture(outputFileOptions, executorService, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                //String msg = "Imagem salva em: " + photoFile.getAbsolutePath();
-                //runOnUiThread(() -> Toast.makeText(CameraxActivity.this, msg, Toast.LENGTH_SHORT).show());
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
                 intent.putExtra("nomeImagem", nomeImagemx);
                 intent.putExtra("caminhoImagem", photoFile.getAbsolutePath());
                 startActivity(intent);
                 finish();
-                //startCamera(); // Reiniciar a câmera após a captura
             }
 
             @Override

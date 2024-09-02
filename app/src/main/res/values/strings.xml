@@ -2,7 +2,7 @@
     <string name="app_name">Kariti</string>
     <string name="buttonvoltarTela">VOLTAR</string>
     <string name="nomeCompleto">Nome Completo*</string>
-    <string name="email">E-mail*</string>
+    <string name="email">E-mail</string>
     <string name="emailNoRequired">E-mail</string>
     <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>

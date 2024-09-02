@@ -1,13 +1,12 @@
 package online.padev.kariti;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AnimacaoCorrecao extends AppCompatActivity {
-    private TextView titulo, informativo;
+    TextView titulo, informativo;
     private static AnimacaoCorrecao instanciaEncerra;
 
     @Override
@@ -26,13 +25,10 @@ public class AnimacaoCorrecao extends AppCompatActivity {
                 " poderá ser visualizado na opção 'Visualizar Correção'\n\n" +
                 "Aguarde"));
 
-        titulo.setText("Corrigindo");
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-                finish();
-            }
+        titulo.setText(String.format("%s","Corrigindo"));
+        btnVoltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
         });
     }
     protected void onDestroy() {

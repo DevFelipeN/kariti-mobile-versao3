@@ -33,7 +33,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     String alunoSelecionado;
     Integer id_turma = 0;
     AdapterExclAluno al;
-    private TextView titulo;
+    TextView titulo;
     ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

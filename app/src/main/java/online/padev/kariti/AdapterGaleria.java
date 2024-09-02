@@ -11,18 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import online.padev.kariti.R;
-
 import java.util.ArrayList;
 
 public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHolder> {
 
-    private ArrayList<String> nomesDasFotos, datasDasFotos, caminhosDasFotos;
-    //    private byte[] photo;
-//    private ArrayList<byte[]> photo;
-    private Context context;
+    ArrayList<String> nomesDasFotos, datasDasFotos, caminhosDasFotos;
+    Context context;
 
     public AdapterGaleria(Context context, ArrayList<String> nomesDasFotos, ArrayList<String> datasDasFotos, ArrayList<String> caminhosDasFotos) {
         this.context = context;
@@ -61,23 +56,7 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
                 .into(holder.imageViewGaleria);
 
         // Defina o clique do botão
-        holder.deleteImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Botão deletar clicado para " + nomeFoto, Toast.LENGTH_SHORT).show();
-            }
-        });
-        /*
-        holder.imageViewGaleria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //ImageDialog dialog = new ImageDialog(context, bitPhoto);
-                ImageDialog dialog = new ImageDialog(context, caminhoFoto);
-                dialog.show();
-            }
-        });
-
-         */
+        holder.deleteImg.setOnClickListener(v -> Toast.makeText(context, "Botão deletar clicado para " + nomeFoto, Toast.LENGTH_SHORT).show());
 
     }
 

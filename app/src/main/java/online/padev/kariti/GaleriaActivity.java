@@ -135,25 +135,6 @@ public class GaleriaActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*
-    public void telaProva(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Provas enviadas para correção!")
-                .setMessage("Aguarde alguns instantes para sua prova ser corrigida.\n" +
-                        "Após a correção da prova, o resultado poderá ser visualizado na opção 'Visualizar Correção'.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-    */
     public void telaProva(){
         Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
         startActivity(intent);

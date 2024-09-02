@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 public class CadAlunoActivity extends AppCompatActivity {
     ImageButton voltar;
     EditText nomeAluno, emailAluno;

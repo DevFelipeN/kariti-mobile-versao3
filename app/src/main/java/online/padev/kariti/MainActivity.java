@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         ocultarSenha = findViewById(R.id.senhaoculta);
         ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
         ImageButton voltar = findViewById(R.id.imgBtnVoltar);
-        Button cadastro = findViewById(R.id.buttonSalvarEdit);
+        Button cadastro = findViewById(R.id.buttonSalvarUsuario);
 
         //cria uma instancia de outras classes
         bancoDados = new BancoDados(this);

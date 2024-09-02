@@ -3,14 +3,12 @@ package online.padev.kariti;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import android.widget.ImageButton;
 
 public class CadEscolaActivity extends AppCompatActivity {

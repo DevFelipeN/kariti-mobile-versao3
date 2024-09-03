@@ -117,7 +117,7 @@
                 style="@style/COLORIMGICONE"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="@string/iconeMenos"
+                android:contentDescription="@string/iconeMenosAnonimos"
                 app:srcCompat="@mipmap/subtract" />
 
             <EditText
@@ -138,7 +138,7 @@
                 style="@style/COLORIMGICONE"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="@string/iconeAdd"
+                android:contentDescription="@string/iconeAddMaisAnonimos"
                 app:srcCompat="@mipmap/btnadicionar" />
         </LinearLayout>
     </LinearLayout>

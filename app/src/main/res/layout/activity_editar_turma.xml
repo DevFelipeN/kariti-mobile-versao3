@@ -116,7 +116,7 @@
                 style="@style/COLORIMGICONE"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="@string/iconeMenos"
+                android:contentDescription="@string/iconeMenosAnonimos"
                 android:padding="3dp"
                 app:srcCompat="@mipmap/subtract" />
 
@@ -139,7 +139,7 @@
                 style="@style/COLORIMGICONE"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="@string/iconeAdd"
+                android:contentDescription="@string/iconeAddMaisAnonimos"
                 android:padding="3dp"
                 app:srcCompat="@mipmap/btnadicionar" />
 

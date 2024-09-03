@@ -30,10 +30,10 @@
         android:background="@drawable/borda_botao"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="0.765" />
+        app:layout_constraintVertical_bias="0.875" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/iconmaisescolas"

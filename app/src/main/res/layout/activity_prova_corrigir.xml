@@ -26,8 +26,8 @@
     <Button
         android:id="@+id/buttonCamera"
         style="@style/BUTTONSTYLE"
-        android:layout_width="250dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/btnAbrirCamera"
         android:textSize="16sp"

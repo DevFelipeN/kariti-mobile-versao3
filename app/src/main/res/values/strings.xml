@@ -151,9 +151,13 @@
     <string name="iconeProva">Icone de Prova</string>
     <string name="iconeEmail">Icone do email</string>
     <string name="iconeUser">Icone do user</string>
-    <string name="iconeAdd">Icone de adicionar</string>
+    <string name="iconeAddMaisAlter">Mais Alternativas</string>
+    <string name="iconeAddMaisAnonimos">Mais Anônimos</string>
+    <string name="iconeAddMaisQuest">Mais Questões</string>
     <string name="iconeCorrigir">Icone de corrigir</string>
-    <string name="iconeMenos">Icone de menos</string>
+    <string name="iconeMenosQuast">Menos Questões</string>
+    <string name="iconeMenosAlter">Menos Alternativas</string>
+    <string name="iconeMenosAnonimos">Menos Anônimos</string>
     <string name="imagemUser">Imagem do user</string>
     <string name="iconeSenhaOculta">Botão de senha oculta</string>
     <string name="texticondirecional">Seta direcional</string>

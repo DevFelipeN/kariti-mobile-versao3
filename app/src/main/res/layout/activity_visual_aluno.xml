@@ -15,32 +15,23 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:layout_editor_absoluteX="0dp" />
 
-<View
-    android:id="@+id/divider4"
-    android:layout_width="409dp"
-    android:layout_height="1dp"
-    android:background="?android:attr/listDivider"
-    app:layout_constraintTop_toBottomOf="@+id/include"
-    tools:layout_editor_absoluteX="2dp"
-    tools:ignore="MissingConstraints" />
-
     <EditText
         android:id="@+id/editTextBuscar"
         style="@style/CAMPOSEDITTEXT"
-        android:layout_width="359dp"
-        android:layout_height="49dp"
-        android:autofillHints=""
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:autofillHints="name"
         android:background="@drawable/border_radio"
-        android:ems="10"
+        android:ems="16"
         android:hint="@string/buscNameAluno"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="0.023"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -48,7 +39,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="10dp"
-        android:contentDescription="@string/buscNameAluno"
+        android:contentDescription="@string/buscNameAlunoLupa"
         app:layout_constraintBottom_toBottomOf="@+id/editTextBuscar"
         app:layout_constraintEnd_toEndOf="@+id/editTextBuscar"
         app:layout_constraintHorizontal_bias="0.0"
@@ -58,17 +49,20 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listSelecAluno"
+        style="@style/BORDABOTOES"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/borda_botao"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/totalAlunos"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBuscar" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextBuscar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/totalAlunos"

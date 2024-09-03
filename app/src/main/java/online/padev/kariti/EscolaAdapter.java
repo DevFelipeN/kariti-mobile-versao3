@@ -11,8 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import online.padev.kariti.R;
-
 import java.util.ArrayList;
 
 public class EscolaAdapter extends ArrayAdapter<String> {

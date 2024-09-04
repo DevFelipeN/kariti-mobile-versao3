@@ -4,6 +4,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -205,6 +207,14 @@ public class VisualEscolaActivity extends AppCompatActivity {
         builder.setMessage("Aqui você encontra todas as suas escolas desativas.\n\n" +
                 "Obs. Você não possui escolas desativadas até o momento!");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-        builder.show();
+        // Criando o diálogo
+        AlertDialog dialog = builder.create();
+
+        // Exibindo o diálogo
+        dialog.show();
+        // Mudando a cor do botão "OK" depois de mostrar o diálogo
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(this, R.color.azul)
+        );
     }
 }

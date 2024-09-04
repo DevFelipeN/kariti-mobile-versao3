@@ -22,11 +22,11 @@
     <string name="maisEscola">Mais Escolas</string>
     <string name="acessoSenha">Digite sua senha</string>
     <string name="descricioniconwelcome">Icone Welcome</string>
-    <string name="novaSenha">Nova senha</string>
-    <string name="informeNovaSenha">Informe a nova senha</string>
+    <string name="novaSenha">Nova senha*</string>
+    <string name="informeNovaSenha">Informe a nova senha*</string>
     <string name="repetirSenha">Repita a senha</string>
-    <string name="textViewsenha">Senha de Acesso</string>
-    <string name="textViewconfirmar">Confirmar Senha</string>
+    <string name="textViewsenha">Senha de Acesso*</string>
+    <string name="textViewconfirmar">Confirmar Senha*</string>
     <string name="EditTextInfoEscola">Informe o nome da escola</string>
     <string name="buttonCadastrar">Cadastrar</string>
     <string name="cadEscola">Cadastrar Escola</string>
@@ -50,8 +50,8 @@
     <string name="buttonCadastreSe">Cadastre-se</string>
     <string name="buttonLogin">Login</string>
     <string name="buttonEsqueciSenha">Esqueci Minha Senha</string>
-    <string name="textViewLoginEntrar">Entre com seu Login</string>
-    <string name="textViewInformeSenha">Informe Sua Senha</string>
+    <string name="textViewLoginEntrar">Entre com seu Login*</string>
+    <string name="textViewInformeSenha">Informe Sua Senha*</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="voidSchool">Nenhum Dado Cadastrado!</string>
@@ -62,8 +62,9 @@
     <string name="nomeSchool">Nome da Escola*</string>
     <string name="bairroSchool">Bairro</string>
     <string name="senhahint">********</string>
-    <string name="btnAlterarSenha">Alterar Senha</string>
+    <string name="btnAlterarSenha">Cadastrar</string>
     <string name="selecionarEsc">Selecionar Escola</string>
+    <string name="descricNovaSenha">Texto Nova Senha</string>
     <string name="btnEscolaDesativada">Escolas desativadas</string>
     <string name="escolaTeste">Esola Teste</string>
     <!--    Aluno-->
@@ -159,6 +160,7 @@
     <string name="iconeMenosAlter">Menos Alternativas</string>
     <string name="iconeMenosAnonimos">Menos Anônimos</string>
     <string name="imagemUser">Imagem do user</string>
+    <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="iconeSenhaOculta">Botão de senha oculta</string>
     <string name="texticondirecional">Seta direcional</string>
     <string name="iconeSenhaOculta2">Botão de senha oculta2</string>

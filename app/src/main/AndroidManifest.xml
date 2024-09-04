@@ -155,19 +155,11 @@
             android:name=".VisualEscolaActivity"
             android:exported="false" />
         <activity
-            android:name=".CadEscolaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".CodSenhaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".InicioActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

@@ -9,25 +9,24 @@
 
     <ImageButton
         android:id="@+id/voltarVoidScholl"
+        style="@style/SETADIRECIONAL"
         android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="48dp"
         android:background="@color/tranparente"
-        android:contentDescription="@string/btnVoltar"
+        android:contentDescription="@string/iconeVoltar"
         android:src="@mipmap/setaleft"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
 
     <ImageView
         android:id="@+id/imageView16"
         android:layout_width="400dp"
         android:layout_height="300dp"
+        android:contentDescription="@string/escolaArquivada"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
@@ -38,15 +37,16 @@
 
     <TextView
         android:id="@+id/textView3"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
         android:text="@string/voidSchool"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.14" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

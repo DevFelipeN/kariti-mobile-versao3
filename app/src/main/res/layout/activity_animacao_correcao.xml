@@ -26,26 +26,28 @@
         tools:layout_editor_absoluteX="2dp" />
 
     <TextView
+        style="@style/COLORTEXT"
         android:id="@+id/textViewInformativo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="124dp"
         android:layout_marginEnd="24dp"
-        android:text="TextView"
+        android:text="@string/aguardeCorrecao"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.159" />
 
     <pl.droidsonroids.gif.GifImageView
-        android:layout_width="376dp"
-        android:layout_height="273dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#2196F3"
         android:foregroundTint="#3A81B7"
         android:src="@drawable/animacao_correcao"
@@ -54,6 +56,6 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewInformativo"
-        app:layout_constraintVertical_bias="0.463" />
+        app:layout_constraintVertical_bias="0.353" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

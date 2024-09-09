@@ -6,35 +6,24 @@ import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import org.apache.commons.logging.LogFactory;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class DetalheCorrecao extends AppCompatActivity {
 
-    private static final org.apache.commons.logging.Log log = LogFactory.getLog(DetalheCorrecao.class);
     ImageButton voltar;
     String nomeAluno, status;
     Integer id_aluno, id_prova, qtdQuestoes;
     BancoDados bancoDados;
     TextView alunoDetalhe, notaTotal;
     ArrayList<String> respostasDadas, gabarito, peso;
-    private TextView titulo;
+    TextView titulo;
     float nota = 0;
 
     @Override
@@ -46,17 +35,14 @@ public class DetalheCorrecao extends AppCompatActivity {
         alunoDetalhe  = findViewById(R.id.textViewDetalheAluno);
         notaTotal = findViewById(R.id.textViewNotaTotalDetalhe);
         titulo = findViewById(R.id.toolbar_title);
-
         bancoDados = new BancoDados(this);
 
-        titulo.setText("Detalhes");
+        titulo.setText(String.format("%s","Detalhes"));
 
         id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         nomeAluno = bancoDados.pegaNomeParaDetalhe(id_aluno.toString());
         id_prova = getIntent().getExtras().getInt("id_prova");
         qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
-
-        Log.e("kariti","PASSEI AQUI---------");
 
         alunoDetalhe.setText(nomeAluno);
         //Carrega todas as respostas ordenadas por questao
@@ -134,16 +120,17 @@ public class DetalheCorrecao extends AppCompatActivity {
         }
         notaTotal.setText(String.format("Nota total obtida: %s pontos", nota));
 
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
 
 
-    }
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

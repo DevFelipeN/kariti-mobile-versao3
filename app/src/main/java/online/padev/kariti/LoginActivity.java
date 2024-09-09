@@ -2,8 +2,6 @@ package online.padev.kariti;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -27,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     CodSenhaActivity codSenhaActivity;
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         EditTextSenha = findViewById(R.id.editTextSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
 
-        EditTextEmail.setText(String.format("%s","nora.santos@prof.am.gov.br"));
-        EditTextSenha.setText(String.format("%s","nora230677"));
+        EditTextEmail.setText(String.format("%s","felipemartinsdonascimento4@gmail.com"));
+        EditTextSenha.setText(String.format("%s","123"));
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
@@ -112,10 +109,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void carregarTelaInicial(){
-        Toast.makeText(this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, InicioActivity.class);
-        startActivity(intent);
-        finish();
+        if(!bancoDados.listEscolas(1).isEmpty()){
+            Toast.makeText(this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, VisualEscolaActivity.class);
+            startActivity(intent);
+            finish();
+        }else if(!bancoDados.listEscolas(0).isEmpty()){
+            Intent intent = new Intent(this, EscolaDesativadaActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(this, CadEscolaActivity.class);
+            intent.putExtra("status", "primeiroAcesso");
+            startActivity(intent);
+            finish();
+        }
     }
     private void mudarParaTelaCadastro(){
         Intent intent = new Intent(this, MainActivity.class);

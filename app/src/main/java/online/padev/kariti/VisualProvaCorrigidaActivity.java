@@ -2,6 +2,7 @@ package online.padev.kariti;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,7 +44,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ArrayList<String> listAlunos, respostasDadas, respostasEsperadas, notasQuestoes;
     ArrayList<Integer> listIdsAlunos, listQuestoes;
     BancoDados bancoDados;
-    Integer id_prova, qtdQuestoes;
+    private Integer id_prova, qtdQuestoes;
     String prova, turma;
     TextView provaResult;
     List<String[]> dadosProvaCorrigida;
@@ -61,7 +62,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
 
-        titulo.setText("Resultado");
+        titulo.setText(String.format("%s","Resultado"));
 
         prova = Objects.requireNonNull(getIntent().getExtras()).getString("prova");
         id_prova = getIntent().getExtras().getInt("id_prova");
@@ -81,7 +82,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);
             Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-            if(!situacao.equals(-1)) {
+            if(!situacao.equals(-1)){
                 for (int i = 1; i <= qtdQuestoes; i++) {
                     Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
                     Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, i);
@@ -202,10 +203,14 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 }
             }
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
     }
@@ -218,22 +223,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             return aluno;
         }
     }
-    private boolean isOnline(){
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
-            return true;
-        }else{
-            return false;
-        }
-    }
     public void PopMenu(View v){
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
-            }
-        });
+        v.setOnClickListener(view -> Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
     }
     public void carregaGabarito(){
         String gabarito = bancoDados.mostraGabaritoInt(id_prova);
@@ -258,15 +249,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 "• imagem ofuscada\n\n" +
                 "• Cartão resposta Rasurado\n\n" +
                 "Para ter melhor resultado na correção é essencial que sejam seguidas as orientações destacadas na fase de correção!");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
-    }
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
 }

@@ -641,11 +641,21 @@ public class BancoDados extends SQLiteOpenHelper {
         return id_turma;
     }
     public Integer pegaqtdQuestoes(String id_prova){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select qtdQuestoes from prova where id_prova = ?", new String[]{id_prova});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getInt(0);
+        SQLiteDatabase base_dados = this.getReadableDatabase();
+        Cursor cursor = null;
+        Integer qtdQuestoes = null;
+        try {
+            cursor = base_dados.rawQuery("SELECT qtdQuestoes FROM prova WHERE id_prova = ?", new String[]{id_prova});
+            if (cursor.getCount() > 0){
+                cursor.moveToFirst();
+                qtdQuestoes = cursor.getInt(0);
+            }
+        }finally{
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return qtdQuestoes;
     }
     public Integer pegaqtdAlternativas(String id_prova) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -984,7 +994,7 @@ public class BancoDados extends SQLiteOpenHelper {
         ArrayList<Integer> ids_alunos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()){
             do {
                 Integer id_aluno = cursor.getInt(0);
                 ids_alunos.add(id_aluno);
@@ -1104,7 +1114,7 @@ public class BancoDados extends SQLiteOpenHelper {
             do {
                 String aux = "";
                 String resposta = cursor.getString(0);
-                if(!resposta.equals("-1")) {
+                if(!resposta.equals("-1")){
                     Log.e("kariti", resposta);
                     if (resposta.equals("0")) {
                         aux = "-";

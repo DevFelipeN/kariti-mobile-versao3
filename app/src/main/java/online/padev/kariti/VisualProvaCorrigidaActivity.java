@@ -80,8 +80,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             float nota = 0;
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);
-            Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-            if(!situacao.equals(-1)) {
+            if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
                 for (int i = 1; i <= qtdQuestoes; i++) {
                     Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
                     Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, i);
@@ -144,8 +143,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             cell4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-                    if(situacao != -1){
+                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)){
                         Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
                         intent.putExtra("id_aluno", v.getId());
                         intent.putExtra("id_prova", id_prova);
@@ -167,8 +165,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
                 String dataProva = bancoDados.pegaData(id_prova.toString());
                 for(int id_aluno: listIdsAlunos) {
-                    Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-                    if(situacao != -1) {
+                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
                         String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(id_aluno);
                         String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
                         //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");

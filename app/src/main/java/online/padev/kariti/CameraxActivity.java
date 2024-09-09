@@ -25,10 +25,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
-
 import com.google.common.util.concurrent.ListenableFuture;
-import online.padev.kariti.R;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;

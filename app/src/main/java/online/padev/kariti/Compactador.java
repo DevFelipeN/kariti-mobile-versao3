@@ -12,13 +12,10 @@ import java.util.ArrayList;
 //compactar arquivos para enviar
 public class Compactador{
     public static ArrayList<String> listCartoes = new ArrayList<>();
-    public static void main(String[] args){
 
-        compactador();
-    }
     public static boolean compactador(){
         List<String> arquivos = new ArrayList<>();
-        for(int x = 0; x < listCartoes.size(); x++) {
+        for(int x = 0; x < listCartoes.size(); x++){
             Log.e("kariti", listCartoes.get(x));
             arquivos.add("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/"+listCartoes.get(x)); //Carregando as imagens
         }

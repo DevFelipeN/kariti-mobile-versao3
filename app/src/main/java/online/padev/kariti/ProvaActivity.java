@@ -36,8 +36,15 @@ public class ProvaActivity extends AppCompatActivity {
         btnCadastrarProva.setOnClickListener(v -> carregarCadastroProva());
         editarProva.setOnClickListener(v -> carregarTelaMaisOpcoes());
         btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
-        btnCorrigirProva.setOnClickListener(v -> carregaTelaCorrecao());
         btnProvasCorrigida.setOnClickListener(v -> carregarTelaProvasCorrigida());
+        btnCorrigirProva.setOnClickListener(v -> {
+            if(bancoDados.checkQuantidadeProvas()){
+                carregaTelaCorrecao();
+            }else{
+                aviso("provas cadastradas");
+            }
+
+        });
 
         voltar.setOnClickListener(v -> {
             getOnBackPressedDispatcher();
@@ -51,29 +58,36 @@ public class ProvaActivity extends AppCompatActivity {
         });
     }
     private void carregarCadastroProva(){
-        if(!bancoDados.obterNomeTurmas().isEmpty()) {
+        if(!bancoDados.obterNomeTurmas().isEmpty()){
             Intent intent = new Intent(this, CadProvaActivity.class);
             startActivity(intent);
-        }else aviso();
+        }else aviso("turmas cadastradas");
     }
     private void carregarTelaMaisOpcoes(){
         Intent intent = new Intent(getApplicationContext(), EditarProva.class);
         startActivity(intent);
     }
-    private void carregarTelaGerarCartao(){
-        Intent intent = new Intent(this, ProvaCartoesActivity.class);
-        intent.putExtra("endereco", 2);
-        startActivity(intent);
+    private void carregarTelaGerarCartao() {
+        if (bancoDados.checkQuantidadeProvas()) {
+            Intent intent = new Intent(this, ProvaCartoesActivity.class);
+            intent.putExtra("endereco", 2);
+            startActivity(intent);
+        }else{
+            aviso("provas cadastradas");
+        }
     }
     private void carregarTelaProvasCorrigida(){
-        Intent intent = new Intent(this, VisualProvaActivity.class);
-        startActivity(intent);
+        if(bancoDados.checkQuantidadeProvasCorrigida()) {
+            Intent intent = new Intent(this, VisualProvaActivity.class);
+            startActivity(intent);
+        }else{
+            aviso("provas corrigidas");
+        }
     }
-    private void aviso(){
+    private void aviso(String descricao){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Atenção!");
-        builder.setMessage("Não existem turmas cadastradas. " +
-                "Para realizar o cadastro de provas, realize o cadastro das turma em que atua e/ou que será aplicada a prova.");
+        builder.setMessage("Não encontramos "+descricao+" para essa escola. Para ter acesso a essa opção é necessário ter "+descricao+".");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }

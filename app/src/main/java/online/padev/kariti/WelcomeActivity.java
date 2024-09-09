@@ -21,7 +21,7 @@ public class WelcomeActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         if(bancoDados.verificaEmail("karitimobile@gmail.com") == null) {
-            bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
+            TestesPlayStore.inserirDadosAltomaticos(bancoDados);
         }
         botaoCadastro.setOnClickListener(v -> mudarParaTelaCadastro());
         botaoLogin.setOnClickListener(v -> mudarParaTelaLogin());

@@ -75,7 +75,7 @@ public class BancoDados extends SQLiteOpenHelper {
             long inserir = base_dados.insert("usuario", null, contentValues);
             return inserir != -1;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("kariti", e.getMessage());
             return false;
         } finally {
             if (base_dados != null && base_dados.isOpen()) {
@@ -103,7 +103,7 @@ public class BancoDados extends SQLiteOpenHelper {
             long inserir = base_dados.insert("escola", null, contentValues);
             return inserir != -1;
         } catch (Exception e){
-            e.printStackTrace();
+            Log.e("kariti", e.getMessage());
             return false;
         }finally {
             if(base_dados != null && base_dados.isOpen()){
@@ -113,21 +113,40 @@ public class BancoDados extends SQLiteOpenHelper {
 
     }
     public Boolean inserirTurma(String nomeTurma, Integer an){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeTurma", nomeTurma);
-        contentValues.put("qtdAnonimos", an);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
-        long inserir = base_dados.insert("turma", null, contentValues);
-        return inserir != -1;
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("nomeTurma", nomeTurma);
+            contentValues.put("qtdAnonimos", an);
+            contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+            long inserir = base_dados.insert("turma", null, contentValues);
+            return inserir != -1;
+        }catch (Exception e){
+            Log.e("kariti", e.getMessage());
+            return false;
+        }finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
+
     }
     public void inserirAlunosNaTurma(Integer id_turma, Integer id_aluno){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("id_turma", id_turma);
-        contentValues.put("id_aluno", id_aluno);
-        base_dados.insert("alunosTurma", null, contentValues);
-        base_dados.close();
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id_turma", id_turma);
+            contentValues.put("id_aluno", id_aluno);
+            base_dados.insert("alunosTurma", null, contentValues);
+        }catch (Exception e){
+            Log.e("kariti", e.getMessage());
+        }finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
     }
     public void inserirResultCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
         SQLiteDatabase base_dados = null;
@@ -154,25 +173,44 @@ public class BancoDados extends SQLiteOpenHelper {
 
     }
     public Integer inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeProva", nomeProva);
-        contentValues.put("dataProva", dataProva);
-        contentValues.put("qtdQuestoes", qtdQuestoes);
-        contentValues.put("qtdAlternativas", qtdAlternativas);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
-        contentValues.put("id_turma", id_turma);
-        long inserir = base_dados.insert("prova", null, contentValues);
-        return Math.toIntExact(inserir);
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("nomeProva", nomeProva);
+            contentValues.put("dataProva", dataProva);
+            contentValues.put("qtdQuestoes", qtdQuestoes);
+            contentValues.put("qtdAlternativas", qtdAlternativas);
+            contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
+            contentValues.put("id_turma", id_turma);
+            long inserir = base_dados.insert("prova", null, contentValues);
+            return Math.toIntExact(inserir); // Alterar tipo de variavel de Id
+        }catch (Exception e){
+            Log.e("kariti", e.getMessage());
+        }finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
+
     }
     public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Double nota){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("id_prova", id_prova);
-        contentValues.put("questao", questao);
-        contentValues.put("resposta", resposta);
-        contentValues.put("nota", nota);
-        base_dados.insert("gabarito", null, contentValues);
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id_prova", id_prova);
+            contentValues.put("questao", questao);
+            contentValues.put("resposta", resposta);
+            contentValues.put("nota", nota);
+            base_dados.insert("gabarito", null, contentValues);
+        }catch (Exception e){
+            Log.e("kariti", e.getMessage());
+        }finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
     }
     public Boolean inserirDadosAluno(String nomeAluno, String email, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -1012,16 +1050,25 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public List<Integer> listAlunoPorProvaCorrigida(Integer id_prova){
         ArrayList<Integer> ids_alunos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer id_aluno = cursor.getInt(0);
-                ids_alunos.add(id_aluno);
-            } while (cursor.moveToNext());
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_aluno = cursor.getInt(0);
+                    ids_alunos.add(id_aluno);
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor != null){
                 cursor.close();
             }
-        db.close();
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
         return ids_alunos;
     }
     public List<Integer> listQuestoes(Integer id_prova, Integer id_aluno) {
@@ -1115,7 +1162,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String detalhes = "";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()){
             do {
                 String resposta = cursor.getString(0);
                 char r = (char) (Integer.parseInt(resposta)-1+'A');
@@ -1126,37 +1173,46 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return detalhes;
     }
+
     public List<String> respostasDadas(Integer id_prova, Integer id_aluno) {
         ArrayList<String> respostasDadas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String aux = "";
-                String resposta = cursor.getString(0);
-                if(resposta.equals("-1")){
-                    resposta = "0";
-                }
-                if(resposta.equals("0")) {
-                    aux = "-";
-                }else {
-                    aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
-                }
-                for(int i = 1; i < resposta.length(); i++){
-                    Log.e("kariti", "respostasss: "+String.valueOf(resposta.charAt(i)));
-                    if(!String.valueOf(resposta.charAt(i)).equals("0")) {
-                        aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String aux = "";
+                    String resposta = cursor.getString(0);
+                    if(!resposta.equals("-1")){
+                        Log.e("kariti", resposta);
+                        if (resposta.equals("0")) {
+                            aux = "-";
+                        } else {
+                            aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
+                        }
+                        for (int i = 1; i < resposta.length(); i++) {
+                            Log.e("kariti", "respostasss: " + String.valueOf(resposta.charAt(i)));
+                            if (!String.valueOf(resposta.charAt(i)).equals("0")) {
+                                aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                            }
+                        }
+                        respostasDadas.add(aux);
                     }
-                }
-                respostasDadas.add(aux);
-                //Log.e("kariti", "Aqui 5");
-            } while (cursor.moveToNext());
-            cursor.close();
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor != null){
+                cursor.close();
+            }
+            if (db != null && db.isOpen()){
+                db.close();
+            }
         }
-        db.close();
-        //Log.e("kariti", "Aqui 6");
         return respostasDadas;
     }
+
     public String listRespostasAluno(String id_prova, String id_aluno) {
         String respostasDadas = "";
         String ultimaQuestao = "";

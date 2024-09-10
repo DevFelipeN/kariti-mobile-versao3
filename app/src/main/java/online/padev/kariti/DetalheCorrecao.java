@@ -4,22 +4,13 @@ import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -31,7 +22,7 @@ public class DetalheCorrecao extends AppCompatActivity {
     BancoDados bancoDados;
     TextView alunoDetalhe, notaTotal;
     ArrayList<String> respostasDadas, gabarito, peso;
-    private TextView titulo;
+    TextView titulo;
     float nota = 0;
 
     @Override
@@ -40,12 +31,12 @@ public class DetalheCorrecao extends AppCompatActivity {
         setContentView(R.layout.activity_detalhe_correcao);
 
         voltar = findViewById(R.id.imgBtnVoltar);
-        alunoDetalhe  = (TextView) findViewById(R.id.textViewDetalheAluno);
-        notaTotal = (TextView) findViewById(R.id.textViewNotaTotalDetalhe);
+        alunoDetalhe  = findViewById(R.id.textViewDetalheAluno);
+        notaTotal = findViewById(R.id.textViewNotaTotalDetalhe);
         titulo = findViewById(R.id.toolbar_title);
         bancoDados = new BancoDados(this);
 
-        titulo.setText("Detalhes");
+        titulo.setText(String.format("%s","Detalhes"));
 
         id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         nomeAluno = bancoDados.pegaNomeParaDetalhe(id_aluno.toString());
@@ -55,10 +46,8 @@ public class DetalheCorrecao extends AppCompatActivity {
         alunoDetalhe.setText(nomeAluno);
         //Carrega todas as respostas ordenadas por questao
         respostasDadas = (ArrayList<String>) bancoDados.respostasDadas(id_prova, id_aluno);
-        Log.e("kariti", "respostasDadas - "+respostasDadas);
         gabarito = (ArrayList<String>) bancoDados.carregaGabarito(id_prova);
         peso = (ArrayList<String>) bancoDados.listNotaPorQuetao(id_prova);
-        Log.e("kariti", "passei aqui");
 
         ShapeDrawable border = new ShapeDrawable(new RectShape());
         border.getPaint().setColor(0xFF000000); // Cor da borda
@@ -67,12 +56,10 @@ public class DetalheCorrecao extends AppCompatActivity {
 
         for(int x = 1; x <= qtdQuestoes; x++) {
             Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, x);
-            Log.e("kariti", "respostaDada = "+respostaDada);
             Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, x);
             if(respostaGabarito.equals(respostaDada)){
                 nota += bancoDados.pegaNotaQuestao(id_prova, x);
             }
-            Log.e("kariti", "Questao = "+x);
 
             TableLayout tableLayout = findViewById(R.id.tableLayoutDetalheCorrecao);
             TableRow row = new TableRow(this);
@@ -106,7 +93,7 @@ public class DetalheCorrecao extends AppCompatActivity {
 
             // Cria outra célula para a nova linha para armazenar o status de acertos do aluno
             TextView cell4 = new TextView(this);
-            if(respostasDadas.get(x-1).equals(gabarito.get(x-1))){
+            if(gabarito.get(x-1).equals(respostasDadas.get(x-1))){
                 status = "CERTA";
             }else{
                 status = "ERRADA";
@@ -116,7 +103,7 @@ public class DetalheCorrecao extends AppCompatActivity {
             cell4.setGravity(Gravity.CENTER);
             row.addView(cell4);
 
-            // Cria outra célula para a nova linha para armazenar o peso da questão
+            //Cria outra célula para a nova linha para armazenar o peso da questão
             TextView cell5 = new TextView(this);
             cell5.setText(peso.get(x-1));
             cell5.setGravity(Gravity.CENTER);
@@ -126,18 +113,16 @@ public class DetalheCorrecao extends AppCompatActivity {
             // Adiciona a nova linha à tabela
             tableLayout.addView(row);
         }
-        notaTotal.setText(String.format("Nota total obtida: %s pontos", nota));
-
-        voltar.setOnClickListener(new View.OnClickListener() {
+        notaTotal.setText(String.format("Nota total obtida: %s pantos", nota));
+        voltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
-
-
-    }
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

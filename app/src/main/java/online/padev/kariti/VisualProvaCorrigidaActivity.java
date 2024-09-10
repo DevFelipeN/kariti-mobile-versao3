@@ -1,19 +1,14 @@
 package online.padev.kariti;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
-
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DownloadManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -25,29 +20,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import online.padev.kariti.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixar;
-    ArrayList<String> listAlunos, respostasDadas, respostasEsperadas, notasQuestoes;
-    ArrayList<Integer> listIdsAlunos, listQuestoes;
+    ArrayList<String> listAlunos, respostasDadas;
+    ArrayList<Integer> listIdsAlunos;
     BancoDados bancoDados;
     Integer id_prova, qtdQuestoes;
     String prova, turma;
     TextView provaResult;
     List<String[]> dadosProvaCorrigida;
-    private TextView titulo;
+    TextView titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +51,11 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
 
-        titulo.setText("Resultado");
+        titulo.setText(String.format("%s","Resultado"));
 
-        prova = Objects.requireNonNull(getIntent().getExtras()).getString("prova");
         id_prova = getIntent().getExtras().getInt("id_prova");
-        turma = Objects.requireNonNull(getIntent().getExtras()).getString("turma");
+        prova = getIntent().getExtras().getString("prova");
+        turma = getIntent().getExtras().getString("turma");
         provaResult.setText(prova);
 
         qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
@@ -76,10 +66,10 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         border.getPaint().setStyle(Paint.Style.STROKE);
 
         listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunoPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
-        for(int x = 0; x < listIdsAlunos.size(); x++) { // interage sob esses alunos
+        for(int x : listIdsAlunos) { // interage sob esses alunos
             float nota = 0;
             int acertos = 0;
-            Integer id_aluno = listIdsAlunos.get(x);
+            Integer id_aluno = x;
             if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
                 for (int i = 1; i <= qtdQuestoes; i++) {
                     Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
@@ -112,7 +102,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             if(acertos != -1){
                 cell2.setText(String.valueOf(acertos));
             }else{
-                cell2.setText(" - ");}
+                cell2.setText("-");}
             cell2.setGravity(Gravity.CENTER);
             cell2.setTextSize(16);
             row.addView(cell2);
@@ -122,9 +112,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             if(nota != -1){
                 cell3.setText(String.valueOf(nota));
             }else{
-                cell3.setText(" - ");
+                cell3.setText("-");
             }
-
             cell3.setGravity(Gravity.CENTER);
             cell3.setTextSize(16);
             row.addView(cell3);
@@ -132,7 +121,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             // Cria outra célula para a nova linha com botão para exibir detalhamento da nota do aluno
             Button cell4 = new Button(this);
             cell4.setId(id_aluno);
-            cell4.setText("Ver");
+            cell4.setText(String.format("%s","Ver"));
             cell4.setGravity(Gravity.CENTER);
             cell4.setPadding(4,4,4,4);
             row.addView(cell4);
@@ -140,130 +129,97 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             // Adiciona a nova linha à tabela
             tableLayout.addView(row);
 
-            cell4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)){
-                        Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
-                        intent.putExtra("id_aluno", v.getId());
-                        intent.putExtra("id_prova", id_prova);
-                        startActivity(intent);
-                    }else{
-                        informeProvaNaoCorrigida();
-                    }
-
+            cell4.setOnClickListener(v -> {
+                respostasDadas = (ArrayList<String>) bancoDados.respostasDadas(id_prova, id_aluno);
+                if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1) && qtdQuestoes.equals(respostasDadas.size())){
+                    Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
+                    intent.putExtra("id_aluno", v.getId());
+                    intent.putExtra("id_prova", id_prova);
+                    startActivity(intent);
+                }else{
+                    informeProvaNaoCorrigida();
                 }
+
             });
         }
         //carregaGabarito();
-        btnBaixar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dadosProvaCorrigida = new ArrayList<>();
-                String prof = bancoDados.pegaUsuario(BancoDados.USER_ID.toString());
-                String qtdAlternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova.toString()));
-                String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
-                String dataProva = bancoDados.pegaData(id_prova.toString());
-                for(int id_aluno: listIdsAlunos) {
-                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
-                        String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(id_aluno);
-                        String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
-                        //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        String respostasEsperadas = bancoDados.listRespostasGabarito(id_prova.toString());
-                        respostasEsperadas = respostasEsperadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        String notasQuestoes = bancoDados.listNotaQuestao(id_prova.toString());
-                        notasQuestoes = notasQuestoes.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        dadosProvaCorrigida.add(new String[]{id_prova.toString(), prova, prof, turma, dataProva, qtdQuestoes.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
-                    }
-                }
-                try {
-                    File filecsv  = new File(getExternalFilesDir(null), "/dadosCorrecao.csv");
-                    String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
-                    String filePdf = "Corrigida_" + prova + dateCart + ".pdf";
-                    GerarCsv.gerar(dadosProvaCorrigida, filecsv);// Gerando e salvando arquivo.csv
-                    File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
-                    BaixarResultadoCorrecao.solicitarResultadoCorrecao(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
-                    AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaCorrigidaActivity.this);
-                    builder.setTitle("Por favor, Aguarde!")
-                            .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                } catch (IOException e) {
-                    Log.e("Kariti", e.toString());
+        btnBaixar.setOnClickListener(v -> {
+            if (!VerificaConexaoInternet.verificaConexao(VisualProvaCorrigidaActivity.this)) {
+                Toast.makeText(VisualProvaCorrigidaActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            dadosProvaCorrigida = new ArrayList<>();
+            String prof = bancoDados.pegaUsuario(BancoDados.USER_ID.toString());
+            String qtdAlternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova.toString()));
+            String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
+            String dataProva = bancoDados.pegaData(id_prova.toString());
+            for(int id_aluno: listIdsAlunos) {
+                if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
+                    String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(id_aluno);
+                    String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
+                    //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
+                    String respostasEsperadas = bancoDados.listRespostasGabarito(id_prova.toString());
+                    respostasEsperadas = respostasEsperadas.replaceAll("(?<=\\d)(?=\\d)", ",");
+                    String notasQuestoes = bancoDados.listNotaQuestao(id_prova.toString());
+                    notasQuestoes = notasQuestoes.replaceAll("(?<=\\d)(?=\\d)", ",");
+                    dadosProvaCorrigida.add(new String[]{id_prova.toString(), prova, prof, turma, dataProva, qtdQuestoes.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
                 }
             }
+            try {
+                File filecsv  = new File(getExternalFilesDir(null), "/dadosCorrecao.csv");
+                String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
+                String filePdf = "Corrigida_" + prova + dateCart + ".pdf";
+                GerarCsv.gerar(dadosProvaCorrigida, filecsv);// Gerando e salvando arquivo.csv
+                File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
+                BaixarResultadoCorrecao.solicitarResultadoCorrecao(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
+                AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaCorrigidaActivity.this);
+                builder.setTitle("Por favor, Aguarde!")
+                        .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                    dialog.dismiss();
+                    finish();
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            } catch (Exception e) {
+                Log.e("Kariti", e.toString());
+            }
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
     }
     private String editaNomeAluno(String aluno){
         String[] separa = aluno.trim().split("\\s+");
-        //String novoNome = "";
         if(separa.length > 2) {
             return separa[0] + " " + separa[separa.length - 1];
         }else{
             return aluno;
         }
     }
-    private boolean isOnline(){
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
-            return true;
-        }else{
-            return false;
-        }
-    }
     public void PopMenu(View v){
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    public void carregaGabarito(){
-        String gabarito = bancoDados.mostraGabaritoInt(id_prova);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Gabarito");
-        builder.setMessage(gabarito);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-        });
-        builder.show();
-
+        v.setOnClickListener(view -> Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
     }
     public void informeProvaNaoCorrigida(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
-        builder.setMessage("Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n" +
+        builder.setMessage("Prova não corrigida corretamente!\n\n" +
+                " Veja algumas das causas que podem ter colaborado para este resultado:\n\n" +
                 "• Fundo da imagem com ruidos ou diferente do padrão uniforme \n\n" +
-                "• Cartão resposta não estava visível totalmente na imagem\n\n" +
+                "• Cartão resposta não visível totalmente na imagem\n\n" +
                 "• Ambiente com pouca luminosidade\n\n" +
                 "• imagem ofuscada\n\n" +
                 "• Cartão resposta Rasurado\n\n" +
                 "Para ter melhor resultado na correção é essencial que sejam seguidas as orientações destacadas na fase de correção!");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
 }

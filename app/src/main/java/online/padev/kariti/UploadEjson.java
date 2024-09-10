@@ -52,7 +52,7 @@ public class UploadEjson {
     public static void fimUpload(File dir, BancoDados bancoDados){
         try {
             String situacao = Environment.getExternalStorageState();
-            if (situacao.equals(Environment.MEDIA_MOUNTED)) {
+            if (situacao.equals(Environment.MEDIA_MOUNTED)){
                 String result = GaleriaActivity.leitor(dir+"/json.json");
                 JSONArray json = new JSONArray(result);
                 for (int x = 0; x < json.length(); x++){

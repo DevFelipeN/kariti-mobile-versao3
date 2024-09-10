@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
         gerarCodigo = new GerarCodigoValidacao();
 
         cadastro.setOnClickListener(v ->{
-
-            if (!VerificaConexaoInternet.verificaConexao(MainActivity.this)) {
+            if(!VerificaConexaoInternet.verificaConexao(MainActivity.this)){
                 Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
                 return;
             }

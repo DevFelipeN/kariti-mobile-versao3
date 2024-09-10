@@ -37,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         EditTextSenha = findViewById(R.id.editTextSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
 
-        EditTextEmail.setText(String.format("%s","felipemartinsdonascimento4@gmail.com"));
-        EditTextSenha.setText(String.format("%s","123"));
+        //EditTextEmail.setText(String.format("%s","felipemartinsdonascimento4@gmail.com"));
+        //EditTextSenha.setText(String.format("%s","123"));
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
@@ -59,7 +59,11 @@ public class LoginActivity extends AppCompatActivity {
             Integer autenticacao_id = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
             if (autenticacao_id != null) {
                 BancoDados.USER_ID = autenticacao_id;
-                carregarTelaInicial();
+                //carregarTelaInicial();
+                Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                startActivity(intent);
+                finish();
             } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
         });
 

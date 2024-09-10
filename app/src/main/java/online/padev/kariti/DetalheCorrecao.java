@@ -47,10 +47,8 @@ public class DetalheCorrecao extends AppCompatActivity {
         alunoDetalhe.setText(nomeAluno);
         //Carrega todas as respostas ordenadas por questao
         respostasDadas = (ArrayList<String>) bancoDados.respostasDadas(id_prova, id_aluno);
-        Log.e("kariti", "respostasDadas - "+respostasDadas);
         gabarito = (ArrayList<String>) bancoDados.carregaGabarito(id_prova);
         peso = (ArrayList<String>) bancoDados.listNotaPorQuetao(id_prova);
-        Log.e("kariti", "passei aqui");
 
         ShapeDrawable border = new ShapeDrawable(new RectShape());
         border.getPaint().setColor(0xFF000000); // Cor da borda
@@ -59,7 +57,6 @@ public class DetalheCorrecao extends AppCompatActivity {
 
         for(int x = 1; x <= qtdQuestoes; x++) {
             Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, x);
-            Log.e("kariti", "respostaDada = "+respostaDada);
             Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, x);
             if(respostaGabarito.equals(respostaDada)){
                 nota += bancoDados.pegaNotaQuestao(id_prova, x);

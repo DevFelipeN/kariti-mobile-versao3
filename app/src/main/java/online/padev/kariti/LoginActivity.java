@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

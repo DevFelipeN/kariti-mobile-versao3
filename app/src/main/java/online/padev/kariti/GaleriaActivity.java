@@ -78,7 +78,7 @@ public class GaleriaActivity extends AppCompatActivity {
                     File fileZip = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip");
                     File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                     UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
-                    telaProva();
+                    iniciaAnimacaoCorrecao();
                 } catch (Exception e) {
                     Log.e("Kariti", e.toString());
                 }
@@ -113,10 +113,8 @@ public class GaleriaActivity extends AppCompatActivity {
     }
 
     private void carregarFotos() {
-        // Caminho da pasta onde as fotos estão armazenadas
-        String caminhoDaPasta = Environment.getExternalStorageDirectory() + "/Android/media/online.padev.kariti/CameraXApp/";
-        File diretorio = new File(caminhoDaPasta);
-        if (diretorio.exists() && diretorio.isDirectory()) {
+        File diretorio = new File("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/");
+        if (diretorio.exists() && diretorio.isDirectory()){
             File[] arquivos = diretorio.listFiles();
             if (arquivos != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
@@ -177,10 +175,9 @@ public class GaleriaActivity extends AppCompatActivity {
         }else {
             // Tratamento adicional para resultados que não sejam do IntentIntegrator
             super.onActivityResult(requestCode, resultCode, data);
-            //onRestart
         }
     }
-    public void telaProva(){
+    public void iniciaAnimacaoCorrecao(){
         Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
         startActivity(intent);
         finish();

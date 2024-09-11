@@ -222,4 +222,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
+
+    public static class Scanner {
+
+    }
 }

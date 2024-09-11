@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 public class ProvaCorrigirActivity extends AppCompatActivity {
@@ -22,7 +21,7 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
     String nomeDaFoto;
     BancoDados bancoDados;
     Integer qtdQuestoes, qtdAlternativas;
-    private TextView titulo;
+    TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +30,11 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.buttonCamera);
         voltar = findViewById(R.id.imgBtnVoltar);
         titulo = findViewById(R.id.toolbar_title);
+
         bancoDados = new BancoDados(this);
 
         titulo.setText("Correção");
+        iniciarScannerQRCode();
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -37,11 +37,11 @@ import java.util.concurrent.Executors;
 public class CameraxActivity extends AppCompatActivity {
     private static final String TAG = "CameraxActivity";
     private PreviewView previewView;
-    private ImageButton captureButton, aroundCamera, toggleFlash;
+    ImageButton captureButton, aroundCamera, toggleFlash;
     private int cameraFacing = CameraSelector.LENS_FACING_BACK;
     private ImageCapture imageCapture;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private ActivityResultLauncher<String> requestPermissionLauncher;
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    ActivityResultLauncher<String> requestPermissionLauncher;
     String nomeImagemx;
 
     @Override

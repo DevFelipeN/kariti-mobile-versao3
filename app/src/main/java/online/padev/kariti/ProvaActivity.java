@@ -111,7 +111,7 @@ public class ProvaActivity extends AppCompatActivity {
                 "• De forma que o cartão seja enquadrado por inteiro na imagem\n\n" +
                 "• Com boa visibilidade\n");
         builder.setPositiveButton("Iniciar Correção", (dialog, which) -> {
-            Intent intent = new Intent(getApplicationContext(), ProvaCorrigirActivity.class);
+            Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
             startActivity(intent);
             dialog.dismiss();
         });

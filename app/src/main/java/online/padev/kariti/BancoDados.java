@@ -174,6 +174,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Integer inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase base_dados = null;
+        Integer id_prova = null;
         try {
             base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -184,7 +185,7 @@ public class BancoDados extends SQLiteOpenHelper {
             contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
             contentValues.put("id_turma", id_turma);
             long inserir = base_dados.insert("prova", null, contentValues);
-            return Math.toIntExact(inserir); // Alterar tipo de variavel de Id
+            id_prova = Math.toIntExact(inserir); // Alterar tipo de variavel de Id
         }catch (Exception e){
             Log.e("kariti", e.getMessage());
         }finally {
@@ -192,7 +193,7 @@ public class BancoDados extends SQLiteOpenHelper {
                 base_dados.close();
             }
         }
-
+        return id_prova;
     }
     public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Double nota){
         SQLiteDatabase base_dados = null;

@@ -44,7 +44,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ArrayList<String> listAlunos, respostasDadas, respostasEsperadas, notasQuestoes;
     ArrayList<Integer> listIdsAlunos, listQuestoes;
     BancoDados bancoDados;
-    private Integer id_prova, qtdQuestoes;
+    Integer id_prova, qtdQuestoes;
     String prova, turma;
     TextView provaResult;
     List<String[]> dadosProvaCorrigida;
@@ -62,7 +62,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
         listAlunos = new ArrayList<>();
 
-        titulo.setText(String.format("%s","Resultado"));
+        titulo.setText("Resultado");
 
         prova = Objects.requireNonNull(getIntent().getExtras()).getString("prova");
         id_prova = getIntent().getExtras().getInt("id_prova");
@@ -81,8 +81,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             float nota = 0;
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);
-            Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-            if(!situacao.equals(-1)){
+            if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
                 for (int i = 1; i <= qtdQuestoes; i++) {
                     Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
                     Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, i);
@@ -145,8 +144,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             cell4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-                    if(situacao != -1){
+                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)){
                         Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
                         intent.putExtra("id_aluno", v.getId());
                         intent.putExtra("id_prova", id_prova);
@@ -168,8 +166,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
                 String dataProva = bancoDados.pegaData(id_prova.toString());
                 for(int id_aluno: listIdsAlunos) {
-                    Integer situacao = bancoDados.checkSituacaoCorrecao(id_prova, id_aluno);
-                    if(situacao != -1) {
+                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
                         String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(id_aluno);
                         String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
                         //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
@@ -223,8 +220,22 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             return aluno;
         }
     }
+    private boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public void PopMenu(View v){
-        v.setOnClickListener(view -> Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(VisualProvaCorrigidaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     public void carregaGabarito(){
         String gabarito = bancoDados.mostraGabaritoInt(id_prova);
@@ -233,8 +244,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         builder.setMessage(gabarito);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
+                dialog.dismiss();
+            }
         });
         builder.show();
 
@@ -249,8 +260,15 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 "• imagem ofuscada\n\n" +
                 "• Cartão resposta Rasurado\n\n" +
                 "Para ter melhor resultado na correção é essencial que sejam seguidas as orientações destacadas na fase de correção!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         builder.show();
+    }
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 }

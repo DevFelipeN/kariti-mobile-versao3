@@ -19,10 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
@@ -150,11 +152,13 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                 }
                 try {
-                    String dateCart = new SimpleDateFormat("HH_mm_ss").format(new Date());
-                    String filePdf = nomeProva + dateCart + ".pdf";
-                    File filecsv  = new File(getExternalFilesDir(null), "/dadosProva.csv");
-                    GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                    File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
+                    String dateCart = dataHoraAtual();    //pega data e hora atual
+                    String filePdf = nomeProva + dateCart + ".pdf";         //cria um nome para o arquivo pdf
+                    //File filecsv = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                    File filecsv = criarDiretorio();      //cria um diretorio interno para adicionar arquivo .csv
+                    GerarCsv.gerar(dados, filecsv);         // Gerando e salvando arquivo.csv
+                    File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);     //diretorio do armazenamento externo para escrita do pdf
+                    //File fSaida = new File(getFilesDir(), filePdf);
                     BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
                     builder.setTitle("Por favor, Aguarde!")
@@ -185,5 +189,27 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         builder.setMessage("Permitir que o Kariti acesse os arquivos do dispositivo");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+    private File criarDiretorio(){
+        File filecsv = new File(getCacheDir(), "dadosProva.csv");
+        if (!filecsv.exists()) {
+            try {
+                // Tenta criar o arquivo
+                if (filecsv.createNewFile()) {
+                    Log.e("kariti","Diretorio criado");
+                } else {
+                    Log.i("kariti", "Arquivo já existe.");
+                }
+            } catch (IOException e) {
+                Log.e("kariti", "Erro ao criar diretorio!");
+            }
+        }
+        Log.e("kariti","Caminho: "+filecsv);
+        return filecsv;
+    }
+    private String dataHoraAtual(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        Date date = new Date();
+        return sdf.format(date);
     }
 }

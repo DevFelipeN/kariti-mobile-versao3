@@ -6,8 +6,11 @@
     <string name="emailNoRequired">E-mail</string>
     <string name="InfEmail">Informe seu e-mail</string>
     <string name="sexo">Sexo</string>
+    <string name="img_galeria">Imagens</string>
     <string name="Acerto">Acerto </string>
+    <string name="nomeImagem">000_00_00_0.jpg</string>
     <string name="Nota">Nota </string>
+    <string name="dataImagem">2024-04-20 19:50</string>
     <string name="Ver">Ver</string>
     <string name="Questao">Questão </string>
     <string name="Marcada">Marcada </string>

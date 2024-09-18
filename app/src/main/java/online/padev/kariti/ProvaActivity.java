@@ -112,6 +112,7 @@ public class ProvaActivity extends AppCompatActivity {
                 "• Com boa visibilidade\n");
         builder.setPositiveButton("Iniciar Correção", (dialog, which) -> {
             Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
+            intent.putExtra("contexto","inicia_correcao");
             startActivity(intent);
             dialog.dismiss();
         });

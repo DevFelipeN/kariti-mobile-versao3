@@ -1,16 +1,17 @@
 package online.padev.kariti;
 
+import static online.padev.kariti.Compactador.listCartoes;
+
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -42,7 +44,7 @@ public class CameraxActivity extends AppCompatActivity {
     private ImageCapture imageCapture;
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     ActivityResultLauncher<String> requestPermissionLauncher;
-    String nomeImagemx;
+    String nomeCartao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +56,15 @@ public class CameraxActivity extends AppCompatActivity {
         toggleFlash = findViewById(R.id.buttonFlashX);
         aroundCamera = findViewById(R.id.aroundCameraX);
 
-        nomeImagemx = Objects.requireNonNull(getIntent().getExtras()).getString("nomeImagem");
+        nomeCartao = Objects.requireNonNull(getIntent().getExtras()).getString("nomeImagem");
 
         // Inicializar o launcher para solicitação de permissão
-        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean isGranted) {
-                if (isGranted) {
-                    startCamera();
-                } else {
-                    Toast.makeText(CameraxActivity.this, "Permissão de câmera não concedida.", Toast.LENGTH_SHORT).show();
-                    finish(); // Encerrar a atividade se a permissão não for concedida
-                }
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                startCamera();
+            } else {
+                Toast.makeText(CameraxActivity.this, "Permissão de câmera não concedida.", Toast.LENGTH_SHORT).show();
+                finish(); // Encerrar a atividade se a permissão não for concedida
             }
         });
 
@@ -75,25 +74,30 @@ public class CameraxActivity extends AppCompatActivity {
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
         }
-        aroundCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (cameraFacing == CameraSelector.LENS_FACING_BACK){
-                    cameraFacing = CameraSelector.LENS_FACING_FRONT;
-                }else {
-                    cameraFacing = CameraSelector.LENS_FACING_BACK;
-                }
-                startCamera();
+        aroundCamera.setOnClickListener(view -> {
+            if (cameraFacing == CameraSelector.LENS_FACING_BACK){
+                cameraFacing = CameraSelector.LENS_FACING_FRONT;
+            }else {
+                cameraFacing = CameraSelector.LENS_FACING_BACK;
             }
+            startCamera();
         });
         // Configurar o listener do botão de captura
-        captureButton.setOnClickListener(new View.OnClickListener() {
+        captureButton.setOnClickListener(v -> {
+            if (imageCapture != null) {
+                captureImage();
+            } else {
+                Toast.makeText(CameraxActivity.this, "Erro ao capturar imagem. Câmera não inicializada.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View v) {
-                if (imageCapture != null) {
-                    captureImage();
-                } else {
-                    Toast.makeText(CameraxActivity.this, "Erro ao capturar imagem. Câmera não inicializada.", Toast.LENGTH_SHORT).show();
+            public void handleOnBackPressed() {
+                if(listCartoes.isEmpty()){
+                    finish();
+                }else{
+                    avidoDeCancelamento();
                 }
             }
         });
@@ -101,57 +105,52 @@ public class CameraxActivity extends AppCompatActivity {
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
-        cameraProviderFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
-                    Preview preview = new Preview.Builder()
-                            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                            .build();
+                Preview preview = new Preview.Builder()
+                        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                        .build();
 
-                    CameraSelector cameraSelector = new CameraSelector.Builder()
-                            .requireLensFacing(cameraFacing)
-                            .build();
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .requireLensFacing(cameraFacing)
+                        .build();
 
-                    imageCapture = new ImageCapture.Builder()
-                            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                            .build();
+                imageCapture = new ImageCapture.Builder()
+                        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                        .build();
 
-                    cameraProvider.unbindAll();
-                    Camera camera = cameraProvider.bindToLifecycle(CameraxActivity.this, cameraSelector, preview, imageCapture);
-                    preview.setSurfaceProvider(previewView.getSurfaceProvider());
+                cameraProvider.unbindAll();
+                Camera camera = cameraProvider.bindToLifecycle(CameraxActivity.this, cameraSelector, preview, imageCapture);
+                preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
-                    toggleFlash.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setFlashIcon(camera);
-                    }
-                    });
+                toggleFlash.setOnClickListener(view -> setFlashIcon(camera));
 
-                } catch (ExecutionException | InterruptedException e) {
-                    Log.e(TAG, "Erro ao iniciar a câmera", e);
-                }
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Erro ao iniciar a câmera", e);
             }
         }, ContextCompat.getMainExecutor(this));
     }
 
     private void captureImage() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String fileName = "IMG_" + sdf.format(System.currentTimeMillis()) + ".jpg";
+        Date data = new Date();
+        String dataHoraAtual = sdf.format(data);
 
-        File outputDirectory = getOutputDirectory();
-        File photoFile = new File(outputDirectory, nomeImagemx);
+        File outputDirectory = getOutputDirectory();//Cria um diretorio da pasta para armazenamento das imagens no armazenamento externo
 
-        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
+        File diretorioAbsoluto = new File(outputDirectory, nomeCartao);//diretorio de destino da imagem
+
+        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(diretorioAbsoluto).build();
 
         imageCapture.takePicture(outputFileOptions, executorService, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
-                intent.putExtra("nomeImagem", nomeImagemx);
-                intent.putExtra("caminhoImagem", photoFile.getAbsolutePath());
+                intent.putExtra("contexto","continua_correcao");
+                intent.putExtra("nomeImagem", nomeCartao);
+                intent.putExtra("dataHora", dataHoraAtual);
                 startActivity(intent);
                 finish();
             }
@@ -175,12 +174,7 @@ public class CameraxActivity extends AppCompatActivity {
                 toggleFlash.setImageResource(R.drawable.baseline_bolt_24);
             }
         }else{
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(CameraxActivity.this, "Flash não está disponível no momento", Toast.LENGTH_SHORT).show();
-                }
-            });
+            runOnUiThread(() -> Toast.makeText(CameraxActivity.this, "Flash não está disponível no momento", Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -188,46 +182,30 @@ public class CameraxActivity extends AppCompatActivity {
         File mediaDir = getExternalMediaDirs()[0];
         File appDir = new File(mediaDir, "CameraXApp");
         if (!appDir.exists()) {
-            if (!appDir.mkdirs()) {
+            if(!appDir.mkdirs()){
                 Log.e(TAG, "Falha ao criar diretório de mídia");
                 return null;
             }
         }
         return appDir;
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         executorService.shutdown(); // Encerrar o executor quando a atividade for destruída
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(Compactador.listCartoes.isEmpty()){
-            super.onBackPressed();
-            finish();
-        }else{
-            avidoDeCancelamento();
-        }
     }
     public void avidoDeCancelamento(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO!")
                 .setMessage("Caso confirme essa ação, o processo de correção em andamento, será cancelado!\n\n" +
                         "Deseja realmente voltar")
-                .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Compactador.listCartoes.clear();
-                        onBackPressed();
-                        finish();
-                    }
+                .setPositiveButton("SIM", (dialog, which) -> {
+                    Compactador.listCartoes.clear();
+                    getOnBackPressedDispatcher();
+                    finish();
                 })
-                .setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Código para lidar com o clique no botão Cancelar, se necessário
-                    }
+                .setNegativeButton("NÃO", (dialog, which) -> {
+                    // Código para lidar com o clique no botão Cancelar, se necessário
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

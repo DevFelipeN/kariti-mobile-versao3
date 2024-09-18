@@ -20,6 +20,7 @@ public class UploadEjson {
     static Integer id_prova, id_aluno, resultCorrect, questao, respostaDada, questAnterior, respostaAnterior;
     static String mensagem, respostaDupla;
     public static void enviarArquivosP(File arquivo, FileOutputStream fos, File dir, BancoDados bancoDados) {
+
         Thread thread = new Thread(() -> {
             try {
                 String URL = "http://kariti.online/src/pages/test/correct_test/core.php";

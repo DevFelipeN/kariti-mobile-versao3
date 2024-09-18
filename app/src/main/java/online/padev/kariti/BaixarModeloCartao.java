@@ -8,8 +8,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+//import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -55,7 +57,6 @@ public class BaixarModeloCartao {
                 baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
                 Log.e("Kariti", "Fim");
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.e("kariti", e.toString());
             }
         });

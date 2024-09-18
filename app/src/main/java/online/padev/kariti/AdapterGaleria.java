@@ -4,26 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import java.util.ArrayList;
+
+import java.io.File;
 
 public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHolder> {
-
-    ArrayList<String> nomesDasFotos, datasDasFotos, caminhosDasFotos;
     Context context;
+    File diretorio;
 
-    public AdapterGaleria(Context context, ArrayList<String> nomesDasFotos, ArrayList<String> datasDasFotos, ArrayList<String> caminhosDasFotos) {
+    public AdapterGaleria(Context context, File dir) {
         this.context = context;
-        this.nomesDasFotos = nomesDasFotos;
-        this.datasDasFotos = datasDasFotos;
-        this.caminhosDasFotos = caminhosDasFotos;
+        this.diretorio = dir;
     }
 
     @NonNull
@@ -35,15 +30,9 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String nomeFoto = nomesDasFotos.get(position);
-        String dataFoto = datasDasFotos.get(position);
-        String caminhoFoto = caminhosDasFotos.get(position);
-
-        //byte[] fotoData = photo.get(position);
-        //Bitmap foto = fotosDoBanco.get(position); //teste para o banco.
-
-        //Bitmap bitPhoto = BitmapFactory.decodeByteArray(fotoData, 0, fotoData.length);
-        //Bitmap bitPhoto = BitmapFactory.decodeByteArray(photo, 0, photo.length);
+        String nomeFoto = Compactador.listCartoes.get(position);
+        String dataFoto = Compactador.datasImgs.get(position);
+        String caminhoFoto = diretorio+"/"+nomeFoto;
 
         // Defina os dados nos elementos de visualização
         holder.nomeDaFoto.setText(nomeFoto);
@@ -54,29 +43,23 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
         Glide.with(context)
                 .load(caminhoFoto) // Carregar a imagem a partir do caminho do arquivo
                 .into(holder.imageViewGaleria);
-
-        // Defina o clique do botão
-        holder.deleteImg.setOnClickListener(v -> Toast.makeText(context, "Botão deletar clicado para " + nomeFoto, Toast.LENGTH_SHORT).show());
-
     }
 
     @Override
     public int getItemCount() {
-        return nomesDasFotos.size();
+        return Compactador.listCartoes.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewGaleria;
         TextView nomeDaFoto;
         TextView dataDaFoto;
-        ImageButton deleteImg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewGaleria = itemView.findViewById(R.id.imageViewGaleria);
             nomeDaFoto = itemView.findViewById(R.id.nomeDaFoto);
             dataDaFoto = itemView.findViewById(R.id.dataDafoto);
-            deleteImg = itemView.findViewById(R.id.deleteImg);
         }
     }
 }

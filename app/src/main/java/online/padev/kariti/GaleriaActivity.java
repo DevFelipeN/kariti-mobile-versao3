@@ -81,13 +81,13 @@ public class GaleriaActivity extends AppCompatActivity {
                     try {
                         //File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         File dir = getCacheDir();
-                        File fileJson  = getOutputJson(dir);
+                        File fileJson = getOutputJson(dir);
                         //UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
                         //UploadEjson.enviarArquivosP(fileZip, fileJson, bancoDados);
                         iniciaAnimacaoCorrecao();
                     } catch (Exception e){
-                        Log.e("Kariti", e.toString());
+                        Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
                     }
                 }else Toast.makeText(GaleriaActivity.this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
             }catch (Exception e){

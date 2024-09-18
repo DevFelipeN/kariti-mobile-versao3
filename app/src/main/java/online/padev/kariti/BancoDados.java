@@ -670,9 +670,9 @@ public class BancoDados extends SQLiteOpenHelper {
         return id_escola;
     }
 
-    public Integer pegaIdProva(String provacad) {
+    public Integer pegaIdProva(String provacad, Integer id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ?", new String[]{provacad});
+        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ? and id_turma = ?", new String[]{provacad, id_turma.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);

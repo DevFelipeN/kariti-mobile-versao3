@@ -42,9 +42,10 @@ public class UploadEjson {
                     fos.write(inByte);
                 is.close();
                 fos.close();
+                Log.e("kariti","Json baixado com sucesso!");
                 UploadEjson.fimUpload(dir, bancoDados);
-            } catch (Exception e) {
-                Log.e("kariti","Erro: "+e.getMessage());
+            } catch (Exception e){
+                Log.e("kariti","Erro detectado na tentativa de envio de Zip: "+e.getMessage());
                 AnimacaoCorrecao.encerra();
             }
         });
@@ -95,7 +96,7 @@ public class UploadEjson {
                 AnimacaoCorrecao.encerra();
             }
         }catch (Exception e){
-            Log.e("Kariti", e.toString());
+            Log.e("Kariti", "Erro na tentativa de armazenamento de Json"+e.getMessage());
         }
     }
 }

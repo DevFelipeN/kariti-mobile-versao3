@@ -40,9 +40,10 @@ public class Compactador{
             }
             zipOut.close();
             fos.close();
+            Log.e("kariti", "Arquivos compactados com sucesso");
             return true;
         }catch(Exception e){
-            Log.e("KARITI", e.toString());
+            Log.e("KARITI", "Erro de compactação: "+e.getMessage());
             return false;
         }
     }

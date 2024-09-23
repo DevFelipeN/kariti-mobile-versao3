@@ -10,12 +10,14 @@ import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class AtualizarSenha extends AppCompatActivity {
+public class AtualizarSenha extends AppCompatActivity{
     private Integer id_usuario;
     String nomeUsuario, emailUsuario, novaSenha, confNovaSenha;
-    EditText editTextNome, editTextEmail, editTextNovaSenha, editTextConfNovaSenha;
+    EditText editTextNovaSenha, editTextConfNovaSenha;
+    TextView descricaoNovaSenha, titulo;
     Button btnAlterar;
     BancoDados bancoDados;
     ImageButton ocultarSenha, ocultarSenha2, voltar;
@@ -26,22 +28,23 @@ public class AtualizarSenha extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atualizar_senha);
 
-        editTextNome = findViewById(R.id.editTextAttSenha);
-        editTextEmail = findViewById(R.id.editTextEmailAttSenha);
+        descricaoNovaSenha = findViewById(R.id.descricaoNovaSenha);
         editTextNovaSenha = findViewById(R.id.editTextNovaAttSenha);
         editTextConfNovaSenha = findViewById(R.id.editTextConfirmAttSenha);
         btnAlterar = findViewById(R.id.buttonAttSenha);
-        voltar = findViewById(R.id.imgBtnVoltaAttSenha);
+        voltar = findViewById(R.id.imgBtnVoltar);
         ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
         ocultarSenha = findViewById(R.id.senhaoculta);
+        titulo = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);
 
         id_usuario = getIntent().getExtras().getInt("id_usuario");
         nomeUsuario = getIntent().getExtras().getString("nome");
         emailUsuario = getIntent().getExtras().getString("email");
-        editTextNome.setText(nomeUsuario);
-        editTextEmail.setText(emailUsuario);
+
+        titulo.setText(String.format("%s","Nova senha"));
+        descricaoNovaSenha.setText(String.format("Olá, %s!\n Informe uma senha segura para ter acesso ao KARITI.",nomeUsuario));
 
         btnAlterar.setOnClickListener(v -> {
             novaSenha = editTextNovaSenha.getText().toString();

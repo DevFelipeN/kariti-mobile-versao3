@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -37,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         EditTextSenha = findViewById(R.id.editTextSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
 
-        //EditTextEmail.setText(String.format("%s","nora.santos@prof.am.gov.br"));
-        //EditTextSenha.setText(String.format("%s","nora230677"));
+        EditTextEmail.setText(String.format("%s","karitimobile@gmail.com"));
+        EditTextSenha.setText(String.format("%s","user1"));
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();
@@ -59,22 +59,18 @@ public class LoginActivity extends AppCompatActivity {
             Integer autenticacao_id = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
             if (autenticacao_id != null) {
                 BancoDados.USER_ID = autenticacao_id;
-                //carregarTelaInicial();
-                Toast.makeText(LoginActivity.this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                startActivity(intent);
-                finish();
+                carregarTelaInicial();
             } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
         });
 
         esqueciSenha.setOnClickListener(v -> {
-            if(!VerificaConexaoInternet.verificaConexao(LoginActivity.this)) {
+            if(!VerificaConexaoInternet.verificaConexao(LoginActivity.this)){
                 Toast.makeText(LoginActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
                 return;
             }
             emailInformado = EditTextEmail.getText().toString();
             if(emailInformado.trim().isEmpty()) {
-               alerteEsqueciSenha();
+                alerteEsqueciSenha();
             }else{
                 id_usuario = bancoDados.verificaEmail(emailInformado);
                 Log.e("kariti","id_usuario "+id_usuario);
@@ -113,20 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void carregarTelaInicial(){
-        if(!bancoDados.listEscolas(1).isEmpty()){
-            Toast.makeText(this, "Bem Vindo Ao Kariti", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, VisualEscolaActivity.class);
-            startActivity(intent);
-            finish();
-        }else if(!bancoDados.listEscolas(0).isEmpty()){
-            Intent intent = new Intent(this, EscolaDesativadaActivity.class);
-            startActivity(intent);
-        }else {
-            Intent intent = new Intent(this, CadEscolaActivity.class);
-            intent.putExtra("status", "primeiroAcesso");
-            startActivity(intent);
-            finish();
-        }
+        Intent intent = new Intent(this, VisualEscolaActivity.class);
+        startActivity(intent);
+        finish();
     }
     private void mudarParaTelaCadastro(){
         Intent intent = new Intent(this, MainActivity.class);

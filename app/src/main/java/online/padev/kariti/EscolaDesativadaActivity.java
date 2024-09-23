@@ -61,7 +61,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                     .setNegativeButton("Excluir", (dialog, which) -> {
                         //Implementar verificação, se possui dados como alunos turmas e provas ligadas a essa escola.................................
                         Boolean deletaEscola = bancoDados.deletarEscola(id_escola);
-                        if (deletaEscola) {
+                        if (deletaEscola){
                             listDesativadasBD.remove(position);
                             adapter.notifyDataSetChanged();
                             if(listDesativadasBD.isEmpty()){

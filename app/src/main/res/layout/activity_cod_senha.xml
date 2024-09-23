@@ -8,37 +8,42 @@
 
     <TextView
         android:id="@+id/textViewMsgValidacao"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutCod"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/layoutCod"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/buttonValidarSenhaw"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewMsgValidacao">
+        app:layout_constraintTop_toBottomOf="@+id/textViewMsgValidacao">
 
         <EditText
             android:id="@+id/editTextNumber"
+            style="@style/COLORTEXT"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="1"
             android:hint="@string/valorZero"
             android:inputType="number"
             android:maxLength="1"
@@ -49,43 +54,46 @@
 
         <EditText
             android:id="@+id/editTextNumber2"
+            style="@style/COLORTEXT"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:ems="10"
+            android:layout_marginStart="15dp"
+            android:ems="1"
             android:hint="@string/valorZero"
-            android:textColorHint="@color/cinzaClaroPlace"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
+            android:textColorHint="@color/cinzaClaroPlace"
             android:textSize="34sp"
             tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/editTextNumber3"
+            style="@style/COLORTEXT"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:ems="10"
-            android:textColorHint="@color/cinzaClaroPlace"
+            android:layout_marginStart="15dp"
+            android:ems="1"
             android:hint="@string/valorZero"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
+            android:textColorHint="@color/cinzaClaroPlace"
             android:textSize="34sp"
             tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/editTextNumber4"
+            style="@style/COLORTEXT"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:ems="10"
-            android:textColorHint="@color/cinzaClaroPlace"
+            android:layout_marginStart="15dp"
+            android:ems="1"
             android:hint="@string/valorZero"
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
+            android:textColorHint="@color/cinzaClaroPlace"
             android:textSize="34sp"
             tools:ignore="Autofill" />
 
@@ -96,28 +104,28 @@
         style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/buttonValidar"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCancelar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutCod"
-        app:layout_constraintVertical_bias="0.213" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutCod" />
 
     <TextView
         android:id="@+id/textViewCancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="72dp"
         android:text="@string/textViewReenviar"
         android:textColor="@color/corLinks"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonValidarSenhaw"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintTop_toBottomOf="@+id/buttonValidarSenhaw" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,7 +47,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         listarAlunos = findViewById(R.id.listViewCadTurma);
         titulo = findViewById(R.id.toolbar_title);
 
-        titulo.setText("Turma");
+        titulo.setText(String.format("%s","Cadastro"));
 
         nomeTurma = findViewById(R.id.editTextTurmaCad);
         cadastrar = findViewById(R.id.buttonCadastrarTurma);

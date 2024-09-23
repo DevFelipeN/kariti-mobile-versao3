@@ -12,17 +12,13 @@ import java.util.ArrayList;
 //compactar arquivos para enviar
 public class Compactador{
     public static ArrayList<String> listCartoes = new ArrayList<>();
-    public static void main(String[] args){
-
-        compactador();
-    }
-    public static boolean compactador(){
+    public static ArrayList<String> datasImgs = new ArrayList<>();
+    public static boolean compactador(File diretorioImg, String caminhoZip){
         List<String> arquivos = new ArrayList<>();
-        for(int x = 0; x < listCartoes.size(); x++) {
-            Log.e("kariti", listCartoes.get(x));
-            arquivos.add("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/"+listCartoes.get(x)); //Carregando as imagens
+        for(String cartao : listCartoes){
+            arquivos.add(diretorioImg+"/"+cartao); //Carregando as imagens
         }
-        return compactar("/storage/emulated/0/Android/media/online.padev.kariti/CameraXApp/saida.zip", arquivos); //retorna true se funcionou
+        return compactar(caminhoZip, arquivos); //retorna true se funcionou
     }
     public static boolean compactar(String arquivoSaida, List<String> arquivosParaCompactar){
         try{
@@ -44,9 +40,10 @@ public class Compactador{
             }
             zipOut.close();
             fos.close();
+            Log.e("kariti", "Arquivos compactados com sucesso");
             return true;
         }catch(Exception e){
-            Log.e("KARITI", e.toString());
+            Log.e("KARITI", "Erro de compactação: "+e.getMessage());
             return false;
         }
     }

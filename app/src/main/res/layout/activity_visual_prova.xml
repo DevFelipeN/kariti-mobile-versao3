@@ -14,108 +14,101 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="409dp"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:layout_editor_absoluteX="2dp"
-        tools:ignore="MissingConstraints" />
-
     <Spinner
         android:id="@+id/spinnerTurma1"
-        android:layout_width="350dp"
+        style="@style/CAMPOSEDITTEXT"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/style_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerProva1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnTurma" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/spinnerProva1"
-        android:layout_width="350dp"
+        style="@style/CAMPOSEDITTEXT"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/style_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerAlunos1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnProva" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma1" />
 
     <Spinner
         android:id="@+id/spinnerAlunos1"
-        android:layout_width="350dp"
+        style="@style/CAMPOSEDITTEXT"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/style_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/buttonVisualizarProva"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSpinnAluno" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProva1" />
 
     <Button
         android:id="@+id/buttonVisualizarProva"
         style="@style/BUTTONSTYLE"
-        android:layout_width="165dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/buttonVisualizar"
         android:textAlignment="textEnd"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos1"
-        app:layout_constraintVertical_bias="0.501" />
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonVisualizarProva"
-        app:layout_constraintEnd_toEndOf="@+id/buttonVisualizarProva"
-        app:layout_constraintHorizontal_bias="0.079"
-        app:layout_constraintStart_toStartOf="@+id/buttonVisualizarProva"
-        app:layout_constraintTop_toTopOf="@+id/buttonVisualizarProva"
-        app:srcCompat="@mipmap/prova" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAlunos1" />
 
     <TextView
         android:id="@+id/textViewSpinnTurma"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:text="@string/textViewTurma"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerTurma1"
         app:layout_constraintEnd_toEndOf="@+id/spinnerTurma1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/spinnerTurma1"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textViewSpinnProva"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="@string/textViewProva"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerProva1"
         app:layout_constraintEnd_toEndOf="@+id/spinnerProva1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/spinnerProva1"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma1" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTurma1"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textViewSpinnAluno"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="@string/textViewAluno"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerAlunos1"
         app:layout_constraintEnd_toEndOf="@+id/spinnerAlunos1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/spinnerAlunos1"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerProva1" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProva1"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

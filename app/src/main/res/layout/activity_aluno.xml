@@ -16,54 +16,62 @@
 
     <Button
         android:id="@+id/buttonCadAluno"
+        style="@style/BUTTONSTYLE"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
         android:background="@drawable/button_selector"
         android:padding="5dp"
         android:text="@string/buttonCadAluno"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/divider4"
+        app:layout_constraintVertical_bias="0.307" />
 
     <Button
         android:id="@+id/buttonVisualAluno"
+        style="@style/BUTTONSTYLE"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:background="@drawable/button_selector"
         android:padding="5dp"
         android:text="@string/buttonVisuAluno"
-        android:textColor="@color/cinzaClaro"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCadAluno" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCadAluno"
+        app:layout_constraintVertical_bias="0.153" />
 
     <ImageView
         android:id="@+id/imageView8"
+        style="@style/COLORIMGICONE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         android:contentDescription="@string/imgBtnSeta"
         app:layout_constraintBottom_toBottomOf="@+id/buttonCadAluno"
         app:layout_constraintEnd_toEndOf="@+id/buttonCadAluno"
+        app:layout_constraintHorizontal_bias="0.958"
+        app:layout_constraintStart_toStartOf="@+id/buttonCadAluno"
         app:layout_constraintTop_toTopOf="@+id/buttonCadAluno"
+        app:layout_constraintVertical_bias="0.352"
         app:srcCompat="@mipmap/ic_arrownext" />
 
     <ImageView
         android:id="@+id/imageView12"
+        style="@style/COLORIMGICONE"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginStart="12dp"
         android:contentDescription="@string/textViewAluno"
         app:layout_constraintBottom_toBottomOf="@+id/buttonCadAluno"
+        app:layout_constraintEnd_toEndOf="@+id/buttonCadAluno"
+        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="@+id/buttonCadAluno"
         app:layout_constraintTop_toTopOf="@+id/buttonCadAluno"
+        app:layout_constraintVertical_bias="0.357"
         app:srcCompat="@mipmap/student" />
 
     <View
@@ -72,7 +80,7 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:layout_editor_absoluteX="2dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

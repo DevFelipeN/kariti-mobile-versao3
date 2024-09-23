@@ -2,67 +2,107 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BACKGROUND"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/BACKGROUND">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewWelcome"
-        android:layout_width="wrap_content"
+
+    <GridLayout
+        android:id="@+id/gridwelcome"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/textViewbemVindo"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_margin="0dp"
+        android:columnCount="1"
+        android:rowCount="3"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="220dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWelcome"
-        app:srcCompat="@drawable/teacher" />
+        <TextView
+            android:id="@+id/textViewWelcome"
+            style="@style/COLORTEXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription=""
+            android:text="@string/textViewbemVindo"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="91dp"
+            tools:layout_editor_absoluteY="50dp" />
 
-    <TextView
-        android:id="@+id/textViewDesKariti"
-        android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/imageViewelcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="@string/descricioniconwelcome"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWelcome"
+            app:srcCompat="@drawable/teacher"
+            tools:layout_editor_absoluteX="78dp"
+            tools:layout_editor_absoluteY="133dp" />
+
+        <TextView
+            android:id="@+id/textViewDesKariti"
+            style="@style/COLORTEXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/textViewKariti"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewelcome"
+            tools:layout_editor_absoluteX="164dp"
+            tools:layout_editor_absoluteY="459dp" />
+
+    </GridLayout>
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/textViewKariti"
-        android:textSize="34sp"
-        android:textStyle="bold"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="152dp"
+        android:columnCount="1"
+        android:rowCount="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/gridwelcome">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonCadastroW"
-        style="@style/BUTTONSTYLE"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/buttonCadastreSe"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginW" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonLoginW"
+            style="@style/BUTTONSTYLE"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="25dp"
+            android:text="@string/buttonLogin"
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="491dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonLoginW"
-        style="@style/BUTTONSTYLE"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/buttonLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDesKariti" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonCadastroW"
+            style="@style/BUTTONSTYLE"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/buttonCadastreSe"
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="565dp" />
+
+
+    </GridLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

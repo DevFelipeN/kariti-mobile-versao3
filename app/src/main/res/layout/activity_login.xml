@@ -9,12 +9,15 @@
 
     <TextView
         android:id="@+id/textView6"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:text="@string/textViewInformeSenha"
-        android:textColor="@color/cinzaLabel"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextSenha"
+        app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextSenha"
         app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
@@ -23,8 +26,8 @@
         android:id="@+id/imageView3"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="50dp"
         android:contentDescription="@string/imgProfessor"
+        app:layout_constraintBottom_toTopOf="@+id/editTextLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,57 +35,65 @@
 
     <TextView
         android:id="@+id/textView5"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:text="@string/textViewLoginEntrar"
-        android:textColor="@color/cinzaLabel"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextLogin"
+        app:layout_constraintEnd_toEndOf="@+id/editTextLogin"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLogin"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/editTextLogin"
-        android:layout_width="300dp"
+        style="@style/COLORTEXTINSERT"
+        android:layout_width="320dp"
         android:layout_height="48dp"
-        android:layout_marginTop="5dp"
-        android:autofillHints=""
-        android:ems="10"
+        android:autofillHints="name"
+        android:ems="15"
         android:hint="@string/email"
         android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/editTextSenha"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
         tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/editTextSenha"
-        android:layout_width="300dp"
+        style="@style/COLORTEXTINSERT"
+        android:layout_width="320dp"
         android:layout_height="48dp"
-        android:layout_marginTop="5dp"
+        android:autofillHints="username"
         android:ems="10"
-        android:autofillHints=""
         android:hint="@string/senhahint"
-        android:inputType="textPassword"
         android:maxLength="16"
+        android:textAlignment="center"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEntrarL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
 
     <ImageButton
         android:id="@+id/senhaoculta"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        style="@style/ICONSENHA"
+        android:layout_width="43dp"
+        android:layout_height="34dp"
         android:background="#00FFFFFF"
         android:contentDescription="@string/acessoSenha"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/editTextSenha"
         app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
-        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextSenha"
         app:layout_constraintTop_toTopOf="@+id/editTextSenha"
-        app:layout_constraintVertical_bias="0.45"
         app:srcCompat="@mipmap/senhaoff"
         tools:ignore="TouchTargetSizeCheck" />
 
@@ -90,14 +101,13 @@
         android:id="@+id/buttonEntrarL"
         style="@style/BUTTONSTYLE"
         android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="48dp"
         android:text="@string/btnEntrar"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSenha"
-        app:layout_constraintVertical_bias="0.085" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -108,16 +118,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonEntrarL">
+        app:layout_constraintTop_toBottomOf="@+id/buttonEntrarL">
 
         <TextView
             android:id="@+id/textViewCriarConta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="0dp"
             android:text="@string/criaConta"
-            android:textColor="@color/corLinks"
+            android:textColor="@color/design_default_color_primary"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonEntrarL" />
@@ -126,10 +137,11 @@
             android:id="@+id/buttonEsqueciSenhaL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="0dp"
             android:background="@color/tranparente"
             android:text="@string/buttonEsqueciSenha"
-            android:textColor="@color/corLinks"
+            android:textColor="@color/design_default_color_primary"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -138,4 +150,3 @@
             app:layout_constraintVertical_bias="0.0" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

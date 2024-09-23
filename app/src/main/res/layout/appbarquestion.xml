@@ -18,8 +18,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@color/tranparente"
-            android:src="@mipmap/setaleft"
-            android:contentDescription="@string/iconeVoltar"/>
+            android:contentDescription="@string/iconeVoltar"
+            android:src="@mipmap/setaleft" />
 
         <TextView
             android:id="@+id/toolbar_title"

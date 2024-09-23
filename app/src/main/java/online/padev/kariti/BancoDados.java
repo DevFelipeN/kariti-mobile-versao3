@@ -76,7 +76,7 @@ public class BancoDados extends SQLiteOpenHelper {
             long inserir = base_dados.insert("usuario", null, contentValues);
             return inserir != -1;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("kariti", e.getMessage());
             return false;
         } finally {
             if (base_dados != null && base_dados.isOpen()) {
@@ -104,7 +104,7 @@ public class BancoDados extends SQLiteOpenHelper {
             long inserir = base_dados.insert("escola", null, contentValues);
             return inserir != -1;
         } catch (Exception e){
-            e.printStackTrace();
+            Log.e("kariti", e.getMessage());
             return false;
         }finally {
             if(base_dados != null && base_dados.isOpen()){
@@ -114,21 +114,39 @@ public class BancoDados extends SQLiteOpenHelper {
 
     }
     public Boolean inserirTurma(String nomeTurma, Integer an){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("nomeTurma", nomeTurma);
-        contentValues.put("qtdAnonimos", an);
-        contentValues.put("id_escola", BancoDados.ID_ESCOLA);
-        long inserir = base_dados.insert("turma", null, contentValues);
-        return inserir != -1;
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("nomeTurma", nomeTurma);
+            contentValues.put("qtdAnonimos", an);
+            contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+            long inserir = base_dados.insert("turma", null, contentValues);
+            return inserir != -1;
+        } catch (Exception e){
+            Log.e("kariti", e.getMessage());
+            return false;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
     }
     public void inserirAlunosNaTurma(Integer id_turma, Integer id_aluno){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("id_turma", id_turma);
-        contentValues.put("id_aluno", id_aluno);
-        base_dados.insert("alunosTurma", null, contentValues);
-        base_dados.close();
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id_turma", id_turma);
+            contentValues.put("id_aluno", id_aluno);
+            base_dados.insert("alunosTurma", null, contentValues);
+        }catch (Exception e){
+            Log.e("kariti", e.getMessage());
+        }finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
     }
     public void inserirResultCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
         SQLiteDatabase base_dados = null;
@@ -152,7 +170,6 @@ public class BancoDados extends SQLiteOpenHelper {
                 base_dados.close();
             }
         }
-
     }
     public Integer inserirProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase base_dados = null;
@@ -167,28 +184,36 @@ public class BancoDados extends SQLiteOpenHelper {
             contentValues.put("id_escola", BancoDados.ID_ESCOLA); // Excluir posteriormente
             contentValues.put("id_turma", id_turma);
             long inserir = base_dados.insert("prova", null, contentValues);
-            int convert = (int) inserir; //remover gambiarra após segunda bateria de testes
-            id_prova = Integer.valueOf(convert);
-            return id_prova;
+            id_prova = Math.toIntExact(inserir); // Alterar tipo de variavel de Id
         }catch (Exception e){
-            e.printStackTrace();
-            return -1;
+            Log.e("kariti", e.getMessage());
+            return null;
         }finally {
             if (base_dados != null && base_dados.isOpen()) {
                 base_dados.close();
             }
         }
+        return id_prova;
     }
-    public void inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Float nota){
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("id_prova", id_prova);
-        contentValues.put("questao", questao);
-        contentValues.put("resposta", resposta);
-        contentValues.put("nota", nota);
-        base_dados.insert("gabarito", null, contentValues);
-        base_dados.close();
-        Log.e("kariti","Cadastrado");
+    public Boolean inserirGabarito(Integer id_prova, Integer questao, Integer resposta, Float nota){
+        SQLiteDatabase base_dados = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id_prova", id_prova);
+            contentValues.put("questao", questao);
+            contentValues.put("resposta", resposta);
+            contentValues.put("nota", nota);
+            base_dados.insert("gabarito", null, contentValues);
+        }catch (Exception e){
+            Log.e("kariti", e.getMessage());
+            return false;
+        }finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
+        return true;
     }
     public Boolean inserirDadosAluno(String nomeAluno, String email, Integer status){
         SQLiteDatabase base_dados = this.getWritableDatabase();
@@ -210,11 +235,10 @@ public class BancoDados extends SQLiteOpenHelper {
         long inserir = base_dados.insert("aluno", null, contentValues);
         return Math.toIntExact(inserir);
     }
-
     /**
      * Este método deleta uma escola do banco
-     * @param id_escola
-     * @return
+     * @param id_escola parametro contendo o id da prova que se deseja deletar
+     * @return retorna o resultado da execução
      */
     public Boolean deletarEscola(Integer id_escola){
         SQLiteDatabase base_dados = null;
@@ -408,17 +432,28 @@ public class BancoDados extends SQLiteOpenHelper {
         }
     }
     public Boolean upadateDadosAluno(String nomeAluno, String email, Integer id_aluno){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
         try {
-            SQLiteDatabase base_dados = this.getWritableDatabase();
+            base_dados = this.getWritableDatabase();
             String altera = "UPDATE aluno SET nomeAluno=?, email=? WHERE id_aluno=?";
-            SQLiteStatement stmt = base_dados.compileStatement(altera);
+            stmt = base_dados.compileStatement(altera);
             stmt.bindString(1, nomeAluno);
             stmt.bindString(2, email);
             stmt.bindLong(3, id_aluno);
             stmt.executeUpdateDelete();
             base_dados.close();
-        }catch (Exception e){e.printStackTrace();}
-        return true;
+            return true;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(base_dados != null){
+                base_dados.close();
+            }
+            if(stmt != null){
+                stmt.close();
+            }
+        }
     }
 
     /**
@@ -440,7 +475,6 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.close();
             return true;
         }catch (Exception e){
-            e.printStackTrace();
             return false;
         }finally {
             if(base_dados != null){
@@ -484,7 +518,6 @@ public class BancoDados extends SQLiteOpenHelper {
         }
 
     }
-
     /**
      * Este método verifica se determinado email está cadstrado no banco de dados
      * @param email parâmetro usado para verificar se existe o email no banco
@@ -645,18 +678,9 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return id_escola;
     }
-
-    public Integer pegaIdProva(String provacad) {
+    public Integer pegaIdProva(String nomeProva, @NonNull Integer id_turma) {
         SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ?", new String[]{provacad});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getInt(0);
-    }
-
-    public Integer pegaIdProvaTESTEEEEE(String provacad, @NonNull Integer id_turma) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ? and id_turma = ?", new String[]{provacad, id_turma.toString()});
+        Cursor cursor = base_dados.rawQuery("Select id_prova from prova where nomeProva = ? and id_turma = ?", new String[]{nomeProva, id_turma.toString()});
         if (cursor.getCount() > 0)
             cursor.moveToFirst();
         return cursor.getInt(0);
@@ -771,10 +795,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkprovasNome(String nomeProva, String id_turma) {
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT nomeProva FROM prova WHERE nomeProva = ? and id_turma = ?", new String[]{nomeProva, id_turma});
-        if (cursor.getCount() > 0){
-            return true;
-        }else
-            return false;
+        return cursor.getCount() > 0;
     }
     public Boolean checkCorrigida(String id_prova){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -787,10 +808,31 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkprovaId(String id_prova){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM prova WHERE id_prova = ?", new String[]{id_prova});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() > 0;
+    }
+    public Boolean checkQuantidadeProvas(){
+        Cursor cursor = null;
+        try {
+            SQLiteDatabase database = this.getWritableDatabase();
+            cursor = database.rawQuery("SELECT id_prova FROM prova WHERE id_escola = ?", new String[]{BancoDados.ID_ESCOLA.toString()});
+            return cursor.getCount() > 0;
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+    }
+    public Boolean checkQuantidadeProvasCorrigida(){
+        Cursor cursor = null;
+        try {
+            SQLiteDatabase database = this.getWritableDatabase();
+            cursor = database.rawQuery("SELECT id_prova FROM prova WHERE id_escola = ? and id_prova in (SELECT DISTINCT id_prova FROM resultadoCorrecao)", new String[]{BancoDados.ID_ESCOLA.toString()});
+            return cursor.getCount() > 0;
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
     }
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -1037,16 +1079,25 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public List<Integer> listAlunoPorProvaCorrigida(Integer id_prova){
         ArrayList<Integer> ids_alunos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()){
-            do {
-                Integer id_aluno = cursor.getInt(0);
-                ids_alunos.add(id_aluno);
-            } while (cursor.moveToNext());
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_aluno = cursor.getInt(0);
+                    ids_alunos.add(id_aluno);
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor != null){
                 cursor.close();
             }
-        db.close();
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
         return ids_alunos;
     }
     public List<Integer> listQuestoes(Integer id_prova, Integer id_aluno) {
@@ -1151,31 +1202,41 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return detalhes;
     }
-    public List<String> respostasDadas(Integer id_prova, Integer id_aluno){
+    public List<String> respostasDadas(Integer id_prova, Integer id_aluno) {
         ArrayList<String> respostasDadas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String aux = "";
-                String resposta = cursor.getString(0);
-                if(!resposta.equals("-1")){
-                    if (resposta.equals("0")) {
-                        aux = "-";
-                    } else {
-                        aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
-                    }
-                    for (int i = 1; i < resposta.length(); i++) {
-                        if (!String.valueOf(resposta.charAt(i)).equals("0")) {
-                            aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String aux = "";
+                    String resposta = cursor.getString(0);
+                    if(!resposta.equals("-1")){
+                        Log.e("kariti", resposta);
+                        if (resposta.equals("0")) {
+                            aux = "-";
+                        } else {
+                            aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
                         }
+                        for (int i = 1; i < resposta.length(); i++) {
+                            if (!String.valueOf(resposta.charAt(i)).equals("0")) {
+                                aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                            }
+                        }
+                        respostasDadas.add(aux);
                     }
-                    respostasDadas.add(aux);
-                }
-            } while (cursor.moveToNext());
-            cursor.close();
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor != null){
+                cursor.close();
+            }
+            if (db != null && db.isOpen()){
+                db.close();
+            }
         }
-        db.close();
         return respostasDadas;
     }
     public String listRespostasAluno(String id_prova, String id_aluno) {

@@ -166,18 +166,15 @@ public class GabaritoActivity extends AppCompatActivity {
                 radioAlternativa.setText(letras[j]);
                 radioGroupAlternativas.addView(radioAlternativa);
             }
-            radioGroupAlternativas.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    for (int i = 0; i < listRadioGroups.size(); i++) {
-                        if (listRadioGroups.get(i) == group) {
-                            int positionDaQuestao = i;
-                            int selectedRadioButtonId = group.getCheckedRadioButtonId();
-                            RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
-                            int position = group.indexOfChild(selectedRadioButton);
-                            alternativasEscolhidas.put(positionDaQuestao, position);
-                            break;
-                        }
+            radioGroupAlternativas.setOnCheckedChangeListener((group, checkedId) -> {
+                for (int i12 = 0; i12 < listRadioGroups.size(); i12++) {
+                    if (listRadioGroups.get(i12) == group) {
+                        int positionDaQuestao = i12;
+                        int selectedRadioButtonId = group.getCheckedRadioButtonId();
+                        RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
+                        int position = group.indexOfChild(selectedRadioButton);
+                        alternativasEscolhidas.put(positionDaQuestao, position);
+                        break;
                     }
                 }
             });

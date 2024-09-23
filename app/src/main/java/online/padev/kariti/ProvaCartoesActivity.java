@@ -137,7 +137,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         String nomeProva = spinnerProva.getSelectedItem().toString();
                         String nomeTurma = spinnerTurma.getSelectedItem().toString();
                         id_turma = bancoDados.pegaIdTurma(nomeTurma);
-                        String id_prova = String.valueOf(bancoDados.pegaIdProvaTESTEEEEE(nomeProva, id_turma));
+                        String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva, id_turma));
                         String id_usuario = String.valueOf(BancoDados.USER_ID);
                         String prof = bancoDados.pegaUsuario(id_usuario);
                         String data = bancoDados.pegaData(id_prova);

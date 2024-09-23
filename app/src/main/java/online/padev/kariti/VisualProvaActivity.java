@@ -14,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 import java.util.ArrayList;
 
 public class    VisualProvaActivity extends AppCompatActivity {
@@ -88,7 +86,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
             return;
         }
         provaSelected = spinnerProva.getSelectedItem().toString();
-        Integer id_prova = bancoDados.pegaIdProva(provaSelected);
+        Integer id_prova = bancoDados.pegaIdProva(provaSelected, id_turma);
         if(bancoDados.checkCorrigida(id_prova.toString())){
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", provaSelected);

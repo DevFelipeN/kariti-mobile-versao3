@@ -2,8 +2,6 @@ package online.padev.kariti;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -24,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     EnviarEmail enviarEmail;
     GerarCodigoValidacao gerarCodigo;
 
-    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         editTextconfirmarSenha = findViewById(R.id.editTextConfirmNovaSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
         ocultarSenha2 = findViewById(R.id.imgButtonSenhaOFF);
-        ImageButton voltar = findViewById(R.id.imgBtnVoltaEscola);
-        Button cadastro = findViewById(R.id.buttonSalvarEdit);
+        ImageButton voltar = findViewById(R.id.imgBtnVoltar);
+        Button cadastro = findViewById(R.id.buttonSalvarUsuario);
 
         //cria uma instancia de outras classes
         bancoDados = new BancoDados(this);

@@ -3,7 +3,6 @@ package online.padev.kariti;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +17,7 @@ import online.padev.kariti.R;
 
 import java.util.ArrayList;
 
-public class VisualProvaActivity extends AppCompatActivity {
+public class    VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button visualProva;
     String turmaSelecionada, provaSelected;
@@ -88,7 +87,7 @@ public class VisualProvaActivity extends AppCompatActivity {
             return;
         }
         provaSelected = spinnerProva.getSelectedItem().toString();
-        Integer id_prova = bancoDados.pegaIdProva(provaSelected);
+        Integer id_prova = bancoDados.pegaIdProva(provaSelected, id_turma);
         if(bancoDados.checkCorrigida(id_prova.toString())){
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", provaSelected);
@@ -98,18 +97,5 @@ public class VisualProvaActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();
         }
-    }
-    public void carregaGabarito(){
-        String gabarito = bancoDados.mostraGabaritoInt(3);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Gabarito");
-        builder.setMessage(gabarito);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-
     }
 }

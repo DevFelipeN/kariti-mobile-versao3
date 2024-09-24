@@ -826,8 +826,8 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             SQLiteDatabase database = this.getWritableDatabase();
-            cursor = database.rawQuery("SELECT id_prova FROM prova WHERE id_escola = ? and id_prova in (SELECT DISTINCT id_prova FROM resultadoCorrecao)", new String[]{BancoDados.ID_ESCOLA.toString()});
-            return cursor.getCount() > 0;
+            cursor = database.rawQuery("SELECT id_prova FROM prova WHERE id_escola = ? and id_prova in (SELECT id_prova FROM resultadoCorrecao)", new String[]{BancoDados.ID_ESCOLA.toString()});
+            return cursor != null && cursor.moveToFirst();
         }finally {
             if(cursor != null){
                 cursor.close();
@@ -837,8 +837,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public Boolean checkAluno(String nome){
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ? and id_usuario = ?", new String[]{nome, BancoDados.USER_ID.toString()});
-        if (cursor.getCount() > 0) return true;
-        else return false;
+        return cursor.getCount() > 0;
     }
     public Boolean checkSituacaoCorrecao(Integer id_prova, Integer id_aluno, Integer estado){
         SQLiteDatabase database = this.getReadableDatabase();

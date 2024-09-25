@@ -113,7 +113,7 @@ public class CodSenhaActivity extends AppCompatActivity {
      */
     private void carregarTelaNovaSenha(){
         Integer id_usuario = getIntent().getExtras().getInt("id_usuario");
-        String nomeBD = bancoDados.pegaNome(id_usuario);
+        String nomeBD = bancoDados.pegarNomeUsuario(id_usuario);
         Intent proxima = new Intent(this, AtualizarSenha.class);
         proxima.putExtra("id_usuario", id_usuario);
         proxima.putExtra("nome", nomeBD);

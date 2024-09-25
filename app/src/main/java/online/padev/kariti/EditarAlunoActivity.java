@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
     EditText nomeAluno, emailAluno;
@@ -37,7 +35,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         infoEditarAluno();
 
         id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
-        aluno = bancoDados.pegaNomeAluno(id_aluno);
+        aluno = bancoDados.pegaNomeAlunoPStatus(id_aluno, 1);
         email = bancoDados.pegaEmailAluno(id_aluno);
         nomeAluno.setText(aluno);
         emailAluno.setText(email);
@@ -54,11 +52,11 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                 String emailAtual = emailAluno.getText().toString();
                 if(!nomAtual.equals("")) {
                     if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
-                        Boolean checkAluno = bancoDados.checkAluno(nomAtual);
+                        Boolean checkAluno = bancoDados.verificaExisteAlunoPNome(nomAtual);
                         if (!emailAtual.equals("")) {
                             if (Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
                                 if(!checkAluno || !emailAtual.equals(email)) {
-                                    Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
+                                    Boolean alteraDadoAluno = bancoDados.alterarDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
                                     if (alteraDadoAluno.equals(true)) {
                                         Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
@@ -71,7 +69,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                             }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
                         }else {
                             if(!checkAluno) {
-                                Boolean alteraDadoAluno = bancoDados.upadateDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
+                                Boolean alteraDadoAluno = bancoDados.alterarDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
                                 if (alteraDadoAluno.equals(true)){
                                     Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);

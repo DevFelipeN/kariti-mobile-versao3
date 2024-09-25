@@ -109,14 +109,14 @@ public class GabaritoActivity extends AppCompatActivity {
             }
             if (respostaSelecionada && respostasNotasPreenchidas) {
                 if(status.equals(false)) {
-                    id_prova = bancoDados.inserirProva(prova, dataForm, quest, alter, id_turma);
+                    id_prova = bancoDados.cadastrarProva(prova, dataForm, quest, alter, id_turma);
                     if(id_prova == null){
                         Toast.makeText(this, "Erro de comunicação, favor tente novamente!", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }else{
-                    bancoDados.upadateProva(id_prova, prova, dataForm, id_turma, quest, alter);
-                    bancoDados.deletaGabarito(id_prova);
+                    bancoDados.alterarDadosProva(id_prova, prova, dataForm, id_turma, quest, alter);
+                    bancoDados.deletarGabarito(id_prova);
                 }
                 notasPorQuestao = (ArrayList<Float>) info.get("notaQuest");
                 if(!notasPorQuestao.isEmpty() && id_prova != null){
@@ -124,7 +124,7 @@ public class GabaritoActivity extends AppCompatActivity {
                     for(int i = 1; i <= quest; i++){
                         Integer resp = alternativasEscolhidas.get(i-1);
                         Log.e("kariti","Q = "+i+" R = "+(resp+1)+" N = "+notasPorQuestao.get(i-1));
-                        bancoDados.inserirGabarito(id_prova, i, resp+1, notasPorQuestao.get(i-1));
+                        bancoDados.cadastrarGabarito(id_prova, i, resp+1, notasPorQuestao.get(i-1));
                     }
                     dialogProvaSucess();
                 }

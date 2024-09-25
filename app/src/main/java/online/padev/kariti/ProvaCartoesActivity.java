@@ -71,7 +71,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(position!=0){
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
-                        idTurmaSelect = bancoDados.pegaIdTurma(turmaSelecionada);
+                        idTurmaSelect = bancoDados.pegarIdTurma(turmaSelecionada);
 
                         listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
                         SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
@@ -89,7 +89,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             });
         }else if(endereco.equals(1)){ //para quando a activity que chamou for Gabarito
             id_turma = getIntent().getExtras().getInt("id_turma");
-            turma = bancoDados.pegaNomeTurma(String.valueOf(id_turma));
+            turma = bancoDados.pegarNomeTurma(String.valueOf(id_turma));
             turmalist.add(0, turma);
             SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
             spinnerTurma.setAdapter(adapterTurma);
@@ -109,7 +109,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(position!=0){
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
-                        idTurmaSelect = bancoDados.pegaIdTurma(turmaSelecionada);
+                        idTurmaSelect = bancoDados.pegarIdTurma(turmaSelecionada);
                         //Lista todas provas pertecentes a turma selecionada
                         listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
                         listagemProvas.add(0, "Selecione a prova");
@@ -136,24 +136,24 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     if(spinnerProva.getSelectedItem() != null) {
                         String nomeProva = spinnerProva.getSelectedItem().toString();
                         String nomeTurma = spinnerTurma.getSelectedItem().toString();
-                        id_turma = bancoDados.pegaIdTurma(nomeTurma);
-                        String id_prova = String.valueOf(bancoDados.pegaIdProva(nomeProva, id_turma));
+                        id_turma = bancoDados.pegarIdTurma(nomeTurma);
+                        String id_prova = String.valueOf(bancoDados.pegarIdProva(nomeProva, id_turma));
                         String id_usuario = String.valueOf(BancoDados.USER_ID);
                         String prof = bancoDados.pegaUsuario(id_usuario);
-                        String data = bancoDados.pegaData(id_prova);
+                        String data = bancoDados.pegaDataProva(id_prova);
                         String nota = String.valueOf(bancoDados.listNota(id_prova));
                         String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
                         String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
 
                         dados = new ArrayList<>();
 
-                        String idTurma = String.valueOf(bancoDados.pegaIdTurma(nomeTurma));
+                        String idTurma = String.valueOf(bancoDados.pegarIdTurma(nomeTurma));
                         listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
                         int qtdProvas = listIdsAlunos.size();
                         dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                         for (int x = 0; x < qtdProvas; x++) {
                             idAluno = String.valueOf(listIdsAlunos.get(x));
-                            String aluno = bancoDados.alunosGerarProva(String.valueOf(listIdsAlunos.get(x)));
+                            String aluno = bancoDados.pegaNomeAluno(listIdsAlunos.get(x));
                             dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
                         }
                         try {

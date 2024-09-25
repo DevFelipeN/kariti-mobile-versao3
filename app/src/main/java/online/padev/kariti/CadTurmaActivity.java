@@ -17,8 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity{
@@ -137,23 +135,23 @@ public class CadTurmaActivity extends AppCompatActivity{
                 if(!turma.trim().isEmpty()) {
                     if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
                         Integer an = Integer.valueOf(alunosAnonimos.getText().toString());
-                        Boolean checkTurma = bancoDados.checkTurma(turma);
+                        Boolean checkTurma = bancoDados.verificaExisteTurma(turma);
                         if (!checkTurma) {
-                            Boolean cadTurma = bancoDados.inserirTurma(turma, an);
+                            Boolean cadTurma = bancoDados.cadastrarTurma(turma, an);
                             if (cadTurma) {
-                                id_turma = bancoDados.pegaIdTurma(turma);
+                                id_turma = bancoDados.pegarIdTurma(turma);
                                 if (!selectedAlunos.isEmpty()) {
                                     int num = listarAlunos.getAdapter().getCount();
                                     for (int i = 0; i < num; i++) {
-                                        Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
-                                        bancoDados.inserirAlunosNaTurma(id_turma, id_aluno);
+                                        Integer id_aluno = bancoDados.pegarIdAluno(selectedAlunos.get(i));
+                                        bancoDados.cadastrarAlunoNaTurma(id_turma, id_aluno);
                                     }
                                 }
                                 if (!an.equals(0)) {
                                     for (int x = 1; x <= an; x++) {
                                         String anonimo = "Aluno "+ x;
-                                        Integer id_anonimo = bancoDados.inserirNovoAluno(anonimo, null, 0);
-                                        bancoDados.inserirAlunosNaTurma(id_turma, id_anonimo);
+                                        Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
+                                        bancoDados.cadastrarAlunoNaTurma(id_turma, id_anonimo);
                                     }
                                 }
                                 Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();

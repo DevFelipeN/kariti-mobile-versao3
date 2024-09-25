@@ -46,7 +46,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         listViewDesativadas.setAdapter(adapter);
         listViewDesativadas.setOnItemLongClickListener((parent, view, position, id) -> {
             // Exibir a caixa de diálogo
-            id_escola = bancoDados.pegaIdEscola(adapter.getItem(position));
+            id_escola = bancoDados.pegarIdEscola(adapter.getItem(position));
             AlertDialog.Builder builder = new AlertDialog.Builder(EscolaDesativadaActivity.this);
             builder.setTitle("Atenção!")
                     .setMessage("Qual operação deseja realizar com essa escola? ")

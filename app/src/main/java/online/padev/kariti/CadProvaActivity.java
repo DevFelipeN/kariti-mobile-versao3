@@ -106,9 +106,14 @@ public class CadProvaActivity extends AppCompatActivity {
                 Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            id_turma = bancoDados.pegaIdTurma(turma);
+            id_turma = bancoDados.pegarIdTurma(turma);
             if(id_turma != null) {
-                if(bancoDados.checkprovasNome(prova, id_turma.toString())) {
+                Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova, id_turma.toString());
+                if(verificaProva == null){
+                    Toast.makeText(this, "Erro na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(verificaProva) {
                     Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, "+prova, Toast.LENGTH_SHORT).show();
                     return;
                 }

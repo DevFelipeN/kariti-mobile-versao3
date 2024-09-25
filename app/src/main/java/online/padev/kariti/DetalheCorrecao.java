@@ -40,7 +40,7 @@ public class DetalheCorrecao extends AppCompatActivity {
         titulo.setText(String.format("%s","Detalhes"));
 
         id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
-        nomeAluno = bancoDados.pegaNomeParaDetalhe(id_aluno.toString());
+        nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
         id_prova = getIntent().getExtras().getInt("id_prova");
         qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
 
@@ -56,8 +56,8 @@ public class DetalheCorrecao extends AppCompatActivity {
         border.getPaint().setStyle(Paint.Style.STROKE);
 
         for(int x = 1; x <= qtdQuestoes; x++) {
-            Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, x);
-            Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, x);
+            Integer respostaDada = bancoDados.pegarRespostaDadaQuestao(id_prova, id_aluno, x);
+            Integer respostaGabarito = bancoDados.pegarRespostaQuestaoGabarito(id_prova, x);
             if(respostaGabarito.equals(respostaDada)){
                 nota += bancoDados.pegaNotaQuestao(id_prova, x);
             }

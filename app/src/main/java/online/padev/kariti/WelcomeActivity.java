@@ -20,7 +20,7 @@ public class WelcomeActivity extends AppCompatActivity {
         AppCompatButton botaoLogin = findViewById(R.id.buttonLoginW);
         bancoDados = new BancoDados(this);
 
-        if(bancoDados.verificaEmail("karitimobile@gmail.com") == null) {
+        if(bancoDados.verificaExisteEmail("karitimobile@gmail.com") == null) {
             bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
         }
         botaoCadastro.setOnClickListener(v -> {

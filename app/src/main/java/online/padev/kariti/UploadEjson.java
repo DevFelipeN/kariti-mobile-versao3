@@ -63,8 +63,13 @@ public class UploadEjson {
                     mensagem = objJson.getString("mensagem");
 
                     if(resultCorrect.equals(0)){
-                        if(bancoDados.checkResultadoCorrecao(id_prova, id_aluno)){ //verifica se essa prova já foi corrigida antes
-                            bancoDados.deletaCorrecaoPorAluno(id_prova, id_aluno); //Exclui essa prova para ser atualizada
+                        if(bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){           //verifica se essa prova já foi corrigida antes
+                            if(bancoDados.deletarCorrecaoPorAluno(id_prova, id_aluno)){       //Exclui essa prova para ser atualizada
+                                Log.e("kariti","Correção deletada com sucesso!!");
+                            }else {
+                                Log.e("kariti", "Erro ao tentar deletar correção!");
+                            }
+
                         }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
@@ -80,15 +85,15 @@ public class UploadEjson {
                                 respostaDada = Integer.valueOf(respostaDupla);
                             }
                             if(questao.equals(questAnterior)){
-                                bancoDados.upadateResultadoCorrecao(id_prova, id_aluno, questao, respostaDada);
+                                bancoDados.AlterarDadosCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }else{
-                                bancoDados.inserirResultCorrecao(id_prova, id_aluno, questao, respostaDada);
+                                bancoDados.cadastrarCorrecao(id_prova, id_aluno, questao, respostaDada);
                             }
                             questAnterior = questao;
                             respostaAnterior = respostaDada;
                         }
-                    }else if(!bancoDados.checkResultadoCorrecao(id_prova, id_aluno)){
-                        bancoDados.inserirResultCorrecao(id_prova, id_aluno, -1, -1);
+                    }else if(!bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){
+                        bancoDados.cadastrarCorrecao(id_prova, id_aluno, -1, -1);
                     }
                 }
                 AnimacaoCorrecao.encerra();

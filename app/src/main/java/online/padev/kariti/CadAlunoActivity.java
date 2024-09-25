@@ -1,17 +1,15 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import online.padev.kariti.R;
 
 public class CadAlunoActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -30,42 +28,43 @@ public class CadAlunoActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltaEscola);
         cadastrar = findViewById(R.id.buttonSalvarEdit);
         bancoDados = new BancoDados(this);
-        cadastrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String nome = nomeAluno.getText().toString();
-                String email = emailAluno.getText().toString();
-                if (nome.trim().isEmpty()) {
-                    Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
-                } else {
-                    Boolean checkAluno = bancoDados.checkAluno(nome);
-                    if (!checkAluno) {
-                        if (!email.trim().isEmpty()) {
-                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && !bancoDados.checkEmailDAluno(email)) {
-                                Boolean insertAluno = bancoDados.inserirDadosAluno(nome, email, 1);
-                                if (insertAluno) {
-                                    Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                } else {
-                                    Toast.makeText(CadAlunoActivity.this, "Falha no cadastro do aluno!", Toast.LENGTH_SHORT).show();
-                                }
-                            } else
-                                Toast.makeText(CadAlunoActivity.this, "E-mail Inválido ou já existente!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Boolean insertAlunoS = bancoDados.inserirDadosAluno(nome, email, 1);
-                            if (insertAlunoS) {
+        cadastrar.setOnClickListener(view -> {
+            String nome = nomeAluno.getText().toString();
+            String email = emailAluno.getText().toString();
+            if (nome.trim().isEmpty()) {
+                Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
+            } else {
+                Boolean checkAluno = bancoDados.verificaExisteAlunoPNome(nome);
+                if (!checkAluno) {
+                    if (!email.trim().isEmpty()) {
+                        if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && !bancoDados.verificaExisteEmailAluno(email)){
+                            Integer insertAluno = bancoDados.cadastrarAluno(nome, email, 1);
+                            if (insertAluno != -1){
                                 Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else {Toast.makeText(CadAlunoActivity.this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();}
-                        }
-                    } else { Toast.makeText(CadAlunoActivity.this, "Aluno já cadastrado!", Toast.LENGTH_SHORT).show();}
-                }
+                            } else {
+                                Toast.makeText(CadAlunoActivity.this, "Falha no cadastro do aluno!", Toast.LENGTH_SHORT).show();
+                            }
+                        } else
+                            Toast.makeText(CadAlunoActivity.this, "E-mail Inválido ou já existente!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Integer insertAlunoS = bancoDados.cadastrarAluno(nome, email, 1);
+                        if (insertAlunoS != -1) {
+                            Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {Toast.makeText(CadAlunoActivity.this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();}
+                    }
+                } else { Toast.makeText(CadAlunoActivity.this, "Aluno já cadastrado!", Toast.LENGTH_SHORT).show();}
             }
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
     }

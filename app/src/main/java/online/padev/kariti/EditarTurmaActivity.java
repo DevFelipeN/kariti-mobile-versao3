@@ -142,38 +142,35 @@ public class EditarTurmaActivity extends AppCompatActivity {
                 novosAlAnonimos.setText(String.valueOf(mais));
             }
         });
-        salvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String turmaEditada = editTurma.getText().toString();
-                if(!turmaEditada.trim().isEmpty()) {
-                    Integer an = Integer.valueOf(novosAlAnonimos.getText().toString());
-                    //Editar essa linha após realização de segunda fase da segunda bateria de testes
-                    bancoDados.upadateTurma(turmaEditada, an, Integer.valueOf(id_turma)); //Alterando Dados da turma
-                    bancoDados.deletaAnonimos(Integer.valueOf(id_turma)); //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
-                    bancoDados.deletarAlunoDturma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
+        salvar.setOnClickListener(view -> {
+            String turmaEditada = editTurma.getText().toString();
+            if(!turmaEditada.trim().isEmpty()) {
+                Integer an = Integer.valueOf(novosAlAnonimos.getText().toString());
+                //Editar essa linha após realização de segunda fase da segunda bateria de testes
+                bancoDados.alterarDadosTurma(turmaEditada, an, Integer.valueOf(id_turma)); //Alterando Dados da turma
+                bancoDados.deletarAnonimos(Integer.valueOf(id_turma)); //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
+                bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
 
-                    if (!alunosDaTurmaSemAnonimos.isEmpty()) {
-                        for (int i = 0; i < alunosDaTurmaSemAnonimos.size(); i++) {
-                            id_aluno = bancoDados.pegaIdAluno(alunosDaTurmaSemAnonimos.get(i));
-                            bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), id_aluno);
-                        }
+                if (!alunosDaTurmaSemAnonimos.isEmpty()) {
+                    for (int i = 0; i < alunosDaTurmaSemAnonimos.size(); i++) {
+                        id_aluno = bancoDados.pegaIdAluno(alunosDaTurmaSemAnonimos.get(i));
+                        bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_aluno);
                     }
-                    if (!an.equals(0)) {
-                        for (int x = 1; x <= an; x++) {
-                            String anonimo = "Aluno "+ x;
-                            Integer id_anonimo = bancoDados.inserirNovoAluno(anonimo, null, 0);
-                            bancoDados.inserirAlunosNaTurma(Integer.valueOf(id_turma), id_anonimo);
-                        }
-                    }
-                    Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), DadosTurmaActivity.class);
-                    intent.putExtra("idTurma", Integer.valueOf(id_turma));
-                    startActivity(intent);
-                    finish();
-                }else{
-                    Toast.makeText(EditarTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
                 }
+                if (!an.equals(0)) {
+                    for (int x = 1; x <= an; x++) {
+                        String anonimo = "Aluno "+ x;
+                        Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
+                        bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_anonimo);
+                    }
+                }
+                Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), DadosTurmaActivity.class);
+                intent.putExtra("idTurma", Integer.valueOf(id_turma));
+                startActivity(intent);
+                finish();
+            }else{
+                Toast.makeText(EditarTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
             }
         });
         voltar.setOnClickListener(new View.OnClickListener() {

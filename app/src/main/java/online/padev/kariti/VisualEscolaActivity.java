@@ -181,8 +181,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
         btnCadastrar.setOnClickListener(v -> {
             String nomeEscola = editTextEscola.getText().toString();
             if (!nomeEscola.trim().isEmpty()) {
-                if (!bancoDados.verificaEscola(nomeEscola)) {
-                    if (bancoDados.inserirDadosEscola(nomeEscola, null, 1)) {
+                Boolean verificaEscola = bancoDados.verificaExisteEscola(nomeEscola);
+                if(verificaEscola == null){
+                    Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!verificaEscola){
+                    if (bancoDados.cadastrarEscola(nomeEscola, null, 1)) {
                         listEscolaBD.add(nomeEscola);
                         Collections.sort(listEscolaBD);
                         adapter.notifyDataSetChanged();

@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,11 +41,16 @@ public class CadEscolaActivity extends AppCompatActivity {
                 Toast.makeText(CadEscolaActivity.this, "Informe o nome da escola!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (bancoDados.verificaEscola(nomeEscola)) {
+            Boolean verificaEscola = bancoDados.verificaExisteEscola(nomeEscola);
+            if(verificaEscola == null){
+                Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (verificaEscola) {
                 informacao();
                 return;
             }
-            if (bancoDados.inserirDadosEscola(nomeEscola, bairroEscola, 1)) {
+            if (bancoDados.cadastrarEscola(nomeEscola, bairroEscola, 1)) {
                 Toast.makeText(CadEscolaActivity.this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
                 finish();
             }else{

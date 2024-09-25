@@ -13,8 +13,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="5dp">
+        style="@style/BARRASPRINCIPAIS"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/imgBtnVoltar"
@@ -32,7 +35,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="34sp" />
+            android:textSize="24sp" />
 
         <ImageButton
             android:id="@+id/home_icon"

@@ -107,15 +107,15 @@ public class EditarProva extends AppCompatActivity {
         if(bancoDados.checkCorrigida(id_prova.toString())){
             avisoSeApagar(id_prova);
         }else{
-            bancoDados.deletaGabarito(id_prova);
-            bancoDados.deletaProva(id_prova);
+            bancoDados.deletarGabarito(id_prova);
+            bancoDados.deletarProva(id_prova);
             provaApagada();
         }
     }
     private void deteteProva(Integer id_prova){
-        bancoDados.deletaGabarito(id_prova);
-        bancoDados.deletaCorrecao(id_prova);
-        bancoDados.deletaProva(id_prova);
+        bancoDados.deletarGabarito(id_prova);
+        bancoDados.deletarCorrecao(id_prova);
+        bancoDados.deletarProva(id_prova);
         provaApagada();
 
     }

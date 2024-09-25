@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
             }
             Integer autenticacao_id = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
             if (autenticacao_id != null) {
+                if(autenticacao_id.equals(-1)){
+                    Toast.makeText(this, "Falha de comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 BancoDados.USER_ID = autenticacao_id;
                 carregarTelaInicial();
             } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
@@ -72,9 +75,12 @@ public class LoginActivity extends AppCompatActivity {
             if(emailInformado.trim().isEmpty()) {
                 alerteEsqueciSenha();
             }else{
-                id_usuario = bancoDados.verificaEmail(emailInformado);
-                Log.e("kariti","id_usuario "+id_usuario);
+                id_usuario = bancoDados.verificaExisteEmail(emailInformado);
                 if(id_usuario != null) {
+                    if(id_usuario == -1){
+                        Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     codigo = gerarCodigo.gerarVerificador();
                     if (enviarEmail.enviaCodigo(emailInformado, codigo)) {
                         carregarTelaCodigo();

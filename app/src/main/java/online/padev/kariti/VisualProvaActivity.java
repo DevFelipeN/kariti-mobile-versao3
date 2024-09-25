@@ -26,7 +26,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
     BancoDados bancoDados;
     ArrayList<Integer> listIdAlTurma;
     ArrayList<String> provalist, turmalist, alunolist;
-    private TextView titulo;
+    TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

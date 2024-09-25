@@ -35,7 +35,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         infoEditarAluno();
 
         id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
-        aluno = bancoDados.pegaNomeAluno(id_aluno);
+        aluno = bancoDados.pegaNomeAlunoPStatus(id_aluno, 1);
         email = bancoDados.pegaEmailAluno(id_aluno);
         nomeAluno.setText(aluno);
         emailAluno.setText(email);
@@ -52,7 +52,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                 String emailAtual = emailAluno.getText().toString();
                 if(!nomAtual.equals("")) {
                     if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
-                        Boolean checkAluno = bancoDados.checkAluno(nomAtual);
+                        Boolean checkAluno = bancoDados.verificaExisteAlunoPNome(nomAtual);
                         if (!emailAtual.equals("")) {
                             if (Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
                                 if(!checkAluno || !emailAtual.equals(email)) {

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,14 +13,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import online.padev.kariti.R;
 
 import java.util.ArrayList;
 
@@ -81,7 +76,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         });
     }
     public void onItemClick(int position) {
-        Integer id_aluno = bancoDados.pegaIdAluno(listAlunos.get(position));
+        Integer id_aluno = bancoDados.pegarIdAluno(listAlunos.get(position));
         Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
         intent.putExtra("id_aluno", id_aluno);
         startActivity(intent);
@@ -94,8 +89,8 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Integer id_aluno = bancoDados.pegaIdAluno(listAlunos.get(position));
-                        Boolean checkAlEmTurma = bancoDados.checkAlunoEmTurma(id_aluno);
+                        Integer id_aluno = bancoDados.pegarIdAluno(listAlunos.get(position));
+                        Boolean checkAlEmTurma = bancoDados.verificaExisteAlunoEmTurma(id_aluno);
                         if(!checkAlEmTurma){
                             Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
                             if (deletAluno) {

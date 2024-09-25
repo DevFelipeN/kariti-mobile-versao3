@@ -136,7 +136,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
                 String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
                 String id_prova = partes[0];
-                if(bancoDados.checkprovaId(id_prova)) {
+                if(bancoDados.verificaExisteProvaPId(id_prova)) {
                     qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova);
                     qtdAlternativas = bancoDados.pegaqtdAlternativas(id_prova);
                 }else{

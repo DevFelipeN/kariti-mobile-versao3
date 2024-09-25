@@ -71,7 +71,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
 
         //Mostra a turma a ser editada
         id_turma = Objects.requireNonNull(getIntent().getExtras()).getString("id_turma");
-        pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        pegaTurma = bancoDados.pegarNomeTurma(id_turma);
         qtdAlunosAnonimatos = (ArrayList<Integer>) bancoDados.qtdAlunosAnonimatos(id_turma);
         editTurma.setText(pegaTurma);
         novosAlAnonimos.setText(String.format("%s", qtdAlunosAnonimatos.size()));
@@ -153,7 +153,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
 
                 if (!alunosDaTurmaSemAnonimos.isEmpty()) {
                     for (int i = 0; i < alunosDaTurmaSemAnonimos.size(); i++) {
-                        id_aluno = bancoDados.pegaIdAluno(alunosDaTurmaSemAnonimos.get(i));
+                        id_aluno = bancoDados.pegarIdAluno(alunosDaTurmaSemAnonimos.get(i));
                         bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_aluno);
                     }
                 }

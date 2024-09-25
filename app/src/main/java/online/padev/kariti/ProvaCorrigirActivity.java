@@ -72,8 +72,8 @@ public class ProvaCorrigirActivity extends AppCompatActivity {
             qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
             String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
             String id_prova = partes[0];
-            Boolean existProva = bancoDados.checkprovaId(id_prova);
-            if(!existProva.equals(false)) {
+            Boolean existProva = bancoDados.verificaExisteProvaPId(id_prova);
+            if(!existProva) {
                 qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova);
                 qtdAlternativas = bancoDados.pegaqtdAlternativas(id_prova);
             }else{

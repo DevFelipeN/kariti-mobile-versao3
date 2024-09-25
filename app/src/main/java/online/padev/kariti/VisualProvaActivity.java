@@ -1,6 +1,5 @@
 package online.padev.kariti;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import online.padev.kariti.R;
 
 import java.util.ArrayList;
 
@@ -53,7 +50,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0) {
                     turmaSelecionada = spinnerTurma.getSelectedItem().toString();
-                    id_turma = bancoDados.pegaIdTurma(turmaSelecionada);
+                    id_turma = bancoDados.pegarIdTurma(turmaSelecionada);
 
                     provalist = (ArrayList<String>) bancoDados.obterNomeProvas(id_turma.toString());
                     SpinnerAdapter adapterProva = new SpinnerAdapter(VisualProvaActivity.this, provalist);
@@ -87,8 +84,8 @@ public class    VisualProvaActivity extends AppCompatActivity {
             return;
         }
         provaSelected = spinnerProva.getSelectedItem().toString();
-        Integer id_prova = bancoDados.pegaIdProva(provaSelected, id_turma);
-        if(bancoDados.checkCorrigida(id_prova.toString())){
+        Integer id_prova = bancoDados.pegarIdProva(provaSelected, id_turma);
+        if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", provaSelected);
             intent.putExtra("id_prova", id_prova);

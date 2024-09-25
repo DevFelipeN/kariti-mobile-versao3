@@ -34,7 +34,7 @@ public class CadAlunoActivity extends AppCompatActivity {
             if (nome.trim().isEmpty()) {
                 Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
             } else {
-                Boolean checkAluno = bancoDados.checkAluno(nome);
+                Boolean checkAluno = bancoDados.verificaExisteAlunoPNome(nome);
                 if (!checkAluno) {
                     if (!email.trim().isEmpty()) {
                         if (Patterns.EMAIL_ADDRESS.matcher(email).matches() && !bancoDados.verificaExisteEmailAluno(email)){

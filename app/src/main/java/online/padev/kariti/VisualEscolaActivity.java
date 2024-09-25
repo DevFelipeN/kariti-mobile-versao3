@@ -63,7 +63,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listViewEscolas.setAdapter(adapter);
 
         listViewEscolas.setOnItemClickListener((parent, view, position, id) -> {
-            BancoDados.ID_ESCOLA = bancoDados.pegaIdEscola(adapter.getItem(position));
+            BancoDados.ID_ESCOLA = bancoDados.pegarIdEscola(adapter.getItem(position));
             carregarDetalhesEscola();
         });
         listViewEscolas.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -72,7 +72,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
             builder.setTitle("Atenção!")
                     .setMessage("Deseja desativar essa escola?")
                     .setPositiveButton("Sim", (dialog, which) -> {
-                        id_escola = bancoDados.pegaIdEscola(adapter.getItem(position));
+                        id_escola = bancoDados.pegarIdEscola(adapter.getItem(position));
                         if(bancoDados.alterarStatusEscola(id_escola,0)){
                             listEscolaBD.remove(position);
                             adapter.notifyDataSetChanged();

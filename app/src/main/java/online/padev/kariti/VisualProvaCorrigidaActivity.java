@@ -27,8 +27,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import online.padev.kariti.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -81,10 +79,10 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             float nota = 0;
             int acertos = 0;
             Integer id_aluno = listIdsAlunos.get(x);
-            if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
+            if(!bancoDados.verificaSituacaoCorrecao(id_prova, id_aluno, -1)) {
                 for (int i = 1; i <= qtdQuestoes; i++) {
-                    Integer respostaDada = bancoDados.pegaRespostaDada(id_prova, id_aluno, i);
-                    Integer respostaGabarito = bancoDados.pegaRespostaQuestao(id_prova, i);
+                    Integer respostaDada = bancoDados.pegarRespostaDadaQuestao(id_prova, id_aluno, i);
+                    Integer respostaGabarito = bancoDados.pegarRespostaQuestaoGabarito(id_prova, i);
                     if (respostaGabarito.equals(respostaDada)) {
                         nota += bancoDados.pegaNotaQuestao(id_prova, i);
                         acertos += 1;
@@ -103,7 +101,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
             // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            String nomeAluno = editaNomeAluno(bancoDados.pegaAlunoProvaCorrigida(id_aluno));
+            String nomeAluno = editaNomeAluno(bancoDados.pegaNomeAluno(id_aluno));
             cell1.setText(String.format("  %s", nomeAluno));
             //cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
@@ -144,7 +142,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             cell4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)){
+                    if(!bancoDados.verificaSituacaoCorrecao(id_prova, id_aluno, -1)){
                         Intent intent = new Intent(getApplicationContext(), DetalheCorrecao.class);
                         intent.putExtra("id_aluno", v.getId());
                         intent.putExtra("id_prova", id_prova);
@@ -164,10 +162,10 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 String prof = bancoDados.pegaUsuario(BancoDados.USER_ID.toString());
                 String qtdAlternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova.toString()));
                 String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
-                String dataProva = bancoDados.pegaData(id_prova.toString());
+                String dataProva = bancoDados.pegaDataProva(id_prova.toString());
                 for(int id_aluno: listIdsAlunos) {
-                    if(!bancoDados.checkSituacaoCorrecao(id_prova, id_aluno, -1)) {
-                        String nomeAluno = bancoDados.pegaAlunoProvaCorrigida(id_aluno);
+                    if(!bancoDados.verificaSituacaoCorrecao(id_prova, id_aluno, -1)) {
+                        String nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
                         String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
                         //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
                         String respostasEsperadas = bancoDados.listRespostasGabarito(id_prova.toString());

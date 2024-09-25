@@ -52,7 +52,7 @@ public class EditarProva extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0) {
                     turmaSelecionada = turma.getSelectedItem().toString();
-                    id_turma = bancoDados.pegaIdTurma(turmaSelecionada);
+                    id_turma = bancoDados.pegarIdTurma(turmaSelecionada);
 
                     lisProva = (ArrayList<String>) bancoDados.obterNomeProvas(id_turma.toString());
                     SpinnerAdapter adapterProva = new SpinnerAdapter(EditarProva.this, lisProva);
@@ -88,8 +88,8 @@ public class EditarProva extends AppCompatActivity {
             return;
         }
         provaSelecionada = (String) prova.getSelectedItem();
-        Integer id_prova = bancoDados.pegaIdProva(provaSelecionada, id_turma);
-        if(bancoDados.checkCorrigida(id_prova.toString())){
+        Integer id_prova = bancoDados.pegarIdProva(provaSelecionada, id_turma);
+        if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
             naoEditavel();
         }else {
             Intent intent = new Intent(this, EdicaoProva.class);
@@ -103,8 +103,8 @@ public class EditarProva extends AppCompatActivity {
         if(prova.getSelectedItem() == null)
             return;
         provaSelecionada = (String) prova.getSelectedItem();
-        Integer id_prova = bancoDados.pegaIdProva(provaSelecionada, id_turma);
-        if(bancoDados.checkCorrigida(id_prova.toString())){
+        Integer id_prova = bancoDados.pegarIdProva(provaSelecionada, id_turma);
+        if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
             avisoSeApagar(id_prova);
         }else{
             bancoDados.deletarGabarito(id_prova);

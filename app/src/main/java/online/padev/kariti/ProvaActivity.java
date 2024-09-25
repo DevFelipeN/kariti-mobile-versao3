@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ public class ProvaActivity extends AppCompatActivity {
         btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
         btnProvasCorrigida.setOnClickListener(v -> carregarTelaProvasCorrigida());
         btnCorrigirProva.setOnClickListener(v -> {
-            if(bancoDados.checkQuantidadeProvas()){
+            if(bancoDados.verificaExisteProvaCadastrada()){
                 carregaTelaCorrecao();
             }else{
                 aviso("provas cadastradas");
@@ -69,7 +68,7 @@ public class ProvaActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void carregarTelaGerarCartao() {
-        if (bancoDados.checkQuantidadeProvas()) {
+        if (bancoDados.verificaExisteProvaCadastrada()) {
             Intent intent = new Intent(this, ProvaCartoesActivity.class);
             intent.putExtra("endereco", 2);
             startActivity(intent);
@@ -78,7 +77,7 @@ public class ProvaActivity extends AppCompatActivity {
         }
     }
     private void carregarTelaProvasCorrigida(){
-        if(bancoDados.checkQuantidadeProvasCorrigida()) {
+        if(bancoDados.verificaExisteProvaCorrigida()) {
             Intent intent = new Intent(this, VisualProvaActivity.class);
             startActivity(intent);
         }else{

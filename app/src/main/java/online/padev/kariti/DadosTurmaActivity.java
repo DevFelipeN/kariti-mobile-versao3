@@ -35,7 +35,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         bancoDados = new BancoDados(this);
 
         id_turma = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
-        String pegaTurma = bancoDados.pegaNomeTurma(id_turma);
+        String pegaTurma = bancoDados.pegarNomeTurma(id_turma);
 
         turmaCad.setText(String.format("Turma: %s", pegaTurma));
 
@@ -74,7 +74,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         provasPorTurma = (ArrayList<Integer>) bancoDados.listProvasPorTurma(id_turma);
         if(!provasPorTurma.isEmpty()){
             for(int a : provasPorTurma){
-                Boolean checkCorrigida = bancoDados.checkCorrigida(String.valueOf(a));
+                Boolean checkCorrigida = bancoDados.verificaExisteCorrecao(String.valueOf(a));
                 if(checkCorrigida) {
                     status = true;
                     break;

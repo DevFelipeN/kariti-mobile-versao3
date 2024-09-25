@@ -135,15 +135,15 @@ public class CadTurmaActivity extends AppCompatActivity{
                 if(!turma.trim().isEmpty()) {
                     if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
                         Integer an = Integer.valueOf(alunosAnonimos.getText().toString());
-                        Boolean checkTurma = bancoDados.checkTurma(turma);
+                        Boolean checkTurma = bancoDados.verificaExisteTurma(turma);
                         if (!checkTurma) {
                             Boolean cadTurma = bancoDados.cadastrarTurma(turma, an);
                             if (cadTurma) {
-                                id_turma = bancoDados.pegaIdTurma(turma);
+                                id_turma = bancoDados.pegarIdTurma(turma);
                                 if (!selectedAlunos.isEmpty()) {
                                     int num = listarAlunos.getAdapter().getCount();
                                     for (int i = 0; i < num; i++) {
-                                        Integer id_aluno = bancoDados.pegaIdAluno(selectedAlunos.get(i));
+                                        Integer id_aluno = bancoDados.pegarIdAluno(selectedAlunos.get(i));
                                         bancoDados.cadastrarAlunoNaTurma(id_turma, id_aluno);
                                     }
                                 }

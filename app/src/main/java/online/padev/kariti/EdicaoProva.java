@@ -60,10 +60,10 @@ public class EdicaoProva extends AppCompatActivity {
         id_provaBD = Objects.requireNonNull(getIntent().getExtras()).getInt("id_prova");
         provaBD = getIntent().getExtras().getString("prova");
         id_turmaBD = getIntent().getExtras().getInt("id_turma");
-        turmaBD = bancoDados.pegaNomeTurma(id_turmaBD.toString());
+        turmaBD = bancoDados.pegarNomeTurma(id_turmaBD.toString());
         qtdQuestoesBD = bancoDados.pegaqtdQuestoes(id_provaBD.toString());
         qtdAlternativasBD = bancoDados.pegaqtdAlternativas(id_provaBD.toString());
-        dataBD = bancoDados.pegaData(id_provaBD.toString());
+        dataBD = bancoDados.pegaDataProva(id_provaBD.toString());
 
         this.dataBD = formataDataCadastrada(dataBD);
 
@@ -142,7 +142,7 @@ public class EdicaoProva extends AppCompatActivity {
             public void onClick(View v) {
                 novaProva = nomeProva.getText().toString();
                 novaTurma = spinnerTurma.getSelectedItem().toString(); // nome da turma não tem como ser vazio!
-                id_turmaBD = bancoDados.pegaIdTurma(novaTurma);
+                id_turmaBD = bancoDados.pegarIdTurma(novaTurma);
                 novaData = dataAtual.getText().toString();
                 novaQuestao = Integer.valueOf(questoesAtuais.getText().toString());
                 novaAlternativa = Integer.valueOf(alternativas.getText().toString());
@@ -153,7 +153,12 @@ public class EdicaoProva extends AppCompatActivity {
                             return;
                         }
                         if(!novaProva.equals(provaBD) || !novaTurma.equals(turmaBD)){
-                            if(bancoDados.checkprovasNome(novaProva, id_turmaBD.toString())) {
+                            Boolean verificaProva = bancoDados.verificaExisteProvaPNome(novaProva, id_turmaBD.toString());
+                            if(verificaProva == null){
+                                Toast.makeText(EdicaoProva.this, "Erro na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if(verificaProva) {
                                 Toast.makeText(EdicaoProva.this, "Esta turma já pussui uma prova cadastrada com esse nome, " + novaProva, Toast.LENGTH_SHORT).show();
                                 return;
                             }

@@ -45,7 +45,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {;
-                Integer idTurma = bancoDados.pegaIdTurma(adapter.getItem(position));
+                Integer idTurma = bancoDados.pegarIdTurma(adapter.getItem(position));
                 telaTeste(idTurma);
             }
         });
@@ -62,8 +62,8 @@ public class VisualTurmaActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String turma = listarTurma.get(position);
-                                Integer id_turma = bancoDados.pegaIdTurma(turma);
-                                Boolean checkEmProva = bancoDados.checkTurmaEmProva(id_turma);
+                                Integer id_turma = bancoDados.pegarIdTurma(turma);
+                                Boolean checkEmProva = bancoDados.verificaExisteTurmaEmProva(id_turma);
                                 if(!checkEmProva) {
                                     Boolean deletTurma = bancoDados.deletarTurma(id_turma);
                                     bancoDados.deletarAlunoDeTurma(id_turma);

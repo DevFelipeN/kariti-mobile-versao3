@@ -63,7 +63,7 @@ public class UploadEjson {
                     mensagem = objJson.getString("mensagem");
 
                     if(resultCorrect.equals(0)){
-                        if(bancoDados.verificaExisteCorrecao(id_prova, id_aluno)){           //verifica se essa prova já foi corrigida antes
+                        if(bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){           //verifica se essa prova já foi corrigida antes
                             if(bancoDados.deletarCorrecaoPorAluno(id_prova, id_aluno)){       //Exclui essa prova para ser atualizada
                                 Log.e("kariti","Correção deletada com sucesso!!");
                             }else {
@@ -92,7 +92,7 @@ public class UploadEjson {
                             questAnterior = questao;
                             respostaAnterior = respostaDada;
                         }
-                    }else if(!bancoDados.verificaExisteCorrecao(id_prova, id_aluno)){
+                    }else if(!bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){
                         bancoDados.cadastrarCorrecao(id_prova, id_aluno, -1, -1);
                     }
                 }

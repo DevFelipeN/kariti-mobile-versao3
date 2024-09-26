@@ -21,8 +21,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     BancoDados bancoDados;
     ListView listView;
     ArrayList<String> listTodosAlunosDaTurma;
-    ArrayList<Integer> qtdAlunosAnonimatos, provasPorTurma;
+    ArrayList<Integer> provasPorTurma;
     String id_turma;
+    Integer qtdAlunosAnonimatos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +40,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
 
         turmaCad.setText(String.format("Turma: %s", pegaTurma));
 
-        listTodosAlunosDaTurma = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(id_turma);
-        qtdAlunosAnonimatos = (ArrayList<Integer>) bancoDados.qtdAlunosAnonimatos(id_turma);
-        qtdAnonimos.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s",qtdAlunosAnonimatos.size(), listTodosAlunosDaTurma.size()));
+        listTodosAlunosDaTurma = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma);
+        qtdAlunosAnonimatos = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
+        qtdAnonimos.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s",qtdAlunosAnonimatos, listTodosAlunosDaTurma.size()));
         DesativadaAdapter adapter = new DesativadaAdapter(this, listTodosAlunosDaTurma, listTodosAlunosDaTurma);
         listView.setAdapter(adapter);
 
@@ -71,7 +72,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     public void telaEditar(){
         boolean status = false;
         //Boolean checkTurmaEmProva = bancoDados.checkTurmaEmProva(Integer.valueOf(id_turma));
-        provasPorTurma = (ArrayList<Integer>) bancoDados.listProvasPorTurma(id_turma);
+        provasPorTurma = (ArrayList<Integer>) bancoDados.listarIdsProvasPorTurma(id_turma);
         if(!provasPorTurma.isEmpty()){
             for(int a : provasPorTurma){
                 Boolean checkCorrigida = bancoDados.verificaExisteCorrecao(String.valueOf(a));

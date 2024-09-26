@@ -2,8 +2,6 @@ package online.padev.kariti;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,7 +20,6 @@ public class AtualizarSenha extends AppCompatActivity{
     BancoDados bancoDados;
     ImageButton ocultarSenha, ocultarSenha2, voltar;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +41,7 @@ public class AtualizarSenha extends AppCompatActivity{
         emailUsuario = getIntent().getExtras().getString("email");
 
         titulo.setText(String.format("%s","Nova senha"));
-        descricaoNovaSenha.setText(String.format("Olá, %s!\n Informe uma senha segura para ter acesso ao KARITI.",nomeUsuario));
+        descricaoNovaSenha.setText(String.format("Olá, %s!\n Informe uma senha segura para acesso ao KARITI.",nomeUsuario));
 
         btnAlterar.setOnClickListener(v -> {
             novaSenha = editTextNovaSenha.getText().toString();
@@ -59,6 +56,8 @@ public class AtualizarSenha extends AppCompatActivity{
             }
             if (bancoDados.alterarSenha(novaSenha, id_usuario)) {
                 mudarParaTelaLogin();
+            }else{
+                Toast.makeText(this, "Erro de comunicação!\n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
             }
         });
         voltar.setOnClickListener(v -> {

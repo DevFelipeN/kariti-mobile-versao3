@@ -41,7 +41,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         tituloAppBarAlunos = findViewById(R.id.toolbar_title);
         tituloAppBarAlunos.setText("Alunos");
 
-        listAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        listAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
         if (listAlunos.isEmpty()) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);

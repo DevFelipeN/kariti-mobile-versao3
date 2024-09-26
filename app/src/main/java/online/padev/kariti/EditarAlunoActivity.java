@@ -36,7 +36,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
 
         id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
         aluno = bancoDados.pegaNomeAlunoPStatus(id_aluno, 1);
-        email = bancoDados.pegaEmailAluno(id_aluno);
+        email = bancoDados.pegarEmailAluno(id_aluno);
         nomeAluno.setText(aluno);
         emailAluno.setText(email);
        voltar.setOnClickListener(new View.OnClickListener() {

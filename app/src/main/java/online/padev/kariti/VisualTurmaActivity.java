@@ -33,7 +33,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        listarTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        listarTurma = (ArrayList<String>) bancoDados.listarNomesTurmas();
         if (listarTurma.isEmpty()) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);

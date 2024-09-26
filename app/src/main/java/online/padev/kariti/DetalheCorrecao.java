@@ -42,13 +42,13 @@ public class DetalheCorrecao extends AppCompatActivity {
         id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
         id_prova = getIntent().getExtras().getInt("id_prova");
-        qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
+        qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova.toString());
 
         alunoDetalhe.setText(nomeAluno);
         //Carrega todas as respostas ordenadas por questao
-        respostasDadas = (ArrayList<String>) bancoDados.respostasDadas(id_prova, id_aluno);
-        gabarito = (ArrayList<String>) bancoDados.carregaGabarito(id_prova);
-        peso = (ArrayList<String>) bancoDados.listNotaPorQuetao(id_prova);
+        respostasDadas = (ArrayList<String>) bancoDados.listarRespostasDadas(id_prova, id_aluno);
+        gabarito = (ArrayList<String>) bancoDados.listarRespostasGabarito(id_prova);
+        peso = (ArrayList<String>) bancoDados.listarNotasPorQuestao(id_prova);
 
         ShapeDrawable border = new ShapeDrawable(new RectShape());
         border.getPaint().setColor(0xFF000000); // Cor da borda
@@ -59,7 +59,7 @@ public class DetalheCorrecao extends AppCompatActivity {
             Integer respostaDada = bancoDados.pegarRespostaDadaQuestao(id_prova, id_aluno, x);
             Integer respostaGabarito = bancoDados.pegarRespostaQuestaoGabarito(id_prova, x);
             if(respostaGabarito.equals(respostaDada)){
-                nota += bancoDados.pegaNotaQuestao(id_prova, x);
+                nota += bancoDados.pegarNotaQuestao(id_prova, x);
             }
             Log.e("kariti", "Questao = "+x);
 

@@ -67,14 +67,14 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         turma = Objects.requireNonNull(getIntent().getExtras()).getString("turma");
         provaResult.setText(prova);
 
-        qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova.toString());
+        qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova.toString());
 
         ShapeDrawable border = new ShapeDrawable(new RectShape());
         border.getPaint().setColor(0xFF000000); // Cor da borda
         border.getPaint().setStrokeWidth(1); // Largura da borda
         border.getPaint().setStyle(Paint.Style.STROKE);
 
-        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunoPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
+        listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
         for(int x = 0; x < listIdsAlunos.size(); x++) { // interage sob esses alunos
             float nota = 0;
             int acertos = 0;
@@ -84,7 +84,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                     Integer respostaDada = bancoDados.pegarRespostaDadaQuestao(id_prova, id_aluno, i);
                     Integer respostaGabarito = bancoDados.pegarRespostaQuestaoGabarito(id_prova, i);
                     if (respostaGabarito.equals(respostaDada)) {
-                        nota += bancoDados.pegaNotaQuestao(id_prova, i);
+                        nota += bancoDados.pegarNotaQuestao(id_prova, i);
                         acertos += 1;
                     }
                 }
@@ -154,23 +154,22 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 }
             });
         }
-        //carregaGabarito();
         btnBaixar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dadosProvaCorrigida = new ArrayList<>();
-                String prof = bancoDados.pegaUsuario(BancoDados.USER_ID.toString());
-                String qtdAlternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova.toString()));
-                String nota = String.valueOf(bancoDados.listNota(id_prova.toString()));
-                String dataProva = bancoDados.pegaDataProva(id_prova.toString());
+                String prof = bancoDados.pegarNomeUsuario(BancoDados.USER_ID.toString());
+                String qtdAlternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova.toString()));
+                String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova.toString()));
+                String dataProva = bancoDados.pegarDataProva(id_prova.toString());
                 for(int id_aluno: listIdsAlunos) {
                     if(!bancoDados.verificaSituacaoCorrecao(id_prova, id_aluno, -1)) {
                         String nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
-                        String respostasDadas = bancoDados.listRespostasAluno(id_prova.toString(), String.valueOf(id_aluno));
+                        String respostasDadas = bancoDados.listarRespostasDadasNumero(id_prova, id_aluno);
                         //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        String respostasEsperadas = bancoDados.listRespostasGabarito(id_prova.toString());
+                        String respostasEsperadas = bancoDados.listarRespostasGabaritoNumerico(id_prova.toString());
                         respostasEsperadas = respostasEsperadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        String notasQuestoes = bancoDados.listNotaQuestao(id_prova.toString());
+                        String notasQuestoes = bancoDados.listarNotasProva(id_prova.toString());
                         notasQuestoes = notasQuestoes.replaceAll("(?<=\\d)(?=\\d)", ",");
                         dadosProvaCorrigida.add(new String[]{id_prova.toString(), prova, prof, turma, dataProva, qtdQuestoes.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
                     }
@@ -235,19 +234,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             }
         });
     }
-    public void carregaGabarito(){
-        String gabarito = bancoDados.mostraGabaritoInt(id_prova);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Gabarito");
-        builder.setMessage(gabarito);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
 
-    }
     public void informeProvaNaoCorrigida(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");

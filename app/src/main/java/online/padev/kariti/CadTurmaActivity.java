@@ -55,7 +55,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         maisAnonimos = findViewById(R.id.imageViewMaisAnonimos);
         bancoDados = new BancoDados(this);
 
-        nomesAluno = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        nomesAluno = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
         nomesAluno.add(0, "Selecione os Alunos");
         nomesAluno.add(1, "Todos");
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
@@ -74,7 +74,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                 if (position != 0) {
                     alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
                     if(alunoSelecionado.equals("Todos")){
-                        selectedAlunos = (ArrayList<String>) bancoDados.obterNomesAlunos();
+                        selectedAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
                         al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
                         listarAlunos.setAdapter(al);
                         al.notifyDataSetChanged();
@@ -148,8 +148,9 @@ public class CadTurmaActivity extends AppCompatActivity{
                                     }
                                 }
                                 if (!an.equals(0)) {
+                                    int tamanho = String.valueOf(an).length();
                                     for (int x = 1; x <= an; x++) {
-                                        String anonimo = "Aluno "+ x;
+                                        String anonimo = "Aluno "+ String.format("%0"+tamanho+"d",x);
                                         Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
                                         bancoDados.cadastrarAlunoNaTurma(id_turma, id_anonimo);
                                     }

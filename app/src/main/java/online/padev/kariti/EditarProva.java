@@ -42,7 +42,7 @@ public class EditarProva extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        listTurma = (ArrayList<String>) bancoDados.listTurmasPorProva();
+        listTurma = (ArrayList<String>) bancoDados.listarTurmasPorProva();
         listTurma.add(0, "Selecione a turma");
         SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listTurma);
         turma.setAdapter(adapterTurma);
@@ -54,7 +54,7 @@ public class EditarProva extends AppCompatActivity {
                     turmaSelecionada = turma.getSelectedItem().toString();
                     id_turma = bancoDados.pegarIdTurma(turmaSelecionada);
 
-                    lisProva = (ArrayList<String>) bancoDados.obterNomeProvas(id_turma.toString());
+                    lisProva = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
                     SpinnerAdapter adapterProva = new SpinnerAdapter(EditarProva.this, lisProva);
                     prova.setAdapter(adapterProva);
                 }

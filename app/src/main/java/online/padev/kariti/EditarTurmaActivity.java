@@ -26,13 +26,12 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ListView listView;
     EditText editTurma, novosAlAnonimos;
     ArrayList<String> alunosDaTurmaSemAnonimos, alunosSpinner;
-    ArrayList<Integer> qtdAlunosAnonimatos;
     String id_turma, pegaTurma, alunosSelecionados;
     BancoDados bancoDados;
     AdapterExclAluno adapter;
     Spinner spinnerBuscAlun;
     Button salvar;
-    Integer id_aluno;
+    Integer id_aluno, qtdAlunosAnonimatos;
     private TextView titulo;
 
     @Override
@@ -63,7 +62,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
         });
 
         //Lista todos os alunos no Spinner
-        alunosSpinner = (ArrayList<String>) bancoDados.obterNomesAlunos();
+        alunosSpinner = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
         alunosSpinner.add(0, "Selecione os Alunos");
         SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
         spinnerBuscAlun.setAdapter(adapterSpinner);
@@ -72,13 +71,13 @@ public class EditarTurmaActivity extends AppCompatActivity {
         //Mostra a turma a ser editada
         id_turma = Objects.requireNonNull(getIntent().getExtras()).getString("id_turma");
         pegaTurma = bancoDados.pegarNomeTurma(id_turma);
-        qtdAlunosAnonimatos = (ArrayList<Integer>) bancoDados.qtdAlunosAnonimatos(id_turma);
+        qtdAlunosAnonimatos = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
         editTurma.setText(pegaTurma);
-        novosAlAnonimos.setText(String.format("%s", qtdAlunosAnonimatos.size()));
-        informAnonimos(qtdAlunosAnonimatos.size());
+        novosAlAnonimos.setText(String.format("%s", qtdAlunosAnonimatos));
+        informAnonimos(qtdAlunosAnonimatos);
 
         //Lista os aluno cadastrados nesta turma.
-        alunosDaTurmaSemAnonimos = (ArrayList<String>) bancoDados.listAlunosDaTurmaSemAnonimos(id_turma);
+        alunosDaTurmaSemAnonimos = (ArrayList<String>) bancoDados.listarAlunosTurmaPorStatus(id_turma, 1);
         adapter = new AdapterExclAluno(this, alunosDaTurmaSemAnonimos);
         listView.setAdapter(adapter);
 

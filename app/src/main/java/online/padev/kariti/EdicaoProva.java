@@ -61,9 +61,9 @@ public class EdicaoProva extends AppCompatActivity {
         provaBD = getIntent().getExtras().getString("prova");
         id_turmaBD = getIntent().getExtras().getInt("id_turma");
         turmaBD = bancoDados.pegarNomeTurma(id_turmaBD.toString());
-        qtdQuestoesBD = bancoDados.pegaqtdQuestoes(id_provaBD.toString());
-        qtdAlternativasBD = bancoDados.pegaqtdAlternativas(id_provaBD.toString());
-        dataBD = bancoDados.pegaDataProva(id_provaBD.toString());
+        qtdQuestoesBD = bancoDados.pegarQtdQuestoes(id_provaBD.toString());
+        qtdAlternativasBD = bancoDados.pegarQtdAlternativas(id_provaBD.toString());
+        dataBD = bancoDados.pegarDataProva(id_provaBD.toString());
 
         this.dataBD = formataDataCadastrada(dataBD);
 
@@ -72,7 +72,7 @@ public class EdicaoProva extends AppCompatActivity {
         alternativas.setText(String.valueOf(qtdAlternativasBD));
         dataAtual.setText(dataBD);
 
-        listTurma = (ArrayList<String>) bancoDados.obterNomeTurmas();
+        listTurma = (ArrayList<String>) bancoDados.listarNomesTurmas();
         listTurma.add(0, turmaBD);
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurma);
         spinnerTurma.setAdapter(adapter);

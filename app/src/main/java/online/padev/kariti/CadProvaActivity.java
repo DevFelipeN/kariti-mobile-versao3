@@ -51,7 +51,7 @@ public class CadProvaActivity extends AppCompatActivity {
 
         titulo.setText(String.format("%s","Nova Prova"));
 
-        listTurmaEmProva = (ArrayList<String>) bancoDados.obterNomeTurmas(); //Obtem a lista das turmas delimitadas por escola
+        listTurmaEmProva = (ArrayList<String>) bancoDados.listarNomesTurmas(); //Obtem a lista das turmas delimitadas por escola
         listTurmaEmProva.add(0, "Selecione a Turma");
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmaEmProva);
         spinnerTurma.setAdapter(adapter);

@@ -59,7 +59,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
         endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
-        turmalist = (ArrayList<String>) bancoDados.listTurmasPorProva();
+        turmalist = (ArrayList<String>) bancoDados.listarTurmasPorProva();
 
         if(endereco.equals(2)){ //para quando a activity que a chamou foi ProvaActivity
             turmalist.add(0,"Selecione a turma");
@@ -73,11 +73,11 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                         idTurmaSelect = bancoDados.pegarIdTurma(turmaSelecionada);
 
-                        listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
+                        listagemProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(String.valueOf(idTurmaSelect));
                         SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
                         spinnerProva.setAdapter(adapterProva);
 
-                        alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(idTurmaSelect.toString());
+                        alunolist = (ArrayList<String>) bancoDados.listarAlunosPorTurma(idTurmaSelect.toString());
                         alunolist.add(0, "Alunos");
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);
@@ -94,12 +94,12 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
             spinnerTurma.setAdapter(adapterTurma);
             //Lista todas provas pertecentes a turma selecionada
-            listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(id_turma));
+            listagemProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turma));
             listagemProvas.add(0, prova);
             SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
             spinnerProva.setAdapter(adapterProva);
             //Lista todos os alunos pertecentes a turma selecionada
-            alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(id_turma.toString());
+            alunolist = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma.toString());
             alunolist.add(0, "Alunos");
             SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
             spinnerAluno.setAdapter(adapterAluno);
@@ -111,12 +111,12 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                         idTurmaSelect = bancoDados.pegarIdTurma(turmaSelecionada);
                         //Lista todas provas pertecentes a turma selecionada
-                        listagemProvas = (ArrayList<String>) bancoDados.obterNomeProvas(String.valueOf(idTurmaSelect));
+                        listagemProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(String.valueOf(idTurmaSelect));
                         listagemProvas.add(0, "Selecione a prova");
                         SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
                         spinnerProva.setAdapter(adapterProva);
                         //Lista todos os alunos pertencentes a turma selecionada
-                        alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(idTurmaSelect.toString());
+                        alunolist = (ArrayList<String>) bancoDados.listarAlunosPorTurma(idTurmaSelect.toString());
                         alunolist.add(0, "Alunos");
                         SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity.this, alunolist);
                         spinnerAluno.setAdapter(adapterAluno);
@@ -139,16 +139,16 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         id_turma = bancoDados.pegarIdTurma(nomeTurma);
                         String id_prova = String.valueOf(bancoDados.pegarIdProva(nomeProva, id_turma));
                         String id_usuario = String.valueOf(BancoDados.USER_ID);
-                        String prof = bancoDados.pegaUsuario(id_usuario);
-                        String data = bancoDados.pegaDataProva(id_prova);
-                        String nota = String.valueOf(bancoDados.listNota(id_prova));
-                        String questoes = String.valueOf(bancoDados.pegaqtdQuestoes(id_prova));
-                        String alternativas = String.valueOf(bancoDados.pegaqtdAlternativas(id_prova));
+                        String prof = bancoDados.pegarNomeUsuario(id_usuario);
+                        String data = bancoDados.pegarDataProva(id_prova);
+                        String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova));
+                        String questoes = String.valueOf(bancoDados.pegarQtdQuestoes(id_prova));
+                        String alternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova));
 
                         dados = new ArrayList<>();
 
                         String idTurma = String.valueOf(bancoDados.pegarIdTurma(nomeTurma));
-                        listIdsAlunos = (ArrayList<Integer>) bancoDados.listAlunosDturma(idTurma);
+                        listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorTurma(idTurma);
                         int qtdProvas = listIdsAlunos.size();
                         dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                         for (int x = 0; x < qtdProvas; x++) {

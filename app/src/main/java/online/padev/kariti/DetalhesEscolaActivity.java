@@ -32,7 +32,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        nomeEscola = bancoDados.pegaEscola(String.valueOf(BancoDados.ID_ESCOLA));
+        nomeEscola = bancoDados.pegarNomeEscola(String.valueOf(BancoDados.ID_ESCOLA));
         textViewEscola.setText(nomeEscola);
 
         btnTurma.setOnClickListener(v -> carregarTelaTurma());

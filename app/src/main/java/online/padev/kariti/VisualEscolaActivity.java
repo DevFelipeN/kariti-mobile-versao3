@@ -51,9 +51,9 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         titulo.setText(String.format("%s","Acessar com:"));
 
-        listEscolaBD = (ArrayList<String>) bancoDados.listEscolas(1); //carrega todas as escolas ativadas para o usuario logado
+        listEscolaBD = (ArrayList<String>) bancoDados.listarEscolas(1); //carrega todas as escolas ativadas para o usuario logado
         if(listEscolaBD.isEmpty()){
-            if(!bancoDados.listEscolas(0).isEmpty()){
+            if(!bancoDados.listarEscolas(0).isEmpty()){
                 carregaEscolasDesativadas();
             }else{
                 cadastrarNovaEscola();
@@ -148,7 +148,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void telaEscolaDesativada() {
-        if(!bancoDados.listEscolas(0).isEmpty()) {
+        if(!bancoDados.listarEscolas(0).isEmpty()) {
             Intent intent = new Intent(this, EscolaDesativadaActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
         }else{

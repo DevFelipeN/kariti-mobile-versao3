@@ -38,7 +38,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
 
         iconeAjuda.setOnClickListener(v -> ajuda());
 
-        listDesativadasBD = (ArrayList<String>) bancoDados.listEscolas(0);
+        listDesativadasBD = (ArrayList<String>) bancoDados.listarEscolas(0);
         if(listDesativadasBD.isEmpty()){
             ilustracao();
         }

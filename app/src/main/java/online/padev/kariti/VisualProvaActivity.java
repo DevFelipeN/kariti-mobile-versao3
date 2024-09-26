@@ -40,7 +40,7 @@ public class    VisualProvaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        turmalist = (ArrayList<String>) bancoDados.listTurmasPorProva();
+        turmalist = (ArrayList<String>) bancoDados.listarTurmasPorProva();
         turmalist.add(0, "Selecione a turma");
         SpinnerAdapter adapterTurma = new SpinnerAdapter(this, turmalist);
         spinnerTurma.setAdapter(adapterTurma);
@@ -52,11 +52,11 @@ public class    VisualProvaActivity extends AppCompatActivity {
                     turmaSelecionada = spinnerTurma.getSelectedItem().toString();
                     id_turma = bancoDados.pegarIdTurma(turmaSelecionada);
 
-                    provalist = (ArrayList<String>) bancoDados.obterNomeProvas(id_turma.toString());
+                    provalist = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
                     SpinnerAdapter adapterProva = new SpinnerAdapter(VisualProvaActivity.this, provalist);
                     spinnerProva.setAdapter(adapterProva);
 
-                    alunolist = (ArrayList<String>) bancoDados.listTodosAlunosDaTurma(id_turma.toString());
+                    alunolist = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma.toString());
                     alunolist.add(0, "Alunos");
                     SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, alunolist);
                     spinnerAluno.setAdapter(adapterAluno);

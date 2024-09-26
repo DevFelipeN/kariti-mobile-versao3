@@ -58,7 +58,7 @@ public class ProvaActivity extends AppCompatActivity {
         });
     }
     private void carregarCadastroProva(){
-        if(!bancoDados.obterNomeTurmas().isEmpty()){
+        if(!bancoDados.listarNomesTurmas().isEmpty()){
             Intent intent = new Intent(this, CadProvaActivity.class);
             startActivity(intent);
         }else aviso("turmas cadastradas");

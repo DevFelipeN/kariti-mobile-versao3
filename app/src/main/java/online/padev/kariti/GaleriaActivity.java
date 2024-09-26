@@ -137,8 +137,8 @@ public class GaleriaActivity extends AppCompatActivity {
                 String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
                 String id_prova = partes[0];
                 if(bancoDados.verificaExisteProvaPId(id_prova)) {
-                    qtdQuestoes = bancoDados.pegaqtdQuestoes(id_prova);
-                    qtdAlternativas = bancoDados.pegaqtdAlternativas(id_prova);
+                    qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova);
+                    qtdAlternativas = bancoDados.pegarQtdAlternativas(id_prova);
                 }else{
                     Toast.makeText(this, "Prova não cadastrada!", Toast.LENGTH_SHORT).show();
                     return;

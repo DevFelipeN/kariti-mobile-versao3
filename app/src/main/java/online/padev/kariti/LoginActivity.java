@@ -36,8 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         EditTextSenha = findViewById(R.id.editTextSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
 
-        //EditTextEmail.setText(String.format("%s","karitimobile@gmail.com"));
-        //EditTextSenha.setText(String.format("%s","user1"));
+        EditTextEmail.setText(String.format("%s","karitimobile@gmail.com"));
+        EditTextSenha.setText(String.format("%s","user1"));
 
         bancoDados = new BancoDados(this);
         enviarEmail = new EnviarEmail();

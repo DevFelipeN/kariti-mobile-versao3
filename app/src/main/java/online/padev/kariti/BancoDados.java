@@ -668,7 +668,6 @@ public class BancoDados extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-
     }
     public Boolean verificaExisteCorrecaoAluno(Integer id_prova, Integer id_aluno) {
         SQLiteDatabase base_dados = null;
@@ -689,9 +688,8 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-
     /**
-     * Este método verifica se o email e senha informado pelo usuário são validos
+     * Este método verifica se o email e senha informado pelo usuário são válidos
      * @param email parameto usado para vericar se existe no banco
      * @param password parametro usado para analisa se pertence ao email informado
      * @return retorna o id do usuario caso os dados de autenticação sejam validos ou null caso contrário
@@ -883,7 +881,6 @@ public class BancoDados extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-
     }
 
     public Boolean verificaExisteTurmaEmProva(Integer id_turma){
@@ -996,7 +993,7 @@ public class BancoDados extends SQLiteOpenHelper {
         return respostaGabarito;
 
     }
-    public Float pegaNotaQuestao(Integer id_prova, Integer questao) {
+    public Float pegarNotaQuestao(Integer id_prova, Integer questao) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         Float notaQuestao = null;
@@ -1091,7 +1088,7 @@ public class BancoDados extends SQLiteOpenHelper {
         return nomeAluno;
     }
     
-    public String pegaDataProva(String id_prova) {
+    public String pegarDataProva(String id_prova) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         String dataProva = null;
@@ -1214,65 +1211,624 @@ public class BancoDados extends SQLiteOpenHelper {
         return id_turma;
     }
 
-    //  PAREI AQUIIII-----------------------------------------------------------------------------------------------
-    public Integer pegaqtdQuestoes(String id_prova){
-        SQLiteDatabase base_dados = this.getReadableDatabase();
+    public Integer pegarQtdQuestoes(String id_prova){
+        SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         Integer qtdQuestoes = null;
         try {
+            base_dados = this.getReadableDatabase();
             cursor = base_dados.rawQuery("SELECT qtdQuestoes FROM prova WHERE id_prova = ?", new String[]{id_prova});
-            if (cursor.getCount() > 0){
-                cursor.moveToFirst();
+            if (cursor != null && cursor.moveToFirst()){
                 qtdQuestoes = cursor.getInt(0);
             }
-        }finally{
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar quantidade de questões! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
             if(cursor != null){
                 cursor.close();
             }
         }
         return qtdQuestoes;
     }
-    public Integer pegaqtdAlternativas(String id_prova) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select qtdAlternativas from prova where id_prova = ?", new String[]{id_prova});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getInt(0);
-    }
-    public String pegaEmailAluno(String id_aluno) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from aluno where id_aluno = ? and status = ? and id_usuario = ?", new String[]{id_aluno, "1", BancoDados.USER_ID.toString()});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getString(2);
-    }
-    public String pegaEscola(String escola) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from escola where id_escola = ? and id_usuario = ?", new String[]{escola, BancoDados.USER_ID.toString()});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getString(1);
-    }
-    public String pegaUsuario(String id_usuario) {
-        SQLiteDatabase base_dados = this.getWritableDatabase();
-        Cursor cursor = base_dados.rawQuery("Select * from usuario where id_usuario = ?", new String[]{id_usuario});
-        if (cursor.getCount() > 0)
-            cursor.moveToFirst();
-        return cursor.getString(1);
-    }
-
-    public void listTeste(){
+    public Integer pegarQtdAlternativas(String id_prova) {
+        SQLiteDatabase base_dados = null;
         Cursor cursor = null;
+        Integer qtdAlternativas = null;
         try {
-            SQLiteDatabase database = this.getWritableDatabase();
-            cursor = database.rawQuery("SELECT id_prova FROM prova WHERE id_escola = ?", new String[]{BancoDados.ID_ESCOLA.toString()});
-            long id_prova = cursor.getInt(0);
-        }finally {
+            base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT qtdAlternativas FROM prova WHERE id_prova = ?", new String[]{id_prova});
+            if (cursor != null && cursor.moveToFirst()){
+                qtdAlternativas = cursor.getInt(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar quantidade de alternativas! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
             if(cursor != null){
                 cursor.close();
             }
         }
+        return qtdAlternativas;
+
     }
+    public String pegarEmailAluno(String id_aluno) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String emailAluno = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE id_aluno = ? AND status = ? AND id_usuario = ?", new String[]{id_aluno, "1", BancoDados.USER_ID.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                emailAluno = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar email do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return emailAluno;
+    }
+    public String pegarNomeEscola(String escola) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String nomeEscola = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_escola = ? AND id_usuario = ?", new String[]{escola, BancoDados.USER_ID.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                nomeEscola = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome da escola! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomeEscola;
+    }
+    public String pegarNomeUsuario(String id_usuario) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String nomeUsuario = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{id_usuario});
+            if (cursor != null && cursor.moveToFirst()){
+                nomeUsuario = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome do usuario! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomeUsuario;
+    }
+    public Float pegarNotaProva(String id_prova) {
+        float notaProva = 0;
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ?", new String[]{id_prova});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    float nota = cursor.getFloat(0);
+                    notaProva = notaProva + nota;
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nota da prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+
+        return notaProva;
+    }
+    public Integer pegarQtdAlunosPorStatus(String id_turma, Integer status) {
+        Integer qtdAnonimos = null;
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados  = this.getReadableDatabase();
+            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT id_aluno) FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) AND status = ?", new String[]{id_turma, status.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                qtdAnonimos  = cursor.getInt(0);
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar quantidade de alunos por status! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return qtdAnonimos;
+    }
+    public List<String> listarNomesAlunos(Integer status) {
+        List<String> nomesAlunos = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE status = ? AND id_usuario = ? ORDER BY nomeAluno ASC", new String[]{status.toString(), BancoDados.USER_ID.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String nomeAluno = cursor.getString(0);
+                    nomesAlunos.add(nomeAluno);
+                } while (cursor.moveToNext());
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes dos alunos! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomesAlunos;
+    }
+    public List<String> listarAlunosPorTurma(String id_turma) {
+        List<String>  alunos = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_usuario = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{BancoDados.USER_ID.toString(), id_turma});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String aluno = cursor.getString(0);
+                    alunos.add(aluno);
+                } while (cursor.moveToNext());
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes dos alunos por turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return alunos;
+    }
+    public List<String> listarAlunosTurmaPorStatus(String id_turma, Integer status) {
+        List<String>  alunos = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_usuario = ? AND status = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{BancoDados.USER_ID.toString(), status.toString(), id_turma});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String aluno = cursor.getString(0);
+                    alunos.add(aluno);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes dos alunos por status e turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return alunos;
+    }
+
+    public List<Integer> listarIdsAlunosPorTurma(String id_turma) {
+        List<Integer>  ids_alunos = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno FROM alunosTurma WHERE id_turma = ?", new String[]{id_turma});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id = cursor.getInt(0);
+                    ids_alunos.add(id);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return ids_alunos;
+    }
+
+    public List<Integer> listarIdsAlunosPorProvaCorrigida(Integer id_prova){
+        List<Integer> ids_alunos = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_aluno = cursor.getInt(0);
+                    ids_alunos.add(id_aluno);
+                } while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor != null){
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+        return ids_alunos;
+    }
+    public List<String> listarNomesTurmas() {
+        List<String> nomesTurma = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String nomeTurma = cursor.getString(0);
+                    nomesTurma.add(nomeTurma);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes das turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomesTurma;
+    }
+    public List<Integer> listarIdsProvasPorTurma(String id_turma) {
+        List<Integer>  ids_provas = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_prova FROM prova WHERE id_turma = ? and id_escola = ?", new String[]{id_turma, BancoDados.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_prova = cursor.getInt(0);
+                    ids_provas.add(id_prova);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar provas por turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return ids_provas;
+    }
+    public List<String> listarTurmasPorProva() {
+        List<String>  nomesTurma = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String nomeTurma = cursor.getString(0);
+                    nomesTurma.add(nomeTurma);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar turmas por prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomesTurma;
+    }
+    public List<String> listarNomesProvasPorTurma(String id_turma) {
+        List<String>  nomesProvas = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeProva FROM prova WHERE id_turma = ?", new String[]{id_turma});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String nomeProva = cursor.getString(0);
+                    nomesProvas.add(nomeProva);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes das provas por turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomesProvas;
+    }
+
+    /**
+     * Este método obtém as notas de cada questão de uma prova.
+     * @param id_prova codigo da prova que se deseja saber as notas das questões.
+     * @return lista com um item de texto para cada questão correspondendo a nota.
+     * */
+    public List<String> listarNotasPorQuestao(Integer id_prova) {
+        ArrayList<String>  notas = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? ORDER BY questao", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String nota = cursor.getString(0);
+                    notas.add(nota);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar notas por questão! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return notas;
+    }
+
+    /**
+     * Este método lista todas as escolas do banco de dados pertecentes a um determinado usuário
+     * @param status parametro que determina se as escolas listadas serão as ativas ou as desativadas
+     * @return retorna uma lista de string contendo todas as escolas pertencentes ao usuario
+     * logado caso não tenha, retorna uma lista vazia.
+     */
+    public List<String> listarEscolas(Integer status) {
+        ArrayList<String> escolas = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_usuario = ? AND status = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString(), status.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String escola = cursor.getString(0);
+                    escolas.add(escola);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar escolas! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return escolas;
+    }
+
+    public List<String> listarRespostasGabarito(Integer id_prova) {
+        ArrayList<String> respostasGabarito = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String resposta = cursor.getString(0);
+                    char r = (char) (Integer.parseInt(resposta)-1+'A');
+                    respostasGabarito.add(String.valueOf(r));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar gabarito! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return respostasGabarito;
+    }
+
+    public List<String> listarRespostasDadas(Integer id_prova, Integer id_aluno) {
+        ArrayList<String> respostasDadas = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String aux = "";
+                    String resposta = cursor.getString(0);
+                    if(!resposta.equals("-1")){
+                        if (resposta.equals("0")) {
+                            aux = "-";
+                        } else {
+                            aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
+                        }
+                        for (int i = 1; i < resposta.length(); i++) {
+                            if (!String.valueOf(resposta.charAt(i)).equals("0")){
+                                aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                            }
+                        }
+                        respostasDadas.add(aux);
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas dadas! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return respostasDadas;
+    }
+    public String listarRespostasDadasNumero(Integer id_prova, Integer id_aluno) {
+        String respostasDadas = "";
+        String ultimaQuestao = "";
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT respostaDada, questao FROM resultadoCorrecao where id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String resposta = cursor.getString(0);
+                    String questao = cursor.getString(1);
+                    if(!respostasDadas.isEmpty() && !questao.equals(ultimaQuestao)){
+                        respostasDadas += ",";
+                    }
+                    respostasDadas += resposta;
+                    ultimaQuestao = questao;
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas dadas! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return respostasDadas;
+    }
+    public String listarRespostasGabaritoNumerico(String id_prova) {
+        String respostasGabarito = "";
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String resposta = cursor.getString(0);
+                    respostasGabarito += resposta;
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return respostasGabarito;
+    }
+    public String listarNotasProva(String id_prova) {
+        String notasQuestoes = "";
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String nota = cursor.getString(0);
+                    notasQuestoes += nota;
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar notas de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+
+        return notasQuestoes;
+    }
+
     @NonNull
     private static String bytesToHex(@NonNull byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
@@ -1296,253 +1852,7 @@ public class BancoDados extends SQLiteOpenHelper {
             return "ERROR";
         }
     }
-    public List<String> obterNomesAlunos() {
-        List<String> nomesAlunos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where status = ? and id_usuario = ? ORDER BY nomeAluno ASC", new String[]{"1", BancoDados.USER_ID.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String nomeAluno = cursor.getString(0);
-                nomesAlunos.add(nomeAluno);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return nomesAlunos;
-    }
-    public List<String> listTodosAlunosDaTurma(String id_turma) {
-        ArrayList<String>  alunos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where id_usuario = ? and id_aluno in (select DISTINCT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{BancoDados.USER_ID.toString(), id_turma});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String aluno = cursor.getString(0);
-                alunos.add(aluno);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return alunos;
-    }
-    public List<String> listAlunosDaTurmaSemAnonimos(String id_turma) {
-        ArrayList<String>  alunos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeAluno FROM aluno where id_usuario = ? and status = ? and id_aluno in (select DISTINCT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{BancoDados.USER_ID.toString(), "1", id_turma});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String aluno = cursor.getString(0);
-                alunos.add(aluno);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return alunos;
-    }
-    public List<String> obterNomeTurmas() {
-        List<String>  nomesTurma = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeTurma FROM turma where id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // O índice 0 corresponde à coluna 'nome' no exemplo
-                String nomeTurma = cursor.getString(0);
-                nomesTurma.add(nomeTurma);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return nomesTurma;
-    }
-    public List<Integer> listProvasPorTurma(String id_turma) {
-        List<Integer>  ids_provas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id_prova FROM prova WHERE id_turma = ? and id_escola = ?", new String[]{id_turma, BancoDados.ID_ESCOLA.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer id_prova = cursor.getInt(0);
-                ids_provas.add(id_prova);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return ids_provas;
-    }
-    public List<String> listTurmasPorProva() {
-        List<String>  nomesTurma = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeTurma FROM turma where id_escola = ? and id_turma in (select DISTINCT id_turma FROM prova) ", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // O índice 0 corresponde à coluna 'nome' no exemplo
-                String nomeTurma = cursor.getString(0);
-                nomesTurma.add(nomeTurma);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return nomesTurma;
-    }
-    public List<String> obterNomeProvas(String id_turma) {
-        List<String>  nomesProvas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeProva FROM prova where id_turma = ?", new String[]{id_turma});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String nomeProva = cursor.getString(0);
-                nomesProvas.add(nomeProva);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return nomesProvas;
-    }
 
-    public List<String> listProvasNCorrigidas(Integer id_turma) {
-        List<String>  nomesProvas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nomeProva, id_prova FROM prova p WHERE id_turma = ? and NOT EXISTS (SELECT id_prova FROM resultadoCorrecao r WHERE r.id_prova = p.id_prova)", new String[]{id_turma.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String nomeProva = cursor.getString(0);
-                nomesProvas.add(nomeProva);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return nomesProvas;
-    }
-
-    public List<Integer> listAlunosDturma(String id_turma) {
-        List<Integer>  ids = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id_aluno FROM alunosTurma where id_turma = ?", new String[]{id_turma});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer id = cursor.getInt(0);
-                ids.add(id);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return ids;
-    }
-    public List<Integer> qtdAlunosAnonimatos(String id_turma) {
-        List<Integer>  ids_anonimos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT id_aluno FROM aluno where id_aluno in (select DISTINCT id_aluno FROM alunosTurma WHERE id_turma = ?) and status = ?", new String[]{id_turma, "0"});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer id = cursor.getInt(0);
-                ids_anonimos.add(id);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return ids_anonimos;
-    }
-    public Float listNota(String id_prova) {
-        float notaTot = 0;
-        //ArrayList<Integer>  notas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nota FROM gabarito where id_prova = ?", new String[]{id_prova});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // O índice 0 corresponde à coluna 'nome' no exemplo
-                float nota = cursor.getFloat(0);
-                Log.e("kariti","Nota = "+nota);
-                notaTot = notaTot + nota;
-                //notas.add(nota);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return notaTot;
-    }
-
-    /**
-     * Este método obtém as notas de cada questão de uma prova.
-     * @param id_prova codigo da prova que se deseja saber as notas das questões.
-     * @return lista com um item de texto para cada questão correspondendo a nota.
-     * */
-    public List<String> listNotaPorQuetao(Integer id_prova) {
-        ArrayList<String>  notas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nota FROM gabarito where id_prova = ? ORDER BY questao", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // O índice 0 corresponde à coluna 'nome' no exemplo
-                String nota = cursor.getString(0);
-                notas.add(nota);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return notas;
-    }
-    public List<Integer> listAlunoPorProvaCorrigida(Integer id_prova){
-        ArrayList<Integer> ids_alunos = new ArrayList<>();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = this.getReadableDatabase();
-            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno in (SELECT distinct id_aluno FROM resultadoCorrecao where id_prova = ?) ORDER BY nomeAluno", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Integer id_aluno = cursor.getInt(0);
-                    ids_alunos.add(id_aluno);
-                } while (cursor.moveToNext());
-            }
-        }finally {
-            if (cursor != null){
-                cursor.close();
-            }
-            if (db != null && db.isOpen()) {
-                db.close();
-            }
-        }
-        return ids_alunos;
-    }
-    public List<Integer> listQuestoes(Integer id_prova, Integer id_aluno) {
-        ArrayList<Integer>  questoes = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM resultadoCorrecao where id_prova = ? and id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Integer questao = cursor.getInt(3);
-                questoes.add(questao);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return questoes;
-    }
-
-    /**
-     * Este método lista todas as escolas do banco de dados pertecentes a um determinado usuário
-     * @param status parametro que determina se as escolas listadas serão as ativas ou as desativadas
-     * @return retorna uma lista de string contendo todas as escolas pertencentes ao usuario
-     * logado caso não tenha, retorna uma lista vazia.
-     */
-    public List<String> listEscolas(Integer status) {
-        ArrayList<String> escolas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = null;
-        try {
-            cursor = db.rawQuery("SELECT nomeEscola FROM escola WHERE id_usuario = ? AND status = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString(), status.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String escola = cursor.getString(0);
-                    escolas.add(escola);
-                } while (cursor.moveToNext());
-            }
-        }finally {
-            if(cursor != null){
-                cursor.close();
-            }
-            db.close();
-        }
-        return escolas;
-    }
     public String mostraGabarito(Integer id_prova) {
         String gabarito = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1558,37 +1868,7 @@ public class BancoDados extends SQLiteOpenHelper {
         db.close();
         return gabarito;
     }
-    public String mostraGabaritoInt(Integer id_prova) {
-        String gabarito = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String resposta = cursor.getString(0);
-                gabarito += resposta + "\n";
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return gabarito;
-    }
-    public List<String> carregaGabarito(Integer id_prova) {
-        ArrayList<String> respostasEsperadas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String resposta = cursor.getString(0);
-                char r = (char) (Integer.parseInt(resposta)-1+'A');
-                respostasEsperadas.add(String.valueOf(r));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return respostasEsperadas;
-    }
 
-    //Restorna os dados do Gabarito
     public String detalhePorAluno(Integer id_prova, Integer id_aluno) {
         String detalhes = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1603,90 +1883,5 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         db.close();
         return detalhes;
-    }
-    public List<String> respostasDadas(Integer id_prova, Integer id_aluno) {
-        ArrayList<String> respostasDadas = new ArrayList<>();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = this.getReadableDatabase();
-            cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String aux = "";
-                    String resposta = cursor.getString(0);
-                    if(!resposta.equals("-1")){
-                        Log.e("kariti", resposta);
-                        if (resposta.equals("0")) {
-                            aux = "-";
-                        } else {
-                            aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
-                        }
-                        for (int i = 1; i < resposta.length(); i++) {
-                            if (!String.valueOf(resposta.charAt(i)).equals("0")) {
-                                aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
-                            }
-                        }
-                        respostasDadas.add(aux);
-                    }
-                } while (cursor.moveToNext());
-            }
-        }finally {
-            if (cursor != null){
-                cursor.close();
-            }
-            if (db != null && db.isOpen()){
-                db.close();
-            }
-        }
-        return respostasDadas;
-    }
-    public String listRespostasAluno(String id_prova, String id_aluno) {
-        String respostasDadas = "";
-        String ultimaQuestao = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT respostaDada, questao FROM resultadoCorrecao where id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova, id_aluno});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String resposta = cursor.getString(0);
-                String questao = cursor.getString(1);
-                if(!respostasDadas.isEmpty() && !questao.equals(ultimaQuestao)){
-                    respostasDadas += ",";
-                }
-                respostasDadas += resposta;
-                ultimaQuestao = questao;
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return respostasDadas;
-    }
-    public String listRespostasGabarito(String id_prova) {
-        String respostasGabarito = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String resposta = cursor.getString(0);
-                respostasGabarito += resposta;
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return respostasGabarito;
-    }
-    public String listNotaQuestao(String id_prova) {
-        String notasQuestoes = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String nota = cursor.getString(0);
-                notasQuestoes += nota;
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return notasQuestoes;
     }
 }

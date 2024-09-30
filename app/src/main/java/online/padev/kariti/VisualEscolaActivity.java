@@ -187,7 +187,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
                     return;
                 }
                 if (!verificaEscola){
-                    if (bancoDados.cadastrarEscola(nomeEscola, null, 1)) {
+                    if (bancoDados.cadastrarEscola(nomeEscola, 1)) {
                         listEscolaBD.add(nomeEscola);
                         Collections.sort(listEscolaBD);
                         adapter.notifyDataSetChanged();

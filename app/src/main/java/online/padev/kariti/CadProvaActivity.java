@@ -52,6 +52,10 @@ public class CadProvaActivity extends AppCompatActivity {
         titulo.setText(String.format("%s","Nova Prova"));
 
         listTurmaEmProva = (ArrayList<String>) bancoDados.listarNomesTurmas(); //Obtem a lista das turmas delimitadas por escola
+        if(listTurmaEmProva == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
         listTurmaEmProva.add(0, "Selecione a Turma");
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmaEmProva);
         spinnerTurma.setAdapter(adapter);
@@ -107,17 +111,19 @@ public class CadProvaActivity extends AppCompatActivity {
                 return;
             }
             id_turma = bancoDados.pegarIdTurma(turma);
-            if(id_turma != null) {
-                Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova, id_turma.toString());
-                if(verificaProva == null){
-                    Toast.makeText(this, "Erro na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(verificaProva) {
-                    Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, "+prova, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }else return;
+            if(id_turma == null || id_turma == -1){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova, id_turma.toString());
+            if(verificaProva == null){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(verificaProva) {
+                Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, "+prova, Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
             intent.putExtra("nomeProva", prova);
             intent.putExtra("turma", turma);

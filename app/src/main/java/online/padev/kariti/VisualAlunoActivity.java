@@ -1,5 +1,6 @@
 package online.padev.kariti;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +28,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     ArrayList<String> listAlunos;
     MyAdapter adapter;
     TextView tituloAppBarAlunos, totalAlunos;
+    private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +81,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         Integer id_aluno = bancoDados.pegarIdAluno(listAlunos.get(position));
         Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
         intent.putExtra("id_aluno", id_aluno);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, REQUEST_CODE);
     }
     public void onItemLongClick(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
@@ -102,14 +103,19 @@ public class VisualAlunoActivity extends AppCompatActivity {
                         }else avisoNotExluirAluno();
                     }
                 })
-                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //cancelou
-                    }
+                .setNegativeButton("Não", (dialog, which) -> {
+                    //cancelou
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            finish();
+            startActivity(getIntent());
+        }
     }
     public void avisoNotExluirAluno(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
@@ -117,14 +123,5 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 .setMessage("Este aluno possui vínculo com uma ou mais turma(s) cadastrada(s), não sendo possível excluir!.");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    public boolean haAlunoCadastrado(){
-        SQLiteDatabase database = bancoDados.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM aluno WHERE id_aluno=" + BancoDados.USER_ID, null);
-        cursor.moveToFirst();
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count > 0;
     }
 }

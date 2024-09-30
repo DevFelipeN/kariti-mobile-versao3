@@ -1,11 +1,11 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,19 +20,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class CadTurmaActivity extends AppCompatActivity{
-    ImageButton voltar, iconHelpCadturma;
+    ImageButton voltar, iconAjudaCadturma;
     Toolbar toolbar;
     EditText nomeTurma, alunosAnonimos;
     ImageView menosAnonimos, maisAnonimos;
-    ListView listarAlunos;
-    Button cadastrar;
+    ListView listarAlunosListView;
+    Button btnCadastrarTurma;
     BancoDados bancoDados;
-    Spinner spinnerBuscAluno;
+    Spinner spinnerAluno;
     String alunoSelecionado;
     Integer id_turma = 0;
-    AdapterExclAluno al;
+    AdapterExclAluno adapterAlunos;
     TextView titulo;
-    ArrayList<String> selectedAlunos = new ArrayList<>(), nomesAluno;
+    ArrayList<String> listadAlunos = new ArrayList<>(), nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,60 +41,60 @@ public class CadTurmaActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.myToolBarMenu);
         setSupportActionBar(toolbar);
         voltar = findViewById(R.id.imgBtnVoltaDescola);
-        iconHelpCadturma = findViewById(R.id.iconHelp);
-        listarAlunos = findViewById(R.id.listViewCadTurma);
+        iconAjudaCadturma = findViewById(R.id.iconHelp);
+        listarAlunosListView = findViewById(R.id.listViewCadTurma);
         titulo = findViewById(R.id.toolbar_title);
 
         titulo.setText(String.format("%s","Cadastro"));
 
         nomeTurma = findViewById(R.id.editTextTurmaCad);
-        cadastrar = findViewById(R.id.buttonCadastrarTurma);
-        spinnerBuscAluno = findViewById(R.id.spinnerBuscAluno);
+        btnCadastrarTurma = findViewById(R.id.buttonCadastrarTurma);
+        spinnerAluno = findViewById(R.id.spinnerBuscAluno);
         alunosAnonimos = findViewById(R.id.editTextAlunosAnonimos);
         menosAnonimos = findViewById(R.id.imageViewMenosAnonimos);
         maisAnonimos = findViewById(R.id.imageViewMaisAnonimos);
+
         bancoDados = new BancoDados(this);
 
         nomesAluno = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
         nomesAluno.add(0, "Selecione os Alunos");
         nomesAluno.add(1, "Todos");
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
-        spinnerBuscAluno.setAdapter(adapter);
-        spinnerBuscAluno.setSelection(0);
+        spinnerAluno.setAdapter(adapter);
+        spinnerAluno.setSelection(0);
 
-        iconHelpCadturma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogHelpDetalhes();
-            }
-        });
-        spinnerBuscAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        iconAjudaCadturma.setOnClickListener(view -> dialogHelpDetalhes());
+        spinnerAluno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    alunoSelecionado = spinnerBuscAluno.getSelectedItem().toString();
+                    alunoSelecionado = spinnerAluno.getSelectedItem().toString();
                     if(alunoSelecionado.equals("Todos")){
-                        selectedAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
-                        al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
-                        listarAlunos.setAdapter(al);
-                        al.notifyDataSetChanged();
-                        spinnerBuscAluno.setSelection(0);
+                        listadAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
+                        if(listadAlunos == null){
+                            Toast.makeText(CadTurmaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        adapterAlunos = new AdapterExclAluno(CadTurmaActivity.this, listadAlunos);
+                        listarAlunosListView.setAdapter(adapterAlunos);
+                        adapterAlunos.notifyDataSetChanged();
+                        spinnerAluno.setSelection(1);
                     }else {
                         int i = 0;
-                        for (int a = 0; a < selectedAlunos.size(); a++) {
-                            if (alunoSelecionado.equals(selectedAlunos.get(a))) {
+                        for (String a : listadAlunos) {
+                            if (alunoSelecionado.equals(a)) {
                                 i = 1;
                                 Toast.makeText(CadTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
-                                spinnerBuscAluno.setSelection(0);
+                                spinnerAluno.setSelection(0);
                                 break;
                             }
                         }
                         if (i != 1) {
-                            selectedAlunos.add(alunoSelecionado);
-                            al = new AdapterExclAluno(CadTurmaActivity.this, selectedAlunos);
-                            listarAlunos.setAdapter(al);
-                            al.notifyDataSetChanged();
-                            spinnerBuscAluno.setSelection(0);
+                            listadAlunos.add(alunoSelecionado);
+                            adapterAlunos = new AdapterExclAluno(CadTurmaActivity.this, listadAlunos);
+                            listarAlunosListView.setAdapter(adapterAlunos);
+                            adapterAlunos.notifyDataSetChanged();
+                            spinnerAluno.setSelection(0);
                         }
                     }
                 }
@@ -103,74 +103,85 @@ public class CadTurmaActivity extends AppCompatActivity{
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        listarAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               selectedAlunos.remove(i);
-               al.notifyDataSetChanged();
-               Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
-           }
+        listarAlunosListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            listadAlunos.remove(i);
+            adapterAlunos.notifyDataSetChanged();
+            Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
         });
-        menosAnonimos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Integer menos = Integer.valueOf(alunosAnonimos.getText().toString());
-                if(menos > 0)
-                    menos --;
-                alunosAnonimos.setText(menos.toString());
-            }
+        menosAnonimos.setOnClickListener(view -> {
+            int menos = Integer.parseInt(alunosAnonimos.getText().toString());
+            if(menos > 0)
+                menos --;
+            alunosAnonimos.setText(String.valueOf(menos));
         });
-        maisAnonimos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Integer mais = Integer.valueOf(alunosAnonimos.getText().toString());
-                mais ++;
-                alunosAnonimos.setText(mais.toString());
-            }
+        maisAnonimos.setOnClickListener(view -> {
+            int mais = Integer.parseInt(alunosAnonimos.getText().toString());
+            mais ++;
+            alunosAnonimos.setText(String.valueOf(mais));
         });
-        cadastrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+        btnCadastrarTurma.setOnClickListener(v -> {
+            try {
                 String turma = nomeTurma.getText().toString();
-                if(!turma.trim().isEmpty()) {
-                    if (!selectedAlunos.isEmpty() || !alunosAnonimos.getText().toString().equals("0")) {
-                        Integer an = Integer.valueOf(alunosAnonimos.getText().toString());
-                        Boolean checkTurma = bancoDados.verificaExisteTurma(turma);
-                        if (!checkTurma) {
-                            Boolean cadTurma = bancoDados.cadastrarTurma(turma, an);
-                            if (cadTurma) {
-                                id_turma = bancoDados.pegarIdTurma(turma);
-                                if (!selectedAlunos.isEmpty()) {
-                                    int num = listarAlunos.getAdapter().getCount();
-                                    for (int i = 0; i < num; i++) {
-                                        Integer id_aluno = bancoDados.pegarIdAluno(selectedAlunos.get(i));
-                                        bancoDados.cadastrarAlunoNaTurma(id_turma, id_aluno);
-                                    }
-                                }
-                                if (!an.equals(0)) {
-                                    int tamanho = String.valueOf(an).length();
-                                    for (int x = 1; x <= an; x++) {
-                                        String anonimo = "Aluno "+ String.format("%0"+tamanho+"d",x);
-                                        Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
-                                        bancoDados.cadastrarAlunoNaTurma(id_turma, id_anonimo);
-                                    }
-                                }
-                                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else
-                                Toast.makeText(CadTurmaActivity.this, "Erro no cadastro da Turma", Toast.LENGTH_SHORT).show();
-                        } else
-                            Toast.makeText(CadTurmaActivity.this, "Turma já cadstradada! ", Toast.LENGTH_SHORT).show();
-                    } else aviso();
-                }else{
-                    Toast.makeText(CadTurmaActivity.this, "Por favor, informe o nome da turma!", Toast.LENGTH_SHORT).show();
+                if(turma.trim().isEmpty()) {
+                    Toast.makeText(CadTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                if (listadAlunos.isEmpty() && alunosAnonimos.getText().toString().equals("0")) {
+                    aviso();
+                    return;
+                }
+                Integer totAnonimos = Integer.valueOf(alunosAnonimos.getText().toString());
+                Boolean verificaTurma = bancoDados.verificaExisteTurma(turma);
+                if (verificaTurma == null){
+                    Toast.makeText(CadTurmaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (verificaTurma) {
+                    Toast.makeText(CadTurmaActivity.this, "Turma já cadastrada! ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                id_turma = bancoDados.cadastrarTurma(turma);
+                if (id_turma == null || id_turma == -1) {
+                    Toast.makeText(CadTurmaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!listadAlunos.isEmpty()){
+                    for (String aluno : listadAlunos) {
+                        Integer id_aluno = bancoDados.pegarIdAluno(aluno);
+                        if (id_aluno != null && id_aluno != -1){
+                            if(bancoDados.cadastrarAlunoNaTurma(id_turma, id_aluno)){
+                                Log.e("kariti","Aluno cadastrado na turma: "+id_turma);
+                            }
+                        }else Log.e("kariti","Erro ao tentar cadastrar na turma o aluno: "+aluno);
+                    }
+                }
+                if (!totAnonimos.equals(0)){
+                    int tamanho = String.valueOf(totAnonimos).length();
+                    for (int x = 1; x <= totAnonimos; x++) {
+                        String anonimo = "Aluno "+ String.format("%0"+tamanho+"d",x);
+                        Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
+                        if(id_anonimo != -1){
+                            if(bancoDados.cadastrarAlunoNaTurma(id_turma, id_anonimo)){
+                                Log.e("kariti","Aluno anônimo cadastrado na turma: "+id_turma);
+                            }
+                        }else  Log.e("kariti","Erro ao tentar cadastrar anônimo: "+x);
+                    }
+                }
+                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                finish();
+            }catch (Exception e){
+                Toast.makeText(this, "Erro: turma não cadastrada corretamente!!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
                 finish();
             }
         });
@@ -178,13 +189,8 @@ public class CadTurmaActivity extends AppCompatActivity{
     public void aviso(){
         AlertDialog.Builder builder = new AlertDialog.Builder(CadTurmaActivity.this);
         builder.setTitle("Atenção!")
-                .setMessage("Não é possivel cadastrar turma sem incluir aluno. Favor selecionar os alunos pertencentes a essa turma ou informe a quantidade de alunos anônimos se preferir! ")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(CadTurmaActivity.this, "Selecione os alunos!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                .setMessage("Não é possível cadastrar uma turma sem alunos. Por favor, selecione os alunos para essa turma ou, caso preferir, informe a quantidade de alunos anônimos! ")
+                .setPositiveButton("OK", (dialog, which) -> Toast.makeText(CadTurmaActivity.this, "Selecione os alunos!", Toast.LENGTH_SHORT).show());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -197,11 +203,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                 "2 - Alunos: podem ser incluídos alunos para essa turma selecionando-os no campo 'Selecione os Alunos', os quais antecipadamente já devem estar cadastrados no KARITI na tela de cadastro de alunos. Todos os alunos selecionados são listados no campo 'Alunos'. Caso selecione algum aluno errado, basta clicar no nome do aluno para remove-lo da lista. \n\n" +
                 "3 - Anônimos: caso não deseje cadastrar alunos para essa turma, podem ser incluidos alunos anônimos no campo 'Incluir Alunos Anônimos', informando a quantidade no campo sugerido, sem a necessidade de cadastrar todos ou nenhum aluno como descrito na opção 2. \n\n" +
                 "Obs. A Turma não pode ser cadastrada sem alunos.");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

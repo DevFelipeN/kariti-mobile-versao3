@@ -1,5 +1,6 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -11,45 +12,62 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
-    TextView turmaCad, qtdAnonimos;
+    TextView turmaCadastrada, txtViewQtdAnonimos;
     BancoDados bancoDados;
-    ListView listView;
-    ArrayList<String> listTodosAlunosDaTurma;
-    ArrayList<Integer> provasPorTurma;
+    ListView listViewAlunos;
+    ArrayList<String> listaAlunosDaTurma;
     String id_turma;
-    Integer qtdAlunosAnonimatos;
+    Integer qtdAnonimos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dados_turma);
 
         voltar = findViewById(R.id.imgBtnVoltarDados);
-        listView = findViewById(R.id.listViewDados);
-        qtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
-        turmaCad = findViewById(R.id.textViewTurmaCad);
+        listViewAlunos = findViewById(R.id.listViewDados);
+        txtViewQtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
+        turmaCadastrada = findViewById(R.id.textViewTurmaCad);
+
         bancoDados = new BancoDados(this);
 
         id_turma = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
-        String pegaTurma = bancoDados.pegarNomeTurma(id_turma);
+        String nomeTurma = bancoDados.pegarNomeTurma(id_turma);
+        if (nomeTurma == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
-        turmaCad.setText(String.format("Turma: %s", pegaTurma));
+        turmaCadastrada.setText(String.format("Turma: %s", nomeTurma));
 
-        listTodosAlunosDaTurma = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma);
-        qtdAlunosAnonimatos = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
-        qtdAnonimos.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s",qtdAlunosAnonimatos, listTodosAlunosDaTurma.size()));
-        DesativadaAdapter adapter = new DesativadaAdapter(this, listTodosAlunosDaTurma, listTodosAlunosDaTurma);
-        listView.setAdapter(adapter);
+        listaAlunosDaTurma = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma);
+        if (listaAlunosDaTurma == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        qtdAnonimos = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
+        if (qtdAnonimos == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        txtViewQtdAnonimos.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s", qtdAnonimos, listaAlunosDaTurma.size()));
+        DesativadaAdapter adapter = new DesativadaAdapter(this, listaAlunosDaTurma, listaAlunosDaTurma);
+        listViewAlunos.setAdapter(adapter);
 
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
+                finish();
             }
         });
     }
@@ -70,19 +88,12 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     }
 
     public void telaEditar(){
-        boolean status = false;
-        //Boolean checkTurmaEmProva = bancoDados.checkTurmaEmProva(Integer.valueOf(id_turma));
-        provasPorTurma = (ArrayList<Integer>) bancoDados.listarIdsProvasPorTurma(id_turma);
-        if(!provasPorTurma.isEmpty()){
-            for(int a : provasPorTurma){
-                Boolean checkCorrigida = bancoDados.verificaExisteCorrecao(String.valueOf(a));
-                if(checkCorrigida) {
-                    status = true;
-                    break;
-                }
-            }
+        Boolean provasCorrigidas = bancoDados.verificaExisteCorrecaoPorTurma(id_turma);
+        if (provasCorrigidas == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
         }
-        if(!status){
+        if(!provasCorrigidas){
             Intent intent = new Intent(this, EditarTurmaActivity.class);
             intent.putExtra("id_turma", id_turma);
             startActivity(intent);

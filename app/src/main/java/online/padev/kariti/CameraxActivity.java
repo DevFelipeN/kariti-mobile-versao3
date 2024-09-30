@@ -6,6 +6,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -68,7 +69,7 @@ public class CameraxActivity extends AppCompatActivity {
         });
 
         // Verificar e solicitar permissão da câmera, se necessário
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
             startCamera();
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA);
@@ -178,14 +179,20 @@ public class CameraxActivity extends AppCompatActivity {
     }
 
     private File getOutputDirectory() {
-        File mediaDir = getExternalMediaDirs()[0];
+        // Obtém o diretório de arquivos externos privados da aplicação
+        File mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Altera para diretório de imagens
+
+        // Cria um diretório específico para o app dentro de "Pictures"
         File appDir = new File(mediaDir, "CameraXApp");
+
+        // Verifica se o diretório existe e, se não existir, tenta criá-lo
         if (!appDir.exists()) {
-            if(!appDir.mkdirs()){
-                Log.e(TAG, "Falha ao criar diretório de mídia");
+            if (!appDir.mkdirs()) {
+                Log.e("kariti", "Falha ao criar diretório de mídia");
                 return null;
             }
         }
+
         return appDir;
     }
     @Override

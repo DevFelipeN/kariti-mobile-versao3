@@ -1,11 +1,9 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -17,75 +15,86 @@ import android.widget.Toast;
 
 public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton voltar;
-    EditText nomeAluno, emailAluno;
-    Button salvar;
+    EditText editTxtNomeAluno, editTxtEmailAluno;
+    Button btnSalvar;
+    String alunoBD, emailBD;
+    Integer id_aluno;
     BancoDados bancoDados;
-    String id_aluno, aluno, email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_aluno);
 
-        nomeAluno = findViewById(R.id.editTextAlunoCadastrado);
-        emailAluno = findViewById(R.id.editTextEmailCadastrado);
+        editTxtNomeAluno = findViewById(R.id.editTextAlunoCadastrado);
+        editTxtEmailAluno = findViewById(R.id.editTextEmailCadastrado);
+        btnSalvar = findViewById(R.id.buttonSalvarEditAluno);
         voltar = findViewById(R.id.imgBtnVoltaEscola);
-        salvar = findViewById(R.id.buttonSalvarEditAluno);
+
         bancoDados = new BancoDados(this);
 
         infoEditarAluno();
 
-        id_aluno = String.valueOf(getIntent().getExtras().getInt("id_aluno"));
-        aluno = bancoDados.pegaNomeAlunoPStatus(id_aluno, 1);
-        email = bancoDados.pegarEmailAluno(id_aluno);
-        nomeAluno.setText(aluno);
-        emailAluno.setText(email);
-       voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                startActivity(intent);
-            finish();}
-       });
-       salvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String nomAtual = nomeAluno.getText().toString();
-                String emailAtual = emailAluno.getText().toString();
-                if(!nomAtual.equals("")) {
-                    if (!nomAtual.equals(aluno) || !emailAtual.equals(email)) {
-                        Boolean checkAluno = bancoDados.verificaExisteAlunoPNome(nomAtual);
-                        if (!emailAtual.equals("")) {
-                            if (Patterns.EMAIL_ADDRESS.matcher(emailAtual).matches()) {
-                                if(!checkAluno || !emailAtual.equals(email)) {
-                                    Boolean alteraDadoAluno = bancoDados.alterarDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
-                                    if (alteraDadoAluno.equals(true)) {
-                                        Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else
-                                        Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
-                                }else
-                                    Toast.makeText(EditarAlunoActivity.this, "Dados já existentes! ", Toast.LENGTH_SHORT).show();
-                            }else Toast.makeText(EditarAlunoActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
-                        }else {
-                            if(!checkAluno) {
-                                Boolean alteraDadoAluno = bancoDados.alterarDadosAluno(nomAtual, emailAtual, Integer.valueOf(id_aluno));
-                                if (alteraDadoAluno.equals(true)){
-                                    Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else Toast.makeText(EditarAlunoActivity.this, "Dados não alterados", Toast.LENGTH_SHORT).show();
-                            }else
-                                Toast.makeText(EditarAlunoActivity.this, "Esse aluno já esta cadastrado ", Toast.LENGTH_SHORT).show();
-                        }
-                    } else
-                        Toast.makeText(EditarAlunoActivity.this, "Sem alterações encontradas para salvar!", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(EditarAlunoActivity.this, "Por favor, Informe um nome de Aluno!", Toast.LENGTH_SHORT).show();
+        id_aluno = getIntent().getExtras().getInt("id_aluno");
+        alunoBD = bancoDados.pegaNomeAlunoPStatus(id_aluno, 1);
+        emailBD = bancoDados.pegarEmailAluno(id_aluno);
+        if (alunoBD == null || emailBD == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        editTxtNomeAluno.setText(alunoBD); //Mostra o nome do aluno
+        editTxtEmailAluno.setText(emailBD); //Mostra o e-mail do aluno
+
+        btnSalvar.setOnClickListener(view -> {
+            String nomeAlunoAtual = editTxtNomeAluno.getText().toString().trim();
+            String emailAlunoAtual = editTxtEmailAluno.getText().toString().trim();
+            if (alunoBD.equals(nomeAlunoAtual) && emailBD.equals(emailAlunoAtual)){
+                Toast.makeText(this, "Sem alterações realizadas", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(nomeAlunoAtual.trim().isEmpty()){
+                Toast.makeText(EditarAlunoActivity.this, "Informe o nome do aluno!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!alunoBD.equals(nomeAlunoAtual)){
+                Boolean verificaNovoAluno = bancoDados.verificaExisteAlunoPNome(nomeAlunoAtual);
+                if (verificaNovoAluno == null) {
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (verificaNovoAluno) {
+                    Toast.makeText(this, "Já existe um aluno com esse nome, cadastrado nesta escola!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
             }
-       });
+            if (!emailBD.equals(emailAlunoAtual) && !emailAlunoAtual.trim().isEmpty()) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(emailAlunoAtual).matches()) {
+                    Toast.makeText(this, "E-mail inválido", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            Boolean alterarDadosAluno = bancoDados.alterarDadosAluno(nomeAlunoAtual, emailAlunoAtual, id_aluno);
+            if (alterarDadosAluno == null){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (alterarDadosAluno) {
+                Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                recarregarVisualAlunos();
+            } else {
+                Toast.makeText(EditarAlunoActivity.this, "Erro: alteração nao realizada!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        voltar.setOnClickListener(view -> recarregarVisualAlunos());
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                recarregarVisualAlunos();
+            }
+        });
+    }
+    public void recarregarVisualAlunos(){
+        setResult(RESULT_OK);
+        finish();
     }
 
     public void popMenuAluno(View v){
@@ -101,23 +110,18 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
             AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
             builder.setTitle("Atenção!")
                     .setMessage("Deseja realmente excluir o aluno?")
-                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Integer id_aluno = getIntent().getExtras().getInt("id_aluno");
-                            Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
-                            if (deletAluno)
-                                Toast.makeText(EditarAlunoActivity.this, "Aluno Excluido Com Sucesso", Toast.LENGTH_SHORT).show();
+                    .setPositiveButton("Sim", (dialog, which) -> {
+                        Boolean deletarAluno = bancoDados.deletarAluno(id_aluno);
+                        if (deletarAluno) {
+                            Toast.makeText(this, "Aluno excluido com sucesso", Toast.LENGTH_SHORT).show();
+                            recarregarVisualAlunos();
+                        }else{
+                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent intent = new Intent(getApplicationContext(), VisualAlunoActivity.class);
-                            startActivity(intent);
                         }
                     })
-                    .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // cancelou
-                        }
+                    .setNegativeButton("Não", (dialog, which) -> {
+                        // cancelou
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();

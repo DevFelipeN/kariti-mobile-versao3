@@ -4,6 +4,7 @@ import static online.padev.kariti.Compactador.datasImgs;
 import static online.padev.kariti.Compactador.listCartoes;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -34,13 +35,14 @@ public class GaleriaActivity extends AppCompatActivity {
     Integer qtdQuestoes, qtdAlternativas;
     TextView titulo;
     BancoDados bancoDados;
+    Scanner scanner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galeria);
 
         bancoDados = new BancoDados(this);
-        Scanner scanner = new Scanner(this);
+        scanner = new Scanner(this);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         titulo = findViewById(R.id.toolbar_title);
@@ -59,7 +61,8 @@ public class GaleriaActivity extends AppCompatActivity {
             }
         }
 
-        File diretorio = new File(getExternalMediaDirs()[0], "CameraXApp");//diretorios das fotos
+        //File diretorio = new File(getExternalMediaDirs()[0], "CameraXApp");//diretorios das fotos
+        File diretorio = getOutputImgs();
 
         recyclerView = findViewById(R.id.recyclerViewFotos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -74,7 +77,7 @@ public class GaleriaActivity extends AppCompatActivity {
         });
         btnFinalizar.setOnClickListener(v -> {
             try {
-                File fileZip = getOutputZip(); //cria um diretorio interno para um aqrquivo zip
+                File fileZip = getOutputZip(); //cria um diretorio interno para um arquivo zip
                 if(Compactador.compactador(getOutputImgs(), fileZip.getAbsolutePath())){
                     listCartoes.clear();
                     datasImgs.clear();
@@ -136,18 +139,25 @@ public class GaleriaActivity extends AppCompatActivity {
                 qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
                 String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
                 String id_prova = partes[0];
-                if(bancoDados.verificaExisteProvaPId(id_prova)) {
+                Boolean verificaProva = bancoDados.verificaExisteProvaPId(id_prova);
+                if(verificaProva == null){
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                }
+                if(verificaProva) {
                     qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova);
                     qtdAlternativas = bancoDados.pegarQtdAlternativas(id_prova);
-                }else{
+                    nomeCartaoScaneado = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".jpg";
+                    Log.e("kariti","NomeCartao: "+nomeCartaoScaneado);
+                    Intent intent = new Intent(this, CameraxActivity.class);
+                    intent.putExtra("nomeImagem", nomeCartaoScaneado);
+                    startActivity(intent);
+                    finish();
+                } else {
                     Toast.makeText(this, "Prova não cadastrada!", Toast.LENGTH_SHORT).show();
-                    return;
+                    if(contexto.equals("inicia_correcao")){
+                        scanner.iniciarScanner();
+                    }
                 }
-                nomeCartaoScaneado = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".jpg";
-                Intent intent = new Intent(this, CameraxActivity.class);
-                intent.putExtra("nomeImagem", nomeCartaoScaneado);
-                startActivity(intent);
-                finish();
             } else {
                 // Caso o usuário tenha cancelado o scanner ou não tenha lido um QR Code
                 if(listCartoes.isEmpty()){
@@ -196,10 +206,15 @@ public class GaleriaActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private File getOutputImgs(){
-        File mediaDir = getExternalMediaDirs()[0];
+        // Obtém o diretório de arquivos externos privados da aplicação
+        File mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Altera para diretório de imagens
+
+        // Cria um diretório específico para o app dentro de "Pictures"
         File appDir = new File(mediaDir, "CameraXApp");
+
+        // Verifica se o diretório existe e, se não existir, tenta criá-lo
         if (!appDir.exists()) {
-            Log.e("kariti", "Diretório não existe!");
+            Log.e("kariti", "diretorio não existe!!");
             return null;
         }
         return appDir;
@@ -236,31 +251,4 @@ public class GaleriaActivity extends AppCompatActivity {
         }
         return fileJson;
     }
-    /*
-
-    private void carregarFotos() {
-        try {
-            File diretorio = new File(getExternalMediaDirs()[0], "CameraXApp");//diretorios das fotos
-            if (diretorio.exists() && diretorio.isDirectory()){//verifica se esse diretório existe e se é um diretório
-                File[] arquivos = diretorio.listFiles();//lista todos os arquivos contidos no diretório
-                if (arquivos != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                    for (File arquivo : arquivos) {
-                        //verifica se o arquivo é realmente um arquivo, se este arquivo tem a extensão .jpg e se esse arquivo exise na lista listCartoes
-                        if (arquivo.isFile() && arquivo.getName().endsWith(".jpg") && listCartoes.contains(arquivo.getName())) {
-                            caminhosDasImagens.add(arquivo.getAbsolutePath());//adiciona nessa lista o caminho completo desse arquivo
-                            listaNomesCartoes.add(arquivo.getName());//adiciona nessa lista o nome do arquivo (cartão)
-                            datasImgs.add(sdf.format(arquivo.lastModified()));
-                        }
-                    }
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        }catch (Exception e){
-            Log.e("kariti","T00");
-        }
-
-     */
 }

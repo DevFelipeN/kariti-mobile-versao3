@@ -1,6 +1,7 @@
 package online.padev.kariti;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -25,6 +26,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     ArrayList<String> listaAlunosDaTurma;
     String id_turma;
     Integer qtdAnonimos;
+    private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +98,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         if(!provasCorrigidas){
             Intent intent = new Intent(this, EditarTurmaActivity.class);
             intent.putExtra("id_turma", id_turma);
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent, REQUEST_CODE);
         }else{
             avisoNotExluir();
         }
@@ -108,5 +109,13 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
                 .setMessage("Esta turma possui vínculo com uma ou mais prova(s) já corrigidas, não sendo possível editar!");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            finish();
+            startActivity(getIntent());
+        }
     }
 }

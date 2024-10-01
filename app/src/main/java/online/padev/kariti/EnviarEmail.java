@@ -1,6 +1,8 @@
 package online.padev.kariti;
 
 
+import android.util.Log;
+
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -30,14 +32,11 @@ public class EnviarEmail {
             m.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             m.setSubject("Código de verificação do KARITI (" + codigo + ")");
             m.setContent("<p>Insira do código de 4 dígitos abaixo para confirmar sua identidade no aplicativo Kariti:</p><br><b>" + codigo + "</b><br><p>Obrigado por nos ajudar a proteger sua conta.</p><br><p><b>Equipe Kariti</b></p>", "text/html; charset=utf-8");
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Transport.send(m);
-                    } catch (Exception e) {
-
-                    }
+            Thread t = new Thread(() -> {
+                try {
+                    Transport.send(m);
+                } catch (Exception e) {
+                    Log.e("kariti",e.getMessage());
                 }
             });
             t.start();

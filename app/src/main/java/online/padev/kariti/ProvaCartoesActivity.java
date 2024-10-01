@@ -4,11 +4,15 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,7 +59,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         titulo = findViewById(R.id.toolbar_title);
         bancoDados = new BancoDados(this);
 
-        titulo.setText("Cartões");
+        titulo.setText(String.format("%s","Cartões"));
 
         endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
@@ -129,68 +133,72 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 }
             });
         }
-        baixarCartoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isOnline()) {
-                    if(spinnerProva.getSelectedItem() != null) {
-                        String nomeProva = spinnerProva.getSelectedItem().toString();
-                        String nomeTurma = spinnerTurma.getSelectedItem().toString();
-                        id_turma = bancoDados.pegarIdTurma(nomeTurma);
-                        String id_prova = String.valueOf(bancoDados.pegarIdProva(nomeProva, id_turma));
-                        String id_usuario = String.valueOf(BancoDados.USER_ID);
-                        String prof = bancoDados.pegarNomeUsuario(id_usuario);
-                        String data = bancoDados.pegarDataProva(id_prova);
-                        String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova));
-                        String questoes = String.valueOf(bancoDados.pegarQtdQuestoes(id_prova));
-                        String alternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova));
+        baixarCartoes.setOnClickListener(v -> {
+            if (isOnline()) {
+                if(spinnerProva.getSelectedItem() != null) {
+                    String nomeProva = spinnerProva.getSelectedItem().toString();
+                    String nomeTurma = spinnerTurma.getSelectedItem().toString();
+                    id_turma = bancoDados.pegarIdTurma(nomeTurma);
+                    String id_prova = String.valueOf(bancoDados.pegarIdProva(nomeProva, id_turma));
+                    String id_usuario = String.valueOf(BancoDados.USER_ID);
+                    String prof = bancoDados.pegarNomeUsuario(id_usuario);
+                    String data = bancoDados.pegarDataProva(id_prova);
+                    String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova));
+                    String questoes = String.valueOf(bancoDados.pegarQtdQuestoes(id_prova));
+                    String alternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova));
 
-                        dados = new ArrayList<>();
+                    dados = new ArrayList<>();
 
-                        String idTurma = String.valueOf(bancoDados.pegarIdTurma(nomeTurma));
-                        listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorTurma(idTurma);
-                        int qtdProvas = listIdsAlunos.size();
-                        dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
-                        for (int x = 0; x < qtdProvas; x++) {
-                            idAluno = String.valueOf(listIdsAlunos.get(x));
-                            String aluno = bancoDados.pegaNomeAluno(listIdsAlunos.get(x));
-                            dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
-                        }
-                        try {
-                            //File filecsv = null;
-                            //filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
-                            String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
-                            String filePdf = nomeProva + dateCart + ".pdf";
-                            File filecsv  = new File(getExternalFilesDir(null), "/dadosProva.csv");
-                            GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                            File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
-                            BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
-                            builder.setTitle("Por favor, Aguarde!")
-                                    .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
-                            });
-                            AlertDialog alertDialog = builder.create();
-                            alertDialog.show();
-
-                        } catch (Exception e) {
-                            Log.e("Kariti", e.toString());
-                            pedirPermissao();
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                if (!Environment.isExternalStorageManager()) {
-                                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                    startActivity(intent);
-                                }
+                    String idTurma = String.valueOf(bancoDados.pegarIdTurma(nomeTurma));
+                    listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorTurma(idTurma);
+                    int qtdProvas = listIdsAlunos.size();
+                    dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
+                    for (int x = 0; x < qtdProvas; x++) {
+                        idAluno = String.valueOf(listIdsAlunos.get(x));
+                        String aluno = bancoDados.pegaNomeAluno(listIdsAlunos.get(x));
+                        dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, idAluno, aluno});
+                    }
+                    try {
+                        //File filecsv = null;
+                        //filecsv = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dadosProva.csv");
+                        String dateCart = new SimpleDateFormat(" HH_mm_ss").format(new Date());
+                        String filePdf = nomeProva + dateCart + ".pdf";
+                        File filecsv  = new File(getExternalFilesDir(null), "/dadosProva.csv");
+                        GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
+                        File fSaida = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filePdf);
+                        BaixarModeloCartao.solicitarCartoesResposta(filecsv, new FileOutputStream(fSaida), fSaida, filePdf, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
+                        builder.setTitle("Por favor, Aguarde!")
+                                .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                finish();
                             }
-                            //Toast.makeText(ProvaCartoesActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+                    } catch (Exception e) {
+                        Log.e("Kariti", e.toString());
+                        pedirPermissao();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            // Para Android 11 (API 30) e superior, usar MANAGE_EXTERNAL_STORAGE
+                            if (!Environment.isExternalStorageManager()) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivity(intent);
+                            }
+                        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                            // Para Android 6.0 (API 23) até Android 9 (API 28), solicitar WRITE_EXTERNAL_STORAGE
+                            if (ContextCompat.checkSelfPermission(ProvaCartoesActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(ProvaCartoesActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                            }
+                            //Manifest.permission.WRITE_EXTERNAL_STORAGE
                         }
-                    }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
-                }else Toast.makeText(ProvaCartoesActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
-            }
+                    }
+                }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(ProvaCartoesActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
         });
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,12 +214,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     public void pedirPermissao(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Kariti");
-        builder.setMessage("Permitir que o Kariti acesse os arquivos do dispositivo");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setMessage("Permitir que o Kariti faça download dos cartões no seu dispositivo.");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

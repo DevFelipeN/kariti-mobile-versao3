@@ -610,13 +610,12 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             base_dados = this.getWritableDatabase();
             cursor = base_dados.rawQuery("SELECT id_usuario FROM usuario WHERE email = ?", new String[]{email});
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
+            if (cursor != null && cursor.moveToFirst()) {
                 id_usuario = cursor.getInt(0);
             }
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar realizar consulta de e-mail! "+e.getMessage());
-            return -1;
+            return null;
         }finally {
             if(base_dados != null && base_dados.isOpen()){
                 base_dados.close();
@@ -698,13 +697,12 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             base_dados = this.getWritableDatabase();
             cursor = base_dados.rawQuery("SELECT id_usuario FROM usuario WHERE email = ? AND password = ?", new String[] {email, to256(password)});
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
+            if (cursor != null && cursor.moveToFirst()) {
                 id_usuario = cursor.getInt(0);
             }
         }catch (Exception e){
             Log.e("kariti","Erro de verificação de autenticação! "+e.getMessage());
-            return -1;
+            return null;
         }finally {
             if(base_dados != null && base_dados.isOpen()){
                 base_dados.close();
@@ -1167,7 +1165,7 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar pegar id da escola! "+e.getMessage());
-            return null;
+            return -1;
         } finally {
             if(base_dados != null && base_dados.isOpen()){
                 base_dados.close();

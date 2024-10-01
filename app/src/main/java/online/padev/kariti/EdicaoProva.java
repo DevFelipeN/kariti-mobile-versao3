@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -165,28 +166,20 @@ public class EdicaoProva extends AppCompatActivity {
                         }
                         confirmeAlteracaoDados();
                     }else{
-                        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                        intent.putExtra("id_prova", id_provaBD);
-                        intent.putExtra("nomeProva", novaProva);
-                        intent.putExtra("id_turma", id_turmaBD);
-                        intent.putExtra("turma", novaTurma);
-                        intent.putExtra("data", novaData);
-                        intent.putExtra("dataForm", dataFormatada);
-                        intent.putExtra("quest", novaQuestao);
-                        intent.putExtra("alter", novaAlternativa);
-                        intent.putExtra("status", true);
-                        startActivity(intent);
-                        finish();
+                        carregarTelaGabarito();
                     }
                 }else{
                     Toast.makeText(EdicaoProva.this, "Informe o nome da Prova!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        voltar.setOnClickListener(new View.OnClickListener() {
+        voltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void handleOnBackPressed() {
                 finish();
             }
         });
@@ -212,18 +205,7 @@ public class EdicaoProva extends AppCompatActivity {
                 .setMessage("Confirma as alterações realizadas para esta prova? ")
                 .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-                        intent.putExtra("id_prova", id_provaBD);
-                        intent.putExtra("nomeProva", novaProva);
-                        intent.putExtra("id_turma", id_turmaBD);
-                        intent.putExtra("turma", novaTurma);
-                        intent.putExtra("data", novaData);
-                        intent.putExtra("dataForm", dataFormatada);
-                        intent.putExtra("quest", novaQuestao);
-                        intent.putExtra("alter", novaAlternativa);
-                        intent.putExtra("status", true);
-                        startActivity(intent);
-                        finish();
+                        carregarTelaGabarito();
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -236,9 +218,18 @@ public class EdicaoProva extends AppCompatActivity {
         alertDialog.show();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    private void carregarTelaGabarito(){
+        Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
+        intent.putExtra("id_prova", id_provaBD);
+        intent.putExtra("nomeProva", novaProva);
+        intent.putExtra("id_turma", id_turmaBD);
+        intent.putExtra("turma", novaTurma);
+        intent.putExtra("data", novaData);
+        intent.putExtra("dataForm", dataFormatada);
+        intent.putExtra("quest", novaQuestao);
+        intent.putExtra("alter", novaAlternativa);
+        intent.putExtra("status", "atualizacao");
+        startActivity(intent);
         finish();
     }
 }

@@ -132,7 +132,7 @@ public class CadProvaActivity extends AppCompatActivity {
             intent.putExtra("dataForm", dataform);
             intent.putExtra("quest", quest);
             intent.putExtra("alter", alter);
-            intent.putExtra("status", false);
+            intent.putExtra("status", "novaProva");
             startActivity(intent);
             finish();
         });

@@ -1,10 +1,9 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,7 +20,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,19 +27,19 @@ import java.util.Map;
 import java.util.Objects;
 
 public class GabaritoActivity extends AppCompatActivity {
-    TextView notaProva, nProva,nturma, ndata;
-    Button cadProva;
+    TextView txtViewNotaProva, txtViewProva, txtViewTurma, txtViewData;
+    Button btnCadastrarProva;
     ImageButton voltar, iconAjuda;
     BancoDados bancoDados;
     LinearLayout layoutHorizontal;
-    String prova, turma, data, dataForm;
+    String prova, turma, data, dataForm, status;
     Integer id_turma, id_prova, quest, alter;
-    private Boolean status;
     TextView titulo;
     Map<String, Object> info;
     List<RadioGroup> listRadioGroups;
     HashMap<Integer, Integer> alternativasEscolhidas;
     ArrayList<Float> notasPorQuestao;
+    Boolean situacao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +49,11 @@ public class GabaritoActivity extends AppCompatActivity {
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconAjuda = findViewById(R.id.iconHelp);
         titulo = findViewById(R.id.toolbar_title);
-        cadProva = findViewById(R.id.btnCadProva);
-        nProva = findViewById(R.id.textViewProva);
-        nturma = findViewById(R.id.textViewTurma);
-        ndata = findViewById(R.id.textViewData);
-        notaProva = findViewById(R.id.txtViewNotaProva);
+        btnCadastrarProva = findViewById(R.id.btnCadProva);
+        txtViewProva = findViewById(R.id.textViewProva);
+        txtViewTurma = findViewById(R.id.textViewTurma);
+        txtViewData = findViewById(R.id.textViewData);
+        txtViewNotaProva = findViewById(R.id.txtViewNotaProva);
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         bancoDados = new BancoDados(this);
@@ -74,16 +71,16 @@ public class GabaritoActivity extends AppCompatActivity {
         dataForm = getIntent().getExtras().getString("dataForm");
         quest = getIntent().getExtras().getInt("quest");
         alter = getIntent().getExtras().getInt("alter");
-        status = getIntent().getExtras().getBoolean("status");
-        if(status){
+        status = getIntent().getExtras().getString("status");
+        if(status.equals("atualizacao")){
             id_prova = getIntent().getExtras().getInt("id_prova");
-            cadProva.setText(String.format("%s","Salvar"));
+            btnCadastrarProva.setText(String.format("%s","Salvar"));
         }
-        nProva.setText(String.format("Prova: %s", prova));
-        nturma.setText(String.format("Turma: %s", turma));
-        ndata.setText(String.format("Data: %s", data));
+        txtViewProva.setText(String.format("Prova: %s", prova));
+        txtViewTurma.setText(String.format("Turma: %s", turma));
+        txtViewData.setText(String.format("Data: %s", data));
 
-        cadProva.setOnClickListener(v -> {
+        btnCadastrarProva.setOnClickListener(v -> {
             boolean respostaSelecionada = false;
             boolean respostasNotasPreenchidas = true;
             for (RadioGroup radioGroup : listRadioGroups) {
@@ -95,7 +92,6 @@ public class GabaritoActivity extends AppCompatActivity {
                     respostaSelecionada = true;
                 }
             }
-
             // Verifica se todos os campos de notas foram preenchidos
             for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
                 LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
@@ -108,32 +104,44 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
             }
             if (respostaSelecionada && respostasNotasPreenchidas) {
-                if(status.equals(false)) {
+                if(status.equals("novaProva")) {
                     id_prova = bancoDados.cadastrarProva(prova, dataForm, quest, alter, id_turma);
-                    if(id_prova == null){
-                        Toast.makeText(this, "Erro de comunicação, favor tente novamente!", Toast.LENGTH_SHORT).show();
+                    if(id_prova == null || id_prova == -1){
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }else{
-                    bancoDados.alterarDadosProva(id_prova, prova, dataForm, id_turma, quest, alter);
-                    bancoDados.deletarGabarito(id_prova);
+                    if(bancoDados.deletarGabarito(id_prova)){
+                        if(!bancoDados.alterarDadosProva(id_prova, prova, dataForm, id_turma, quest, alter)){
+                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }else{
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
                 notasPorQuestao = (ArrayList<Float>) info.get("notaQuest");
                 if(!notasPorQuestao.isEmpty() && id_prova != null){
-                    Log.e("kariti",id_prova.toString());
+                    situacao = true;
                     for(int i = 1; i <= quest; i++){
                         Integer resp = alternativasEscolhidas.get(i-1);
-                        Log.e("kariti","Q = "+i+" R = "+(resp+1)+" N = "+notasPorQuestao.get(i-1));
-                        bancoDados.cadastrarGabarito(id_prova, i, resp+1, notasPorQuestao.get(i-1));
+                        if(!bancoDados.cadastrarGabarito(id_prova, i, resp+1, notasPorQuestao.get(i-1))){
+                            Log.e("kariti","Erro ao tentar cadastrar resposta da questao "+i+" prova "+id_prova);
+                            situacao = false;
+                        }
                     }
-                    dialogProvaSucess();
+                    if (situacao){
+                        dialogProvaSucess();
+                    } else {
+                        avisoErroDeCadastro();
+                    }
                 }
             }
        });
-       //Sayury
         int quantidadeQuestoes = quest;
         int quantidadeAlternativas = alter;
-        notaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
+        txtViewNotaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
 
         String[] letras = new String[quantidadeAlternativas];
         for (int i = 0; i < quantidadeAlternativas; i++) {
@@ -213,26 +221,32 @@ public class GabaritoActivity extends AppCompatActivity {
             calcularNotaTotal();
 
         }
-        voltar.setOnClickListener(new View.OnClickListener() {
+        iconAjuda.setOnClickListener(v -> dialogHelpDetalhes());
+        voltar.setOnClickListener(view -> avisoVoltar());
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
-                finish();
+            public void handleOnBackPressed() {
+                avisoVoltar();
             }
         });
-        iconAjuda.setOnClickListener(v -> dialogHelpDetalhes());
+
     }
     public void dialogProvaSucess(){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
         builder.setTitle("Prova cadastrada com sucesso!")
                 .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        telaConfim();
-                    }
+                .setPositiveButton("OK", (dialog, which) -> {
+                    finish();
+                    telaConfim();
                 });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    public void avisoErroDeCadastro(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+        builder.setTitle("AVISO!")
+                .setMessage("Falha no cadastro do gabarito!")
+                .setPositiveButton("Sair", (dialog, which) -> finish());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -261,7 +275,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 notas += n;
             }
         }
-        notaProva.setText(String.format("Nota total da prova %.2f pontos.", notas));
+        txtViewNotaProva.setText(String.format("Nota total da prova %.2f pontos.", notas));
     }
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -270,11 +284,21 @@ public class GabaritoActivity extends AppCompatActivity {
                 "• Marque as respostas correspondentes as questões da prova\n" +
                 "• Informe o peso de cada questão nos campos sugeridos \n\n" +
                 "• Antes de finalizar o cadastro confira todos os dados! ");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+    public void avisoVoltar(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+        builder.setTitle("ATENÇÃO!")
+                .setMessage("Ao confirmar essa ação, os dados dessa prova serão perdidos!\n\n" +
+                        "Deseja realmente voltar?")
+                .setPositiveButton("SIM", (dialog, which) -> {
+                    finish();
+                })
+                .setNegativeButton("NÃO", (dialog, which) -> {
+                    //CONTINUE
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

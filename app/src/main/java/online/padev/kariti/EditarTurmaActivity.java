@@ -1,9 +1,10 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,12 +24,12 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ListView listViewAlunos;
     EditText editTxtTurma, EditTxtQtdnonimos;
     ArrayList<String> listaAlunosDTurma, alunosSpinner;
-    String id_turma, pegaTurma, alunosSelecionados;
+    String id_turma, nomeTurmaBD, alunoSelecionado;
     BancoDados bancoDados;
     AdapterExclAluno adapter;
     Spinner spinnerAlunos;
     Button btnSalvar;
-    Integer id_aluno, qtdAlunosAnonimatos;
+    Integer id_aluno, qtdAnonimosBD, qtdAnonimosAtual;
     TextView titulo;
 
     @Override
@@ -56,25 +57,36 @@ public class EditarTurmaActivity extends AppCompatActivity {
 
         //Lista todos os alunos no Spinner
         alunosSpinner = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
-        if (adapter == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+        if (alunosSpinner == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 1", Toast.LENGTH_SHORT).show();
             finish();
         }
-        alunosSpinner.add(0, "Selecione os Alunos");
+        alunosSpinner.add(0, "Selecionar alunos");
         SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, alunosSpinner);
         spinnerAlunos.setAdapter(adapterSpinner);
         spinnerAlunos.setSelection(0);
 
         //Mostra a turma a ser editada
 
-        pegaTurma = bancoDados.pegarNomeTurma(id_turma);
-        qtdAlunosAnonimatos = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
-        editTxtTurma.setText(pegaTurma);
-        EditTxtQtdnonimos.setText(String.format("%s", qtdAlunosAnonimatos));
-        informAnonimos(qtdAlunosAnonimatos);
+        nomeTurmaBD = bancoDados.pegarNomeTurma(id_turma);
+        qtdAnonimosBD = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
+
+        if (nomeTurmaBD == null || qtdAnonimosBD == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 2", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        editTxtTurma.setText(nomeTurmaBD);
+        EditTxtQtdnonimos.setText(String.format("%s", qtdAnonimosBD));
+
+        informAnonimos(qtdAnonimosBD);
 
         //Lista os aluno cadastrados nesta turma.
         listaAlunosDTurma = (ArrayList<String>) bancoDados.listarAlunosTurmaPorStatus(id_turma, 1);
+        if (listaAlunosDTurma == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+            finish();
+        }
         adapter = new AdapterExclAluno(this, listaAlunosDTurma);
         listViewAlunos.setAdapter(adapter);
 
@@ -83,23 +95,13 @@ public class EditarTurmaActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    alunosSelecionados = spinnerAlunos.getSelectedItem().toString();
-                    int n = listaAlunosDTurma.size();
-                    int x = 0;
-                    if(n == 0)
-                        listaAlunosDTurma.add(alunosSelecionados);
-                    spinnerAlunos.setSelection(0);
-                    for(int a = 0; a < n; a++){
-                        if(alunosSelecionados.equals(listaAlunosDTurma.get(a))) {
-                            x = 1;
-                            Toast.makeText(EditarTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
-                            spinnerAlunos.setSelection(0);
-                            break;
-                        }else x = 2;
-
+                    alunoSelecionado = spinnerAlunos.getSelectedItem().toString();
+                    if(listaAlunosDTurma.contains(alunoSelecionado)) {
+                        Toast.makeText(EditarTurmaActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
+                        spinnerAlunos.setSelection(0);
+                        return;
                     }
-                    if (x == 2)
-                        listaAlunosDTurma.add(alunosSelecionados);
+                    listaAlunosDTurma.add(alunoSelecionado);
                     adapter = new AdapterExclAluno(EditarTurmaActivity.this, listaAlunosDTurma);
                     listViewAlunos.setAdapter(adapter);
                     spinnerAlunos.setSelection(0);
@@ -130,41 +132,72 @@ public class EditarTurmaActivity extends AppCompatActivity {
             EditTxtQtdnonimos.setText(String.valueOf(mais));
         });
         btnSalvar.setOnClickListener(view -> {
-            String turmaEditada = editTxtTurma.getText().toString();
-            if(!turmaEditada.trim().isEmpty()) {
-                Integer an = Integer.valueOf(EditTxtQtdnonimos.getText().toString());
-                //Editar essa linha após realização de segunda fase da segunda bateria de testes
-                bancoDados.alterarDadosTurma(turmaEditada, Integer.valueOf(id_turma)); //Alterando Dados da turma
-                bancoDados.deletarAnonimos(Integer.valueOf(id_turma)); //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
-                bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma));  //Deleta todos os alunos pertecentes a essa turma
-
-                if (!listaAlunosDTurma.isEmpty()) {
-                    for (int i = 0; i < listaAlunosDTurma.size(); i++) {
-                        id_aluno = bancoDados.pegarIdAluno(listaAlunosDTurma.get(i));
-                        bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_aluno);
-                    }
-                }
-                if (!an.equals(0)) {
-                    for (int x = 1; x <= an; x++) {
-                        String anonimo = "Aluno "+ x;
-                        Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
-                        bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_anonimo);
-                    }
-                }
-                Toast.makeText(EditarTurmaActivity.this, "Dados Alterados!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), DadosTurmaActivity.class);
-                intent.putExtra("idTurma", Integer.valueOf(id_turma));
-                startActivity(intent);
-                finish();
-            }else{
+            String nomeTurmaAtual = editTxtTurma.getText().toString().trim();
+            qtdAnonimosAtual = Integer.valueOf(EditTxtQtdnonimos.getText().toString());
+            if (nomeTurmaAtual.trim().isEmpty()) {
                 Toast.makeText(EditarTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
-        voltar.setOnClickListener(view -> {
-            getOnBackPressedDispatcher();
-            finish();
+            if (listaAlunosDTurma.isEmpty() && qtdAnonimosAtual.equals(0)) {
+                aviso();
+                return;
+            }
+            if (!nomeTurmaAtual.equals(nomeTurmaBD)) {
+                Boolean verificaTurma = bancoDados.verificaExisteTurma(nomeTurmaAtual);
+                if (verificaTurma == null){
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (verificaTurma) {
+                    Toast.makeText(this, "Turma já cadastrada! ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!bancoDados.alterarDadosTurma(nomeTurmaAtual, Integer.valueOf(id_turma))) {
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            if (!bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma))) {  //Deleta todos os alunos pertecentes a essa turma
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!bancoDados.deletarAnonimos(Integer.valueOf(id_turma))){  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!listaAlunosDTurma.isEmpty()) {
+                for (String aluno : listaAlunosDTurma) {
+                    id_aluno = bancoDados.pegarIdAluno(aluno);
+                    if (id_aluno != null && id_aluno != -1) {
+                        if (!bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_aluno)){
+                            Log.e("kariti","Erro ao tentar vincular o aluno "+aluno+" a turma com id: "+id_turma);
+                        }
+                    }
+                }
+            }
+            if (!qtdAnonimosAtual.equals(0)) {
+                int tamanho = String.valueOf(qtdAnonimosAtual).length();
+                for (int x = 1; x <= qtdAnonimosAtual; x++) {
+                    String anonimo = "Aluno "+ String.format("%0"+tamanho+"d",x);
+                    Integer id_anonimo = bancoDados.cadastrarAluno(anonimo, null, 0);
+                    if (id_anonimo != -1){
+                        if (!bancoDados.cadastrarAlunoNaTurma(Integer.valueOf(id_turma), id_anonimo)) {
+                            Log.e("kariti", "Erro ao tentar vincular o aluno anonimo " + anonimo + " a turma com id: " + id_turma);
+                        }
+                    }
+                }
+            }
+            Toast.makeText(EditarTurmaActivity.this, "Dados alterados com sucesso!", Toast.LENGTH_SHORT).show();
+            recarregarDadosTurma();
         });
         iconeAjuda.setOnClickListener(view -> dialogHelpDetalhes());
+        voltar.setOnClickListener(view -> recarregarDadosTurma());
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                recarregarDadosTurma();
+            }
+        });
     }
     public void PopMenu(View v){
         v.setOnClickListener(view -> Toast.makeText(EditarTurmaActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
@@ -187,6 +220,18 @@ public class EditarTurmaActivity extends AppCompatActivity {
                 "Obs. A Turma não pode ser cadastrada sem alunos.");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+    private void aviso(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditarTurmaActivity.this);
+        builder.setTitle("Atenção!")
+                .setMessage("Não é possível cadastrar uma turma sem alunos. Por favor, selecione os alunos para essa turma ou, caso preferir, informe a quantidade de alunos anônimos! ")
+                .setPositiveButton("OK", (dialog, which) -> Toast.makeText(EditarTurmaActivity.this, "Selecione os alunos!", Toast.LENGTH_SHORT).show());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    public void recarregarDadosTurma(){
+        setResult(RESULT_OK);
+        finish();
     }
 
 }

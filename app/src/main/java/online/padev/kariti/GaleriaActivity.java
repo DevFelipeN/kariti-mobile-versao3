@@ -95,6 +95,8 @@ public class GaleriaActivity extends AppCompatActivity {
                 }else Toast.makeText(GaleriaActivity.this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Log.e("kariti",e.getMessage());
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
         });
@@ -142,12 +144,16 @@ public class GaleriaActivity extends AppCompatActivity {
                 Boolean verificaProva = bancoDados.verificaExisteProvaPId(id_prova);
                 if(verificaProva == null){
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if(verificaProva) {
                     qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova);
                     qtdAlternativas = bancoDados.pegarQtdAlternativas(id_prova);
+                    if (qtdQuestoes == null || qtdAlternativas == null){
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     nomeCartaoScaneado = partes[0] + "_" + partes[1] + "_" + qtdQuestoes + "_" + qtdAlternativas + ".jpg";
-                    Log.e("kariti","NomeCartao: "+nomeCartaoScaneado);
                     Intent intent = new Intent(this, CameraxActivity.class);
                     intent.putExtra("nomeImagem", nomeCartaoScaneado);
                     startActivity(intent);

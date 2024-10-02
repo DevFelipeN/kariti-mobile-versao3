@@ -39,14 +39,21 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
         iconeAjuda.setOnClickListener(v -> ajuda());
 
         listDesativadasBD = (ArrayList<String>) bancoDados.listarEscolas(0);
-        if(listDesativadasBD.isEmpty()){
-            ilustracao();
+        if (listDesativadasBD == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
         }
+
         adapter = new DesativadaAdapter(this, listDesativadasBD, listDesativadasBD);
         listViewDesativadas.setAdapter(adapter);
+
         listViewDesativadas.setOnItemLongClickListener((parent, view, position, id) -> {
             // Exibir a caixa de diálogo
             id_escola = bancoDados.pegarIdEscola(adapter.getItem(position));
+            if (id_escola == null || id_escola == -1){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return false;
+            }
             AlertDialog.Builder builder = new AlertDialog.Builder(EscolaDesativadaActivity.this);
             builder.setTitle("Atenção!")
                     .setMessage("Qual operação deseja realizar com essa escola? ")
@@ -54,7 +61,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                         if(bancoDados.alterarStatusEscola(id_escola, 1)){
                             listDesativadasBD.remove(position);
                             adapter.notifyDataSetChanged();
-                            Toast.makeText(EscolaDesativadaActivity.this, "Escola Reativada com Sucesso!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EscolaDesativadaActivity.this, "Escola reativada com sucesso!", Toast.LENGTH_SHORT).show();
                             recarregarVisualEscola();
                         }else Toast.makeText(EscolaDesativadaActivity.this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
                     })
@@ -65,9 +72,11 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                             listDesativadasBD.remove(position);
                             adapter.notifyDataSetChanged();
                             if(listDesativadasBD.isEmpty()){
-                                finish();
+                                recarregarVisualEscola();
                             }
                             Toast.makeText(EscolaDesativadaActivity.this, "Escola excluida com sucesso", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this, "Erro ao tentar excluir escola!", Toast.LENGTH_SHORT).show();
                         }
                     });
             AlertDialog alertDialog = builder.create();

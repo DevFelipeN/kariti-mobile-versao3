@@ -13,8 +13,8 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        requestPermissions(permissions, 101);
+        //String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        //requestPermissions(permissions, 101);
 
         AppCompatButton botaoCadastro = findViewById(R.id.buttonCadastroW);
         AppCompatButton botaoLogin = findViewById(R.id.buttonLoginW);

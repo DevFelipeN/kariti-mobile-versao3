@@ -6,9 +6,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
 
@@ -56,10 +56,6 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
         <activity
-            android:name=".CameraNoAppActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ilustracionVoidSchoolctivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -80,15 +76,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaCorrigirActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ProvaCartoesActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ProvaCadConfirActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -156,19 +144,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CadEscolaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".CodSenhaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".InicioActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetalhesEscolaActivity extends AppCompatActivity {
     ImageButton btnVoltar, iconeAjuda;
@@ -32,7 +33,12 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        nomeEscola = bancoDados.pegarNomeEscola(String.valueOf(BancoDados.ID_ESCOLA));
+        nomeEscola = bancoDados.pegarNomeEscola();
+        if (nomeEscola == null){ //vericação caso ocorra exceções no Banco
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         textViewEscola.setText(nomeEscola);
 
         btnTurma.setOnClickListener(v -> carregarTelaTurma());
@@ -48,6 +54,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                BancoDados.ID_ESCOLA = null;
                 finish();
             }
         });

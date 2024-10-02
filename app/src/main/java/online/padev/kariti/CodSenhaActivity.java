@@ -60,13 +60,17 @@ public class CodSenhaActivity extends AppCompatActivity {
             v3 = n3.getText().toString();
             v4 = n4.getText().toString();
             String codigoDigitado = v1+v2+v3+v4;
-            if(codigoCerto.equals(codigoDigitado)) {
+            if(codigoCerto.equals(codigoDigitado)){
                 if(identificacao == 0) {
                     Boolean cadastraUsuarioBD = bancoDados.cadastrarUsuario(nomeUsuario, senha, email);
-                    if (cadastraUsuarioBD.equals(true)) {
+                    if (cadastraUsuarioBD == null){
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (cadastraUsuarioBD){
                         carregarTelaLogin();
                     } else {
-                        Toast.makeText(CodSenhaActivity.this, "Erro: Usuário não Registrado! ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CodSenhaActivity.this, "Erro: Usuário não registrado corretamente! ", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     carregarTelaNovaSenha();

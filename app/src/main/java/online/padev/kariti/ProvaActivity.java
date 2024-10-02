@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProvaActivity extends AppCompatActivity {
     ImageButton voltar, iconeAjuda;
@@ -38,14 +39,17 @@ public class ProvaActivity extends AppCompatActivity {
         btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
         btnProvasCorrigida.setOnClickListener(v -> carregarTelaProvasCorrigida());
         btnCorrigirProva.setOnClickListener(v -> {
-            if(bancoDados.verificaExisteProvaCadastrada()){
-                carregaTelaCorrecao();
+            Boolean verificaProva = bancoDados.verificaExisteProvaCadastrada();
+            if (verificaProva == null){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(verificaProva){
+                carregaEtapaCorrecao();
             }else{
                 aviso("provas cadastradas");
             }
-
         });
-
         voltar.setOnClickListener(v -> {
             getOnBackPressedDispatcher();
             finish();
@@ -58,7 +62,12 @@ public class ProvaActivity extends AppCompatActivity {
         });
     }
     private void carregarCadastroProva(){
-        if(!bancoDados.listarNomesTurmas().isEmpty()){
+        Boolean verificaTurma = bancoDados.verificaExisteTurmas();
+        if (verificaTurma == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(verificaTurma){
             Intent intent = new Intent(this, CadProvaActivity.class);
             startActivity(intent);
         }else aviso("turmas cadastradas");
@@ -67,8 +76,13 @@ public class ProvaActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), EditarProva.class);
         startActivity(intent);
     }
-    private void carregarTelaGerarCartao() {
-        if (bancoDados.verificaExisteProvaCadastrada()) {
+    private void carregarTelaGerarCartao(){
+        Boolean verificaProvaCad = bancoDados.verificaExisteProvaCadastrada();
+        if (verificaProvaCad == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (verificaProvaCad) {
             Intent intent = new Intent(this, ProvaCartoesActivity.class);
             intent.putExtra("endereco", 2);
             startActivity(intent);
@@ -77,12 +91,33 @@ public class ProvaActivity extends AppCompatActivity {
         }
     }
     private void carregarTelaProvasCorrigida(){
-        if(bancoDados.verificaExisteProvaCorrigida()) {
+        Boolean verificaExisteProvaCorrigida = bancoDados.verificaExisteProvaCorrigida();
+        if (verificaExisteProvaCorrigida == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(verificaExisteProvaCorrigida){
             Intent intent = new Intent(this, VisualProvaActivity.class);
             startActivity(intent);
         }else{
             aviso("provas corrigidas");
         }
+    }
+    private void carregaEtapaCorrecao(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("INSTRUÇÕES IMPORTATES!");
+        builder.setMessage("Para garantir melhor desempenho do KARITI nas correções, é essencial que a imagem do cartão resposta seja capturada:\n\n" +
+                "• Em superfície com fundo escuro e uniforme\n\n" +
+                "• Em ambientes com boa iluminação\n\n" +
+                "• De forma que o cartão seja enquadrado por inteiro na imagem\n\n" +
+                "• Com boa visibilidade\n");
+        builder.setPositiveButton("Iniciar Correção", (dialog, which) -> {
+            Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
+            intent.putExtra("contexto","inicia_correcao");
+            startActivity(intent);
+            dialog.dismiss();
+        });
+        builder.show();
     }
     private void aviso(String descricao){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -100,22 +135,6 @@ public class ProvaActivity extends AppCompatActivity {
                 "• Corrigir Prova - Após selecionada essa opção, basta realizar os passos sugeriodos pelo KARITI, iniciar correção clicando no botão 'Scannear Cartão', capturar o QrCode da prova e capturar a imagem do cartão resposta, em seguida são listadas as provas capuradas na próxima tela, onde, são sugeridas duas opções, continuar capturando mais provas ou finalizar a correção.\n\n" +
                 "• Visualizar Prova - Nesta opção pode ser visualizado o resultado da correção das provas informando a quantidade de acertos e nota de cada aluno.");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-        builder.show();
-    }
-    private void carregaTelaCorrecao(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("INSTRUÇÕES IMPORTATES!");
-        builder.setMessage("Para garantir melhor desempenho do KARITI nas correções, é essencial que a imagem do cartão resposta seja capturada:\n\n" +
-                "• Em superfície com fundo escuro e uniforme\n\n" +
-                "• Em ambientes com boa iluminação\n\n" +
-                "• De forma que o cartão seja enquadrado por inteiro na imagem\n\n" +
-                "• Com boa visibilidade\n");
-        builder.setPositiveButton("Iniciar Correção", (dialog, which) -> {
-            Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
-            intent.putExtra("contexto","inicia_correcao");
-            startActivity(intent);
-            dialog.dismiss();
-        });
         builder.show();
     }
 }

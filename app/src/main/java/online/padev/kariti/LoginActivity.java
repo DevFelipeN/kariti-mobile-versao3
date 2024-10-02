@@ -47,25 +47,26 @@ public class LoginActivity extends AppCompatActivity {
         btnEntrar.setOnClickListener(v -> {
             emailInformado = EditTextEmail.getText().toString();
             senhaInformada = EditTextSenha.getText().toString();
-            if (emailInformado.trim().isEmpty() || senhaInformada.trim().isEmpty()){
-                Toast.makeText(LoginActivity.this, "Por favor, preencher todos os campos ", Toast.LENGTH_SHORT).show();
+            if (emailInformado.trim().isEmpty()){
+                Toast.makeText(LoginActivity.this, "Informe seu e-mail!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (senhaInformada.trim().isEmpty()){
+                Toast.makeText(LoginActivity.this, "Informe a senha!", Toast.LENGTH_SHORT).show();
                 return;
             }
             if(!Patterns.EMAIL_ADDRESS.matcher(emailInformado).matches()) {
                 Toast.makeText(LoginActivity.this, "E-mail Inválido", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Integer autenticacao_id = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
-            if (autenticacao_id != null) {
-                if(autenticacao_id.equals(-1)){
-                    Toast.makeText(this, "Falha de comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                BancoDados.USER_ID = autenticacao_id;
-                carregarTelaInicial();
-            } else {Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();}
+            Integer id_usuario = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
+            if (id_usuario == null || id_usuario == -1) {
+                Toast.makeText(this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            BancoDados.USER_ID = id_usuario;
+            carregarTelaInicial();
         });
-
         esqueciSenha.setOnClickListener(v -> {
             if(!VerificaConexaoInternet.verificaConexao(LoginActivity.this)){
                 Toast.makeText(LoginActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
@@ -74,20 +75,18 @@ public class LoginActivity extends AppCompatActivity {
             emailInformado = EditTextEmail.getText().toString();
             if(emailInformado.trim().isEmpty()) {
                 alerteEsqueciSenha();
-            }else{
-                id_usuario = bancoDados.verificaExisteEmail(emailInformado);
-                if(id_usuario != null) {
-                    if(id_usuario == -1){
-                        Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    codigo = gerarCodigo.gerarVerificador();
-                    if (enviarEmail.enviaCodigo(emailInformado, codigo)) {
-                        carregarTelaCodigo();
-                    }
-                }else{
-                    Toast.makeText(LoginActivity.this, "E-mail não cadastrado!", Toast.LENGTH_SHORT).show();
-                }
+                return;
+            }
+            id_usuario = bancoDados.verificaExisteEmail(emailInformado);
+            if(id_usuario == null || id_usuario == -1) {
+                Toast.makeText(this, "E-mail não encontrado!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            codigo = gerarCodigo.gerarVerificador();
+            if (enviarEmail.enviaCodigo(emailInformado, codigo)) {
+                carregarTelaCodigo();
+            }else {
+                Toast.makeText(LoginActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
             }
         });
 

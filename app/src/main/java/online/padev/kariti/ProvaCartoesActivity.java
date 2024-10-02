@@ -10,14 +10,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.DownloadManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,7 +25,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -141,57 +136,63 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             }
         });
         btnBaixarCartoes.setOnClickListener(v -> {
-            if (!VerificaConexaoInternet.verificaConexao(this)) {
-                Toast.makeText(this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(spinnerProva.getSelectedItem() != null) {
-                nomeProva = spinnerProva.getSelectedItem().toString();
-                String aluno = spinnerAluno.getSelectedItem().toString();
-                id_prova = String.valueOf(bancoDados.pegarIdProva(nomeProva, id_turma));
-                String prof = bancoDados.pegarNomeUsuario(BancoDados.USER_ID);
-                String data = bancoDados.pegarDataProva(id_prova);
-                String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova));
-                String questoes = String.valueOf(bancoDados.pegarQtdQuestoes(id_prova));
-                String alternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova));
-
-                dados = new ArrayList<>();
-
-                if (aluno.equals("Todos")) {
-                    listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorTurma(id_turma.toString());
-                    if (listIdsAlunos == null){
-                        Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }else {
-                    Integer id_al = bancoDados.pegarIdAluno(aluno);
-                    listIdsAlunos.add(id_al);
+            try {
+                if (!VerificaConexaoInternet.verificaConexao(this)) {
+                    Toast.makeText(this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                if(spinnerProva.getSelectedItem() != null) {
+                    nomeProva = spinnerProva.getSelectedItem().toString();
+                    String aluno = spinnerAluno.getSelectedItem().toString();
+                    id_prova = String.valueOf(bancoDados.pegarIdProva(nomeProva, id_turma));
+                    String prof = bancoDados.pegarNomeUsuario(BancoDados.USER_ID);
+                    String data = bancoDados.pegarDataProva(id_prova);
+                    String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova));
+                    String questoes = String.valueOf(bancoDados.pegarQtdQuestoes(id_prova));
+                    String alternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova));
 
-                dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
-                for (int id : listIdsAlunos) {
-                    String nomeAluno = bancoDados.pegaNomeAluno(id);
-                    String id_aluno = String.valueOf(id);
-                    dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, nomeAluno});
-                }
-                try {
-                    dateCart = dataHoraAtual();    //pega data e hora atual
-                    filePdf = nomeProva + dateCart + ".pdf"; //Cria um nome para o pdf
-                    filecsv  = criarDiretorio(); //cria um diretorio interno para adicionar arquivo .csv
-                    GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
-                        solicitaPermissao();
+                    dados = new ArrayList<>();
+
+                    if (aluno.equals("Todos")) {
+                        listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorTurma(id_turma.toString());
+                        if (listIdsAlunos == null){
+                            Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }else {
-                        baixarCartoesV11();
+                        Integer id_al = bancoDados.pegarIdAluno(aluno);
+                        listIdsAlunos.add(id_al);
                     }
-                }catch (Exception e){
-                    Log.e("kariti","Erro: "+e.getMessage());
-                    Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                }
+
+                    dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
+                    for (int id : listIdsAlunos) {
+                        String nomeAluno = bancoDados.pegaNomeAluno(id);
+                        String id_aluno = String.valueOf(id);
+                        dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, nomeAluno});
+                    }
+                    try {
+                        dateCart = dataHoraAtual();    //pega data e hora atual
+                        filePdf = nomeProva + dateCart + ".pdf"; //Cria um nome para o pdf
+                        filecsv  = criarDiretorio(); //cria um diretorio interno para adicionar arquivo .csv
+                        GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+                            solicitaPermissao();
+                        }else {
+                            baixarCartoesV11();
+                        }
+                    }catch (Exception e){
+                        Log.e("kariti","Erro: "+e.getMessage());
+                        Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    }
 
 
 
-            }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                Log.e("kariti",e.getMessage());
+                Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            }
+
         });
         voltar.setOnClickListener(view -> {
                 getOnBackPressedDispatcher();
@@ -290,35 +291,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(ProvaCartoesActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }else{
             baixarCartoesV9();
-        }
-    }
-
-    public void salvarPdfEmDownloads(String nomeArquivo,List<byte[]> dadosPdf) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            ContentResolver resolver = getContentResolver();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, nomeArquivo);
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
-            contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
-
-            Uri uri = null;
-
-            uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
-
-            try {
-                if (uri != null) {
-                    OutputStream outputStream = resolver.openOutputStream(uri);
-                    if (outputStream != null) {
-                        for(byte[] dados : dadosPdf){
-                            outputStream.write(dados);
-                        }
-                        outputStream.close();
-                        Toast.makeText(this, "PDF salvo em Downloads", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } catch (Exception e) {
-                Log.e("kariti", e.getMessage());
-            }
         }
     }
 }

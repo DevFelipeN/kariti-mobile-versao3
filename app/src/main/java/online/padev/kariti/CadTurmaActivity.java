@@ -132,7 +132,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                     return;
                 }
                 Integer totAnonimos = Integer.valueOf(alunosAnonimos.getText().toString());
-                Boolean verificaTurma = bancoDados.verificaExisteTurma(turma);
+                Boolean verificaTurma = bancoDados.verificaExisteTurmaPorNome(turma);
                 if (verificaTurma == null){
                     Toast.makeText(CadTurmaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;

@@ -143,7 +143,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
                 return;
             }
             if (!nomeTurmaAtual.equals(nomeTurmaBD)) {
-                Boolean verificaTurma = bancoDados.verificaExisteTurma(nomeTurmaAtual);
+                Boolean verificaTurma = bancoDados.verificaExisteTurmaPorNome(nomeTurmaAtual);
                 if (verificaTurma == null){
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
                     return;

@@ -615,7 +615,7 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar realizar consulta de e-mail! "+e.getMessage());
-            return null;
+            return -1;
         }finally {
             if(base_dados != null && base_dados.isOpen()){
                 base_dados.close();
@@ -875,8 +875,27 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
+    public Boolean verificaExisteTurmas(){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            return cursor != null && cursor.moveToFirst();
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar verificar existencia de turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+    }
 
-    public Boolean verificaExisteTurma(String turma){
+    public Boolean verificaExisteTurmaPorNome(String turma){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {

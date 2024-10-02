@@ -17,10 +17,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton ocultarSenha;
     private ImageButton ocultarSenha2;
     private String nome, email, senha, confirmacaoSenha, codigo;
-
-    BancoDados bancoDados;
-    EnviarEmail enviarEmail;
-    GerarCodigoValidacao gerarCodigo;
+    private BancoDados bancoDados;
+    private EnviarEmail enviarEmail;
+    private GerarCodigoValidacao gerarCodigo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         gerarCodigo = new GerarCodigoValidacao();
 
         cadastro.setOnClickListener(v ->{
-
             if (!VerificaConexaoInternet.verificaConexao(MainActivity.this)) {
                 Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
                 return;

@@ -73,7 +73,7 @@
     <!--    Aluno-->
     <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
-    <string name="textViewAluno"> Aluno</string>
+    <string name="textViewAluno"> Alunos</string>
     <string name="textViewTurma">Turma</string>
     <string name="textViewCalendar">Calendário</string>
     <string name="textViewProva">Prova</string>

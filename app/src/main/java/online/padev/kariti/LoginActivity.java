@@ -85,6 +85,8 @@ public class LoginActivity extends AppCompatActivity {
             codigo = gerarCodigo.gerarVerificador();
             if (enviarEmail.enviaCodigo(emailInformado, codigo)) {
                 carregarTelaCodigo();
+            }else {
+                Toast.makeText(LoginActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
             }
         });
 

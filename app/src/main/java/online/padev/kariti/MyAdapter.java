@@ -97,29 +97,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
         public ViewHolder(View itemView, final OnItemClickListener clickListener, final OnItemLongClickListener longClickListener) {
             super(itemView);
             textView = itemView.findViewById(R.id.textViewNomeScol);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (clickListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            clickListener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (clickListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        clickListener.onItemClick(position);
                     }
                 }
             });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (longClickListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            longClickListener.onItemLongClick(position);
-                            return true; // Indica que o evento foi consumido
-                        }
+            itemView.setOnLongClickListener(v -> {
+                if (longClickListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        longClickListener.onItemLongClick(position);
+                        return true; // Indica que o evento foi consumido
                     }
-                    return false;
                 }
+                return false;
             });
         }
     }

@@ -3,9 +3,11 @@ package online.padev.kariti;
 import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -77,6 +79,9 @@ public class DownloadCartoes {
         thread.start();
     }
 
+    /**
+     * Método usado para download de cartões respostas, em dispositivos com versão 10 e superiores
+     */
     public void baixarCartoesV11() {
         Thread thread = new Thread(() -> {
             try {
@@ -96,7 +101,7 @@ public class DownloadCartoes {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
                 while ((bytesRead = is.read(buffer)) != -1) {
-                    byte[] tempBuffer = Arrays.copyOf(buffer, bytesRead); // Copiar apenas os dados lidos
+                    byte[] tempBuffer = Arrays.copyOf(buffer, bytesRead);
                     dadosProva.add(tempBuffer);
                 }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
@@ -105,6 +110,7 @@ public class DownloadCartoes {
                     contentValues.put(MediaStore.Downloads.DISPLAY_NAME, filePdf);
                     contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
                     contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+
 
                     Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
 
@@ -116,7 +122,7 @@ public class DownloadCartoes {
                                     outputStream.write(dados);
                                 }
                                 outputStream.close();
-                                notifyDownloadComplete(filePdf);
+                                notifyDownloadComplete(filePdf, uri);
                             }
                         }
                     } catch (Exception e) {
@@ -132,7 +138,7 @@ public class DownloadCartoes {
         thread.start();
     }
 
-    private void notifyDownloadComplete(String fileName) {
+    private void notifyDownloadComplete(String fileName, Uri fileUri) {
         // Criar um canal de notificação (Android 8.0 e superior)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             String channelId = "download_channel";
@@ -144,6 +150,14 @@ public class DownloadCartoes {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(fileUri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // Criar PendingIntent para abrir o arquivo PDF
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
 
         // Criar e exibir a notificação
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "download_channel")
@@ -151,7 +165,7 @@ public class DownloadCartoes {
                 .setContentTitle("Download Completo")
                 .setContentText("O arquivo " + fileName + " foi baixado com sucesso!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true); // A notificação desaparece quando o usuário a toca
+                .setAutoCancel(true).setContentIntent(pendingIntent); // A notificação desaparece quando o usuário a toca
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

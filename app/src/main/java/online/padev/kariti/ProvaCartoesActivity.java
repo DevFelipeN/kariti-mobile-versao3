@@ -171,9 +171,9 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         dados.add(new String[]{id_prova, nomeProva, prof, nomeTurma, data, nota, questoes, alternativas, id_aluno, nomeAluno});
                     }
                     try {
-                        dateCart = dataHoraAtual();    //pega data e hora atual
-                        filePdf = nomeProva + dateCart + ".pdf"; //Cria um nome para o pdf
-                        filecsv  = criarDiretorio(); //cria um diretorio interno para adicionar arquivo .csv
+                        //pega data e hora atual
+                        filePdf = nomeProva + dataHoraAtual() + ".pdf"; //Cria um nome para o pdf
+                        filecsv  = criarDiretorio(); //cria um diretorio interno para adicionar .csv
                         GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
                             solicitaPermissao();

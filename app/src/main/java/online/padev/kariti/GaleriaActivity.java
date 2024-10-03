@@ -82,15 +82,14 @@ public class GaleriaActivity extends AppCompatActivity {
                     listCartoes.clear();
                     datasImgs.clear();
                     try {
-                        //File fileJson  = new File(getExternalFilesDir(null), "/json.json");
                         File dir = getCacheDir();
                         File fileJson = getOutputJson(dir);
-                        //UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), getExternalFilesDir(null), bancoDados);
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
-                        //UploadEjson.enviarArquivosP(fileZip, fileJson, bancoDados);
                         iniciaAnimacaoCorrecao();
                     } catch (Exception e){
                         Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 }else Toast.makeText(GaleriaActivity.this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
@@ -98,7 +97,6 @@ public class GaleriaActivity extends AppCompatActivity {
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 finish();
             }
-
         });
 
         btnVoltar.setOnClickListener(view -> {
@@ -185,14 +183,12 @@ public class GaleriaActivity extends AppCompatActivity {
     public static String leitor(String path) throws IOException {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         String linha = "", texto = "";
-        while (true) {
-            if (linha == null) {
-                break;
-            }
+        while (linha != null) {
             texto += linha;
             linha = buffRead.readLine();
         }
         buffRead.close();
+        //texto = "{}";
         return texto;
     }
     public void avidoDeCancelamento(){

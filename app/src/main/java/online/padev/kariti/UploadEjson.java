@@ -15,6 +15,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UploadEjson {
     static Integer id_prova, id_aluno, resultCorrect, questao, respostaDada, questAnterior, respostaAnterior;
@@ -44,7 +48,7 @@ public class UploadEjson {
                 UploadEjson.fimUpload(dir, bancoDados);
             } catch (Exception e) {
                 Log.e("kariti","Erro: "+e.getMessage());
-                AnimacaoCorrecao.encerra();
+                AnimacaoCorrecao.encerra("erro");
             }
         });
         thread.start();
@@ -55,51 +59,52 @@ public class UploadEjson {
             if (situacao.equals(Environment.MEDIA_MOUNTED)) {
                 String result = GaleriaActivity.leitor(dir+"/json.json");
                 JSONArray json = new JSONArray(result);
+                List<Object[]> provas = new ArrayList<>();
                 for (int x = 0; x < json.length(); x++){
                     JSONObject objJson = json.getJSONObject(x);
                     resultCorrect = objJson.getInt("resultado");
                     id_prova = objJson.getInt("id_prova");
                     id_aluno = objJson.getInt("id_aluno");
                     mensagem = objJson.getString("mensagem");
+                    Map<Integer, Integer> respostasProva = new HashMap<>();
 
                     if(resultCorrect.equals(0)){
-                        if(bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){           //verifica se essa prova já foi corrigida antes
-                            if(bancoDados.deletarCorrecaoPorAluno(id_prova, id_aluno)){       //Exclui essa prova para ser atualizada
-                                Log.e("kariti","Correção deletada com sucesso!!");
-                            }else {
-                                Log.e("kariti", "Erro ao tentar deletar correção!");
-                            }
 
-                        }
                         mensagem = mensagem.replaceAll("\\),\\(", ");(");
                         mensagem = mensagem.replaceAll("\\)", "");
                         mensagem = mensagem.replaceAll("\\(", "");
                         mensagem = mensagem.replaceAll(" ", "");
                         String[] itens = mensagem.split(";");
-                        for(String item : itens){ //A cada interação uma questão e sua respectiva resposta
+
+                        for(String item : itens) { //A cada interação uma questão e sua respectiva resposta
                             String[] sep = item.split(",");
                             questao = Integer.valueOf(sep[0]); //pega a questão
                             respostaDada = Integer.valueOf(sep[1]);//pega a resposta
-                            if(questao.equals(questAnterior)){ // Em caso de mais de uma alternativas marcadas para uma questão
+                            if (questao.equals(questAnterior)) { // Em caso de mais de uma alternativas marcadas para uma questão
                                 respostaDupla = (respostaAnterior.toString()) + (respostaDada.toString()); // Concatenando as duas respostas
                                 respostaDada = Integer.valueOf(respostaDupla);
                             }
-                            if(questao.equals(questAnterior)){
-                                bancoDados.AlterarDadosCorrecao(id_prova, id_aluno, questao, respostaDada);
-                            }else{
-                                bancoDados.cadastrarCorrecao(id_prova, id_aluno, questao, respostaDada);
-                            }
+                            respostasProva.put(questao, respostaDada);
+
                             questAnterior = questao;
                             respostaAnterior = respostaDada;
                         }
                     }else if(!bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){
-                        bancoDados.cadastrarCorrecao(id_prova, id_aluno, -1, -1);
+                        respostasProva.put(-1, -1);
+                    }else{
+                        continue;
                     }
+                    provas.add(new Object[]{id_prova, id_aluno, respostasProva});
                 }
-                AnimacaoCorrecao.encerra();
+                if (bancoDados.cadastrarCorrecao(provas)){
+                    AnimacaoCorrecao.encerra("sucesso");
+                }else{
+                    AnimacaoCorrecao.encerra("erro");
+                }
             }
         }catch (Exception e){
             Log.e("Kariti", e.toString());
+            AnimacaoCorrecao.encerra("erro");
         }
     }
 }

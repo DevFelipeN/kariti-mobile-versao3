@@ -54,7 +54,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         listEscolaBD = (ArrayList<String>) bancoDados.listarEscolas(1); //carrega todas as escolas ativadas para o usuario logado
         if(listEscolaBD.isEmpty()){
             if(!bancoDados.listarEscolas(0).isEmpty()){
-                carregaEscolasDesativadas();
+                telaEscolaDesativada();
             }else{
                 cadastrarNovaEscola();
             }
@@ -154,11 +154,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
         }else{
             avisoSemEscolasDesativadas();
         }
-    }
-    private void carregaEscolasDesativadas() {
-        Intent intent = new Intent(this, EscolaDesativadaActivity.class);
-        startActivity(intent);
-        finish();
     }
     private void cadastrarNovaEscola() {
         // Inflar o layout customizado

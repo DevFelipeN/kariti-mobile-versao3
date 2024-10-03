@@ -3,6 +3,8 @@ package online.padev.kariti;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -13,6 +15,8 @@ public class AlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar, iconeAjuda;
     Button btnCadastrarAluno, btnVisualizarAluno;
     TextView textviewTitulo;
+
+    BancoDados bancoDados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +27,8 @@ public class AlunoActivity extends AppCompatActivity {
         textviewTitulo = findViewById(R.id.toolbar_title);
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         iconeAjuda = findViewById(R.id.iconHelp);
+
+        bancoDados = new BancoDados(this);
 
         textviewTitulo.setText(String.format("%s", "Aluno"));
 
@@ -46,6 +52,7 @@ public class AlunoActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void carregarTelaVisualizarAluno(){
+        //if ()
         Intent intent = new Intent(this, VisualAlunoActivity.class);
         startActivity(intent);
     }
@@ -59,5 +66,20 @@ public class AlunoActivity extends AppCompatActivity {
                 "Dessa forma será criada uma turma com seus alunos anônimos (alunos com identificação unica gerada pelo KARITI).");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+    private void avisoSemAlunosCadastrados() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("KARITI");
+        builder.setMessage("Você não possui alunos cadastrados!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        // Criando o diálogo
+        AlertDialog dialog = builder.create();
+
+        // Exibindo o diálogo
+        dialog.show();
+        // Mudando a cor do botão "OK" depois de mostrar o diálogo
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(this, R.color.azul)
+        );
     }
 }

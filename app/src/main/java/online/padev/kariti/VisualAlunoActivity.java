@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,15 +18,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VisualAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
-    BancoDados bancoDados;
     EditText pesquisarAlunos;
-    ArrayList<String> listAlunos;
-    MyAdapter adapter;
-    TextView tituloAppBarAlunos, totalAlunos;
+    ArrayList<String> listaAlunos;
+    MyAdapter adapterAluno;
+    TextView tituloAlunos, totalAlunos;
+    RecyclerView recyclerView;
     private static final int REQUEST_CODE = 1;
+
+    BancoDados bancoDados;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,26 +38,35 @@ public class VisualAlunoActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
-        RecyclerView recyclerView = findViewById(R.id.listSelecAluno);
+        recyclerView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
         totalAlunos = findViewById(R.id.totalAlunos);
 
-        tituloAppBarAlunos = findViewById(R.id.toolbar_title);
-        tituloAppBarAlunos.setText("Alunos");
+        tituloAlunos = findViewById(R.id.toolbar_title);
+        tituloAlunos.setText(String.format("%s","Alunos"));
+        List<String[]> aux = new ArrayList<>();
+        aux.add(new String[]{"mariane4", "1", "1"});
+        aux.add(new String[]{"Joane4", "0", "1"});
+        aux.add(new String[]{"john4", "1", null});
+        bancoDados.testandoTransacoes(aux);
 
-        listAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
-        if (listAlunos.isEmpty()) {
+        listaAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
+        if (listaAlunos == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (listaAlunos.isEmpty()) {
             Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
             startActivity(intent);
             finish();
             return;
         }
 
-        totalAlunos.setText("Total de Alunos: "+listAlunos.size());
+        totalAlunos.setText("Total de Alunos: "+ listaAlunos.size());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(this, listAlunos, this::onItemClick, this::onItemLongClick);
-        recyclerView.setAdapter(adapter);
+        adapterAluno = new MyAdapter(this, listaAlunos, this::onItemClick, this::onItemLongClick);
+        recyclerView.setAdapter(adapterAluno);
 
         pesquisarAlunos.addTextChangedListener(new TextWatcher(){
             @Override
@@ -63,7 +74,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2){
-                adapter.getFilter().filter(charSequence);
+                adapterAluno.getFilter().filter(charSequence);
             }
             @Override
             public void afterTextChanged(Editable editable){
@@ -78,7 +89,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
         });
     }
     public void onItemClick(int position) {
-        Integer id_aluno = bancoDados.pegarIdAluno(listAlunos.get(position));
+        Integer id_aluno = bancoDados.pegarIdAluno(listaAlunos.get(position));
         Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
         intent.putExtra("id_aluno", id_aluno);
         startActivityForResult(intent, REQUEST_CODE);
@@ -90,13 +101,13 @@ public class VisualAlunoActivity extends AppCompatActivity {
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Integer id_aluno = bancoDados.pegarIdAluno(listAlunos.get(position));
+                        Integer id_aluno = bancoDados.pegarIdAluno(listaAlunos.get(position));
                         Boolean checkAlEmTurma = bancoDados.verificaExisteAlunoEmTurma(id_aluno);
                         if(!checkAlEmTurma){
                             Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
                             if (deletAluno) {
-                                listAlunos.remove(position);
-                                adapter.notifyDataSetChanged();
+                                listaAlunos.remove(position);
+                                adapterAluno.notifyDataSetChanged();
                                 Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
                             }else
                                 Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();

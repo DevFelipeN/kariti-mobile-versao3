@@ -1,5 +1,8 @@
 package online.padev.kariti;
 
+import static online.padev.kariti.UploadEjson.id_aluno;
+import static online.padev.kariti.UploadEjson.id_prova;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
     public static Integer USER_ID;
@@ -28,7 +33,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.execSQL("create Table usuario(id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
             base_dados.execSQL("create Table validacao_usuario(id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
             base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, id_usuario INT NOT NULL references usuario(id_usuario), status Integer not null check(status = 0 or status = 1))");
-            base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_escola INTEGER not null references escola(id_escolaF))");
+            base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_escola INTEGER not null references escola(id_escola))");
             base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null)");
             base_dados.execSQL("create Table alunosTurma(id_turma Integer not null references turma(id_turma), id_aluno Integer not null references aluno(id_aluno), primary key (id_turma, id_aluno))");
             base_dados.execSQL("create Table prova(id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT not null, dataProva TEXT not null, qtdQuestoes Integer not null, qtdAlternativas Integer not null, id_turma Integer not null references turma(id_turma))");
@@ -149,29 +154,67 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean cadastrarCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
+    @SuppressWarnings("unchecked")
+    public Boolean cadastrarCorrecao(List<Object[]> dadosProva){
         SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
+        Cursor cursor = null;
         try {
             base_dados = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("id_prova", id_prova);
-            contentValues.put("id_aluno", id_aluno);
-            contentValues.put("questao", questao);
-            contentValues.put("respostaDada", respostaDada);
-            long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
-            if(resultado != -1){
-                Log.e("kariti", "Resultado de correção cadastrado com sucesso");
-                return true;
-            }else{
-                Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco");
-                return false;
+            base_dados.beginTransaction();
+
+            for(Object[] prova : dadosProva){
+                Integer id_prova = (Integer) prova[0];
+                Integer id_aluno = (Integer) prova[1];
+                Log.e("kariti","P1");
+
+                cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+                if (cursor != null && cursor.moveToFirst()) {
+
+                    Log.e("kariti", "P2");
+                    String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
+                    stmt = base_dados.compileStatement(deleta);
+                    stmt.bindLong(1, id_prova);
+                    stmt.bindLong(2, id_aluno);
+                    stmt.executeUpdateDelete();
+                    Log.e("kariti", "P3");
+                }
+
+                Map<Integer, Integer> respostas;
+
+                respostas = (Map<Integer, Integer>) prova[2];
+                for (Integer questao : respostas.keySet()){
+                    Log.e("kariti","P(N)");
+                    Integer respostaDada = respostas.get(questao);
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("id_prova", id_prova);
+                    contentValues.put("id_aluno", id_aluno);
+                    contentValues.put("questao", questao);
+                    contentValues.put("respostaDada", respostaDada);
+                    long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
+                    if(resultado != -1){
+                        Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                    }else{
+                        Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
+                        throw new Exception();
+                    }
+                }
             }
+            base_dados.setTransactionSuccessful();
+            return true;
         }catch (Exception e){
-            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco"+e.getMessage());
+            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()) {
+                base_dados.endTransaction();
                 base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+            if(stmt != null){
+                stmt.close();
             }
         }
     }
@@ -519,11 +562,26 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean AlterarDadosCorrecao(Integer id_prova, Integer id_aluno, Integer questao, Integer respostaDada){
+    /*
+    public Boolean AlterarDadosCorrecao(Integer id_prova, Integer id_aluno, String[] itens){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
+
         try {
             base_dados = this.getWritableDatabase();
+            base_dados.beginTransaction();
+
+            if (verificaExisteCorrecaoAluno(id_prova, id_aluno)){
+                base_dados.delete("resultadoCorrecao", "id_prova = ? AND id_aluno = ?", new String[]{String.valueOf(id_prova), String.valueOf(id_aluno)});
+            }
+
+            for(String item : itens){
+                //Integer questao, Integer respostaDada
+                String[] sep = item.split(",");
+                Integer questao = Integer.valueOf(sep[0]); //pega a questão
+                Integer respostaDada = Integer.valueOf(sep[1]);//pega a resposta
+
+            }
             String altera = "UPDATE resultadoCorrecao SET respostaDada = ? WHERE id_prova = ? and id_aluno = ? and questao = ?";
             stmt = base_dados.compileStatement(altera);
             stmt.bindLong(1, respostaDada);
@@ -544,6 +602,7 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
+     */
     public Boolean alterarDadosAluno(String nomeAluno, String email, Integer id_aluno){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
@@ -1434,6 +1493,36 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
         return nomesAlunos;
+    }
+    public void testandoTransacoes(List<String[]> nomes){
+        SQLiteDatabase db = null;
+
+        try {
+            db = getWritableDatabase(); // Obter instância do banco de dados
+            db.beginTransaction(); // Iniciar transação
+
+            for(String[] dadosAluno: nomes){
+                ContentValues values = new ContentValues();
+                values.put("nomeAluno", dadosAluno[0]);
+                values.put("status", dadosAluno[1]);
+                values.put("id_escola", dadosAluno[2]);
+                if (db.insert("aluno", null, values) == -1){
+                    throw new Exception();
+                }
+                //db.execSQL("insert into aluno(nomeAluno, status, id_escola) values('" + dadosAluno[0] + "', " + dadosAluno[1] + ", cast('"+dadosAluno[2]+"' as integer))");
+            }
+
+            // Outras operações...
+
+            db.setTransactionSuccessful(); // Marcar a transação como bem-sucedida
+        } catch (Exception e) {
+            // Lidar com o erro (ex: logar ou mostrar uma mensagem)
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.endTransaction(); // Se a transação foi bem-sucedida, faz COMMIT, senão ROLLBACK
+            }
+        }
     }
     public List<String> listarAlunosPorTurma(String id_turma) {
         List<String>  alunos = new ArrayList<>();

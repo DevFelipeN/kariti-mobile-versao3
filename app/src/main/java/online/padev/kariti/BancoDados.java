@@ -161,25 +161,20 @@ public class BancoDados extends SQLiteOpenHelper {
             for(Object[] prova : dadosProva){
                 Integer id_prova = (Integer) prova[0];
                 Integer id_aluno = (Integer) prova[1];
-                Log.e("kariti","P1");
 
                 cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
                 if (cursor != null && cursor.moveToFirst()) {
-
-                    Log.e("kariti", "P2");
                     String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
                     stmt = base_dados.compileStatement(deleta);
                     stmt.bindLong(1, id_prova);
                     stmt.bindLong(2, id_aluno);
                     stmt.executeUpdateDelete();
-                    Log.e("kariti", "P3");
                 }
 
                 Map<Integer, Integer> respostas;
 
                 respostas = (Map<Integer, Integer>) prova[2];
                 for (Integer questao : respostas.keySet()){
-                    Log.e("kariti","P(N)");
                     Integer respostaDada = respostas.get(questao);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("id_prova", id_prova);

@@ -11,14 +11,13 @@
         style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/layoutCod"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,14 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/buttonValidarSenhaw"
+        app:layout_constraintBottom_toTopOf="@+id/textViewReenviar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMsgValidacao">
 
@@ -106,26 +102,57 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/buttonValidar"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewCancelar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutCod" />
-
-    <TextView
-        android:id="@+id/textViewCancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewReenviar"
-        android:textColor="@color/corLinks"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonValidarSenhaw" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewReenviar" />
+
+    <TextView
+        android:id="@+id/textViewCancelar"
+        style="@style/COLORTXTCLICK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/textViewCancelar"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewReenviar"
+        app:layout_constraintEnd_toStartOf="@+id/textViewReenviar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewReenviar" />
+
+    <TextView
+        android:id="@+id/textViewReenviar"
+        style="@style/COLORTXTCLICK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:text="@string/textViewReenviar"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonValidarSenhaw"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewCancelar"
+        app:layout_constraintTop_toBottomOf="@+id/layoutCod" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        style="@style/COLORTXTCLICK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/layoutCod"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/layoutCod"
+        app:layout_constraintTop_toBottomOf="@+id/layoutCod" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ListView listViewAlunos;
     EditText editTxtTurma, EditTxtQtdnonimos;
     ArrayList<String> listaAlunosDTurma, alunosSpinner;
-    String id_turma, nomeTurmaBD, alunoSelecionado;
+    String id_turma, nomeTurmaBD, nomeTurmaAtual, alunoSelecionado;
     BancoDados bancoDados;
     AdapterExclAluno adapter;
     Spinner spinnerAlunos;
@@ -132,7 +132,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
             EditTxtQtdnonimos.setText(String.valueOf(mais));
         });
         btnSalvar.setOnClickListener(view -> {
-            String nomeTurmaAtual = editTxtTurma.getText().toString().trim();
+            nomeTurmaAtual = editTxtTurma.getText().toString().trim();
             qtdAnonimosAtual = Integer.valueOf(EditTxtQtdnonimos.getText().toString());
             if (nomeTurmaAtual.trim().isEmpty()) {
                 Toast.makeText(EditarTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();

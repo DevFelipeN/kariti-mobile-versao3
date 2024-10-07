@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar, iconeAjuda;
@@ -52,9 +53,17 @@ public class AlunoActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void carregarTelaVisualizarAluno(){
-        //if ()
-        Intent intent = new Intent(this, VisualAlunoActivity.class);
-        startActivity(intent);
+        Boolean verificaAlunos = bancoDados.verificaExisteAlunosPorEscola();
+        if(verificaAlunos == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (verificaAlunos) {
+            Intent intent = new Intent(this, VisualAlunoActivity.class);
+            startActivity(intent);
+        }else{
+            avisoSemAlunos();
+        }
     }
     public void ajuda() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -67,19 +76,12 @@ public class AlunoActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    private void avisoSemAlunosCadastrados() {
+    private void avisoSemAlunos(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI");
-        builder.setMessage("Você não possui alunos cadastrados!");
+        builder.setTitle("Atenção!");
+        builder.setMessage("Não encontramos alunos cadastrados para essa escola!");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-        // Criando o diálogo
-        AlertDialog dialog = builder.create();
-
-        // Exibindo o diálogo
-        dialog.show();
-        // Mudando a cor do botão "OK" depois de mostrar o diálogo
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                ContextCompat.getColor(this, R.color.azul)
-        );
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

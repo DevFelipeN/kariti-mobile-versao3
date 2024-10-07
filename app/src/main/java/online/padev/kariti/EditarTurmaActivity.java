@@ -153,16 +153,16 @@ public class EditarTurmaActivity extends AppCompatActivity {
                     return;
                 }
                 if (!bancoDados.alterarDadosTurma(nomeTurmaAtual, Integer.valueOf(id_turma))) {
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
-            if (!bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma))) {  //Deleta todos os alunos pertecentes a essa turma
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+            if (!bancoDados.deletarAnonimos(Integer.valueOf(id_turma))){  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (!bancoDados.deletarAnonimos(Integer.valueOf(id_turma))){  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+            if (!bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma))) {  //Deleta todos os alunos pertecentes a essa turma
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!listaAlunosDTurma.isEmpty()) {

@@ -28,7 +28,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
     TextView titulo, txtDescricaoDesativadas, txtDescricaoNovaEscola;
     ListView listViewEscolas;
     EscolaAdapter adapter;
-    private ArrayList<String> listEscolaBD;
+    private ArrayList<String> listaEscolasBD;
     BancoDados bancoDados;
     private static final int REQUEST_CODE = 1;
     private Integer id_escola;
@@ -51,19 +51,27 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         titulo.setText(String.format("%s","Acessar com:"));
 
-        listEscolaBD = (ArrayList<String>) bancoDados.listarEscolas(1); //carrega todas as escolas ativadas para o usuario logado
-        if(listEscolaBD.isEmpty()){
+        listaEscolasBD = (ArrayList<String>) bancoDados.listarEscolas(1); //carrega todas as escolas ativadas para o usuario logado
+        if(listaEscolasBD == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if(listaEscolasBD.isEmpty()){
             if(!bancoDados.listarEscolas(0).isEmpty()){
                 telaEscolaDesativada();
             }else{
                 cadastrarNovaEscola();
             }
         }
-        adapter = new EscolaAdapter(this, listEscolaBD, listEscolaBD);
+        adapter = new EscolaAdapter(this, listaEscolasBD, listaEscolasBD);
         listViewEscolas.setAdapter(adapter);
 
         listViewEscolas.setOnItemClickListener((parent, view, position, id) -> {
             BancoDados.ID_ESCOLA = bancoDados.pegarIdEscola(adapter.getItem(position));
+            if (BancoDados.ID_ESCOLA == null || BancoDados.ID_ESCOLA == -1){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
             carregarDetalhesEscola();
         });
         listViewEscolas.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -73,10 +81,14 @@ public class VisualEscolaActivity extends AppCompatActivity {
                     .setMessage("Deseja desativar essa escola?")
                     .setPositiveButton("Sim", (dialog, which) -> {
                         id_escola = bancoDados.pegarIdEscola(adapter.getItem(position));
+                        if (id_escola == null || id_escola == -1){
+                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         if(bancoDados.alterarStatusEscola(id_escola,0)){
-                            listEscolaBD.remove(position);
+                            listaEscolasBD.remove(position);
                             adapter.notifyDataSetChanged();
-                            if(listEscolaBD.isEmpty()) {
+                            if(listaEscolasBD.isEmpty()) {
                                 finish();
                             }
                             Toast.makeText(VisualEscolaActivity.this, "Escola desativada", Toast.LENGTH_SHORT).show();
@@ -183,11 +195,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 }
                 if (!verificaEscola){
                     if (bancoDados.cadastrarEscola(nomeEscola, 1)) {
-                        listEscolaBD.add(nomeEscola);
-                        Collections.sort(listEscolaBD);
+                        listaEscolasBD.add(nomeEscola);
+                        Collections.sort(listaEscolasBD);
                         adapter.notifyDataSetChanged();
                         dialog.dismiss();
                         Toast.makeText(this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this, "Erro: Escola não cadastrada!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(this, "Atenção: Escola já cadastrada!", Toast.LENGTH_SHORT).show();
@@ -197,7 +211,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
             }
         });
         cancelarFlut.setOnClickListener(v -> {
-            if(listEscolaBD.isEmpty()) finish();
+            if(listaEscolasBD.isEmpty()) finish();
             dialog.dismiss();//Fecha o diálogo
         });
     }

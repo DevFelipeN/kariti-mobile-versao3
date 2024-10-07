@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -117,5 +116,9 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
             finish();
             startActivity(getIntent());
         }
+    }
+    public void recarregarVisualTurma(){
+        setResult(RESULT_OK);
+        finish();
     }
 }

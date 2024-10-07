@@ -47,7 +47,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         btnSalvar.setOnClickListener(view -> {
             String nomeAlunoAtual = editTxtNomeAluno.getText().toString().trim();
             String emailAlunoAtual = editTxtEmailAluno.getText().toString().trim();
-            if (alunoBD.equals(nomeAlunoAtual) && emailBD.equals(emailAlunoAtual)){
+            if (nomeAlunoAtual.equals(alunoBD) && emailAlunoAtual.equals(emailBD)){
                 Toast.makeText(this, "Sem alterações realizadas", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -66,7 +66,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
                     return;
                 }
             }
-            if (!emailBD.equals(emailAlunoAtual) && !emailAlunoAtual.trim().isEmpty()) {
+            if (!emailAlunoAtual.equals(emailBD) && !emailAlunoAtual.trim().isEmpty()) {
                 if (!Patterns.EMAIL_ADDRESS.matcher(emailAlunoAtual).matches()) {
                     Toast.makeText(this, "E-mail inválido", Toast.LENGTH_SHORT).show();
                     return;
@@ -134,6 +134,7 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
         builder.setTitle("Ajuda")
                 .setMessage("Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

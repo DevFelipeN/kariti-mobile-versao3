@@ -1,8 +1,5 @@
 package online.padev.kariti;
 
-import static online.padev.kariti.UploadEjson.id_aluno;
-import static online.padev.kariti.UploadEjson.id_prova;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,9 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -336,23 +331,47 @@ public class BancoDados extends SQLiteOpenHelper {
     }
     public Boolean deletarTurma(Integer id_turma){
         SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
+        SQLiteStatement stmtAlunoAnonimo = null;
+        SQLiteStatement stmtAluno = null;
+        SQLiteStatement stmtTurma = null;
         try {
             base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM turma WHERE id_turma = ?";
-            stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_turma);
-            stmt.executeUpdateDelete();
+            base_dados.beginTransaction();
+
+            String deletaAnonimos = "DELETE FROM aluno WHERE status = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)";
+            stmtAlunoAnonimo = base_dados.compileStatement(deletaAnonimos);
+            stmtAlunoAnonimo.bindLong(1, 0);
+            stmtAlunoAnonimo.bindLong(2, id_turma);
+            stmtAlunoAnonimo.executeUpdateDelete();
+
+            String deletaAlunos = "DELETE FROM alunosTurma WHERE id_turma = ?";
+            stmtAluno = base_dados.compileStatement(deletaAlunos);
+            stmtAluno.bindLong(1, id_turma);
+            stmtAluno.executeUpdateDelete();
+
+            String deletaTurma = "DELETE FROM turma WHERE id_turma = ?";
+            stmtTurma = base_dados.compileStatement(deletaTurma);
+            stmtTurma.bindLong(1, id_turma);
+            stmtTurma.executeUpdateDelete();
+
+            base_dados.setTransactionSuccessful();
             return true;
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar deletar turma! "+e.getMessage());
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()){
+                base_dados.endTransaction();
                 base_dados.close();
             }
-            if (stmt != null){
-                stmt.close();
+            if (stmtAlunoAnonimo != null){
+                stmtAlunoAnonimo.close();
+            }
+            if (stmtAluno != null){
+                stmtAluno.close();
+            }
+            if (stmtTurma != null){
+                stmtTurma.close();
             }
         }
     }
@@ -562,47 +581,6 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-    /*
-    public Boolean AlterarDadosCorrecao(Integer id_prova, Integer id_aluno, String[] itens){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-
-        try {
-            base_dados = this.getWritableDatabase();
-            base_dados.beginTransaction();
-
-            if (verificaExisteCorrecaoAluno(id_prova, id_aluno)){
-                base_dados.delete("resultadoCorrecao", "id_prova = ? AND id_aluno = ?", new String[]{String.valueOf(id_prova), String.valueOf(id_aluno)});
-            }
-
-            for(String item : itens){
-                //Integer questao, Integer respostaDada
-                String[] sep = item.split(",");
-                Integer questao = Integer.valueOf(sep[0]); //pega a questão
-                Integer respostaDada = Integer.valueOf(sep[1]);//pega a resposta
-
-            }
-            String altera = "UPDATE resultadoCorrecao SET respostaDada = ? WHERE id_prova = ? and id_aluno = ? and questao = ?";
-            stmt = base_dados.compileStatement(altera);
-            stmt.bindLong(1, respostaDada);
-            stmt.bindLong(2, id_prova);
-            stmt.bindLong(3, id_aluno);
-            stmt.bindLong(4, questao);
-            stmt.executeUpdateDelete();
-            return true;
-        }catch (Exception e){
-            Log.e("Kariti", "Erro ao tentar alterar resposta da questao: "+questao);
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()) {
-                base_dados.close();
-            }
-            if(stmt != null){
-                stmt.close();
-            }
-        }
-    }
-     */
     public Boolean alterarDadosAluno(String nomeAluno, String email, Integer id_aluno){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
@@ -934,6 +912,25 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
+    public Boolean verificaExisteAlunosPorEscola(){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE id_escola = ?", new String[]{BancoDados.ID_ESCOLA.toString()});
+            return cursor != null && cursor.moveToFirst();
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+    }
     public Boolean verificaExisteTurmas(){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
@@ -1214,7 +1211,7 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         } catch (Exception e){
             Log.e("kariti","Erro ao tentar pegar id do aluno! "+e.getMessage());
-            return -1;
+            return null;
         } finally {
             if(base_dados != null && base_dados.isOpen()){
                 base_dados.close();
@@ -1352,7 +1349,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public String pegarEmailAluno(Integer id_aluno) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
-        String emailAluno = null;
+        String emailAluno = "";
         try {
             base_dados = this.getReadableDatabase();
             cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE id_aluno = ? AND status = ? AND id_escola = ?", new String[]{id_aluno.toString(), "1", BancoDados.ID_ESCOLA.toString()});
@@ -1395,13 +1392,13 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return nomeEscola;
     }
-    public String pegarNomeUsuario(String id_usuario) {
+    public String pegarNomeUsuario() {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         String nomeUsuario = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{id_usuario});
+            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{BancoDados.USER_ID.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 nomeUsuario = cursor.getString(0);
             }
@@ -1617,6 +1614,9 @@ public class BancoDados extends SQLiteOpenHelper {
                     ids_alunos.add(id_aluno);
                 } while (cursor.moveToNext());
             }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar id dos alunos por prova corrigida! "+e.getMessage());
+            return null;
         }finally {
             if (cursor != null){
                 cursor.close();

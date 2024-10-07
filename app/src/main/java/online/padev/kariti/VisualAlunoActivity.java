@@ -1,24 +1,20 @@
 package online.padev.kariti;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class VisualAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
@@ -28,6 +24,7 @@ public class VisualAlunoActivity extends AppCompatActivity {
     TextView tituloAlunos, totalAlunos;
     RecyclerView recyclerView;
     private static final int REQUEST_CODE = 1;
+    private Integer id_aluno;
 
     BancoDados bancoDados;
 
@@ -44,25 +41,14 @@ public class VisualAlunoActivity extends AppCompatActivity {
 
         tituloAlunos = findViewById(R.id.toolbar_title);
         tituloAlunos.setText(String.format("%s","Alunos"));
-        List<String[]> aux = new ArrayList<>();
-        aux.add(new String[]{"mariane4", "1", "1"});
-        aux.add(new String[]{"Joane4", "0", "1"});
-        aux.add(new String[]{"john4", "1", null});
-        bancoDados.testandoTransacoes(aux);
 
         listaAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
         if (listaAlunos == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
-        if (listaAlunos.isEmpty()) {
-            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
 
-        totalAlunos.setText("Total de Alunos: "+ listaAlunos.size());
+        totalAlunos.setText(String.format("%s","Total de Alunos: "+ listaAlunos.size()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapterAluno = new MyAdapter(this, listaAlunos, this::onItemClick, this::onItemLongClick);
@@ -80,16 +66,23 @@ public class VisualAlunoActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable){
             }
         });
-        btnVoltar.setOnClickListener(new View.OnClickListener(){
+        btnVoltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view){
-                onBackPressed();
+            public void handleOnBackPressed() {
                 finish();
             }
         });
     }
     public void onItemClick(int position) {
-        Integer id_aluno = bancoDados.pegarIdAluno(listaAlunos.get(position));
+        id_aluno = bancoDados.pegarIdAluno(listaAlunos.get(position));
+        if (id_aluno == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(getApplicationContext(), EditarAlunoActivity.class);
         intent.putExtra("id_aluno", id_aluno);
         startActivityForResult(intent, REQUEST_CODE);
@@ -97,22 +90,27 @@ public class VisualAlunoActivity extends AppCompatActivity {
     public void onItemLongClick(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
         builder.setTitle("Atenção!")
-                .setMessage("Deseja excluir aluno?")
-                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Integer id_aluno = bancoDados.pegarIdAluno(listaAlunos.get(position));
-                        Boolean checkAlEmTurma = bancoDados.verificaExisteAlunoEmTurma(id_aluno);
-                        if(!checkAlEmTurma){
-                            Boolean deletAluno = bancoDados.deletarAluno(id_aluno);
-                            if (deletAluno) {
-                                listaAlunos.remove(position);
-                                adapterAluno.notifyDataSetChanged();
-                                Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
-                            }else
-                                Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
-                        }else avisoNotExluirAluno();
+                .setMessage("Deseja realmente excluir esse aluno?")
+                .setPositiveButton("Sim", (dialog, which) -> {
+                    id_aluno = bancoDados.pegarIdAluno(listaAlunos.get(position));
+                    if (id_aluno == null){
+                        Toast.makeText(VisualAlunoActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    Boolean verificaAluno = bancoDados.verificaExisteAlunoEmTurma(id_aluno);
+                    if(verificaAluno == null){
+                        Toast.makeText(VisualAlunoActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(!verificaAluno){
+                        Boolean deletaAluno = bancoDados.deletarAluno(id_aluno);
+                        if (deletaAluno) {
+                            listaAlunos.remove(position);
+                            adapterAluno.notifyItemRemoved(position);
+                            Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                        }else
+                            Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
+                    }else avisoNotExluirAluno();
                 })
                 .setNegativeButton("Não", (dialog, which) -> {
                     //cancelou
@@ -128,10 +126,11 @@ public class VisualAlunoActivity extends AppCompatActivity {
             startActivity(getIntent());
         }
     }
-    public void avisoNotExluirAluno(){
+    private void avisoNotExluirAluno(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualAlunoActivity.this);
         builder.setTitle("Atenção!")
                 .setMessage("Este aluno possui vínculo com uma ou mais turma(s) cadastrada(s), não sendo possível excluir!.");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

@@ -4,7 +4,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -67,17 +66,7 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
                     })
                     .setNegativeButton("Excluir", (dialog, which) -> {
                         //Implementar verificação, se possui dados como alunos turmas e provas ligadas a essa escola.................................
-                        Boolean deletaEscola = bancoDados.deletarEscola(id_escola);
-                        if (deletaEscola){
-                            listDesativadasBD.remove(position);
-                            adapter.notifyDataSetChanged();
-                            if(listDesativadasBD.isEmpty()){
-                                recarregarVisualEscola();
-                            }
-                            Toast.makeText(EscolaDesativadaActivity.this, "Escola excluida com sucesso", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(this, "Erro ao tentar excluir escola!", Toast.LENGTH_SHORT).show();
-                        }
+                        aviso(position);
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -116,9 +105,25 @@ public class EscolaDesativadaActivity extends AppCompatActivity implements Popup
             return false;
         }
     }
-    private void ilustracao(){
-        Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
-        startActivity(intent);
-        finish();
+    private void aviso(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Deseja realmente excluir essa escola?");
+        builder.setMessage("Caso confirme essa ação, todos os dados pertencentes a essa escola, serão perdidos!");
+        builder.setPositiveButton("SIM", (dialog, which) -> {
+            Boolean deletaEscola = bancoDados.deletarEscola(id_escola);
+            if (deletaEscola){
+                listDesativadasBD.remove(position);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(EscolaDesativadaActivity.this, "Escola excluida com sucesso", Toast.LENGTH_SHORT).show();
+                if(listDesativadasBD.isEmpty()){
+                    recarregarVisualEscola();
+                }
+            }else{
+                Toast.makeText(this, "Erro ao tentar excluir escola!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

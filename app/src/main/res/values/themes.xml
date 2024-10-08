@@ -72,6 +72,10 @@
         <item name="android:textColor">@android:color/background_dark</item>
     </style>
 
+    <style name="COLORTXTCLICK">
+        <item name="android:textColor">@color/corLinks</item>
+    </style>
+
     <style name="STATURBARTHEME" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Outras configurações do tema -->
         <item name="android:statusBarColor">@android:color/holo_purple</item>

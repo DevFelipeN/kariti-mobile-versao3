@@ -84,6 +84,7 @@ public class CameraxActivity extends AppCompatActivity {
         });
         // Configurar o listener do botão de captura
         captureButton.setOnClickListener(v -> {
+            captureButton.setEnabled(false);
             if (imageCapture != null) {
                 captureImage();
             } else {

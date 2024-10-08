@@ -24,7 +24,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ListView listViewAlunos;
     EditText editTxtTurma, EditTxtQtdnonimos;
     ArrayList<String> listaAlunosDTurma, alunosSpinner;
-    String id_turma, nomeTurmaBD, alunoSelecionado;
+    String id_turma, nomeTurmaBD, nomeTurmaAtual, alunoSelecionado;
     BancoDados bancoDados;
     AdapterExclAluno adapter;
     Spinner spinnerAlunos;
@@ -132,7 +132,8 @@ public class EditarTurmaActivity extends AppCompatActivity {
             EditTxtQtdnonimos.setText(String.valueOf(mais));
         });
         btnSalvar.setOnClickListener(view -> {
-            String nomeTurmaAtual = editTxtTurma.getText().toString().trim();
+            btnSalvar.setEnabled(false);
+            nomeTurmaAtual = editTxtTurma.getText().toString().trim();
             qtdAnonimosAtual = Integer.valueOf(EditTxtQtdnonimos.getText().toString());
             if (nomeTurmaAtual.trim().isEmpty()) {
                 Toast.makeText(EditarTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
@@ -153,16 +154,16 @@ public class EditarTurmaActivity extends AppCompatActivity {
                     return;
                 }
                 if (!bancoDados.alterarDadosTurma(nomeTurmaAtual, Integer.valueOf(id_turma))) {
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
-            if (!bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma))) {  //Deleta todos os alunos pertecentes a essa turma
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+            if (!bancoDados.deletarAnonimos(Integer.valueOf(id_turma))){  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (!bancoDados.deletarAnonimos(Integer.valueOf(id_turma))){  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
+            if (!bancoDados.deletarAlunoDeTurma(Integer.valueOf(id_turma))) {  //Deleta todos os alunos pertecentes a essa turma
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!listaAlunosDTurma.isEmpty()) {

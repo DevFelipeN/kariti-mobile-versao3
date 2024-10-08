@@ -45,8 +45,10 @@ public class UploadEjson {
                     fos.write(inByte);
                 is.close();
                 fos.close();
+                Log.e("kariti","passei 0");
                 UploadEjson.fimUpload(dir, bancoDados);
             } catch (Exception e) {
+                Log.e("kariti","passei 000");
                 Log.e("kariti","Erro: "+e.getMessage());
                 AnimacaoCorrecao.encerra("erro");
             }
@@ -97,13 +99,17 @@ public class UploadEjson {
                     provas.add(new Object[]{id_prova, id_aluno, respostasProva});
                 }
                 if (bancoDados.cadastrarCorrecao(provas)){
+                    Log.e("kariti","passei 1");
                     AnimacaoCorrecao.encerra("sucesso");
+
                 }else{
+                    Log.e("kariti","passei 2");
                     AnimacaoCorrecao.encerra("erro");
                 }
             }
         }catch (Exception e){
             Log.e("Kariti", e.toString());
+            Log.e("kariti","passei 3");
             AnimacaoCorrecao.encerra("erro");
         }
     }

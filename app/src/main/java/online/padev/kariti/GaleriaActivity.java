@@ -76,6 +76,7 @@ public class GaleriaActivity extends AppCompatActivity {
             scanner.iniciarScanner();//Inicia o Scanner
         });
         btnFinalizar.setOnClickListener(v -> {
+            btnFinalizar.setEnabled(false);
             try {
                 File fileZip = getOutputZip(); //cria um diretorio interno para um arquivo zip
                 if(Compactador.compactador(getOutputImgs(), fileZip.getAbsolutePath())){
@@ -83,8 +84,11 @@ public class GaleriaActivity extends AppCompatActivity {
                     datasImgs.clear();
                     try {
                         File dir = getCacheDir();
+                        Log.e("kariti","passei k1");
                         File fileJson = getOutputJson(dir);
+                        Log.e("kariti","passei k2");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
+                        Log.e("kariti","passei k3");
                         iniciaAnimacaoCorrecao();
                     } catch (Exception e){
                         Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());

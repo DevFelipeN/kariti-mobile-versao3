@@ -46,7 +46,8 @@
     <string name="textViewKariti">Kariti</string>
     <string name="buttonConfig">Configurações</string>
     <string name="buttonValidar">Validar</string>
-    <string name="textViewReenviar">Cancelar</string>
+    <string name="textViewCancelar">Cancelar</string>
+    <string name="textViewReenviar">Reenviar código</string>
     <string name="textViewOutroMetodo">Usar outro Método</string>
     <string name="textViewbemVindo">SEJA BEM VINDO AO</string>
     <string name="textViewkariti">KARITI</string>
@@ -75,6 +76,7 @@
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
     <string name="textViewAluno"> Alunos</string>
     <string name="textViewTurma">Turma</string>
+    <string name="time">00:00:00</string>
     <string name="textViewCalendar">Calendário</string>
     <string name="textViewProva">Prova</string>
     <string name="textViewEditProva">Mais Opções </string>

@@ -36,14 +36,14 @@ public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixarCartoes;
     Integer id_turma, endereco;
-    String prova, nomeTurma, id_prova, nomeProva,filePdf, dateCart;
+    String prova, nomeTurma, id_prova, nomeProva,filePdf;
     ArrayList<String> listagemProvas, listaTurmas, listaAlunos;
     List<String[]> dados;
     ArrayList<Integer> listIdsAlunos;
     BancoDados bancoDados;
     Spinner spinnerTurma, spinnerProva, spinnerAluno;
     TextView titulo;
-    File filecsv;
+    private File filecsv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +136,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             }
         });
         btnBaixarCartoes.setOnClickListener(v -> {
+            btnBaixarCartoes.setEnabled(false);
             try {
                 if (!VerificaConexaoInternet.verificaConexao(this)) {
                     Toast.makeText(this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
@@ -175,7 +176,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         filePdf = nomeProva + dataHoraAtual() + ".pdf"; //Cria um nome para o pdf
                         filecsv  = criarDiretorio(); //cria um diretorio interno para adicionar .csv
                         GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
                             solicitaPermissao();
                         }else {
                             baixarCartoesV11();

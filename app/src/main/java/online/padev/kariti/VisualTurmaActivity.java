@@ -1,117 +1,111 @@
 package online.padev.kariti;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class VisualTurmaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
-    ListView listView;
+    ListView listViewTurma;
+    ArrayList<String> listaTurma;
+    TextView titulo;
+    Integer id_turma;
     BancoDados bancoDados;
-    ArrayList<String> listarTurma;
-    TextView tituloAppBar;
+    private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_turma);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
-        listView = findViewById(R.id.listViewVisualTurma);
-        tituloAppBar = findViewById(R.id.toolbar_title);
-        tituloAppBar.setText("Turmas");
+        listViewTurma = findViewById(R.id.listViewVisualTurma);
+        titulo = findViewById(R.id.toolbar_title);
+
+        titulo.setText(String.format("%s","Turmas"));
 
         bancoDados = new BancoDados(this);
 
-        listarTurma = (ArrayList<String>) bancoDados.listarNomesTurmas();
-        if (listarTurma.isEmpty()) {
-            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
-            startActivity(intent);
+        listaTurma = (ArrayList<String>) bancoDados.listarNomesTurmas();
+        if (listaTurma == null){
+            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
             finish();
         }
-        EscolaAdapter adapter = new EscolaAdapter(this, listarTurma, listarTurma);
-        listView.setAdapter(adapter);
+        EscolaAdapter adapter = new EscolaAdapter(this, listaTurma, listaTurma);
+        listViewTurma.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {;
-                Integer idTurma = bancoDados.pegarIdTurma(adapter.getItem(position));
-                telaTeste(idTurma);
+        listViewTurma.setOnItemClickListener((parent, view, position, id) -> {
+            id_turma = bancoDados.pegarIdTurma(adapter.getItem(position));
+            if (id_turma == null){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
+                return;
             }
+            telaDadosTurma(id_turma);
         });
 
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                // Exibir a caixa de diálogo
-                AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
-                builder.setTitle("Atenção!")
-                        .setMessage("Deseja excluir essa turma?")
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String turma = listarTurma.get(position);
-                                Integer id_turma = bancoDados.pegarIdTurma(turma);
-                                Boolean checkEmProva = bancoDados.verificaExisteTurmaEmProva(id_turma);
-                                if(!checkEmProva) {
-                                    Boolean deletTurma = bancoDados.deletarTurma(id_turma);
-                                    bancoDados.deletarAlunoDeTurma(id_turma);
-                                    if (deletTurma) {
-                                        listarTurma.remove(position);
-                                        adapter.notifyDataSetChanged();
-                                        Toast.makeText(VisualTurmaActivity.this, "Turma Excluida! ", Toast.LENGTH_SHORT).show();
-                                    }
-                                }else avisoNotExluir();
+        listViewTurma.setOnItemLongClickListener((parent, view, position, id) -> {
+            // Exibir a caixa de diálogo
+            AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
+            builder.setTitle("Atenção!")
+                    .setMessage("Deseja excluir essa turma?")
+                    .setPositiveButton("Sim", (dialog, which) -> {
+                        id_turma = bancoDados.pegarIdTurma(listaTurma.get(position));
+                        Boolean verificaTurma = bancoDados.verificaExisteTurmaEmProva(id_turma);
+                        if (id_turma == null || verificaTurma == null){
+                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(!verificaTurma) {
+                            Boolean deletaTurma = bancoDados.deletarTurma(id_turma);
+                            if (deletaTurma) {
+                                listaTurma.remove(position);
+                                adapter.notifyDataSetChanged();
+                                if(listaTurma.isEmpty()){
+                                    finish();
+                                }
+                                Toast.makeText(VisualTurmaActivity.this, "Turma excluida com sucesso! ", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(VisualTurmaActivity.this, "Algo deu errado, falha ao tentar excluir a turma! ", Toast.LENGTH_SHORT).show();
                             }
-                        })
-                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // cancelou
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show(); 
-                return true;
-            }
+                        }else avisoNotExluir();
+                    })
+                    .setNegativeButton("Não", (dialog, which) -> {
+                        // cancelou
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
         });
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
+        btnVoltar.setOnClickListener(view -> {
+            getOnBackPressedDispatcher();
+            finish();
         });
     }
-    public void telaTeste(Integer idTurma) {
+    private void telaDadosTurma(Integer idTurma) {
         Intent intent = new Intent(this, DadosTurmaActivity.class);
         intent.putExtra("idTurma", idTurma);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, REQUEST_CODE);
     }
-    public void aviso(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
-        builder.setTitle("Atenção!")
-                .setMessage("Nao foram encontradas turmas cadastradas para esse usuário!");
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-    public void avisoNotExluir(){
+    private void avisoNotExluir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualTurmaActivity.this);
         builder.setTitle("Atenção!")
                 .setMessage("Esta turma possui vínculo com uma ou mais prova(s) cadastrada(s), não sendo possível excluir!.");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            finish();
+            startActivity(getIntent());
+        }
     }
 
 }

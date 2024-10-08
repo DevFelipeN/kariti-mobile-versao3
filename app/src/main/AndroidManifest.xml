@@ -56,14 +56,6 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
         <activity
-            android:name=".ilustracionVoidSchoolctivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".SplachActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".GaleriaActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

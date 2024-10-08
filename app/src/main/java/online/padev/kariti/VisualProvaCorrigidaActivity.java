@@ -207,7 +207,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                     filecsv  = criarDiretorio();
                     filePdf = "Corrigida_" + nomeProva + dataHoraAtual() + ".pdf";
                     GerarCsv.gerar(dadosProvaCorrigida, filecsv);// Gerando e salvando arquivo.csv
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
                         solicitaPermissao();
                     }else {
                         baixarCartoesV11();

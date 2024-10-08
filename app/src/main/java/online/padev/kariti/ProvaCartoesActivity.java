@@ -176,7 +176,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         filePdf = nomeProva + dataHoraAtual() + ".pdf"; //Cria um nome para o pdf
                         filecsv  = criarDiretorio(); //cria um diretorio interno para adicionar .csv
                         GerarCsv.gerar(dados, filecsv);// Gerando e salvando arquivo.csv
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
                             solicitaPermissao();
                         }else {
                             baixarCartoesV11();

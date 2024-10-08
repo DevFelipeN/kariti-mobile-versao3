@@ -19,15 +19,15 @@ public class BancoDados extends SQLiteOpenHelper {
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, DBNAME, null, 26);
+        super(context, DBNAME, null, 27);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
         try {
             base_dados.execSQL("PRAGMA foreign_keys=ON;");
             base_dados.execSQL("create Table usuario(id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
-            base_dados.execSQL("create Table validacao_usuario(id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INT NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
-            base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, id_usuario INT NOT NULL references usuario(id_usuario), status Integer not null check(status = 0 or status = 1))");
+            base_dados.execSQL("create Table validacao_usuario(id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INTEGER NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
+            base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, id_usuario INTEGER NOT NULL references usuario(id_usuario), status INTEGER not null check(status = 0 or status = 1))");
             base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_escola INTEGER not null references escola(id_escola))");
             base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null)");
             base_dados.execSQL("create Table alunosTurma(id_turma Integer not null references turma(id_turma), id_aluno Integer not null references aluno(id_aluno), primary key (id_turma, id_aluno))");

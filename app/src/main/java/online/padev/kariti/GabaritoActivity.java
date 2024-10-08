@@ -81,6 +81,7 @@ public class GabaritoActivity extends AppCompatActivity {
         txtViewData.setText(String.format("Data: %s", data));
 
         btnCadastrarProva.setOnClickListener(v -> {
+            btnCadastrarProva.setEnabled(false);
             boolean respostaSelecionada = false;
             boolean respostasNotasPreenchidas = true;
             for (RadioGroup radioGroup : listRadioGroups) {
@@ -237,7 +238,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
                 .setPositiveButton("OK", (dialog, which) -> {
                     finish();
-                    telaConfim();
+                    baixarCartoes();
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -250,7 +251,7 @@ public class GabaritoActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    public void telaConfim() {
+    public void baixarCartoes() {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
         intent.putExtra("prova", prova);
         intent.putExtra("id_turma", id_turma);
@@ -292,9 +293,7 @@ public class GabaritoActivity extends AppCompatActivity {
         builder.setTitle("ATENÇÃO!")
                 .setMessage("Ao confirmar essa ação, os dados dessa prova serão perdidos!\n\n" +
                         "Deseja realmente voltar?")
-                .setPositiveButton("SIM", (dialog, which) -> {
-                    finish();
-                })
+                .setPositiveButton("SIM", (dialog, which) -> finish())
                 .setNegativeButton("NÃO", (dialog, which) -> {
                     //CONTINUE
                 });

@@ -132,6 +132,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
             EditTxtQtdnonimos.setText(String.valueOf(mais));
         });
         btnSalvar.setOnClickListener(view -> {
+            btnSalvar.setEnabled(false);
             nomeTurmaAtual = editTxtTurma.getText().toString().trim();
             qtdAnonimosAtual = Integer.valueOf(EditTxtQtdnonimos.getText().toString());
             if (nomeTurmaAtual.trim().isEmpty()) {

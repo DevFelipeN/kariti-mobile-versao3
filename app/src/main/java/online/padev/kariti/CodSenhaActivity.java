@@ -122,9 +122,6 @@ public class CodSenhaActivity extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-               // if (editable.length() > 0) {
-                   // nextEditText.requestFocus();
-                //}
                 if (editable.length() == 0 && previousEditText != null) {
                     previousEditText.requestFocus();
                 }

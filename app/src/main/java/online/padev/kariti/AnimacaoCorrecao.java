@@ -27,11 +27,14 @@ public class AnimacaoCorrecao extends AppCompatActivity {
                 "Por favor, aguarde..."));
 
         titulo.setText(String.format("%s","Corrigindo..."));
-        btnVoltar.setOnClickListener(v -> getOnBackPressedDispatcher());
+        btnVoltar.setOnClickListener(v -> {
+            getOnBackPressedDispatcher();
+            finish();
+        });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                getOnBackPressedDispatcher();
+                finish();
             }
         });
     }

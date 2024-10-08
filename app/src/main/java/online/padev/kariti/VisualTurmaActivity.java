@@ -37,11 +37,6 @@ public class VisualTurmaActivity extends AppCompatActivity {
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
             finish();
         }
-        if (listaTurma.isEmpty()) {
-            Intent intent = new Intent(this, ilustracionVoidSchoolctivity.class);
-            startActivity(intent);
-            finish();
-        }
         EscolaAdapter adapter = new EscolaAdapter(this, listaTurma, listaTurma);
         listViewTurma.setAdapter(adapter);
 

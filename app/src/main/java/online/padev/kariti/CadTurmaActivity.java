@@ -121,6 +121,7 @@ public class CadTurmaActivity extends AppCompatActivity{
         });
 
         btnCadastrarTurma.setOnClickListener(v -> {
+            btnCadastrarTurma.setEnabled(false);
             try {
                 String turma = nomeTurma.getText().toString();
                 if(turma.trim().isEmpty()) {

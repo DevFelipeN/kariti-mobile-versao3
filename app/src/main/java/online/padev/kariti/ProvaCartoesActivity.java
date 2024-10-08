@@ -136,6 +136,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             }
         });
         btnBaixarCartoes.setOnClickListener(v -> {
+            btnBaixarCartoes.setEnabled(false);
             try {
                 if (!VerificaConexaoInternet.verificaConexao(this)) {
                     Toast.makeText(this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();

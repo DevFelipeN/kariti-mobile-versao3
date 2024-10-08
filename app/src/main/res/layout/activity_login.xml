@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BACKGROUND"
+    android:background="@drawable/fundo_night"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="online.padev.kariti.LoginActivity">
@@ -54,7 +54,7 @@
         style="@style/COLORTEXTINSERT"
         android:layout_width="320dp"
         android:layout_height="48dp"
-        android:autofillHints="name"
+        android:autofillHints="emailAddress"
         android:ems="15"
         android:hint="@string/email"
         android:inputType="text"
@@ -70,7 +70,7 @@
         style="@style/COLORTEXTINSERT"
         android:layout_width="320dp"
         android:layout_height="48dp"
-        android:autofillHints="username"
+        android:autofillHints="password"
         android:ems="10"
         android:hint="@string/senhahint"
         android:maxLength="16"
@@ -122,11 +122,11 @@
 
         <TextView
             android:id="@+id/textViewCriarConta"
+            style="@style/COLORTXTCLICK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:text="@string/criaConta"
-            android:textColor="@color/design_default_color_primary"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -135,12 +135,12 @@
 
         <Button
             android:id="@+id/buttonEsqueciSenhaL"
+            style="@style/COLORTXTCLICK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:background="@color/tranparente"
             android:text="@string/buttonEsqueciSenha"
-            android:textColor="@color/design_default_color_primary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

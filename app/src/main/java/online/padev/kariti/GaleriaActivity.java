@@ -84,11 +84,8 @@ public class GaleriaActivity extends AppCompatActivity {
                     datasImgs.clear();
                     try {
                         File dir = getCacheDir();
-                        Log.e("kariti","passei k1");
                         File fileJson = getOutputJson(dir);
-                        Log.e("kariti","passei k2");
                         UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
-                        Log.e("kariti","passei k3");
                         iniciaAnimacaoCorrecao();
                     } catch (Exception e){
                         Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
@@ -212,13 +209,10 @@ public class GaleriaActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private File getOutputImgs(){
-        // Obtém o diretório de arquivos externos privados da aplicação
-        File mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Altera para diretório de imagens
+        File mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        // Cria um diretório específico para o app dentro de "Pictures"
         File appDir = new File(mediaDir, "CameraXApp");
 
-        // Verifica se o diretório existe e, se não existir, tenta criá-lo
         if (!appDir.exists()) {
             Log.e("kariti", "diretorio não existe!!");
             return null;

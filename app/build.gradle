@@ -33,7 +33,6 @@ android {
             excludes += ['META-INF/NOTICE.md', 'META-INF/LICENSE.md', 'META-INF/DEPENDENCIES']
         }
     }
-
 }
 dependencies {
     implementation 'com.google.zxing:core:3.4.1'

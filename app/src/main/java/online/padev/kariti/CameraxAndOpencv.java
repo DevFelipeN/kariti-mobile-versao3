@@ -13,9 +13,14 @@ import android.graphics.ImageFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -101,32 +106,41 @@ public class CameraxAndOpencv extends AppCompatActivity {
             if(listCartoes.isEmpty()){
                 finish();
             }
-            try {
-                File fileZip = creatDirectoreZip();
-                File directoreImgs = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-                if(Compactador.compactador(directoreImgs, fileZip.getAbsolutePath())){
-                    listCartoes.clear();
+            Handler handler = new Handler(Looper.getMainLooper());
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
                     try {
-                        File dir = getCacheDir();
-                        File fileJson = getOutputJson(dir);
-                        UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
-                        iniciaAnimacaoCorrecao();
-                    } catch (Exception e){
-                        Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
-                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        File fileZip = creatDirectoreZip();
+                        File directoreImgs = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
+                        if(Compactador.compactador(directoreImgs, fileZip.getAbsolutePath())){
+                            listCartoes.clear();
+                            try {
+                                File dir = getCacheDir();
+                                File fileJson = getOutputJson(dir);
+                                UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
+                            } catch (Exception e){
+                                Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
+                                finish();
+                            }
+                        }else{
+                            Log.e("kariti", "Erro de compactação!!!");
+                        }
+                        mensagem(handler, "Correção finalizada!");
+                    }catch (Exception e){
+                        Log.e("kariti",e.getMessage());
                         finish();
                     }
-                }else Toast.makeText(this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
-            }catch (Exception e){
-                Log.e("kariti",e.getMessage());
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+                }
+            }.start();
+            iniciaAnimacaoCorrecao();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if(Compactador.listCartoes.isEmpty()){
+                    Compactador.id_provaOpenCV = 0;
                     finish();
                 }else{
                     avidoDeCancelamento();
@@ -355,6 +369,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 }
             }
             if(!isActivityFinishing && isQrCodePositive){
+                Compactador.id_provaOpenCV = id_provaBD;
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
                 Intent intent = new Intent(this, ViewImage.class);
@@ -540,7 +555,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
     public void iniciaAnimacaoCorrecao(){
         Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
         startActivity(intent);
-        finish();
     }
 
     public File creatDirectoreZip() {
@@ -658,6 +672,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                         "Deseja realmente voltar")
                 .setPositiveButton("SIM", (dialog, which) -> {
                     Compactador.listCartoes.clear();
+                    Compactador.id_provaOpenCV = 0;
                     finish();
                 })
                 .setNegativeButton("NÃO", (dialog, which) -> {
@@ -877,5 +892,55 @@ public class CameraxAndOpencv extends AppCompatActivity {
         //double epsilon = 0.05 * Imgproc.arcLength(cnt2f, true);  // Epsilon é a precisão (tamanho da aproximação)
         //Imgproc.approxPolyDP(cnt2f, approx, epsilon, true);
         return list;
+    }
+
+    private void mensagem(Handler handler, String msg){
+        if (!isFinishing() && !isDestroyed()) {
+            Log.e("tempo", "Fim");
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //Toast.makeText(ProvaActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    // Inflar o layout customizado
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.open_correction_details, null);
+
+                    // Inicializar os elementos do layout
+                    TextView inform = dialogView.findViewById(R.id.tituloInform);
+                    Button buttonYes = dialogView.findViewById(R.id.buttonYesOpen);
+                    Button buttonNot = dialogView.findViewById(R.id.buttonNotOpen);
+
+                    inform.setText("Prova(s) corrigida(s).\n  Deseja visualizar correção?");
+
+                    // Criar o AlertDialog
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(CameraxAndOpencv.this);
+                    builder.setCancelable(false);
+                    builder.setView(dialogView);
+                    // Mostrar o diálogo
+                    androidx.appcompat.app.AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    buttonYes.setOnClickListener(v -> {
+                        String[] x = bancoDados.pegarDadosProva(Compactador.id_provaOpenCV);
+                        String nameProva = x[0];
+                        String id_turma = x[1];
+                        String nameTurma = bancoDados.pegarNomeTurma(id_turma);
+                        Intent intent = new Intent(getApplicationContext(), VisualProvaCorrigidaActivity.class);
+                        intent.putExtra("id_prova", Compactador.id_provaOpenCV);
+                        intent.putExtra("prova", nameProva);
+                        intent.putExtra("turma", nameTurma);
+                        startActivity(intent);
+                        Compactador.id_provaOpenCV = 0;
+                        dialog.dismiss();
+                        finish();
+                    });
+
+                    buttonNot.setOnClickListener(v -> {
+                        dialog.dismiss();
+                        finish();
+                    });
+                }
+            });
+        }
     }
 }

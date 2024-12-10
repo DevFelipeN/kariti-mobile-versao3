@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-public class    VisualProvaActivity extends AppCompatActivity {
+public class VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button bntVisualProva;
     String nomeTurma, nomeProva;

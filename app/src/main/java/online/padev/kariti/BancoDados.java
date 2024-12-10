@@ -1194,6 +1194,31 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return dataProva;
     }
+
+    public String[] pegarDadosProva(Integer id_prova) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String[] x = new String[2];
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeProva, id_turma FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                x[0] = cursor.getString(0);
+                x[1] = cursor.getString(1);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar data da Prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return x;
+    }
     public Integer pegarIdAluno(String nomeAluno) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;

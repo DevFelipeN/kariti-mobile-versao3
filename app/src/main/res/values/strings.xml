@@ -32,7 +32,10 @@
     <string name="textViewconfirmar">Confirmar Senha*</string>
     <string name="EditTextInfoEscola">Informe o nome da escola</string>
     <string name="buttonCadastrar">Cadastrar</string>
+    <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
+    <string name="buttonCameraOpenCV">Capturar Agora</string>
     <string name="cadEscola">Cadastrar Escola</string>
+    <string name="CorrectOpenCv">Como deseja corrigir sua prova?</string>
     <string name="criaConta">Criar conta</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>

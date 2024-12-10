@@ -791,12 +791,12 @@ public class BancoDados extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteProvaPId(String id_prova){
+    public Boolean verificaExisteProvaPId(Integer id_prova){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova WHERE id_prova = ?", new String[]{id_prova});
+            cursor = base_dados.rawQuery("SELECT id_prova FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de prova por id no banco! "+e.getMessage());
@@ -1316,6 +1316,31 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
         return qtdQuestoes;
+    }
+
+    public Integer[] pegarQuestsAndAlts(Integer id_prova){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer[] questAlt = new Integer[2];
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT qtdQuestoes, qtdAlternativas FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                questAlt[0] = cursor.getInt(0);
+                questAlt[1] = cursor.getInt(1);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar quantidade de questões e alternativas! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return questAlt;
     }
     public Integer pegarQtdAlternativas(String id_prova) {
         SQLiteDatabase base_dados = null;

@@ -140,7 +140,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 qrCodeConteudo = qrCodeConteudo.replaceAll("#", "");
                 String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
                 String id_prova = partes[0];
-                Boolean verificaProva = bancoDados.verificaExisteProvaPId(id_prova);
+                Boolean verificaProva = bancoDados.verificaExisteProvaPId(Integer.valueOf(id_prova));
                 if(verificaProva == null){
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;

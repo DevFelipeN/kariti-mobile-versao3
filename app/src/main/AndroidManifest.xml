@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
@@ -31,21 +32,27 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
         <activity
-            android:name=".AnimacaoCorrecao"
-            android:screenOrientation="portrait"
+            android:name=".ViewImage"
             android:exported="false" />
+        <activity
+            android:name=".CameraxAndOpencv"
+            android:exported="false" />
+        <activity
+            android:name=".AnimacaoCorrecao"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EdicaoProva"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EditarProva"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DetalheCorrecao"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CameraxActivity"
             android:exported="false"

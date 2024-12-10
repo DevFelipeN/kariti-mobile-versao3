@@ -26,10 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/CorrectOpenCv"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCamera"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCameraopenCv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnvoltarOpencv" />
@@ -39,6 +40,9 @@
         style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/buttonCameraOpenCV"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonDispositivo"
@@ -51,11 +55,15 @@
         style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/buttonDispositivo"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCamera" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCameraopenCv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

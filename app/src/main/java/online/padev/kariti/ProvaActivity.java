@@ -246,9 +246,13 @@ public class ProvaActivity extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
+                //mensagem(handler, "Correção em andamento...");
                 processarArquivos(requestCode, resultCode, data, handler);
             }
         }.start();
+        if(data != null){
+            iniciaAnimacaoCorrecao();
+        }
     }
     private void processarArquivos(int requestCode, int resultCode, @Nullable Intent data, Handler handler){
         try {
@@ -267,7 +271,11 @@ public class ProvaActivity extends AppCompatActivity {
                         Uri uri = data.getData();
                         analisesFileType(uri);
                     }
+                }else{
+                    return;
                 }
+            }else{
+                return;
             }
             if (!Compactador.listCartoes.isEmpty()) {
                 try {
@@ -279,7 +287,6 @@ public class ProvaActivity extends AppCompatActivity {
                             File dir = getCacheDir();
                             File fileJson = getOutputJson(dir);
                             UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
-                            iniciaAnimacaoCorrecao();
                         } catch (Exception e){
                             Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
                             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
@@ -289,21 +296,59 @@ public class ProvaActivity extends AppCompatActivity {
                 }catch (Exception e){
                     Log.e("kariti",e.getMessage());
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                    finish();
+                    return;
                 }
             }
+            mensagem(handler, "Correção finalizada!!");
         }catch (Exception e){
             Log.e("ERRO", "ERRO AQUI44!!: "+e.toString());
         }
     }
     private void mensagem(Handler handler, String msg){
-        Log.e("tempo", "Fim");
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(ProvaActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (!isFinishing() && !isDestroyed()) {
+            Log.e("tempo", "Fim");
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //Toast.makeText(ProvaActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    // Inflar o layout customizado
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.open_correction_details, null);
+
+                    // Inicializar os elementos do layout
+                    TextView inform = dialogView.findViewById(R.id.tituloInform);
+                    Button buttonYes = dialogView.findViewById(R.id.buttonYesOpen);
+                    Button buttonNot = dialogView.findViewById(R.id.buttonNotOpen);
+
+                    inform.setText("Prova(s) corrigida(s).\n  Deseja visualizar correção?");
+
+                    // Criar o AlertDialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProvaActivity.this);
+                    builder.setCancelable(false);
+                    builder.setView(dialogView);
+                    // Mostrar o diálogo
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    buttonYes.setOnClickListener(v -> {
+                        String[] x = bancoDados.pegarDadosProva(id_provaBD);
+                        String nameProva = x[0];
+                        String id_turma = x[1];
+                        String nameTurma = bancoDados.pegarNomeTurma(id_turma);
+                        Intent intent = new Intent(getApplicationContext(), VisualProvaCorrigidaActivity.class);
+                        intent.putExtra("id_prova", id_provaBD);
+                        intent.putExtra("prova", nameProva);
+                        intent.putExtra("turma", nameTurma);
+                        startActivity(intent);
+                        dialog.dismiss();
+                    });
+
+                    buttonNot.setOnClickListener(v -> {
+                        dialog.dismiss();
+                    });
+                }
+            });
+        }
     }
 
     public void processesImage(Bitmap bitmap){
@@ -446,11 +491,7 @@ public class ProvaActivity extends AppCompatActivity {
                     if(!Compactador.listCartoes.contains(n)) {
                         Compactador.listCartoes.add(n);
                     }
-                }else{
-                    Toast.makeText(this, "QrCode não encontrado na imagem!!!", Toast.LENGTH_SHORT).show();
                 }
-            }else {
-                Toast.makeText(this, "Pontos de Interresse não encontrados!!!", Toast.LENGTH_SHORT).show();
             }
         }catch (Exception e){
             Log.e("ERRO", "ERRO AQUI55!!: "+e.toString());
@@ -603,7 +644,6 @@ public class ProvaActivity extends AppCompatActivity {
     public void iniciaAnimacaoCorrecao(){
         Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
         startActivity(intent);
-        finish();
     }
 
     private File getOutputJson(File dir){

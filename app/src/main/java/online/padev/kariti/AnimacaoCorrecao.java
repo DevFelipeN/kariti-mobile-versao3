@@ -21,9 +21,8 @@ public class AnimacaoCorrecao extends AppCompatActivity {
         titulo = findViewById(R.id.toolbar_title);
         informativo = findViewById(R.id.textViewInformativo);
 
-        informativo.setText(String.format(" %s ","Prova(s) enviada(s) para correção!\n\n" +
-                "Em instantes sua prova será corrigida. Após a correção, o resultado " +
-                "estará disponível na opção 'Visualizar Correção'\n\n" +
+        informativo.setText(String.format(" %s ","Correção em Andamento...\n\n" +
+                "Após a correção, o resultado estará disponível na opção 'Visualizar Correção'\n\n" +
                 "Por favor, aguarde..."));
 
         titulo.setText(String.format("%s","Corrigindo..."));

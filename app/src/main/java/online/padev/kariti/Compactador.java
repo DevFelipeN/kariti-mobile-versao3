@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Compactador{
     public static ArrayList<String> listCartoes = new ArrayList<>();
     public static ArrayList<String> datasImgs = new ArrayList<>();
+    public static Integer id_provaOpenCV;
     public static boolean compactador(File diretorioImg, String caminhoZip){
         List<String> arquivos = new ArrayList<>();
         for(String cartao : listCartoes){

@@ -148,7 +148,7 @@ public class ProvaActivity extends AppCompatActivity {
             return;
         }
         if(verificaExisteProvaCorrigida){
-            Intent intent = new Intent(this, VisualProvaActivity.class);
+            Intent intent = new Intent(this, VisualProvaActivity2.class);
             startActivity(intent);
         }else{
             aviso("provas corrigidas");

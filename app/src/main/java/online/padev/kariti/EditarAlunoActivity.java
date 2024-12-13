@@ -93,8 +93,13 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
         });
     }
     public void recarregarVisualAlunos(){
-        setResult(RESULT_OK);
-        finish();
+        if(bancoDados.verificaExisteAlunosPorEscola()){
+            setResult(RESULT_OK);
+            finish();
+        }else{
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 
     public void popMenuAluno(View v){

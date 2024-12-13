@@ -8,20 +8,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class VisualAlunoActivity extends AppCompatActivity {
     ImageButton btnVoltar;
     EditText pesquisarAlunos;
     ArrayList<String> listaAlunos;
+    FloatingActionButton btnCadAluno;
     MyAdapter adapterAluno;
-    TextView tituloAlunos, totalAlunos;
+    TextView tituloAlunos, totalAlunos, descricaoAddAluno;
     RecyclerView recyclerView;
     private static final int REQUEST_CODE = 1;
     private Integer id_aluno;
@@ -31,13 +42,15 @@ public class VisualAlunoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visual_aluno);
+        setContentView(R.layout.activity_visual_aluno2);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
+        btnCadAluno = findViewById(R.id.iconaddaluno);
         pesquisarAlunos = findViewById(R.id.editTextBuscar);
         recyclerView = findViewById(R.id.listSelecAluno);
         bancoDados = new BancoDados(this);
         totalAlunos = findViewById(R.id.totalAlunos);
+        descricaoAddAluno = findViewById(R.id.txtDescricaoAddAluno);
 
         tituloAlunos = findViewById(R.id.toolbar_title);
         tituloAlunos.setText(String.format("%s","Alunos"));
@@ -46,6 +59,9 @@ public class VisualAlunoActivity extends AppCompatActivity {
         if (listaAlunos == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
+        }
+        if(listaAlunos.isEmpty()){
+            carregarTelaCadastroAluno();
         }
 
         totalAlunos.setText(String.format("%s","Total de Alunos: "+ listaAlunos.size()));
@@ -65,6 +81,18 @@ public class VisualAlunoActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable){
             }
+        });
+        //Exibir o texto sobre o botão
+        descricaoAddAluno.setVisibility(View.VISIBLE);
+        descricaoAddAluno.setVisibility(View.VISIBLE);
+        // Ocultar o texto após 3 segundos
+        new Handler().postDelayed(() -> descricaoAddAluno.setVisibility(View.INVISIBLE), 10000);
+        new Handler().postDelayed(() -> descricaoAddAluno.setVisibility(View.INVISIBLE), 10000);
+
+        btnCadAluno.setOnClickListener(v -> {
+            descricaoAddAluno.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() -> descricaoAddAluno.setVisibility(View.INVISIBLE), 3000);
+            carregarTelaCadastroAluno();
         });
         btnVoltar.setOnClickListener(view -> {
             getOnBackPressedDispatcher();
@@ -107,13 +135,16 @@ public class VisualAlunoActivity extends AppCompatActivity {
                         if (deletaAluno) {
                             listaAlunos.remove(position);
                             adapterAluno.notifyItemRemoved(position);
+                            if(listaAlunos.isEmpty()){
+                                finish();
+                            }
                             Toast.makeText(VisualAlunoActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
                         }else
                             Toast.makeText(VisualAlunoActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
                     }else avisoNotExluirAluno();
                 })
                 .setNegativeButton("Não", (dialog, which) -> {
-                    //cancelou
+                    dialog.dismiss();
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -121,9 +152,15 @@ public class VisualAlunoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("kariti", String.valueOf(requestCode));
+        Log.e("kariti", String.valueOf(resultCode));
         if (requestCode == REQUEST_CODE) {
-            finish();
-            startActivity(getIntent());
+            if(resultCode == RESULT_OK){
+                finish();
+                startActivity(getIntent());
+            }else{
+                finish();
+            }
         }
     }
     private void avisoNotExluirAluno(){
@@ -133,5 +170,80 @@ public class VisualAlunoActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void carregarTelaCadastroAluno(){
+        Intent intent = new Intent(this, CadAlunoActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    private void cadastrarNovosAlunos() {
+        // Inflar o layout customizado
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.activity_cad_aluno, null);
+
+        // Inicializar os elementos do layout
+        EditText editTextAluno = findViewById(R.id.editTextAlunoCad);
+        EditText editTextEmail = findViewById(R.id.editTextEmailCad);
+        ImageButton voltar = findViewById(R.id.imgBtnVoltaEscola);
+        Button btnCadastrar = findViewById(R.id.buttonSalvarEdit);
+
+        Log.e("kariti", "AQUI"+editTextAluno.toString());
+
+        // Criar o AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(dialogView);
+        // Mostrar o diálogo
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        btnCadastrar.setOnClickListener(v -> {
+            String nome = editTextAluno.getText().toString();
+            String email = editTextEmail.getText().toString();
+            if (nome.trim().isEmpty()) {
+                Toast.makeText(this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Boolean verificaAluno = bancoDados.verificaExisteAlunoPNome(nome);
+            if(verificaAluno == null){
+                Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (verificaAluno) {
+                Toast.makeText(this, "Identificamos que esse aluno já está cadastrado!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!email.trim().isEmpty()) {
+                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    Toast.makeText(this, "E-mail do aluno, inválido!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Boolean verificaEmail = bancoDados.verificaExisteEmailAluno(email);
+                if(verificaEmail == null){
+                    Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (verificaEmail){
+                    Toast.makeText(this, "Este e-mail já esta vinculado a um aluno cadastrado!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            Integer inserirtAluno = bancoDados.cadastrarAluno(nome, email, 1);
+            if (inserirtAluno != -1) {
+                listaAlunos.add(nome);
+                Collections.sort(listaAlunos);
+                adapterAluno.notifyDataSetChanged();
+                dialog.dismiss();
+                Toast.makeText(this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        voltar.setOnClickListener(v -> {
+            dialog.dismiss();//Fecha o diálogo
+        });
     }
 }

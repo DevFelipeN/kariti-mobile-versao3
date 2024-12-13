@@ -31,7 +31,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     String alunoSelecionado;
     Integer id_turma = 0;
     AdapterExclAluno adapterAlunos;
-    TextView titulo;
+    TextView titulo, tituloAlunos;
     ArrayList<String> listadAlunos = new ArrayList<>(), nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,9 @@ public class CadTurmaActivity extends AppCompatActivity{
         iconAjudaCadturma = findViewById(R.id.iconHelp);
         listarAlunosListView = findViewById(R.id.listViewCadTurma);
         titulo = findViewById(R.id.toolbar_title);
+        tituloAlunos = findViewById(R.id.textViewAlunos);
 
-        titulo.setText(String.format("%s","Cadastro"));
+        titulo.setText(String.format("%s","Nova Turma"));
 
         nomeTurma = findViewById(R.id.editTextTurmaCad);
         btnCadastrarTurma = findViewById(R.id.buttonCadastrarTurma);
@@ -54,11 +55,20 @@ public class CadTurmaActivity extends AppCompatActivity{
         menosAnonimos = findViewById(R.id.imageViewMenosAnonimos);
         maisAnonimos = findViewById(R.id.imageViewMaisAnonimos);
 
+        listarAlunosListView.setVisibility(View.GONE);
+        tituloAlunos.setVisibility(View.GONE);
+
         bancoDados = new BancoDados(this);
 
         nomesAluno = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
-        nomesAluno.add(0, "Selecione os Alunos");
-        nomesAluno.add(1, "Todos");
+        if (!nomesAluno.isEmpty()){
+            nomesAluno.add(0, "Selecionar Alunos");
+            nomesAluno.add(1, "Todos");
+        }else {
+            spinnerAluno.setVisibility(View.GONE);
+            listarAlunosListView.setVisibility(View.GONE);
+        }
+
         SpinnerAdapter adapter = new SpinnerAdapter(this, nomesAluno);
         spinnerAluno.setAdapter(adapter);
         spinnerAluno.setSelection(0);
@@ -77,6 +87,8 @@ public class CadTurmaActivity extends AppCompatActivity{
                         }
                         adapterAlunos = new AdapterExclAluno(CadTurmaActivity.this, listadAlunos);
                         listarAlunosListView.setAdapter(adapterAlunos);
+                        listarAlunosListView.setVisibility(View.VISIBLE);
+                        tituloAlunos.setVisibility(View.VISIBLE);
                         adapterAlunos.notifyDataSetChanged();
                         spinnerAluno.setSelection(1);
                     }else {
@@ -93,6 +105,8 @@ public class CadTurmaActivity extends AppCompatActivity{
                             listadAlunos.add(alunoSelecionado);
                             adapterAlunos = new AdapterExclAluno(CadTurmaActivity.this, listadAlunos);
                             listarAlunosListView.setAdapter(adapterAlunos);
+                            listarAlunosListView.setVisibility(View.VISIBLE);
+                            tituloAlunos.setVisibility(View.VISIBLE);
                             adapterAlunos.notifyDataSetChanged();
                             spinnerAluno.setSelection(0);
                         }
@@ -105,6 +119,10 @@ public class CadTurmaActivity extends AppCompatActivity{
         });
         listarAlunosListView.setOnItemClickListener((adapterView, view, i, l) -> {
             listadAlunos.remove(i);
+            if(listadAlunos.isEmpty()){
+                listarAlunosListView.setVisibility(View.GONE);
+                tituloAlunos.setVisibility(View.GONE);
+            }
             adapterAlunos.notifyDataSetChanged();
             Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
         });

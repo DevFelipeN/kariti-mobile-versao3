@@ -98,7 +98,7 @@ public class VisualProvaActivity extends AppCompatActivity {
             return;
         }
         nomeProva = spinnerProva.getSelectedItem().toString();
-        id_prova = bancoDados.pegarIdProva(nomeProva, id_turma);
+        id_prova = bancoDados.pegarIdProvaPorTurma(nomeProva, id_turma);
         if (id_prova == null){
             Toast.makeText(VisualProvaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
             return;

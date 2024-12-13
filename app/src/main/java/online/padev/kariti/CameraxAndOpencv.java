@@ -896,7 +896,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
     private void mensagem(Handler handler, String msg){
         if (!isFinishing() && !isDestroyed()) {
-            Log.e("tempo", "Fim");
             handler.post(new Runnable() {
                 @Override
                 public void run() {

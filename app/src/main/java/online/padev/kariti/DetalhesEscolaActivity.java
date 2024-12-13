@@ -64,7 +64,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void carregarTelaAluno(){
-        Intent intent = new Intent(this, AlunoActivity.class);
+        Intent intent = new Intent(this, VisualAlunoActivity.class);
         startActivity(intent);
     }
     public void carregarTelaProva(){

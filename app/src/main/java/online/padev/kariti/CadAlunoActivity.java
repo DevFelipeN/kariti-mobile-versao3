@@ -64,19 +64,28 @@ public class CadAlunoActivity extends AppCompatActivity {
             Integer inserirtAluno = bancoDados.cadastrarAluno(nome, email, 1);
             if (inserirtAluno != -1) {
                 Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                finish();
+                recarregarVisualAluno();
             } else {Toast.makeText(CadAlunoActivity.this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();}
 
         });
         voltar.setOnClickListener(view -> {
             getOnBackPressedDispatcher();
-            finish();
+            recarregarVisualAluno();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
+                recarregarVisualAluno();
             }
         });
+    }
+    public void recarregarVisualAluno(){
+        if(bancoDados.verificaExisteAlunosPorEscola()){
+            setResult(RESULT_OK);
+            finish();
+        }else{
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 }

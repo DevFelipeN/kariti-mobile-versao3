@@ -75,6 +75,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".VisualProvaActivity2"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ProvaCartoesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

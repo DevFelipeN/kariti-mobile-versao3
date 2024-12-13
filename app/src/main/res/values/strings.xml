@@ -23,6 +23,7 @@
     <string name="nomeEscola">Nome da Escola</string>
     <string name="escolaArquivada">Escolas arquivadas</string>
     <string name="maisEscola">Mais Escolas</string>
+    <string name="maisAluno">Cadastrar Aluno(s)</string>
     <string name="acessoSenha">Digite sua senha</string>
     <string name="descricioniconwelcome">Icone Welcome</string>
     <string name="novaSenha">Nova senha*</string>
@@ -59,6 +60,7 @@
     <string name="buttonEsqueciSenha">Esqueci Minha Senha</string>
     <string name="textViewLoginEntrar">Entre com seu Login*</string>
     <string name="textViewInformeSenha">Informe Sua Senha*</string>
+    <string name="textViewFiltro">Filtro por turma</string>
     <string name="btnEntrar">Entrar</string>
     <string name="msg_erro">Dados Incorretos!</string>
     <string name="voidSchool">Nenhum Dado Cadastrado!</string>
@@ -107,7 +109,7 @@
     <!--    Prova-->
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
-    <string name="buttonVisuProva">Visualizar Correção</string>
+    <string name="buttonVisuProva">Visualizar Provas</string>
     <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
     <string name="editTextNomeProva">Digite o nome  da prova*</string>

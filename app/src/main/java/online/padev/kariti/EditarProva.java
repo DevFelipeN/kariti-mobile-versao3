@@ -88,7 +88,7 @@ public class EditarProva extends AppCompatActivity {
             return;
         }
         provaSelecionada = (String) prova.getSelectedItem();
-        Integer id_prova = bancoDados.pegarIdProva(provaSelecionada, id_turma);
+        Integer id_prova = bancoDados.pegarIdProvaPorTurma(provaSelecionada, id_turma);
         if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
             naoEditavel();
         }else {
@@ -103,7 +103,7 @@ public class EditarProva extends AppCompatActivity {
         if(prova.getSelectedItem() == null)
             return;
         provaSelecionada = (String) prova.getSelectedItem();
-        Integer id_prova = bancoDados.pegarIdProva(provaSelecionada, id_turma);
+        Integer id_prova = bancoDados.pegarIdProvaPorTurma(provaSelecionada, id_turma);
         if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
             avisoSeApagar(id_prova);
         }else{

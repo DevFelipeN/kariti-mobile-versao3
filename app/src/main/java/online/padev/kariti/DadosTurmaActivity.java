@@ -62,13 +62,12 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
         listViewAlunos.setAdapter(adapter);
 
         voltar.setOnClickListener(view -> {
-            getOnBackPressedDispatcher();
-            finish();
+            recarregarVisualTurma();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
+                recarregarVisualTurma();
             }
         });
     }

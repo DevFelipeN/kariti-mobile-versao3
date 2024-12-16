@@ -1,8 +1,6 @@
 package online.padev.kariti;
 
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
-
-import static online.padev.kariti.Compactador.datasImgs;
 import static online.padev.kariti.Compactador.listCartoes;
 
 import android.app.AlertDialog;
@@ -323,7 +321,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 Point end = new Point(listOrganized.get(0).x, listOrganized.get(0).y);
                 Imgproc.line(matAux, start, end, new Scalar(0, 0, 255), 1);
             }
-
             //Converte imagem para ser mostrada na tela
             Bitmap imgBitmap = matToBitmap(matAux);
 
@@ -365,7 +362,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     isQrCodePositive = true;
                     nameCartao = resultQrCode+"_"+questionsBD+"_"+alternativesBD;
                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
-                    saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
+                    //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
                 }
             }
             if(!isActivityFinishing && isQrCodePositive){

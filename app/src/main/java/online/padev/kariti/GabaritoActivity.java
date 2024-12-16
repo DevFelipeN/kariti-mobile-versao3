@@ -108,17 +108,23 @@ public class GabaritoActivity extends AppCompatActivity {
                 if(status.equals("novaProva")) {
                     id_prova = bancoDados.cadastrarProva(prova, dataForm, quest, alter, id_turma);
                     if(id_prova == null || id_prova == -1){
-                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }else{
                     if(bancoDados.deletarGabarito(id_prova)){
+                        Log.e("Dados", id_prova.toString());
+                        Log.e("Dados", prova);
+                        Log.e("Dados", dataForm);
+                        Log.e("Dados", id_turma.toString());
+                        Log.e("Dados", quest.toString());
+                        Log.e("Dados", alter.toString());
                         if(!bancoDados.alterarDadosProva(id_prova, prova, dataForm, id_turma, quest, alter)){
-                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 2", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }else{
-                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 3", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }

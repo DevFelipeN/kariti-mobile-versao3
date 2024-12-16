@@ -26,7 +26,7 @@ public class UploadEjson {
     public static void enviarArquivosP(File arquivo, FileOutputStream fos, File dir, BancoDados bancoDados) {
         Thread thread = new Thread(() -> {
             try {
-                String URL = "http://kariti.online/src/pages/test/correct_test/core.php";
+                String URL = "http://kariti.online/src/pages/test/correct_test/core2.php";
                 HttpClient client = new DefaultHttpClient();
                 HttpPost post = new HttpPost(URL);
 
@@ -45,11 +45,8 @@ public class UploadEjson {
                     fos.write(inByte);
                 is.close();
                 fos.close();
-                Log.e("kariti","passei 0");
                 UploadEjson.fimUpload(dir, bancoDados);
             } catch (Exception e) {
-                Log.e("kariti","passei 000");
-                Log.e("kariti","Erro: "+e.getMessage());
                 AnimacaoCorrecao.encerra("erro");
             }
         });
@@ -68,6 +65,7 @@ public class UploadEjson {
                     id_prova = objJson.getInt("id_prova");
                     id_aluno = objJson.getInt("id_aluno");
                     mensagem = objJson.getString("mensagem");
+                    Log.e("correcao: ", mensagem);
                     Map<Integer, Integer> respostasProva = new HashMap<>();
 
                     if(resultCorrect.equals(0)){
@@ -101,7 +99,6 @@ public class UploadEjson {
                 if (bancoDados.cadastrarCorrecao(provas)){
                     Log.e("kariti","passei 1");
                     AnimacaoCorrecao.encerra("sucesso");
-
                 }else{
                     Log.e("kariti","passei 2");
                     AnimacaoCorrecao.encerra("erro");

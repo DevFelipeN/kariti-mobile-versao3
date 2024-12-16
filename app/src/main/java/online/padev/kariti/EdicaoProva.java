@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -226,6 +227,7 @@ public class EdicaoProva extends AppCompatActivity {
         intent.putExtra("turma", novaTurma);
         intent.putExtra("data", novaData);
         intent.putExtra("dataForm", dataFormatada);
+        Log.e("Dados", dataFormatada);
         intent.putExtra("quest", novaQuestao);
         intent.putExtra("alter", novaAlternativa);
         intent.putExtra("status", "atualizacao");

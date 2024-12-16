@@ -29,6 +29,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
+        //bancoDados.deletarCorrecao(2);
+
+
         if(bancoDados.verificaExisteEmail("karitimobile@gmail.com") == null) {
             bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
         }

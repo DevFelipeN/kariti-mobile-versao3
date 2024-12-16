@@ -1,7 +1,6 @@
 package online.padev.kariti;
 
 import android.util.Log;
-
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import java.io.File;

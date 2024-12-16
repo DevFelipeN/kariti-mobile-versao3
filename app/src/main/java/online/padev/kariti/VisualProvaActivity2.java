@@ -69,20 +69,17 @@ public class VisualProvaActivity2 extends AppCompatActivity {
         spinnerTurma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position != 0){
-                    nomeTurma = spinnerTurma.getSelectedItem().toString();
-                    id_turma = bancoDados.pegarIdTurma(nomeTurma);
-                    listaProvas.clear();
-                    listaProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
-                    if (listaProvas == null){
-                        Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                    recyclerView.setLayoutManager(new LinearLayoutManager(VisualProvaActivity2.this));
-                    adapterAluno = new MyAdapter(VisualProvaActivity2.this, listaProvas, VisualProvaActivity2.this::onItemClick, VisualProvaActivity2.this::onItemLongClick);
-                    recyclerView.setAdapter(adapterAluno);
-
+                nomeTurma = spinnerTurma.getSelectedItem().toString();
+                id_turma = bancoDados.pegarIdTurma(nomeTurma);
+                listaProvas.clear();
+                listaProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
+                if (listaProvas == null){
+                    Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
+                recyclerView.setLayoutManager(new LinearLayoutManager(VisualProvaActivity2.this));
+                adapterAluno = new MyAdapter(VisualProvaActivity2.this, listaProvas, VisualProvaActivity2.this::onItemClick, VisualProvaActivity2.this::onItemLongClick);
+                recyclerView.setAdapter(adapterAluno);
             }
 
             @Override

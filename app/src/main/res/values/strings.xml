@@ -23,7 +23,8 @@
     <string name="nomeEscola">Nome da Escola</string>
     <string name="escolaArquivada">Escolas arquivadas</string>
     <string name="maisEscola">Mais Escolas</string>
-    <string name="maisAluno">Cadastrar Aluno(s)</string>
+    <string name="maisAluno">Cadastrar Aluno(a)</string>
+    <string name="maisTurma">Cadastrar Turma</string>
     <string name="acessoSenha">Digite sua senha</string>
     <string name="descricioniconwelcome">Icone Welcome</string>
     <string name="novaSenha">Nova senha*</string>

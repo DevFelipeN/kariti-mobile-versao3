@@ -152,8 +152,6 @@ public class VisualAlunoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("kariti", String.valueOf(requestCode));
-        Log.e("kariti", String.valueOf(resultCode));
         if (requestCode == REQUEST_CODE) {
             if(resultCode == RESULT_OK){
                 finish();
@@ -177,73 +175,4 @@ public class VisualAlunoActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE);
     }
 
-    private void cadastrarNovosAlunos() {
-        // Inflar o layout customizado
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.activity_cad_aluno, null);
-
-        // Inicializar os elementos do layout
-        EditText editTextAluno = findViewById(R.id.editTextAlunoCad);
-        EditText editTextEmail = findViewById(R.id.editTextEmailCad);
-        ImageButton voltar = findViewById(R.id.imgBtnVoltaEscola);
-        Button btnCadastrar = findViewById(R.id.buttonSalvarEdit);
-
-        Log.e("kariti", "AQUI"+editTextAluno.toString());
-
-        // Criar o AlertDialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setView(dialogView);
-        // Mostrar o diálogo
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        btnCadastrar.setOnClickListener(v -> {
-            String nome = editTextAluno.getText().toString();
-            String email = editTextEmail.getText().toString();
-            if (nome.trim().isEmpty()) {
-                Toast.makeText(this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Boolean verificaAluno = bancoDados.verificaExisteAlunoPNome(nome);
-            if(verificaAluno == null){
-                Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (verificaAluno) {
-                Toast.makeText(this, "Identificamos que esse aluno já está cadastrado!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!email.trim().isEmpty()) {
-                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    Toast.makeText(this, "E-mail do aluno, inválido!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Boolean verificaEmail = bancoDados.verificaExisteEmailAluno(email);
-                if(verificaEmail == null){
-                    Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (verificaEmail){
-                    Toast.makeText(this, "Este e-mail já esta vinculado a um aluno cadastrado!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            Integer inserirtAluno = bancoDados.cadastrarAluno(nome, email, 1);
-            if (inserirtAluno != -1) {
-                listaAlunos.add(nome);
-                Collections.sort(listaAlunos);
-                adapterAluno.notifyDataSetChanged();
-                dialog.dismiss();
-                Toast.makeText(this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        voltar.setOnClickListener(v -> {
-            dialog.dismiss();//Fecha o diálogo
-        });
-    }
 }

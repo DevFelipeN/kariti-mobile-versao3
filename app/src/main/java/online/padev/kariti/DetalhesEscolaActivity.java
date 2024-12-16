@@ -60,7 +60,7 @@ public class DetalhesEscolaActivity extends AppCompatActivity {
         });
     }
     public void carregarTelaTurma(){
-        Intent intent = new Intent(this, TurmaActivity.class);
+        Intent intent = new Intent(this, VisualTurmaActivity.class);
         startActivity(intent);
     }
     public void carregarTelaAluno(){

@@ -188,22 +188,31 @@ public class CadTurmaActivity extends AppCompatActivity{
                     }
                 }
                 Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
-                finish();
+                recarregarVisualTurma();
             }catch (Exception e){
                 Toast.makeText(this, "Erro: turma não cadastrada corretamente!!", Toast.LENGTH_SHORT).show();
-                finish();
+                recarregarVisualTurma();
             }
         });
         voltar.setOnClickListener(view -> {
             getOnBackPressedDispatcher();
-            finish();
+            recarregarVisualTurma();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
+                recarregarVisualTurma();
             }
         });
+    }
+    public void recarregarVisualTurma(){
+        if(bancoDados.verificaExisteTurmas()){
+            setResult(RESULT_OK);
+            finish();
+        }else{
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
     public void aviso(){
         AlertDialog.Builder builder = new AlertDialog.Builder(CadTurmaActivity.this);

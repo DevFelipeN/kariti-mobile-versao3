@@ -5,28 +5,36 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class VisualTurmaActivity extends AppCompatActivity {
     ImageButton btnVoltar;
+    FloatingActionButton btnCadTurma;
     ListView listViewTurma;
     ArrayList<String> listaTurma;
-    TextView titulo;
+    TextView titulo, descricaoTurma;
     Integer id_turma;
     BancoDados bancoDados;
     private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visual_turma);
+        setContentView(R.layout.activity_visual_turma2);
 
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         listViewTurma = findViewById(R.id.listViewVisualTurma);
+        descricaoTurma = findViewById(R.id.txtDescricaoAddTurma);
         titulo = findViewById(R.id.toolbar_title);
+        btnCadTurma = findViewById(R.id.iconaddTurma);
 
         titulo.setText(String.format("%s","Turmas"));
 
@@ -36,6 +44,9 @@ public class VisualTurmaActivity extends AppCompatActivity {
         if (listaTurma == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
             finish();
+        }
+        if(listaTurma.isEmpty()){
+            carregarTelaCadTurma();
         }
         EscolaAdapter adapter = new EscolaAdapter(this, listaTurma, listaTurma);
         listViewTurma.setAdapter(adapter);
@@ -82,6 +93,14 @@ public class VisualTurmaActivity extends AppCompatActivity {
             alertDialog.show();
             return true;
         });
+
+        //Exibir o texto sobre o botão
+        descricaoTurma.setVisibility(View.VISIBLE);
+        descricaoTurma.setVisibility(View.VISIBLE);
+        // Ocultar o texto após 3 segundos
+        new Handler().postDelayed(() -> descricaoTurma.setVisibility(View.INVISIBLE), 10000);
+        new Handler().postDelayed(() -> descricaoTurma.setVisibility(View.INVISIBLE), 10000);
+        btnCadTurma.setOnClickListener(v -> carregarTelaCadTurma());
         btnVoltar.setOnClickListener(view -> {
             getOnBackPressedDispatcher();
             finish();
@@ -103,9 +122,18 @@ public class VisualTurmaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
-            finish();
-            startActivity(getIntent());
+            if(resultCode == RESULT_OK){
+                finish();
+                startActivity(getIntent());
+            }else{
+                finish();
+            }
         }
+    }
+
+    private void carregarTelaCadTurma(){
+        Intent intent = new Intent(this, CadTurmaActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
 }

@@ -161,7 +161,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                             return;
                         }
                     }else {
-                        Integer id_al = bancoDados.pegarIdAluno(aluno);
+                        listIdsAlunos = new ArrayList<>();
+                        Integer id_al = bancoDados.pegarIdAlunoPorTurma(aluno, id_turma);
                         listIdsAlunos.add(id_al);
                     }
 
@@ -183,7 +184,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         }
                     }catch (Exception e){
                         Log.e("kariti","Erro: "+e.getMessage());
-                        Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -191,7 +192,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Log.e("kariti",e.getMessage());
-                Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente 2", Toast.LENGTH_SHORT).show();
             }
 
         });

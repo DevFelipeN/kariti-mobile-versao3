@@ -1242,6 +1242,29 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return id_aluno;        
     }
+    public Integer pegarIdAlunoPorTurma(String nomeAluno, Integer id_turma) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer id_aluno = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE nomeAluno = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)", new String[]{nomeAluno, id_turma.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                id_aluno = cursor.getInt(0);
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar id do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return id_aluno;
+    }
 
     /**
      * Este método pega id de uma determinda escola

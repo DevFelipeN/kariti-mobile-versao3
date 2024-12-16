@@ -41,7 +41,7 @@ import java.util.Locale;
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixarCartoes;
-    ArrayList<String> listaAlunos, respostasDadas, gabarito;
+    ArrayList<String> respostasDadas, gabarito;
     ArrayList<Integer> listaIdAlunos;
     Integer id_prova, id_aluno, qtdQuestoesProva;
     String nomeProva, nomeTurma, filePdf;
@@ -64,7 +64,6 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         titulo = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);
-        listaAlunos = new ArrayList<>();
 
         titulo.setText(String.format("%s","Provas Corrigidas"));
 

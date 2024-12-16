@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -88,6 +87,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
         camera = findViewById(R.id.previewCameraX);
         cameraExecutor = Executors.newSingleThreadExecutor();
         edgeImageView = findViewById(R.id.edgeImageView);
+
+        if(listCartoes.isEmpty()){
+            encerrar.setVisibility(View.INVISIBLE);
+        }
 
         bancoDados = new BancoDados(this);
 

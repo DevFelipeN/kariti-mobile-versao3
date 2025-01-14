@@ -184,6 +184,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             });
         }
         btnBaixarCartoes.setOnClickListener(v -> {
+            btnBaixarCartoes.setEnabled(false);
+            solicitaPermissaoNotificacao();
             try {
                 dadosProvaCorrigida = new ArrayList<>();
                 String prof = bancoDados.pegarNomeUsuario();
@@ -301,11 +303,26 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 // Informe ao usuário que a permissão é necessária ou tome uma ação adequada
             }
         }
+        if (requestCode == 101){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permissão concedida!", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permissão negada, exiba uma mensagem explicativa ao usuário
+                permissaoDNotificacaoNegada();
+            }
+        }
     }
     public void permissaoNegada(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Para realizar o download do resultado de correção em seu dispositivo, é necessário que conceda permissão ao Kariti! .");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+    public void permissaoDNotificacaoNegada(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("O Kariti não será capaz de notifica-lo sobre os downloads realizados! .");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
@@ -316,7 +333,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             downloadResultadoCorrecao.solicitarResultadoCorrecao(new FileOutputStream(fSaida), fSaida, (DownloadManager) getSystemService(DOWNLOAD_SERVICE));
             AlertDialog.Builder builder = new AlertDialog.Builder(VisualProvaCorrigidaActivity.this);
             builder.setTitle("Por favor, Aguarde!")
-                    .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado.");
+                    .setMessage("Download em execução. Você será notificado quando o arquivo estiver baixado. Caso não seja, verifique sua pasta de Downloads!");
             builder.setPositiveButton("OK", (dialog, which) -> {
                 dialog.dismiss();
                 finish();
@@ -343,6 +360,13 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             alertDialog.show();
         } catch (Exception e) {
             Log.e("Kariti", e.toString());
+        }
+    }
+    private void solicitaPermissaoNotificacao(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101); // Código de solicitação
+            }
         }
     }
     private void solicitaPermissao(){

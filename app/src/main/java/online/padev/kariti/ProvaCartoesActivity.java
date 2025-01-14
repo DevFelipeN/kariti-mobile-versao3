@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -137,6 +138,8 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         });
         btnBaixarCartoes.setOnClickListener(v -> {
             btnBaixarCartoes.setEnabled(false);
+            solicitaPermissaoNotificacao();
+
             try {
                 if (!VerificaConexaoInternet.verificaConexao(this)) {
                     Toast.makeText(this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
@@ -165,7 +168,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         Integer id_al = bancoDados.pegarIdAlunoPorTurma(aluno, id_turma);
                         listIdsAlunos.add(id_al);
                     }
-
                     dados.add(new String[]{"ID_PROVA", "NOME_PROVA", "NOME_PROFESSOR", "NOME_TURMA", "DATA_PROVA", "NOTA_PROVA", "QTD_QUESTOES", "QTD_ALTERNATIVAS", "ID_ALUNO", "NOME_ALUNO"});
                     for (int id : listIdsAlunos) {
                         String nomeAluno = bancoDados.pegaNomeAluno(id);
@@ -186,9 +188,6 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         Log.e("kariti","Erro: "+e.getMessage());
                         Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
                     }
-
-
-
                 }else Toast.makeText(ProvaCartoesActivity.this, "Selecione os dados", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Log.e("kariti",e.getMessage());
@@ -227,22 +226,32 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         }
     }
     private void baixarCartoesV11(){
+
         try {
             DownloadCartoes downloadCartoes = new DownloadCartoes(filecsv, this, filePdf);
             downloadCartoes.baixarCartoesV11();
             AlertDialog.Builder builder = new AlertDialog.Builder(ProvaCartoesActivity.this);
             builder.setTitle("Por favor, Aguarde!")
-                    .setMessage("Download em execução. Você será notificado quando o arquivo for baixado!");
+                    .setMessage("Download em execução. Você será notificado quando o arquivo for baixado. Caso não seja, verifique sua pasta de Downloads!");
             builder.setPositiveButton("OK", (dialog, which) -> {
                 dialog.dismiss();
                 finish();
             });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-        } catch (Exception e) {
+        } catch (Exception e){
             Log.e("Kariti", e.toString());
         }
     }
+
+    private void solicitaPermissaoNotificacao(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101); // Código de solicitação
+            }
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -258,10 +267,26 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                 // Informe ao usuário que a permissão é necessária ou tome uma ação adequada
             }
         }
-    }public void permissaoNegada(){
+        if (requestCode == 101){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permissão concedida!", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permissão negada, exiba uma mensagem explicativa ao usuário
+                permissaoDNotificacaoNegada();
+            }
+        }
+    }
+    public void permissaoNegada(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Para realizar o download dos cartões resposta em seu dispositivo, é necessário que conceda permissão ao Kariti! .");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+    public void permissaoDNotificacaoNegada(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("O Kariti não será capaz de notifica-lo sobre os downloads realizados! .");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }

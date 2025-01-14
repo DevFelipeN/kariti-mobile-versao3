@@ -6,13 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.SortedList;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
@@ -1908,12 +1914,24 @@ public class BancoDados extends SQLiteOpenHelper {
                         if (resposta.equals("0")) {
                             aux = "-";
                         } else {
-                            aux = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(0))) - 1 + 'A'));
-                        }
-                        for (int i = 1; i < resposta.length(); i++) {
-                            if (!String.valueOf(resposta.charAt(i)).equals("0")){
-                                aux += "+" + String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                            List<String> resp = new ArrayList<>();
+                            for (int i = 0; i < resposta.length(); i++) {
+                                if (!String.valueOf(resposta.charAt(i)).equals("0")){
+                                    String dupli = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
+                                    resp.add(dupli);
+                                }
                             }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                resp.sort((a, b) -> a.compareTo(b));
+                            }else{
+                                Collections.sort(resp, new Comparator<String>() {
+                                    @Override
+                                    public int compare(String o1, String o2) {
+                                        return o1.compareTo(o2);
+                                    }
+                                });
+                            }
+                            aux = String.join("",resp);
                         }
                         respostasDadas.add(aux);
                     }

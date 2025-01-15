@@ -65,7 +65,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import online.padev.kariti.Correction.Util;
+import online.padev.kariti.correction.Util;
 
 public class CameraxAndOpencv extends AppCompatActivity {
 
@@ -89,6 +89,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
         camera = findViewById(R.id.previewCameraX);
         cameraExecutor = Executors.newSingleThreadExecutor();
         edgeImageView = findViewById(R.id.edgeImageView);
+
+        //String test = Util.getOurSqr();
+
+        //Toast.makeText(this, test, Toast.LENGTH_SHORT).show();
 
         if(listCartoes.isEmpty()){
             encerrar.setVisibility(View.INVISIBLE);
@@ -330,7 +334,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
             Bitmap imgBitmap = matToBitmap(matAux);
 
             if (circ == 4){
-                int squares = 0;
+                boolean squares = false;
                 int totAltQuestBD = 0;
                 int questionsBD = 0;
                 int alternativesBD = 0;
@@ -360,9 +364,11 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     questionsBD = questAlt[0];
                     alternativesBD = questAlt[1];
                     totAltQuestBD = questionsBD + alternativesBD;
-                    squares = squares(matWarp);
+                    //squares = squares(matWarp);
+                    Util util = new Util(matWarp, questionsBD, alternativesBD);
+                    squares = util.correctCard(); //Alterado 14/01/2025
                 }
-                if(totAltQuestBD > 0 && squares == totAltQuestBD){
+                if(totAltQuestBD > 0 && squares){
                     Bitmap imgWarp = matToBitmap(matWarp);
                     isQrCodePositive = true;
                     nameCartao = resultQrCode+"_"+questionsBD+"_"+alternativesBD;
@@ -787,32 +793,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
         return listQuestions;
     }
-    private List<Squares> analysisQuestions2(List<Squares> listQuestions, int height, int width){
-        // Ordenar círculos por tamanho do raio em ordem decrescente
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            listQuestions.sort((a, b) -> Double.compare(b.y, a.y));
-        } else {
-            Collections.sort(listQuestions, new Comparator<Squares>() {
-                @Override
-                public int compare(Squares o1, Squares o2) {
-                    return (int) (o2.y - o1.y);
-                }
-            });
-        }
-
-        for (int p = listQuestions.size() - 1; p > 0; p--){
-            Squares square1 = listQuestions.get(p-1);
-            Squares square2 = listQuestions.get(p);
-            Point point1 = new Point(square1.x, square1.y);
-            Point point2 = new Point(square2.x, square2.y);
-            boolean analysis = analysisDistanceY(point1, point2, height, width);
-            if (analysis){
-                listQuestions.remove(p);
-            }
-        }
-
-        return listQuestions;
-    }
 
     private boolean analysisDistanceY(Point p1, Point p2, int height, int width){
         return (p1.y - p2.y > height * 0.048 || p1.y - p2.y < height * 0.027 || Math.abs(p1.x - p2.x) > width * 0.01);
@@ -833,31 +813,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
         for (int p = listAlternatives.size() - 1; p > 0; p--){
             Point point1 = listAlternatives.get(p-1);
             Point point2 = listAlternatives.get(p);
-            boolean analysis = analysisDistanceX(point1, point2, height, width);
-            if (analysis){
-                listAlternatives.remove(p);
-            }
-        }
-        return listAlternatives;
-    }
-
-    private List<Squares> analysisAlternatives2(List<Squares> listAlternatives,int height, int width){
-        // Ordenar círculos por tamanho do raio em ordem decrescente
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            listAlternatives.sort((a, b) -> Double.compare(b.x, a.x));
-        } else {
-            Collections.sort(listAlternatives, new Comparator<Squares>() {
-                @Override
-                public int compare(Squares o1, Squares o2) {
-                    return (int) (o2.x - o1.x);
-                }
-            });
-        }
-        for (int p = listAlternatives.size() - 1; p > 0; p--){
-            Squares square1 = listAlternatives.get(p-1);
-            Squares square2 = listAlternatives.get(p);
-            Point point1 = new Point(square1.x, square1.y);
-            Point point2 = new Point(square2.x, square2.y);
             boolean analysis = analysisDistanceX(point1, point2, height, width);
             if (analysis){
                 listAlternatives.remove(p);

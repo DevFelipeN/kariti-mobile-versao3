@@ -1,6 +1,7 @@
 package online.padev.kariti;
 
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
+import static online.padev.kariti.Compactador.id_provaOpenCV;
 import static online.padev.kariti.Compactador.listCartoes;
 
 import android.app.AlertDialog;
@@ -304,8 +305,8 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     circlesInterest.add(new Point(circExt.x, circExt.y));
                     circ++;
                     Imgproc.drawContours(matAux, Collections.singletonList(circExt.contour), -1, new Scalar(255, 0, 0), -1);
-                    Point center = new Point(circExt.x, circExt.y);
-                    Imgproc.circle(matToWarp, center, (int) (circExt.radius + circExt.radius * 0.8), new Scalar(255, 255, 255), -1);
+                    //Point center = new Point(circExt.x, circExt.y);
+                    //Imgproc.circle(matToWarp, center, (int) (circExt.radius + circExt.radius * 0.8), new Scalar(255, 255, 255), -1);
                 }
             }
 
@@ -355,6 +356,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                         }
                     }
                     id_provaBD = id_provaCaptured;
+                    id_alunoBD = Integer.parseInt(a[1]);
                     Integer[] questAlt = bancoDados.pegarQuestsAndAlts(id_provaBD);
                     if(questAlt == null){
                         imageProxy.close();
@@ -364,9 +366,11 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     questionsBD = questAlt[0];
                     alternativesBD = questAlt[1];
                     totAltQuestBD = questionsBD + alternativesBD;
-                    //squares = squares(matWarp);
-                    Util util = new Util(matWarp, questionsBD, alternativesBD);
-                    squares = util.correctCard(); //Alterado 14/01/2025
+
+                    //Versão 3
+                    Util util = new Util(matWarp, questionsBD, alternativesBD, bancoDados, id_provaBD, id_alunoBD);
+                    squares = util.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+
                 }
                 if(totAltQuestBD > 0 && squares){
                     Bitmap imgWarp = matToBitmap(matWarp);
@@ -380,8 +384,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 Compactador.id_provaOpenCV = id_provaBD;
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
-                Intent intent = new Intent(this, ViewImage.class);
+                Intent intent = new Intent(this, ViewImage2.class);
                 intent.putExtra("filePath", filePath);
+                intent.putExtra("id_prova", id_provaBD);
+                intent.putExtra("id_aluno", id_alunoBD);
                 intent.putExtra("nameImag", nameCartao);
                 startActivity(intent);
                 finish();
@@ -413,18 +419,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
             this.contour = contour;
             this.perimeter = perimeter;
         }
-    }
-
-    class Squares {
-        double x, y;
-        MatOfPoint cnt;
-
-        Squares(double x, double y, MatOfPoint cnt){
-            this.x = x;
-            this.y = y;
-            this.cnt = cnt;
-        }
-
     }
 
 

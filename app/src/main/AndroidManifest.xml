@@ -35,6 +35,9 @@
             android:name=".ViewImage"
             android:exported="false" />
         <activity
+            android:name=".ViewImage2"
+            android:exported="false" />
+        <activity
             android:name=".CameraxAndOpencv"
             android:exported="false" />
         <activity

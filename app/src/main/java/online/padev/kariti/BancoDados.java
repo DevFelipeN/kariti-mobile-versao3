@@ -214,6 +214,55 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
+    public Boolean cadastrarCorrecao(Map<Integer, Integer> gabarito, Integer id_prova, Integer id_aluno){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            base_dados.beginTransaction();
+            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
+                stmt = base_dados.compileStatement(deleta);
+                stmt.bindLong(1, id_prova);
+                stmt.bindLong(2, id_aluno);
+                stmt.executeUpdateDelete();
+            }
+
+            for (Integer questao : gabarito.keySet()){
+                Integer respostaDada = gabarito.get(questao);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("id_prova", id_prova);
+                contentValues.put("id_aluno", id_aluno);
+                contentValues.put("questao", questao);
+                contentValues.put("respostaDada", respostaDada);
+                long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
+                if(resultado != -1){
+                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                }else{
+                    Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
+                    throw new Exception();
+                }
+            }
+            base_dados.setTransactionSuccessful();
+            return true;
+        }catch (Exception e){
+            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
+            return false;
+        }finally {
+            if (base_dados != null && base_dados.isOpen()) {
+                base_dados.endTransaction();
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+            if(stmt != null){
+                stmt.close();
+            }
+        }
+    }
     public Integer cadastrarProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
         SQLiteDatabase base_dados = null;
         Integer id_prova = null;
@@ -420,28 +469,7 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean deletarProva(Integer id_prova){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM prova WHERE id_prova = ?";
-            stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_prova);
-            stmt.executeUpdateDelete();
-            return true;
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar deletar Prova! "+e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (stmt != null){
-                stmt.close();
-            }
-        }
-    }
+
     public Boolean deletarCorrecao(Integer id_prova){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
@@ -461,6 +489,57 @@ public class BancoDados extends SQLiteOpenHelper {
             }
             if (stmt != null){
                 stmt.close();
+            }
+        }
+    }
+    public Boolean deletarProva(Integer id_prova){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmtCorrecao = null;
+        SQLiteStatement stmtGabarito = null;
+        SQLiteStatement stmtProva = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            base_dados.beginTransaction();
+            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                String deletaCorrecao = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
+                stmtCorrecao = base_dados.compileStatement(deletaCorrecao);
+                stmtCorrecao.bindLong(1, id_prova);
+                stmtCorrecao.executeUpdateDelete();
+            }
+
+            String deletaGabarito = "DELETE FROM gabarito WHERE id_prova = ?";
+            stmtGabarito = base_dados.compileStatement(deletaGabarito);
+            stmtGabarito.bindLong(1, id_prova);
+            stmtGabarito.executeUpdateDelete();
+
+            String deletaProva = "DELETE FROM prova WHERE id_prova = ?";
+            stmtProva = base_dados.compileStatement(deletaProva);
+            stmtProva.bindLong(1, id_prova);
+            stmtProva.executeUpdateDelete();
+
+            base_dados.setTransactionSuccessful();
+            return true;
+        }catch (Exception e){
+            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
+            return false;
+        }finally {
+            if (base_dados != null && base_dados.isOpen()) {
+                base_dados.endTransaction();
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+            if(stmtCorrecao != null){
+                stmtCorrecao.close();
+            }
+            if(stmtGabarito != null){
+                stmtGabarito.close();
+            }
+            if(stmtProva != null){
+                stmtProva.close();
             }
         }
     }
@@ -1105,7 +1184,7 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return notaQuestao;
     }
-    public String pegarNomeTurma(String id_turma) {
+    public String pegarNomeTurma(String id_turma){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         String nomeTurma = null;

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +23,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
     Integer id_turma, id_prova;
     ArrayList<String> listaProvas, listaTurmas;
     RecyclerView recyclerView;
-    MyAdapter adapterAluno;
+    MyAdapter adapterProvas;
     TextView titulo;
     Spinner spinnerTurma;
     BancoDados bancoDados;
@@ -63,8 +64,8 @@ public class VisualProvaActivity2 extends AppCompatActivity {
             finish();
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterAluno = new MyAdapter(this, listaProvas, this::onItemClick, this::onItemLongClick);
-        recyclerView.setAdapter(adapterAluno);
+        adapterProvas = new MyAdapter(this, listaProvas, this::onItemClick, this::onItemLongClick);
+        recyclerView.setAdapter(adapterProvas);
 
         spinnerTurma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -78,8 +79,8 @@ public class VisualProvaActivity2 extends AppCompatActivity {
                     finish();
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(VisualProvaActivity2.this));
-                adapterAluno = new MyAdapter(VisualProvaActivity2.this, listaProvas, VisualProvaActivity2.this::onItemClick, VisualProvaActivity2.this::onItemLongClick);
-                recyclerView.setAdapter(adapterAluno);
+                adapterProvas = new MyAdapter(VisualProvaActivity2.this, listaProvas, VisualProvaActivity2.this::onItemClick, VisualProvaActivity2.this::onItemLongClick);
+                recyclerView.setAdapter(adapterProvas);
             }
 
             @Override
@@ -109,7 +110,9 @@ public class VisualProvaActivity2 extends AppCompatActivity {
 
     }
     public void onItemLongClick(int position) {
-        //wdwdwdqdqqsq
+        nomeProva = listaProvas.get(position);
+        id_prova = bancoDados.pegarIdProvaPorTurma(nomeProva, id_turma);
+        solicitaExcluirOuEditar(position);
     }
     private void telaVisualProvaSelecionada(){
         Boolean verificaProva = bancoDados.verificaExisteCorrecao(id_prova.toString());
@@ -125,6 +128,42 @@ public class VisualProvaActivity2 extends AppCompatActivity {
             startActivity(intent);
         }else {
             Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void solicitaExcluirOuEditar(int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Deseja excluir ou editar esta prova?")
+                .setPositiveButton("Excluir", (dialog, which) -> avisoSeExcluir(position))
+                .setNegativeButton("Editar", (dialog, which) -> Toast.makeText(VisualProvaActivity2.this, "Editar prova!", Toast.LENGTH_SHORT).show());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private void avisoSeExcluir(int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO")
+                .setMessage("Caso confirme essa ação todos os dados dessa prova incluindo correção, serão excluidos permanentemente! \n\n" +
+                        "Deseja realmente excluir essa prova? ")
+                .setPositiveButton("SIM", (dialog, which) -> deleteProva(position))
+                .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private void deleteProva(int position){
+        if (bancoDados.deletarProva(id_prova)){
+            listaProvas.remove(nomeProva);
+            provaApagada(position);
+        }else{
+            Toast.makeText(this, "Falha ao tentar excluir essa prova!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void provaApagada(int position){
+        Toast.makeText(this, "Prova excluida com sucesso!", Toast.LENGTH_SHORT).show();
+        if(!listaProvas.isEmpty()){
+            adapterProvas.notifyItemRemoved(position);
+        }else{
+            finish();
         }
     }
 }

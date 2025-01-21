@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ViewImage extends AppCompatActivity {
 
     private ImageView imageProcessada;
-    Button nao, sim;
+    private Button nao, sim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

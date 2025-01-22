@@ -5,20 +5,27 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fundo_night"
     tools:context=".ViewImage">
 
-    <TextView
-        android:id="@+id/textDescricao"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/includeProvaCorrigida"
+        layout="@layout/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="Prova Corrigida"
-        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:id="@+id/dividerProvaCorrigida"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/includeProvaCorrigida" />
 
     <ImageView
         android:id="@+id/ImagemProcessada"
@@ -39,11 +46,12 @@
 
     <Button
         android:id="@+id/buttonEncerrar"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
-        android:text="Encerrar"
+        android:text="@string/encerrar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonContinuar"
         app:layout_constraintHorizontal_bias="0.5"
@@ -51,11 +59,12 @@
 
     <Button
         android:id="@+id/buttonContinuar"
+        style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:text="Continuar"
+        android:text="@string/continuar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -63,38 +72,56 @@
 
     <TextView
         android:id="@+id/textViewNomeAluno"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Aluno"
+        android:text="@string/textViewNomeAluno"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDescricao" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeProva" />
+
+    <TextView
+        android:id="@+id/textViewNomeProva"
+        style="@style/COLORTEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/textViewProva"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.063"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerProvaCorrigida" />
 
     <TextView
         android:id="@+id/textViewNotaAluno"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Nota"
+        android:text="@string/Nota"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.078"
+        app:layout_constraintHorizontal_bias="0.061"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNomeAluno" />
 
     <TextView
         android:id="@+id/textViewAcertosAluno"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Acertos"
+        android:text="@string/txtAcertos"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonEncerrar"
         app:layout_constraintEnd_toStartOf="@+id/textViewErrosAluno"
@@ -103,10 +130,11 @@
 
     <TextView
         android:id="@+id/textViewErrosAluno"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Erros"
+        android:text="@string/txtErros"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonContinuar"
         app:layout_constraintEnd_toEndOf="parent"

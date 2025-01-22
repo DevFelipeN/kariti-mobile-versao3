@@ -39,9 +39,11 @@
     <string name="cadEscola">Cadastrar Escola</string>
     <string name="CorrectOpenCv">Como deseja corrigir sua prova?</string>
     <string name="criaConta">Criar conta</string>
+    <string name="continuar">Continuar</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="encerrar">Encerrar</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
@@ -81,6 +83,7 @@
     <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
     <string name="textViewAluno"> Alunos</string>
+    <string name="textViewNomeAluno"> Aluno</string>
     <string name="textViewTurma">Turma</string>
     <string name="time">00:00:00</string>
     <string name="textViewCalendar">Calendário</string>
@@ -137,6 +140,7 @@
     <string name="btnBaixarProva">Baixar Resultado</string>
     <string name="btnCompartilhar">Compartilhar</string>
     <string name="txtAcertos">Acertos</string>
+    <string name="txtErros">Erros</string>
     <!--    Descrição das Imagens-->
     <string name="dialogImage">Dialog Imagem</string>
     <string name="btnVoltar">Button Voltar</string>

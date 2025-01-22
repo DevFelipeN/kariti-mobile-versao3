@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +19,11 @@ public class ViewImage2 extends AppCompatActivity {
 
     private ImageView imageProcessada;
     private Button encerrar, continuar;
-    private TextView textViewNomeAluno, textViewNotaAluno, textViewAcertos, textViewErros;
+    private TextView textViewNomeAluno, textViewNomeProva, textViewNotaAluno, textViewAcertos, textViewErros, titulo;
     private Integer id_prova, id_aluno;
     float notaAluno;
     int acertos, erros;
-    private String nomeAluno;
+    private String nomeAluno, nomeProva;
     private BancoDados bancoDados;
     private ArrayList<Float> peso;
     private ArrayList<String> respostasDadas, gabarito;
@@ -33,11 +34,14 @@ public class ViewImage2 extends AppCompatActivity {
         setContentView(R.layout.activity_view_image2);
 
         imageProcessada = findViewById(R.id.ImagemProcessada);
+        ImageButton voltar = findViewById(R.id.imgBtnVoltar);
+        textViewNomeProva = findViewById(R.id.textViewNomeProva);
         textViewNomeAluno = findViewById(R.id.textViewNomeAluno);
         textViewNotaAluno = findViewById(R.id.textViewNotaAluno);
         textViewAcertos = findViewById(R.id.textViewAcertosAluno);
         textViewErros = findViewById(R.id.textViewErrosAluno);
         encerrar = findViewById(R.id.buttonEncerrar);
+        titulo = findViewById(R.id.toolbar_title);
         continuar = findViewById(R.id.buttonContinuar);
 
         bancoDados = new BancoDados(this);
@@ -45,7 +49,15 @@ public class ViewImage2 extends AppCompatActivity {
         id_prova = getIntent().getExtras().getInt("id_prova");
         id_aluno = getIntent().getExtras().getInt("id_aluno");
 
+        nomeProva = bancoDados.pegarNomeProva(id_prova);
         nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
+
+        if (nomeProva == null || nomeAluno == null || nomeProva.isEmpty() || nomeAluno.isEmpty()){
+            Toast.makeText(this, "Algo deu errado por aqui!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        titulo.setText(String.format("%s", "Prova Corrigida"));
 
         resultCorrecao();
 
@@ -53,6 +65,7 @@ public class ViewImage2 extends AppCompatActivity {
         if (filePath != null){
             Bitmap bitmap = BitmapFactory.decodeFile(filePath);
             imageProcessada.setImageBitmap(bitmap);
+            textViewNomeProva.setText(String.format("%s", "Prova: "+nomeProva));
             textViewNomeAluno.setText(String.format("%s","Aluno: "+nomeAluno));
             textViewNotaAluno.setText(String.format("%s", "Nota: "+ notaAluno));
             textViewAcertos.setText(String.format("%s", "Acertos: "+ acertos));
@@ -63,6 +76,7 @@ public class ViewImage2 extends AppCompatActivity {
         }
         continuar.setOnClickListener(v -> newIntent());
         encerrar.setOnClickListener(v -> finish());
+        voltar.setOnClickListener(v -> finish());
     }
     private void newIntent(){
         Intent intent = new Intent(this, CameraxAndOpencv.class);

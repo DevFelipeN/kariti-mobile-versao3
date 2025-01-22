@@ -1235,7 +1235,7 @@ public class BancoDados extends SQLiteOpenHelper {
     public String pegaNomeAluno(Integer id_aluno) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
-        String nomeAluno = null;
+        String nomeAluno = "";
         try {
             base_dados = this.getReadableDatabase();
             cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ?", new String[]{id_aluno.toString(), BancoDados.ID_ESCOLA.toString()});
@@ -1303,6 +1303,29 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
         return x;
+    }
+    public String pegarNomeProva(Integer id_prova) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String nomeProva = "";
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeProva FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                nomeProva = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome da Prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return nomeProva;
     }
     public Integer pegarIdAluno(String nomeAluno) {
         SQLiteDatabase base_dados = null;

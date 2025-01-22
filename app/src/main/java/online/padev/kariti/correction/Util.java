@@ -72,7 +72,7 @@ public class Util {
         enumerateQuestions();
         return true;
     }
-    public boolean squares(){
+    private boolean squares(){
         try {
             //Mat imgAux = mat.clone();
             Mat imgAux = mat;

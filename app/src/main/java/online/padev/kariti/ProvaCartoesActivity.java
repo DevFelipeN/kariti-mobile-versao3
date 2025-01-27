@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -33,14 +32,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import online.padev.kariti.Downloads.DownloadCartoes;
+
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixarCartoes;
     Integer id_turma, endereco;
     String prova, nomeTurma, id_prova, nomeProva,filePdf;
-    ArrayList<String> listagemProvas, listaTurmas, listaAlunos;
+    List<String> listagemProvas, listaTurmas, listaAlunos;
     List<String[]> dados;
-    ArrayList<Integer> listIdsAlunos;
+    List<Integer> listIdsAlunos;
     BancoDados bancoDados;
     Spinner spinnerTurma, spinnerProva, spinnerAluno;
     TextView titulo;
@@ -63,7 +64,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
 
         endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
         prova = getIntent().getExtras().getString("prova");
-        listaTurmas = (ArrayList<String>) bancoDados.listarTurmasPorProva();
+        listaTurmas = bancoDados.listarTurmasPorProva();
         if(listaTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
@@ -94,7 +95,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
             SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
             spinnerProva.setAdapter(adapterProva);
             //Lista todos os alunos pertecentes a turma selecionada
-            listaAlunos = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma.toString());
+            listaAlunos = bancoDados.listarAlunosPorTurma(id_turma.toString());
             if (listaAlunos == null){
                 Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -114,7 +115,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                         Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    listagemProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turma));
+                    listagemProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turma));
                     if (listagemProvas == null){
                         Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
@@ -122,7 +123,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity.this, listagemProvas);
                     spinnerProva.setAdapter(adapterProva);
 
-                    listaAlunos = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma.toString());
+                    listaAlunos = bancoDados.listarAlunosPorTurma(id_turma.toString());
                     if (listaAlunos == null){
                         Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
@@ -158,7 +159,7 @@ public class ProvaCartoesActivity extends AppCompatActivity {
                     dados = new ArrayList<>();
 
                     if (aluno.equals("Todos")) {
-                        listIdsAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorTurma(id_turma.toString());
+                        listIdsAlunos = bancoDados.listarIdsAlunosPorTurma(id_turma.toString());
                         if (listIdsAlunos == null){
                             Toast.makeText(ProvaCartoesActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
@@ -313,9 +314,9 @@ public class ProvaCartoesActivity extends AppCompatActivity {
         return sdf.format(date);
     }
     private void solicitaPermissao(){
-        if (ContextCompat.checkSelfPermission(ProvaCartoesActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ProvaCartoesActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }else{
             baixarCartoesV9();
         }

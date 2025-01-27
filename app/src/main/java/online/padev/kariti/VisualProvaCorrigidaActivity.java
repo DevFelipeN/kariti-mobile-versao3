@@ -38,6 +38,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import online.padev.kariti.Downloads.DownloadResultadoCorrecao;
+
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button btnBaixarCartoes;

@@ -85,7 +85,6 @@ public class ProvaActivity extends AppCompatActivity {
 
         iconeAjuda.setOnClickListener(v -> ajuda());
         btnCadastrarProva.setOnClickListener(v -> carregarCadastroProva());
-        editarProva.setOnClickListener(v -> carregarTelaMaisOpcoes());
         btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
         btnProvasCorrigida.setOnClickListener(v -> carregarTelaProvasCorrigida());
         btnCorrigirProva.setOnClickListener(v -> {
@@ -122,10 +121,6 @@ public class ProvaActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CadProvaActivity.class);
             startActivity(intent);
         }else aviso("turmas cadastradas");
-    }
-    private void carregarTelaMaisOpcoes(){
-        Intent intent = new Intent(getApplicationContext(), EditarProva.class);
-        startActivity(intent);
     }
     private void carregarTelaGerarCartao(){
         Boolean verificaProvaCad = bancoDados.verificaExisteProvaCadastrada();

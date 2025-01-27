@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import online.padev.kariti.utilities.Gabarito;
+import online.padev.kariti.utilities.Prova;
+
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
     public static Integer USER_ID;
@@ -203,7 +206,9 @@ public class BancoDados extends SQLiteOpenHelper {
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()) {
-                base_dados.endTransaction();
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
             if (cursor != null){
@@ -252,7 +257,9 @@ public class BancoDados extends SQLiteOpenHelper {
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()) {
-                base_dados.endTransaction();
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
             if (cursor != null){
@@ -263,29 +270,56 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-    public Integer cadastrarProva(String nomeProva, String dataProva, Integer qtdQuestoes, Integer qtdAlternativas, Integer id_turma){
+
+    public boolean cadastrarProva(Prova dadosProva, List<Gabarito> gabarito){
         SQLiteDatabase base_dados = null;
-        Integer id_prova = null;
         try {
             base_dados = this.getWritableDatabase();
+            base_dados.beginTransaction();
+
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeProva", nomeProva);
-            contentValues.put("dataProva", dataProva);
-            contentValues.put("qtdQuestoes", qtdQuestoes);
-            contentValues.put("qtdAlternativas", qtdAlternativas);
-            contentValues.put("id_turma", id_turma);
-            long inserir = base_dados.insert("prova", null, contentValues);
-            id_prova = Math.toIntExact(inserir); // Alterar tipo de variavel de Id
+            contentValues.put("nomeProva", dadosProva.getNomeProva());
+            contentValues.put("dataProva", dadosProva.getDataProva());
+            contentValues.put("qtdQuestoes", dadosProva.getNumQuestoes());
+            contentValues.put("qtdAlternativas", dadosProva.getNumAlternativas());
+            contentValues.put("id_turma", dadosProva.getId_turma());
+            Integer inserirProva = Math.toIntExact(base_dados.insert("prova", null, contentValues));
+
+            if (!inserirProva.equals(-1)){
+                for (Gabarito g : gabarito){
+                    Log.e("respostasGabarito", "Q: "+g.getQuestao()+" R: "+g.getResposta()+ "nota: "+g.getNota());
+                    ContentValues contentValues2 = new ContentValues();
+                    contentValues2.put("id_prova", inserirProva);
+                    contentValues2.put("questao", g.getQuestao());
+                    contentValues2.put("resposta", g.getResposta());
+                    contentValues2.put("nota", g.getNota());
+                    Integer inserirGabarito = Math.toIntExact(base_dados.insert("gabarito", null, contentValues2));
+                    if(!inserirGabarito.equals(-1)){
+                        Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                    }else{
+                        Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
+                        throw new Exception();
+                    }
+                }
+
+            }else{
+                throw new Exception();
+            }
+            base_dados.setTransactionSuccessful();
+            return true;
         }catch (Exception e){
-            Log.e("kariti", e.getMessage());
-            return null;
+            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
+            return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()) {
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
         }
-        return id_prova;
     }
+
     public Boolean cadastrarGabarito(Integer id_prova, Integer questao, Integer resposta, Float nota){
         SQLiteDatabase base_dados = null;
         try {
@@ -303,6 +337,57 @@ public class BancoDados extends SQLiteOpenHelper {
         }finally {
             if (base_dados != null && base_dados.isOpen()){
                 base_dados.close();
+            }
+        }
+    }
+    public Boolean upadateProva(Prova prova, Map<Integer, Integer> gabarito){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            base_dados.beginTransaction();
+            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{prova.getId_prova().toString(), prova.getId_prova().toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
+                stmt = base_dados.compileStatement(deleta);
+                stmt.bindLong(1, prova.getId_prova());
+                stmt.bindLong(2, prova.getId_prova());
+                stmt.executeUpdateDelete();
+            }
+
+            for (Integer questao : gabarito.keySet()){
+                Integer respostaDada = gabarito.get(questao);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("id_prova", prova.getId_prova());
+                contentValues.put("id_aluno", prova.getId_prova());
+                contentValues.put("questao", questao);
+                contentValues.put("respostaDada", respostaDada);
+                long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
+                if(resultado != -1){
+                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                }else{
+                    Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
+                    throw new Exception();
+                }
+            }
+            base_dados.setTransactionSuccessful();
+            return true;
+        }catch (Exception e){
+            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
+            return false;
+        }finally {
+            if (base_dados != null && base_dados.isOpen()) {
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+            if(stmt != null){
+                stmt.close();
             }
         }
     }
@@ -411,7 +496,9 @@ public class BancoDados extends SQLiteOpenHelper {
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()){
-                base_dados.endTransaction();
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
             if (stmtAlunoAnonimo != null){
@@ -526,7 +613,9 @@ public class BancoDados extends SQLiteOpenHelper {
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()) {
-                base_dados.endTransaction();
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
             if (cursor != null){
@@ -634,30 +723,76 @@ public class BancoDados extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean alterarDadosProva(Integer id_prova, String nomeProva, String dataProva, Integer id_turma, Integer questoes, Integer alternativas){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
+    public boolean alterarDadosProva(Prova prova, List<Gabarito> gabarito, int status){
+        SQLiteDatabase base_dado = null;
+        SQLiteStatement stmtUpProva = null;
+        SQLiteStatement stmtDelGabarito = null;
         try {
-            base_dados = this.getWritableDatabase();
-            String altera = "UPDATE prova SET nomeProva = ?, dataProva = ?, qtdQuestoes = ?, qtdAlternativas = ?, id_turma = ?  WHERE id_prova = ?";
-            stmt = base_dados.compileStatement(altera);
-            stmt.bindString(1, nomeProva);
-            stmt.bindString(2, dataProva);
-            stmt.bindLong(3, questoes);
-            stmt.bindLong(4, alternativas);
-            stmt.bindLong(5, id_turma);
-            stmt.bindLong(6, id_prova);
-            stmt.executeUpdateDelete();
+            base_dado = this.getWritableDatabase();
+            base_dado.beginTransaction();
+
+            if (status == 1) {
+
+                String altera = "UPDATE prova SET nomeProva = ?, dataProva = ?, qtdQuestoes = ?, qtdAlternativas = ?, id_turma = ?  WHERE id_prova = ?";
+                stmtUpProva = base_dado.compileStatement(altera);
+                stmtUpProva.bindString(1, prova.getNomeProva());
+                stmtUpProva.bindString(2, prova.getDataProva());
+                stmtUpProva.bindLong(3, prova.getNumQuestoes());
+                stmtUpProva.bindLong(4, prova.getNumAlternativas());
+                stmtUpProva.bindLong(5, prova.getId_turma());
+                stmtUpProva.bindLong(6, prova.getId_prova());
+                int result = stmtUpProva.executeUpdateDelete();
+                if (result == 0) {
+                    throw new Exception();
+                }
+                Log.e("kariti", "Prova alterada 1");
+            }
+
+            String deletaGabarito = "DELETE FROM gabarito WHERE id_prova = ?";
+            stmtDelGabarito = base_dado.compileStatement(deletaGabarito);
+            stmtDelGabarito.bindLong(1, prova.getId_prova());
+            int resultDel = stmtDelGabarito.executeUpdateDelete();
+            if (resultDel == 0) {
+                throw new Exception();
+            }
+            Log.e("kariti", "Gabrito deletado 1");
+
+            for (Gabarito g : gabarito){
+                Log.e("respostasGabarito", "Q: "+g.getQuestao()+" R: "+g.getResposta()+ " nota: "+g.getNota());
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("id_prova", prova.getId_prova());
+                contentValues.put("questao", g.getQuestao());
+                contentValues.put("resposta", g.getResposta());
+                contentValues.put("nota", g.getNota());
+                Integer inserirGabarito = Math.toIntExact(base_dado.insert("gabarito", null, contentValues));
+                if(!inserirGabarito.equals(-1)){
+                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                }else{
+                    Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
+                    throw new Exception();
+                }
+            }
+
+            Log.e("kariti", "Novo Gabarito cadastrado 1");
+
+            base_dado.setTransactionSuccessful();
             return true;
+
         }catch (Exception e){
-            Log.e("Kariti","Erro ao tentar alterar dados da prova com id; "+id_prova);
+            Log.e("Kariti","Erro ao tentar alterar dados da prova com id; "+prova.getId_prova());
             return false;
         }finally {
-            if (base_dados != null && base_dados.isOpen()) {
-                base_dados.close();
+            if (base_dado != null && base_dado.isOpen()) {
+                if (base_dado.inTransaction()) {
+                    base_dado.endTransaction();
+                }
+                base_dado.close();
             }
-            if (stmt != null) {
-                stmt.close();
+            if (stmtUpProva != null) {
+                stmtUpProva.close();
+            }
+            if (stmtDelGabarito != null) {
+                stmtDelGabarito.close();
             }
         }
     }
@@ -1304,6 +1439,33 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return x;
     }
+    public String[] pegarTodosDadosProva(Integer id_prova) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String[] x = new String[5];
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT nomeProva, id_turma, dataProva, qtdQuestoes, qtdAlternativas FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                x[0] = cursor.getString(0);
+                x[1] = cursor.getString(1);
+                x[2] = cursor.getString(2);
+                x[3] = cursor.getString(3);
+                x[4] = cursor.getString(4);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar data da Prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return x;
+    }
     public String pegarNomeProva(Integer id_prova) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
@@ -1714,11 +1876,13 @@ public class BancoDados extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful(); // Marcar a transação como bem-sucedida
         } catch (Exception e) {
-            // Lidar com o erro (ex: logar ou mostrar uma mensagem)
-            e.printStackTrace();
+            Log.e("kariti", e.toString());
         } finally {
             if (db != null) {
-                db.endTransaction(); // Se a transação foi bem-sucedida, faz COMMIT, senão ROLLBACK
+                if (db.inTransaction()) {
+                    db.endTransaction();
+                }
+                db.close();
             }
         }
     }
@@ -1863,7 +2027,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados = this.getReadableDatabase();
             cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
             if (cursor != null && cursor.moveToFirst()) {
-                do {
+                do{
                     String nomeTurma = cursor.getString(0);
                     nomesTurma.add(nomeTurma);
                 } while (cursor.moveToNext());

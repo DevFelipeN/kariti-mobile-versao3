@@ -20,26 +20,31 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
+import online.padev.kariti.utilities.Gabarito;
+import online.padev.kariti.utilities.Prova;
 
 public class GabaritoActivity extends AppCompatActivity {
-    TextView txtViewNotaProva, txtViewProva, txtViewTurma, txtViewData;
-    Button btnCadastrarProva;
-    ImageButton voltar, iconAjuda;
-    BancoDados bancoDados;
-    LinearLayout layoutHorizontal;
-    String prova, turma, data, dataForm, status;
-    Integer id_turma, id_prova, quest, alter;
-    TextView titulo;
-    Map<String, Object> info;
-    List<RadioGroup> listRadioGroups;
-    HashMap<Integer, Integer> alternativasEscolhidas;
-    ArrayList<Float> notasPorQuestao;
-    Boolean situacao;
+    private TextView txtViewNotaProva, txtViewProva, txtViewTurma, txtViewData;
+    private Button btnCadastrarProva;
+    private ImageButton voltar, iconAjuda;
+    private LinearLayout layoutHorizontal;
+    private TextView titulo;
+    private List<Float> notas = new ArrayList<>();
+    private List<RadioGroup> listRadioGroups;
+    private Map<Integer, Integer> alternativasEscolhidas;
+    private List<Gabarito> gabarito = new ArrayList<>();
+
+    private BancoDados bancoDados;
+    private Prova dadosProva;
+
+    int status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,40 +62,34 @@ public class GabaritoActivity extends AppCompatActivity {
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         bancoDados = new BancoDados(this);
-        info = new HashMap<>();
+        dadosProva = new Prova();
         listRadioGroups = new ArrayList<>();
         alternativasEscolhidas = new HashMap<>();
 
         titulo.setText(String.format("%s","Gabarito"));
 
+        dadosProva = (Prova) getIntent().getSerializableExtra("prova");
 
-        prova = Objects.requireNonNull(getIntent().getExtras()).getString("nomeProva");
-        turma = getIntent().getExtras().getString("turma");
-        id_turma = getIntent().getExtras().getInt("id_turma");
-        data = getIntent().getExtras().getString("data");
-        dataForm = getIntent().getExtras().getString("dataForm");
-        quest = getIntent().getExtras().getInt("quest");
-        alter = getIntent().getExtras().getInt("alter");
-        status = getIntent().getExtras().getString("status");
-        if(status.equals("atualizacao")){
-            id_prova = getIntent().getExtras().getInt("id_prova");
+        if(dadosProva.getId_prova() != null){
+            status = getIntent().getExtras().getInt("status");
             btnCadastrarProva.setText(String.format("%s","Salvar"));
         }
-        txtViewProva.setText(String.format("Prova: %s", prova));
-        txtViewTurma.setText(String.format("Turma: %s", turma));
-        txtViewData.setText(String.format("Data: %s", data));
+
+        txtViewProva.setText(String.format("Prova: %s", dadosProva.getNomeProva()));
+        txtViewTurma.setText(String.format("Turma: %s", bancoDados.pegarNomeTurma(dadosProva.getId_turma().toString())));
+        txtViewData.setText(String.format("Data: %s", dadosProva.dateToDisplay()));
 
         btnCadastrarProva.setOnClickListener(v -> {
             btnCadastrarProva.setEnabled(false);
-            boolean respostaSelecionada = false;
+            boolean respostaSelecionada = true;
             boolean respostasNotasPreenchidas = true;
+
+            //Verica aqui se todas as respostas fora marcadas
             for (RadioGroup radioGroup : listRadioGroups) {
                 if (radioGroup.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(GabaritoActivity.this, "Por favor, selecione uma resposta para todas as questões.", Toast.LENGTH_SHORT).show();
                     respostaSelecionada = false;
                     break;
-                } else {
-                    respostaSelecionada = true;
                 }
             }
             // Verifica se todos os campos de notas foram preenchidos
@@ -104,51 +103,47 @@ public class GabaritoActivity extends AppCompatActivity {
                     break;
                 }
             }
-            if (respostaSelecionada && respostasNotasPreenchidas) {
-                if(status.equals("novaProva")) {
-                    id_prova = bancoDados.cadastrarProva(prova, dataForm, quest, alter, id_turma);
-                    if(id_prova == null || id_prova == -1){
-                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
-                        return;
+
+            if (respostaSelecionada && respostasNotasPreenchidas) { //Caso todas as alternativas forem marcadas e as notas adicionadas
+
+                if (!notaFinal()){
+                    btnCadastrarProva.setEnabled(true);
+                    return;
+                }
+                if(!notas.isEmpty()){
+                    for(int i = 1; i <= dadosProva.getNumQuestoes(); i++){
+                        Integer resp = alternativasEscolhidas.get(i-1);
+                        float notaQuestaoI = notas.get(i-1);
+                        Log.e("notas","n1: "+notaQuestaoI);
+                        Gabarito g = new Gabarito(i, resp + 1, notaQuestaoI);
+                        gabarito.add(g);
                     }
-                }else{
-                    if(bancoDados.deletarGabarito(id_prova)){
-                        Log.e("Dados", id_prova.toString());
-                        Log.e("Dados", prova);
-                        Log.e("Dados", dataForm);
-                        Log.e("Dados", id_turma.toString());
-                        Log.e("Dados", quest.toString());
-                        Log.e("Dados", alter.toString());
-                        if(!bancoDados.alterarDadosProva(id_prova, prova, dataForm, id_turma, quest, alter)){
-                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 2", Toast.LENGTH_SHORT).show();
-                            return;
+
+                    if (dadosProva.getId_prova() == null){
+                        if (bancoDados.cadastrarProva(dadosProva, gabarito)){
+                            dialogProvaSucess("cadastrada");
+                        } else {
+                            avisoErroDeCadastro("no cadastro");
                         }
                     }else{
-                        Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 3", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                notasPorQuestao = (ArrayList<Float>) info.get("notaQuest");
-                if(!notasPorQuestao.isEmpty() && id_prova != null){
-                    situacao = true;
-                    for(int i = 1; i <= quest; i++){
-                        Integer resp = alternativasEscolhidas.get(i-1);
-                        if(!bancoDados.cadastrarGabarito(id_prova, i, resp+1, notasPorQuestao.get(i-1))){
-                            Log.e("kariti","Erro ao tentar cadastrar resposta da questao "+i+" prova "+id_prova);
-                            situacao = false;
+                        if (bancoDados.alterarDadosProva(dadosProva, gabarito, status)){
+                            dialogProvaSucess("alterada");
+                        }else{
+                            avisoErroDeCadastro("na alteração");
                         }
                     }
-                    if (situacao){
-                        dialogProvaSucess();
-                    } else {
-                        avisoErroDeCadastro();
-                    }
+                }else{
+                    Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
+                    btnCadastrarProva.setEnabled(true);
                 }
+            }else{
+                btnCadastrarProva.setEnabled(true);
             }
        });
-        int quantidadeQuestoes = quest;
-        int quantidadeAlternativas = alter;
-        txtViewNotaProva.setText("Nota total da prova " + quantidadeQuestoes + " pontos.");
+
+        int quantidadeQuestoes = dadosProva.getNumQuestoes();
+        int quantidadeAlternativas = dadosProva.getNumAlternativas();
+        txtViewNotaProva.setText(String.format("%s","Nota total da prova " + quantidadeQuestoes + " pontos."));
 
         String[] letras = new String[quantidadeAlternativas];
         for (int i = 0; i < quantidadeAlternativas; i++) {
@@ -182,9 +177,9 @@ public class GabaritoActivity extends AppCompatActivity {
                 radioGroupAlternativas.addView(radioAlternativa);
             }
             radioGroupAlternativas.setOnCheckedChangeListener((group, checkedId) -> {
-                for (int i12 = 0; i12 < listRadioGroups.size(); i12++) {
-                    if (listRadioGroups.get(i12) == group) {
-                        int positionDaQuestao = i12;
+                for (int a = 0; a < listRadioGroups.size(); a++) {
+                    if (listRadioGroups.get(a) == group) {
+                        int positionDaQuestao = a;
                         int selectedRadioButtonId = group.getCheckedRadioButtonId();
                         RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                         int position = group.indexOfChild(selectedRadioButton);
@@ -220,12 +215,12 @@ public class GabaritoActivity extends AppCompatActivity {
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    calcularNotaTotal();
+                    calcularNotaAtual();
                 }
             });
 
             layoutHorizontal.addView(layoutQuestao);
-            calcularNotaTotal();
+            calcularNotaAtual();
 
         }
         iconAjuda.setOnClickListener(v -> dialogHelpDetalhes());
@@ -238,37 +233,34 @@ public class GabaritoActivity extends AppCompatActivity {
         });
 
     }
-    public void dialogProvaSucess(){
+    public void dialogProvaSucess(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
-        builder.setTitle("Prova cadastrada com sucesso!")
+        builder.setTitle("Prova "+text+" com sucesso!")
                 .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    finish();
                     baixarCartoes();
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    public void avisoErroDeCadastro(){
+    public void avisoErroDeCadastro(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
         builder.setTitle("AVISO!")
-                .setMessage("Falha no cadastro do gabarito!")
+                .setMessage("Falha "+text+" da prova, por favor tente novamente!")
                 .setPositiveButton("Sair", (dialog, which) -> finish());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
     public void baixarCartoes() {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
-        intent.putExtra("prova", prova);
-        intent.putExtra("id_turma", id_turma);
+        intent.putExtra("prova", dadosProva.getNomeProva());
+        intent.putExtra("id_turma", dadosProva.getId_turma());
         intent.putExtra("endereco", 1);
         startActivity(intent);
+        finish();
     }
-    private void calcularNotaTotal() {
+    private void calcularNotaAtual() {
         float notas = 0;
-        ArrayList<Float> nPquest = new ArrayList<>();
-        info.put("notaQuest", nPquest);
-        //modificado
         for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
             LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
             EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
@@ -276,13 +268,30 @@ public class GabaritoActivity extends AppCompatActivity {
             if(nota.isEmpty() || nota.charAt(0) == '.'){
                 nota = "0"+nota;
             }
-            if (!nota.isEmpty()) {
-                float n = Float.parseFloat(nota);
-                nPquest.add(n);
-                notas += n;
-            }
+            float n = Float.parseFloat(nota);
+            notas += n;
         }
-        txtViewNotaProva.setText(String.format("Nota total da prova %.2f pontos.", notas));
+        txtViewNotaProva.setText(String.format("%s %.2f %s","Nota total da prova", notas, "pontos."));
+    }
+    private boolean notaFinal() {
+        try {
+            for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+                LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
+                EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+                String nota = pontosEditText.getText().toString();
+                if (nota.isEmpty() || nota.charAt(0) == '.') {
+                    nota = "0" + nota;
+                }
+                float n = Float.parseFloat(nota);
+                Log.e("notas","n: "+n);
+                notas.add(n);
+            }
+            return true;
+        }catch (Exception e){
+            Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
+            Log.e("kariti", e.toString());
+            return false;
+        }
     }
     public void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -300,10 +309,9 @@ public class GabaritoActivity extends AppCompatActivity {
                 .setMessage("Ao confirmar essa ação, os dados dessa prova serão perdidos!\n\n" +
                         "Deseja realmente voltar?")
                 .setPositiveButton("SIM", (dialog, which) -> finish())
-                .setNegativeButton("NÃO", (dialog, which) -> {
-                    //CONTINUE
-                });
+                .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
 }

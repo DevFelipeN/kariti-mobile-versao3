@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CadTurmaActivity extends AppCompatActivity{
     ImageButton voltar, iconAjudaCadturma;
@@ -32,7 +33,7 @@ public class CadTurmaActivity extends AppCompatActivity{
     Integer id_turma = 0;
     AdapterExclAluno adapterAlunos;
     TextView titulo, tituloAlunos;
-    ArrayList<String> listadAlunos = new ArrayList<>(), nomesAluno;
+    List<String> listadAlunos = new ArrayList<>(), nomesAluno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

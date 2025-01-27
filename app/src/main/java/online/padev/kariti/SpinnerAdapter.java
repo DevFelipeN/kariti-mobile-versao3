@@ -11,13 +11,14 @@ import android.widget.TextView;
 import online.padev.kariti.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
-    private ArrayList<String> aluno;
+    private List<String> aluno;
     private Context context;
     private LayoutInflater mInflater;
 
-    public SpinnerAdapter(Context context, ArrayList<String> aluno) {
+    public SpinnerAdapter(Context context, List<String> aluno) {
         super(context, R.layout.spinner_select, aluno);
         this.context = context;
         this.aluno = aluno;

@@ -49,10 +49,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EditarProva"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".DetalheCorrecao"
             android:exported="false"
             android:screenOrientation="portrait" />

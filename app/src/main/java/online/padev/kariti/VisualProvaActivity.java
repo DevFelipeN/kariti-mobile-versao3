@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
@@ -19,7 +20,7 @@ public class VisualProvaActivity extends AppCompatActivity {
     String nomeTurma, nomeProva;
     Integer id_turma, id_prova;
     Spinner spinnerProva, spinnerTurma, spinnerAluno;
-    ArrayList<String> listaProvas, listaTurmas, listaAlunos;
+    List<String> listaProvas, listaTurmas, listaAlunos;
     TextView titulo;
     BancoDados bancoDados;
     @Override

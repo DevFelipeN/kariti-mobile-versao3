@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class EditarTurmaActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class EditarTurmaActivity extends AppCompatActivity {
     ImageView maisAnonimos, menosAnonimos;
     ListView listViewAlunos;
     EditText editTxtTurma, EditTxtQtdnonimos;
-    ArrayList<String> listaAlunosDTurma, alunosSpinner;
+    List<String> listaAlunosDTurma, alunosSpinner;
     String id_turma, nomeTurmaBD, nomeTurmaAtual, alunoSelecionado;
     BancoDados bancoDados;
     AdapterExclAluno adapter;

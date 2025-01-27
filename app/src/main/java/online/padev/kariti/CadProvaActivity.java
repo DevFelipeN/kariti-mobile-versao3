@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -12,9 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+import online.padev.kariti.utilities.Prova;
 
 public class CadProvaActivity extends AppCompatActivity {
     Button datePickerButton;
@@ -24,8 +27,9 @@ public class CadProvaActivity extends AppCompatActivity {
     Button btnGerProva;
     Spinner spinnerTurma;
     BancoDados bancoDados;
-    ArrayList<String> listTurmaEmProva;
-    ImageButton voltar, questMenos, questMais, altMais, altMenos;
+    Prova prova;
+    List<String> listTurmas;
+    ImageButton btnVoltar, questMenos, questMais, altMais, altMenos;
     String dataform;
     Integer id_turma;
     TextView titulo;
@@ -35,7 +39,7 @@ public class CadProvaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cad_prova);
 
         datePickerButton = findViewById(R.id.datePickerButton);
-        voltar = findViewById(R.id.imgBtnVoltar);
+        btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnGerProva = findViewById(R.id.btnGerarProva);
         nomeProva = findViewById(R.id.editTextNomeProva);
         qtdQuest = findViewById(R.id.textViewQuantity);
@@ -48,16 +52,17 @@ public class CadProvaActivity extends AppCompatActivity {
         titulo = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);
+        prova = new Prova();
 
         titulo.setText(String.format("%s","Nova Prova"));
 
-        listTurmaEmProva = (ArrayList<String>) bancoDados.listarNomesTurmas(); //Obtem a lista das turmas delimitadas por escola
-        if(listTurmaEmProva == null){
+        listTurmas = bancoDados.listarNomesTurmas(); //Obtem a lista das turmas delimitadas pertecentes a escola atual
+        if(listTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            return;
+            finish();
         }
-        listTurmaEmProva.add(0, "Selecione a Turma");
-        SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmaEmProva);
+        listTurmas.add(0, "Selecione a Turma");
+        SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmas);
         spinnerTurma.setAdapter(adapter);
 
         questMais.setOnClickListener(v -> {
@@ -85,12 +90,12 @@ public class CadProvaActivity extends AppCompatActivity {
             qtdAlter.setText(String.valueOf(alter));
         });
         btnGerProva.setOnClickListener(v -> {
-            String data = datePickerButton.getText().toString();
-            String prova = nomeProva.getText().toString();
-            Integer quest = Integer.valueOf(qtdQuest.getText().toString());
-            Integer alter = Integer.valueOf(qtdAlter.getText().toString());
-            String turma = spinnerTurma.getSelectedItem().toString();
-            if(prova.trim().isEmpty()){
+
+            prova.setNomeProva(nomeProva.getText().toString());
+            prova.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
+            prova.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+
+            if(prova.getNomeProva().trim().isEmpty()){
                 Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -98,43 +103,40 @@ public class CadProvaActivity extends AppCompatActivity {
                 Toast.makeText(CadProvaActivity.this, "Selecione uma turma!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(data.equals("Selecionar Data")){
+            String nomeTurma = spinnerTurma.getSelectedItem().toString();
+            prova.setId_turma(bancoDados.pegarIdTurma(nomeTurma));
+
+            if(datePickerButton.getText().toString().equals("Selecionar Data")){
                 Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(quest.equals(0)){
+            prova.setDataProva(datePickerButton.getText().toString());
+
+            if(prova.getNumQuestoes() == 0){
                 Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(alter.equals(0)){
+            if(prova.getNumAlternativas() == 0){
                 Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            id_turma = bancoDados.pegarIdTurma(turma);
-            if(id_turma == null || id_turma == -1){
+
+            if(prova.getId_turma() == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova, id_turma.toString());
+
+            Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova.getNomeProva(), prova.getId_turma().toString());
             if(verificaProva == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
             if(verificaProva) {
-                Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, "+prova, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, "+prova.getNomeProva(), Toast.LENGTH_SHORT).show();
                 return;
             }
-            Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
-            intent.putExtra("nomeProva", prova);
-            intent.putExtra("turma", turma);
-            intent.putExtra("id_turma", id_turma);
-            intent.putExtra("data", data);
-            intent.putExtra("dataForm", dataform);
-            intent.putExtra("quest", quest);
-            intent.putExtra("alter", alter);
-            intent.putExtra("status", "novaProva");
-            startActivity(intent);
-            finish();
+
+            carregarTelaGabarito();
         });
         // Obtém a instância do calendário com a data atual
         calendar = Calendar.getInstance();
@@ -157,7 +159,7 @@ public class CadProvaActivity extends AppCompatActivity {
             // Exibe o DatePickerDialog
             datePickerDialog.show();
         });
-        voltar.setOnClickListener(v -> getOnBackPressedDispatcher());
+        btnVoltar.setOnClickListener(v -> finish());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -174,5 +176,12 @@ public class CadProvaActivity extends AppCompatActivity {
         String dateFormat = "yyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+    private void carregarTelaGabarito(){
+        Intent intent = new Intent(this, GabaritoActivity.class);
+        intent.putExtra("prova", prova);
+        intent.putExtra("direcao", "novaProva");
+        startActivity(intent);
+        finish();
     }
 }

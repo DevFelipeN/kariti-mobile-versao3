@@ -9,12 +9,13 @@
 
     <TextView
         android:id="@+id/txtViewinfoCameraX"
+        style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
-        android:text="Capturar Imagem"
+        android:text="Scannear Prova"
         android:textSize="20sp" />
 
     <androidx.camera.view.PreviewView

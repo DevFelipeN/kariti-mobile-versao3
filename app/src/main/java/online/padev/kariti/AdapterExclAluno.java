@@ -14,13 +14,14 @@ import androidx.annotation.Nullable;
 import online.padev.kariti.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdapterExclAluno extends ArrayAdapter<String> {
 
-    private ArrayList<String> alunos;
+    private List<String> alunos;
     private Context context;
 
-    public AdapterExclAluno(Context context, ArrayList<String> alunos) {
+    public AdapterExclAluno(Context context, List<String> alunos) {
         super(context, R.layout.list_alunos_delete, alunos);
         this.context = context;
         this.alunos = alunos;

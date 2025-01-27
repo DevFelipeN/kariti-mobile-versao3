@@ -450,7 +450,6 @@ public class Util {
             Log.e("correcao", "E10: "+e.toString());
         }
     }
-
     private void enumerateQuestions(){
         int i = 1;
         for (Point q : squaresQuestions){
@@ -460,33 +459,4 @@ public class Util {
             i++;
         }
     }
-
-
-    public class Circle {
-
-        double x, y, radius, xR, yR, wR, hR, perimeter;
-        MatOfPoint contour;
-
-        public Circle(double x, double y, double radius, double xR, double yR, double wR, double hR, MatOfPoint contour, double perimeter) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.xR = xR;
-            this.yR = yR;
-            this.wR = wR;
-            this.hR = hR;
-            this.contour = contour;
-            this.perimeter = perimeter;
-        }
-    }
-
-    public class SquaresCircles{
-        Point quetions;
-        List<Point> listCircles;
-        SquaresCircles(Point quetions, List<Point> listCircles){
-            this.quetions = quetions;
-            this.listCircles = listCircles;
-        }
-    }
-
 }

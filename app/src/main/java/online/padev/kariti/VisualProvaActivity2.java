@@ -8,20 +8,19 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class VisualProvaActivity2 extends AppCompatActivity {
     ImageButton voltar;
     String nomeTurma, nomeProva;
     Integer id_turma, id_prova;
-    ArrayList<String> listaProvas, listaTurmas;
+    List<String> listaProvas, listaTurmas;
     RecyclerView recyclerView;
     MyAdapter adapterProvas;
     TextView titulo;
@@ -58,7 +57,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
             finish();
         }
 
-        listaProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
+        listaProvas = bancoDados.listarNomesProvasPorTurma(id_turma.toString());
         if (listaProvas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();
@@ -73,7 +72,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
                 nomeTurma = spinnerTurma.getSelectedItem().toString();
                 id_turma = bancoDados.pegarIdTurma(nomeTurma);
                 listaProvas.clear();
-                listaProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
+                listaProvas = bancoDados.listarNomesProvasPorTurma(id_turma.toString());
                 if (listaProvas == null){
                     Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
                     finish();
@@ -107,7 +106,6 @@ public class VisualProvaActivity2 extends AppCompatActivity {
             return;
         }
         telaVisualProvaSelecionada();
-
     }
     public void onItemLongClick(int position) {
         nomeProva = listaProvas.get(position);
@@ -135,7 +133,25 @@ public class VisualProvaActivity2 extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Deseja excluir ou editar esta prova?")
                 .setPositiveButton("Excluir", (dialog, which) -> avisoSeExcluir(position))
-                .setNegativeButton("Editar", (dialog, which) -> Toast.makeText(VisualProvaActivity2.this, "Editar prova!", Toast.LENGTH_SHORT).show());
+                .setNegativeButton("Editar", (dialog, which) -> editarProva());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private void editarProva(){
+        if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
+            avisoProvaNaoEditavel();
+        }else {
+            Intent intent = new Intent(this, EdicaoProva.class);
+            intent.putExtra("id_prova", id_prova);
+            startActivity(intent);
+        }
+    }
+    private void avisoProvaNaoEditavel(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO")
+                .setMessage("Esta prova já foi corrigida.\n\n" +
+                        "Não é possivel editar provas já corrigidas!")
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

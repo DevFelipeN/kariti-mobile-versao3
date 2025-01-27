@@ -2274,6 +2274,37 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return respostasGabarito;
     }
+
+    public List<Gabarito> listarDadosGabarito(Integer id_prova) {
+        List<Gabarito> gabarito = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT questao, resposta, nota FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer questao= cursor.getInt(0);
+                    Integer resposta = cursor.getInt(1);
+                    float nota = cursor.getFloat(2);
+                    Gabarito g = new Gabarito(questao,resposta, nota);
+                    gabarito.add(g);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return gabarito;
+    }
+
     public String listarNotasProva(String id_prova) {
         String notasQuestoes = "";
         SQLiteDatabase base_dados = null;

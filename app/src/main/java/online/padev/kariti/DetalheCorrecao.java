@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DetalheCorrecao extends AppCompatActivity {
@@ -22,8 +23,8 @@ public class DetalheCorrecao extends AppCompatActivity {
     Integer id_aluno, id_prova, qtdQuestoes;
     BancoDados bancoDados;
     TextView alunoDetalhe, notaTotal;
-    ArrayList<String> respostasDadas, gabarito;
-    ArrayList<Float> peso;
+    List<String> respostasDadas, gabarito;
+    List<Float> peso;
     TextView titulo;
     float nota = 0;
 
@@ -51,11 +52,11 @@ public class DetalheCorrecao extends AppCompatActivity {
             finish();
         }
 
-        alunoDetalhe.setText(nomeAluno);
+        alunoDetalhe.setText(String.format("%s","Aluno: "+nomeAluno));
         //Carrega todas as respostas ordenadas por questao
-        respostasDadas = (ArrayList<String>) bancoDados.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
-        gabarito = (ArrayList<String>) bancoDados.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
-        peso = (ArrayList<Float>) bancoDados.listarNotasPorQuestao(id_prova);
+        respostasDadas = bancoDados.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
+        gabarito = bancoDados.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
+        peso = bancoDados.listarNotasPorQuestao(id_prova);
 
         if (respostasDadas == null || gabarito == null || peso == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();

@@ -4,8 +4,8 @@ import org.opencv.core.MatOfPoint;
 
 public class Circle {
 
-    double x, y, radius, xR, yR, wR, hR, perimeter;
-    MatOfPoint contour;
+    public double x, y, radius, xR, yR, wR, hR, perimeter;
+    public MatOfPoint contour;
 
     public Circle(double x, double y, double radius, double xR, double yR, double wR, double hR, MatOfPoint contour, double perimeter) {
         this.x = x;

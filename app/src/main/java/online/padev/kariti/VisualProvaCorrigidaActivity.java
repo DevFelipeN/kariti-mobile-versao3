@@ -276,12 +276,9 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n" +
-                "• Fundo da imagem com ruidos ou diferente do padrão uniforme \n\n" +
-                "• Cartão resposta não estava visível totalmente na imagem\n\n" +
                 "• Ambiente com pouca luminosidade\n\n" +
-                "• imagem ofuscada\n\n" +
-                "• Cartão resposta Rasurado\n\n" +
-                "Para ter melhor resultado na correção é essencial que sejam seguidas as orientações destacadas na fase de correção!");
+                "• Imagem ofuscada\n\n" +
+                "• Cartão resposta Rasurado");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }

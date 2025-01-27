@@ -64,7 +64,7 @@ public class ProvaActivity extends AppCompatActivity {
     Button btnCadastrarProva, btnGerarCartao, btnCorrigirProva, btnProvasCorrigida, editarProva;
     BancoDados bancoDados;
     TextView textViewTitulo;
-    Integer id_provaBD, id_provaCaptured, id_alunoBD;
+    Integer id_provaBD, id_provaCaptured;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

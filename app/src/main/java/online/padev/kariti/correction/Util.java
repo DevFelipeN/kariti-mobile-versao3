@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import online.padev.kariti.BancoDados;
+import online.padev.kariti.utilities.Prova;
 
 
 public class Util {
@@ -31,18 +32,17 @@ public class Util {
     Map<Integer, Integer> gabarito = new HashMap<>();
     List<SquaresCircles> squaresCircles = new ArrayList<>();
     List<Circle> markedCircles = new ArrayList<>();
-    Integer id_provaBD, id_alunoBD;
+    Integer id_alunoBD;
     Mat mat;
     BancoDados bancoDados;
-    int num_questionsBD, num_alternativesBD, height, width;
+    Prova prova;
+    int height, width;
     private final double limit = 0.02;
 
-    public Util(Mat mat, int num_questionsBD, int num_alternativesBD, BancoDados bancoDados, Integer id_provaBD, Integer id_alunoBD){
+    public Util(Mat mat, Prova prova, BancoDados bancoDados, Integer id_alunoBD){
         this.mat = mat;
-        this.num_questionsBD = num_questionsBD;
-        this.num_alternativesBD = num_alternativesBD;
-        this.id_provaBD = id_provaBD;
         this.id_alunoBD = id_alunoBD;
+        this.prova = prova;
         this.bancoDados = bancoDados;
     }
 
@@ -52,7 +52,6 @@ public class Util {
      */
     public boolean correctCard() {
         boolean isValid = squares();
-        //Log.e("correcao", "Passei aqi: "+isValid);
         if (isValid){ //Válida para buscar as respostas (marcações dos alunos)
             boolean resp = getAnswers();
             return resp;
@@ -64,9 +63,9 @@ public class Util {
         circlesOfInterest(); // Seleciona apenas os contornos dentro do limite definido
         sortCirclesOrder(); // Ordena a lista de circulos em ordem crescente em y
         compareSquaresAndCircles();
-        boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabarito, id_provaBD, id_alunoBD);
-        if(insertCorrectBD){
-            Log.e("correcao", "Prova corrigida com sucesso!!");
+        boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabarito, prova.getId_prova(), id_alunoBD);
+        if(!insertCorrectBD){
+            return false;
         }
         paintCantos();
         enumerateQuestions();
@@ -130,7 +129,7 @@ public class Util {
             //Imgproc.threshold(grayWarp, mat, 0, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
             //Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2BGR);
 
-            return quest == num_questionsBD && alt == num_alternativesBD;
+            return quest == prova.getNumQuestoes() && alt == prova.getNumAlternativas();
 
         }catch (Exception e){
             Log.e("correcao", "E1: "+e.toString());
@@ -264,7 +263,6 @@ public class Util {
                 if (areaCircle > 0) {
                     //double circularity = areaContour / areaCircle;
                     if (radius[0] < width * limit && center.y < yP1 && center.y > yP2 && center.x > xP2 && center.x < xP3) {
-                        Log.e("test", "radius" + radius[0]);
                         Rect boundingRect = Imgproc.boundingRect(contour);
                         Circle circle = new Circle(center.x, center.y, radius[0], boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height, contour, Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true));
                         markedCircles.add(circle);
@@ -381,7 +379,7 @@ public class Util {
 
     private void paintCircle(Point p, int mark, int quest){
         try {
-            String gabaritoBD = bancoDados.listarRespostasGabaritoNumerico(id_provaBD.toString());
+            String gabaritoBD = bancoDados.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
             //Log.e("correcao", "c: " + gabaritoBD);
             double x = p.x - (width * 0.01);
             double y = p.y + (height * 0.01);

@@ -40,7 +40,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        listaTurmas = (ArrayList<String>) bancoDados.listarTurmasPorProva();
+        listaTurmas = bancoDados.listarTurmasPorProva();
         if (listaTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();

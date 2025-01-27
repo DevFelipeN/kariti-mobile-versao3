@@ -66,7 +66,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.Util;
+import online.padev.kariti.utilities.Prova;
 
 public class CameraxAndOpencv extends AppCompatActivity {
 
@@ -76,6 +78,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
     private ImageView edgeImageView;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     BancoDados bancoDados;
+    Prova prova;
     ImageAnalysis imageAnalysis;
     Integer id_provaBD, id_provaCaptured, id_alunoBD;
     private boolean isActivityFinishing = false;
@@ -331,62 +334,53 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 Point end = new Point(listOrganized.get(0).x, listOrganized.get(0).y);
                 Imgproc.line(matAux, start, end, new Scalar(0, 0, 255), 1);
             }
+
             //Converte imagem para ser mostrada na tela
             Bitmap imgBitmap = matToBitmap(matAux);
 
             if (circ == 4){
                 boolean squares = false;
-                int totAltQuestBD = 0;
-                int questionsBD = 0;
-                int alternativesBD = 0;
                 Bitmap imgToQrCode = matToBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
                 if(textQrCode != null){
                     matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
+
                     id_provaCaptured = Integer.parseInt(a[0]);
-                    if(!id_provaCaptured.equals(id_provaBD)){
-                        if(!bancoDados.verificaExisteProvaPId(id_provaCaptured)){
-                            //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
-                            Log.e("kariti","Prova não cadastrada!!");
-                            imageProxy.close();
-                            mat.release();
-                            return;
-                        }
-                    }
-                    id_provaBD = id_provaCaptured;
-                    id_alunoBD = Integer.parseInt(a[1]);
-                    Integer[] questAlt = bancoDados.pegarQuestsAndAlts(id_provaBD);
-                    if(questAlt == null){
+
+                    if(!bancoDados.verificaExisteProvaPId(id_provaCaptured)){
+                        //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
+                        Log.e("kariti","Prova não cadastrada!!");
                         imageProxy.close();
                         mat.release();
                         return;
                     }
-                    questionsBD = questAlt[0];
-                    alternativesBD = questAlt[1];
-                    totAltQuestBD = questionsBD + alternativesBD;
+
+                    prova = new Prova(id_provaCaptured, bancoDados);
+
+                    id_alunoBD = Integer.parseInt(a[1]);
 
                     //Versão 3
-                    Util util = new Util(matWarp, questionsBD, alternativesBD, bancoDados, id_provaBD, id_alunoBD);
+                    Util util = new Util(matWarp, prova, bancoDados, id_alunoBD);
                     squares = util.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
 
                 }
-                if(totAltQuestBD > 0 && squares){
+                if(squares){
                     Bitmap imgWarp = matToBitmap(matWarp);
                     isQrCodePositive = true;
-                    nameCartao = resultQrCode+"_"+questionsBD+"_"+alternativesBD;
+                    nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
                     //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
                 }
             }
             if(!isActivityFinishing && isQrCodePositive){
-                Compactador.id_provaOpenCV = id_provaBD;
+                //Compactador.id_provaOpenCV = id_provaBD;
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
                 Intent intent = new Intent(this, ViewImage2.class);
                 intent.putExtra("filePath", filePath);
-                intent.putExtra("id_prova", id_provaBD);
+                intent.putExtra("id_prova", prova.getId_prova());
                 intent.putExtra("id_aluno", id_alunoBD);
                 intent.putExtra("nameImag", nameCartao);
                 startActivity(intent);
@@ -402,23 +396,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
             Log.e("ERRO", e.toString());
         }
 
-    }
-
-    class Circle {
-        double x, y, radius, xR, yR, wR, hR, perimeter;
-        MatOfPoint contour;
-
-        Circle(double x, double y, double radius, double xR, double yR, double wR, double hR, MatOfPoint contour, double perimeter) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.xR = xR;
-            this.yR = yR;
-            this.wR = wR;
-            this.hR = hR;
-            this.contour = contour;
-            this.perimeter = perimeter;
-        }
     }
 
 
@@ -703,146 +680,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
         }
 
         return enhancedImage;
-    }
-
-    private Integer squares(Mat imgWarp){
-        Mat imgAux = imgWarp.clone();
-        List<Point> squaresQuestions = new ArrayList<>();
-        List<Point> squaresQuestionsValid;
-        List<Point> squaresAltenatives = new ArrayList<>();
-        List<Point> squaresAltenativesValid;
-        int height = imgAux.rows();
-        int width = imgAux.cols();
-
-        Mat matEnhanced = enhanceImage(imgAux);
-        if(matEnhanced == null){
-            return 0;
-        }
-
-        Mat grayWarp = new Mat();
-        Imgproc.cvtColor(matEnhanced, grayWarp, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.GaussianBlur(grayWarp, grayWarp, new Size(5, 5), 0);
-
-        // Binarização
-        Mat binaryImage = new Mat();
-        //Imgproc.threshold(grayWarp, binaryImage, 128, 255, Imgproc.THRESH_BINARY_INV);
-        Imgproc.threshold(grayWarp, binaryImage, 0, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
-
-        boolean qualityImage = analysisImage(binaryImage);
-
-        if (!qualityImage){ //Se a imagem apresentar cor preta maior que 3%, desconsiderar imagem
-            return 0;
-        }
-
-        //Bitmap img = matToBitmap(binaryImage);
-        //saveBitmapAndGetPath(img, "binaryTeste");
-
-        // Encontrar contornos
-        List<MatOfPoint> contours = new ArrayList<>();
-        Mat hierarchy = new Mat();
-        Imgproc.findContours(binaryImage, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-
-        for (MatOfPoint cnt : contours) {
-
-            Moments moments = Imgproc.moments(cnt);
-
-            double x = moments.m10 / moments.m00;
-            double y = moments.m01 / moments.m00;
-
-            if ( x < width * 0.09){
-                squaresQuestions.add(new Point(x,y));
-                //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(0, 255, 0), 2);
-            }
-            if (y < height * 0.06){
-                squaresAltenatives.add(new Point(x,y));
-                //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(0, 255, 0), 2);
-            }
-        }
-        squaresQuestionsValid = analysisQuestions(squaresQuestions, height, width);
-        squaresAltenativesValid = analysisAlternatives(squaresAltenatives, height, width);
-
-        return squaresQuestionsValid.size() + squaresAltenativesValid.size();
-    }
-
-    private List<Point> analysisQuestions(List<Point> listQuestions, int height, int width){
-        // Ordenar círculos por tamanho do raio em ordem decrescente
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            listQuestions.sort((a, b) -> Double.compare(b.y, a.y));
-        } else {
-            Collections.sort(listQuestions, new Comparator<Point>() {
-                @Override
-                public int compare(Point o1, Point o2) {
-                    return (int) (o2.y - o1.y);
-                }
-            });
-        }
-        for (int p = listQuestions.size() - 1; p > 0; p--){
-            Point point1 = listQuestions.get(p-1);
-            Point point2 = listQuestions.get(p);
-            boolean analysis = analysisDistanceY(point1, point2, height, width);
-            if (analysis){
-                listQuestions.remove(p);
-            }
-        }
-
-        return listQuestions;
-    }
-
-    private boolean analysisDistanceY(Point p1, Point p2, int height, int width){
-        return (p1.y - p2.y > height * 0.048 || p1.y - p2.y < height * 0.027 || Math.abs(p1.x - p2.x) > width * 0.01);
-    }
-
-    private List<Point> analysisAlternatives(List<Point> listAlternatives,int height, int width){
-        // Ordenar círculos por tamanho do raio em ordem decrescente
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            listAlternatives.sort((a, b) -> Double.compare(b.x, a.x));
-        } else {
-            Collections.sort(listAlternatives, new Comparator<Point>() {
-                @Override
-                public int compare(Point o1, Point o2) {
-                    return (int) (o2.x - o1.x);
-                }
-            });
-        }
-        for (int p = listAlternatives.size() - 1; p > 0; p--){
-            Point point1 = listAlternatives.get(p-1);
-            Point point2 = listAlternatives.get(p);
-            boolean analysis = analysisDistanceX(point1, point2, height, width);
-            if (analysis){
-                listAlternatives.remove(p);
-            }
-        }
-        return listAlternatives;
-    }
-
-    private boolean analysisDistanceX(Point p1, Point p2, int height, int width){
-        return (p1.x - p2.x > width * 0.116 || p1.x - p2.x < width * 0.095 || Math.abs(p1.y - p2.y) > height * 0.01);
-    }
-
-    /**
-     * Dada uma imagem cortada e binarizada, este metodo calcula a porcentagem de cor preta da imagem
-     * @param matWarpOtsu imagem cortada e binarizada para extração das cores
-     * @return true se porcentagem estiver dentro esperado, caso contrario, false.
-     */
-    private boolean analysisImage(Mat matWarpOtsu){
-        int height = matWarpOtsu.rows();
-        int width = matWarpOtsu.cols();
-        int totPixels = height * width;
-        int whitePixels = Core.countNonZero(matWarpOtsu);
-        int blackPixels = totPixels - whitePixels;
-
-        Log.e("porcentagem", "tot: "+totPixels+" black: "+blackPixels);
-        Log.e("porcentagem", "%: "+ (blackPixels / (double) totPixels) * 100);
-
-        return ((blackPixels / (double) totPixels) * 100 <= 3.0);
-    }
-
-    private List<Point> delimiter(List<Point> list){
-        //MatOfPoint2f cnt2f = new MatOfPoint2f(cnt.toArray());
-        //MatOfPoint2f approx = new MatOfPoint2f();
-        //double epsilon = 0.05 * Imgproc.arcLength(cnt2f, true);  // Epsilon é a precisão (tamanho da aproximação)
-        //Imgproc.approxPolyDP(cnt2f, approx, epsilon, true);
-        return list;
     }
 
     private void mensagem(Handler handler, String msg){

@@ -85,7 +85,6 @@ public class Prova implements Serializable {
     public String dateToDisplay(){
         String data = this.getDataProva();
         String[] itens = data.split("-");
-        String dataFor = itens[2]+"/"+itens[1]+"/"+itens[0];
-        return dataFor;
+        return itens[2]+"/"+itens[1]+"/"+itens[0];
     }
 }

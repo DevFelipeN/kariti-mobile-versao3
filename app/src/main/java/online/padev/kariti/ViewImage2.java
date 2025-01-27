@@ -4,16 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
+import java.util.List;
+import online.padev.kariti.utilities.Gabarito;
 
 public class ViewImage2 extends AppCompatActivity {
 
@@ -25,8 +23,6 @@ public class ViewImage2 extends AppCompatActivity {
     int acertos, erros;
     private String nomeAluno, nomeProva;
     private BancoDados bancoDados;
-    private ArrayList<Float> peso;
-    private ArrayList<String> respostasDadas, gabarito;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +80,19 @@ public class ViewImage2 extends AppCompatActivity {
         finish();
     }
     private void resultCorrecao(){
-        int qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova.toString());
-        peso = (ArrayList<Float>) bancoDados.listarNotasPorQuestao(id_prova);
-        gabarito = (ArrayList<String>) bancoDados.listarRespostasGabarito(id_prova);
-        respostasDadas = (ArrayList<String>) bancoDados.listarRespostasDadas(id_prova, id_aluno);
+        Gabarito gabarito = new Gabarito(bancoDados, id_prova);
+        List<Gabarito> listGabarito = gabarito.getGabarito();
+        List<String> respostasDadas = bancoDados.listarRespostasDadas(id_prova, id_aluno);
 
-        for (int i = 0; i < qtdQuestoes; i++){
-             if (respostasDadas.get(i).equals(gabarito.get(i))){
-                 notaAluno += peso.get(i);
-                 acertos += 1;
-             }else{
-                 erros += 1;
-             }
+        for (int i = 0; i < listGabarito.size(); i++){
+            Gabarito g = listGabarito.get(i); // g contém questao, resposta e nota, respectivamente
+            char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResposta())) - 1);
+            if (respostasDadas.get(i).equals(String.valueOf(r))){
+                notaAluno += g.getNota();
+                acertos += 1;
+            }else{
+                erros += 1;
+            }
         }
     }
 

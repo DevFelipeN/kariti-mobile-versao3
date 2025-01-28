@@ -54,8 +54,10 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -529,6 +531,18 @@ public class CameraxAndOpencv extends AppCompatActivity {
             }
         }
         return fileJson;
+    }
+
+    public static String leitor(String path) throws IOException {
+        BufferedReader buffRead = new BufferedReader(new FileReader(path));
+        String linha = "", texto = "";
+        while (linha != null) {
+            texto += linha;
+            linha = buffRead.readLine();
+        }
+        buffRead.close();
+        //texto = "{}";
+        return texto;
     }
 
     public void iniciaAnimacaoCorrecao(){

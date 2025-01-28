@@ -53,18 +53,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CameraxActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
-        <activity
-            android:name=".GaleriaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".VisualProvaCorrigidaActivity"
             android:exported="false"
@@ -118,10 +110,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TurmaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".AtualizarSenha"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -131,10 +119,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CadAlunoActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AlunoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

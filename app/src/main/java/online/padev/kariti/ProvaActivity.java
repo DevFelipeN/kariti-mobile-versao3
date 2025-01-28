@@ -149,22 +149,6 @@ public class ProvaActivity extends AppCompatActivity {
             aviso("provas corrigidas");
         }
     }
-    private void carregaEtapaCorrecao(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("INSTRUÇÕES IMPORTATES!");
-        builder.setMessage("Para garantir melhor desempenho do KARITI nas correções, é essencial que a imagem do cartão resposta seja capturada:\n\n" +
-                "• Em superfície com fundo escuro e uniforme\n\n" +
-                "• Em ambientes com boa iluminação\n\n" +
-                "• De forma que o cartão seja enquadrado por inteiro na imagem\n\n" +
-                "• Com boa visibilidade\n");
-        builder.setPositiveButton("Iniciar Correção", (dialog, which) -> {
-            Intent intent = new Intent(getApplicationContext(), GaleriaActivity.class);
-            intent.putExtra("contexto","inicia_correcao");
-            startActivity(intent);
-            dialog.dismiss();
-        });
-        builder.show();
-    }
     private void aviso(String descricao){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Atenção!");

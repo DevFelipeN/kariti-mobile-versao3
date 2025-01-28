@@ -56,7 +56,7 @@ public class UploadEjson {
         try {
             String situacao = Environment.getExternalStorageState();
             if (situacao.equals(Environment.MEDIA_MOUNTED)) {
-                String result = GaleriaActivity.leitor(dir+"/json.json");
+                String result = CameraxAndOpencv.leitor(dir+"/json.json");
                 JSONArray json = new JSONArray(result);
                 List<Object[]> provas = new ArrayList<>();
                 for (int x = 0; x < json.length(); x++){

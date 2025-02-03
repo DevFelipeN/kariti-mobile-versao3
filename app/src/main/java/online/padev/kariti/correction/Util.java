@@ -26,14 +26,14 @@ import online.padev.kariti.utilities.Prova;
 
 
 public class Util {
-    List<Point> squaresQuestions = new ArrayList<>();
-    List<MatOfPoint> contours = new ArrayList<>();
-    List<Point> squaresAltenatives = new ArrayList<>();
-    Map<Integer, Integer> gabarito = new HashMap<>();
-    List<SquaresCircles> squaresCircles = new ArrayList<>();
-    List<Circle> markedCircles = new ArrayList<>();
+    List<Point> squaresQuestions = new ArrayList<>(); // Para armazenar apenas os quadrados da questões
+    List<Point> squaresAltenatives = new ArrayList<>(); // Paa armazenar apenas os quadrados das alternativas
+    List<MatOfPoint> contours = new ArrayList<>(); // Para armazenar os contornos encontrados na imagem
+    Map<Integer, Integer> gabarito = new HashMap<>(); // Para armazenar a questão (Key) e a resposta associada a questão
+    List<SquaresCircles> squaresCircles = new ArrayList<>(); // Para armazenar a questão e os circulos associados a essa questão
+    List<Circle> markedCircles = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem
     Integer id_alunoBD;
-    Mat mat;
+    Mat mat; // Faz referência a imagem cortada
     BancoDados bancoDados;
     Prova prova;
     int height, width;
@@ -48,26 +48,44 @@ public class Util {
 
     /**
      * Método para validação de imagens para correção baseado nos contornos referentes aos quadrados das questões e alternativas
-     * @return retorna true caso a imagem seja valida para correção e false caso contrário
+     * @return retorna true caso a imagem seja válida para correção e false caso contrário
      */
     public boolean correctCard() {
-        boolean isValid = squares();
-        if (isValid){ //Válida para buscar as respostas (marcações dos alunos)
-            boolean resp = getAnswers();
-            return resp;
+        if (squares()){
+            //return true;
+            return getAnswers();
         }else {
             return false;
         }
     }
+
+    /**
+     * Este méto é chamado após validação da imagem, procura as marcações referentes as respostas
+     * e associa as suas respectivas questões e alternativas.
+     * @return retorna o estatus da correção como um valor booleano
+     */
     private boolean getAnswers(){
-        circlesOfInterest(); // Seleciona apenas os contornos dentro do limite definido
-        sortCirclesOrder(); // Ordena a lista de circulos em ordem crescente em y
-        compareSquaresAndCircles();
+        // Seleciona apenas os contornos dentro do limite definido
+        if(!circlesOfInterest()){
+            return false;
+        }
+
+        // Ordena a lista de circulos em ordem crescente em y
+        if(!sortCirclesOrder()){
+            return false;
+        }
+        // Associa os circulos a sua respectiva questão e alternativa
+        if(!compareSquaresAndCircles()){
+            return false;
+        }
+        // Insere as respostas encontradas para essa prova no banco
         boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabarito, prova.getId_prova(), id_alunoBD);
         if(!insertCorrectBD){
             return false;
         }
+        //Desenha um quadrado nos quatro cantos da imagem
         paintCantos();
+        //Numera os quedrados das questões
         enumerateQuestions();
         return true;
     }
@@ -240,9 +258,13 @@ public class Util {
 
         return ((blackPixels / (double) totPixels) * 100 <= 3.0);
     }
-    private void circlesOfInterest(){
+
+    /**
+     * Este método seleciona todos os contornos contidos numa determinada área de interesse e adiciona suas coordenadas em "markedCircles".
+     * @return
+     */
+    private boolean circlesOfInterest(){
         try {
-            Mat matToCircles = mat;
             Point p1 = squaresQuestions.get(squaresQuestions.size() - 1); // Point da ultima questão
             Point p2 = squaresAltenatives.get(0); // Point da primeira alternativa
             Point p3 = squaresAltenatives.get(squaresAltenatives.size() - 1); // Point da ultima alternativa
@@ -271,25 +293,14 @@ public class Util {
                 }
             }
             Log.e("test", "Tot: " + markedCircles.size());
+            return true;
         }catch (Exception e){
             Log.e("correcao", "E5: "+e.toString());
+            return false;
         }
     }
 
-    private void release() {
-        if (mat != null) {
-            mat.release();
-        }
-        for (MatOfPoint contour : contours) {
-            contour.release();
-        }
-        contours.clear();
-        //squaresQuestions.clear();
-        //squaresAltenatives.clear();
-        //markedCircles.clear();
-    }
-
-    private void sortCirclesOrder(){
+    private boolean sortCirclesOrder(){
         try {
             // Ordenar círculos por tamanho do raio em ordem decrescente
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -303,12 +314,19 @@ public class Util {
                     }
                 });
             }
+            return true;
         }catch (Exception e){
             Log.e("correcao", "E6: "+e.toString());
+            return false;
         }
     }
 
-    private void compareSquaresAndCircles(){
+    /**
+     * Este método associa todas as marcações a sua respectiva questão e alternativa e adiciona
+     * em gabarito: [questao, resposta(s)]
+     * @return retorna um valor booleano true para execussão bem sucedida e false caso contrário.
+     */
+    private boolean compareSquaresAndCircles(){
         try {
             double thresholdY = height * limit;
             double thresholdX = width * limit;
@@ -366,8 +384,10 @@ public class Util {
                     }
                 }
             }
+            return true;
         }catch (Exception e){
             Log.e("correcao", "E7: "+e.toString());
+            return false;
         }
     }
 
@@ -398,18 +418,6 @@ public class Util {
 
         }catch (Exception e){
             Log.e("correcao", "E8: "+e.toString());
-        }
-    }
-
-    private void paintCantos(){
-        try {
-            double limit2 = 0.05;
-            Imgproc.rectangle(mat, new Point(0, 0), new Point(width * limit2, height * limit2), new Scalar(0, 0, 0), -1); // Canto superior esquerdo
-            Imgproc.rectangle(mat, new Point(width - width * limit2, 0), new Point(width, height * limit2), new Scalar(0, 0, 0), -1); // Canto superior esquerdo
-            Imgproc.rectangle(mat, new Point(0, height - height * limit2), new Point(width * limit2, height), new Scalar(0, 0, 0), -1); // canto inferior esquerdo
-            Imgproc.rectangle(mat, new Point(width - width * limit2, height - height * limit2), new Point(width, height), new Scalar(0, 0, 0), -1); // canto inferior direito
-        }catch (Exception e){
-            Log.e("correcao", "E9: "+e.toString());
         }
     }
 
@@ -446,6 +454,17 @@ public class Util {
             }
         }catch (Exception e){
             Log.e("correcao", "E10: "+e.toString());
+        }
+    }
+    private void paintCantos(){
+        try {
+            double limit2 = 0.05;
+            Imgproc.rectangle(mat, new Point(0, 0), new Point(width * limit2, height * limit2), new Scalar(0, 0, 0), -1); // Canto superior esquerdo
+            Imgproc.rectangle(mat, new Point(width - width * limit2, 0), new Point(width, height * limit2), new Scalar(0, 0, 0), -1); // Canto superior esquerdo
+            Imgproc.rectangle(mat, new Point(0, height - height * limit2), new Point(width * limit2, height), new Scalar(0, 0, 0), -1); // canto inferior esquerdo
+            Imgproc.rectangle(mat, new Point(width - width * limit2, height - height * limit2), new Point(width, height), new Scalar(0, 0, 0), -1); // canto inferior direito
+        }catch (Exception e){
+            Log.e("correcao", "E9: "+e.toString());
         }
     }
     private void enumerateQuestions(){

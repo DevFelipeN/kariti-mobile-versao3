@@ -366,7 +366,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     //Versão 3
                     Util util = new Util(matWarp, prova, bancoDados, id_alunoBD);
                     squares = util.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
-
                 }
                 if(squares){
                     Bitmap imgWarp = matToBitmap(matWarp);

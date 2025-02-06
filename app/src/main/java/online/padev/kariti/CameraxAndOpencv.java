@@ -345,6 +345,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 Bitmap imgToQrCode = matToBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
                 if(textQrCode != null){
+                    Log.e("QRcode", "QR: "+textQrCode);
                     matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
@@ -366,7 +367,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     //Versão 3
                     Util util = new Util(matWarp, prova, bancoDados, id_alunoBD);
                     squares = util.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
-
                 }
                 if(squares){
                     Bitmap imgWarp = matToBitmap(matWarp);
@@ -654,6 +654,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("QRcode", e.toString());
+            return null;
         }
         return qrCodeResult;
     }

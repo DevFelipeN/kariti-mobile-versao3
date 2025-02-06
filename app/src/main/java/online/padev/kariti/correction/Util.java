@@ -27,7 +27,7 @@ import online.padev.kariti.utilities.Prova;
 
 public class Util {
     List<Point> squaresQuestions = new ArrayList<>(); // Para armazenar apenas os quadrados da questões
-    List<Point> squaresAltenatives = new ArrayList<>(); // Paa armazenar apenas os quadrados das alternativas
+    List<Point> squaresAltenatives = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas
     List<MatOfPoint> contours = new ArrayList<>(); // Para armazenar os contornos encontrados na imagem
     Map<Integer, Integer> gabarito = new HashMap<>(); // Para armazenar a questão (Key) e a resposta associada a questão
     List<SquaresCircles> squaresCircles = new ArrayList<>(); // Para armazenar a questão e os circulos associados a essa questão
@@ -55,6 +55,7 @@ public class Util {
             //return true;
             return getAnswers();
         }else {
+            Log.e("correct", "W1");
             return false;
         }
     }
@@ -67,20 +68,24 @@ public class Util {
     private boolean getAnswers(){
         // Seleciona apenas os contornos dentro do limite definido
         if(!circlesOfInterest()){
+            Log.e("correct", "W2");
             return false;
         }
 
         // Ordena a lista de circulos em ordem crescente em y
         if(!sortCirclesOrder()){
+            Log.e("correct", "W3");
             return false;
         }
         // Associa os circulos a sua respectiva questão e alternativa
         if(!compareSquaresAndCircles()){
+            Log.e("correct", "W4");
             return false;
         }
         // Insere as respostas encontradas para essa prova no banco
         boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabarito, prova.getId_prova(), id_alunoBD);
         if(!insertCorrectBD){
+            Log.e("correct", "W5");
             return false;
         }
         //Desenha um quadrado nos quatro cantos da imagem
@@ -114,6 +119,7 @@ public class Util {
             boolean qualityImage = analysisImage(binaryImage);
 
             if (!qualityImage){ //Se a imagem apresentar cor preta maior que 3%, desconsiderar imagem
+                Log.e("correct", "W1.1");
                 return false;
             }
 
@@ -141,8 +147,12 @@ public class Util {
                 }
             }
 
+
             int quest = analysisQuestions(height, width);
             int alt = analysisAlternatives(height, width);
+
+            //Log.e("correct", "Quetss: "+quest);
+            //Log.e("correct", "Altess: "+alt);
 
             //Imgproc.threshold(grayWarp, mat, 0, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
             //Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2BGR);
@@ -225,6 +235,8 @@ public class Util {
             }
 
             eliminateAlternatives();
+
+            Log.e("correct", "Altess: "+squaresAltenatives.size());
 
             for (int p = squaresAltenatives.size() - 1; p > 0; p--) {
                 Point point1 = squaresAltenatives.get(p);
@@ -354,13 +366,17 @@ public class Util {
                 List<Point> listCirc = item.listCircles;
                 if (listCirc.size() > 1) {
                     String markings = "";
+                    boolean[] uniqueAlt = new boolean[squaresAltenatives.size()]; // controla a repetição de alternativas para uma mesma questão
                     for (int j = 0; j < listCirc.size(); j++) {
                         Point circ = listCirc.get(j);
                         for (int a = 0; a < squaresAltenatives.size(); a++) {
                             Point alt = squaresAltenatives.get(a);
-                            if (getProportion(alt.x, circ.x, thresholdX)) {
-                                markings = markings + String.valueOf(letters[a]);
-                                paintCircle(circ, letters[a], i);
+                            if (getProportion(alt.x, circ.x, thresholdX)) { // verifica se o circulo atual pertence a alternativa atual
+                                if (!uniqueAlt[a]) { // Evita de repetir a mesma alternativa para a mesma questão
+                                    markings = markings + String.valueOf(letters[a]);
+                                    paintCircle(circ, letters[a], i);
+                                    uniqueAlt[a] = true;
+                                }
                                 break;
                             }
                         }
@@ -413,8 +429,6 @@ public class Util {
                 Imgproc.putText(mat, String.valueOf(d), new Point(x,y), Imgproc.FONT_HERSHEY_SIMPLEX, width * 0.0008, new Scalar(255, 255, 255), 2);
             }
             //Imgproc.putText(mat, String.valueOf(d), new Point(x,y), Imgproc.FONT_HERSHEY_SIMPLEX, width * 0.001, new Scalar(0, 0, 0), 2);
-
-
 
         }catch (Exception e){
             Log.e("correcao", "E8: "+e.toString());

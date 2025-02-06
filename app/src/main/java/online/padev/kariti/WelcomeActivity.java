@@ -9,6 +9,8 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
+import online.padev.kariti.cards.CreatCard;
+
 public class WelcomeActivity extends AppCompatActivity {
     BancoDados bancoDados;
 
@@ -25,6 +27,10 @@ public class WelcomeActivity extends AppCompatActivity {
         }else{
             Log.e("opencv","Erro ao tentar executar openCV");
         }
+
+        // ==========================================TESTE==================================
+        //CreatCard creatCard = new CreatCard(this);
+        //creatCard.creatPdfCard();
 
 
         bancoDados = new BancoDados(this);

@@ -10,14 +10,14 @@ Este repositório destina-se ao código fonte do Kariti Mobile. O Kariti foi des
 * Correção da Prova - Apenas apontar a câmera do aplicativo para o cartão resposta preenchido, que por sua vez captura os dados do QRcode para identificar a prova, em seguida o cartão é processado e enviado para correção ao servidor do Kariti (Kariti online) que devolve um Json contendo os dados da correção para ser processado e mostrado no app.
 * Correções - O aplicativo exibe os detalhes de acertos e erros de cada aluno na opção "Visualizar Provas" do aplicativo.
 
-Como melhoria desta verão para a versão inicial [Versão 1](https://github.com/DevFelipeN/kariti-mobile-versao1). O processo de captura do cartão resposta que antes necessitava de fundo escuro para facilitar o corte da imagem e porteriormente a correção no servidor, processo que muitas vezes ocorriam falhas devido a qualidade da imagem. foi substituido pelo metodo apresentado nesta versão.
+Como melhoria desta verão com relação à versão inicial [Versão 1](https://github.com/DevFelipeN/kariti-mobile-versao1), o processo de captura do cartão resposta que antes necessitava de fundo escuro para facilitar o corte da imagem e porteriormente a correção no servidor, processo que em muitas vezes ocorriam falhas devido a qualidade da imagem, foi substituido pelo metodo apresentado nesta versão.
 
 ## MUDANÇAS
-Nesta versão do aplicativo Kariti, foi incorporado ao projeto a biblioteca OpenCV, a mesma utilizada no módulo de correção online, com intuito de realizar o processamento de imagem diretamente no app, e enviar ao Kariti online apenas imagens consideradas válidas para correção e com o corte já realizado (imagem com área contento apenas os quadrados das questões e alternativas, e as marcações dos alunos).
+Nesta versão do aplicativo Kariti, foi alterado o marcador que delimita a região em que as respostas são apresentadas pelos alunos, substituindo o quadrado por duas circunferências circunscritas. Foi incorporado ao aplicativo a biblioteca OpenCV, que antes era utilizada apenas no módulo de correção online, com intuito de realizar o processamento de imagem diretamente no app, sem necessidade de conexão com a internet. Assim, o aplicativo pré-processa as imagens e envia ao Kariti online apenas regiões consideradas válidas para correção e com o corte já realizado (imagem com área contendo apenas os marcadores das questões e alternativas, e as marcações dos alunos).
 
 ## RESULTADO DA MUDANÇA
 
-* 100% de acerto para todos os testes
+* 100% de acerto para todos os testes sintéticos
 * Mais práticidade na captura dos cartões
 * Melhor desempenho da aplicação
 * Mais praticidade

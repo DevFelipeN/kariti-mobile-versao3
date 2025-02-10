@@ -16,6 +16,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -1965,6 +1966,33 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return ids_alunos;
     }
+    public Map<Integer, String> listarAlunosPorTurma(Integer id_turma) {
+        Map<Integer, String>  alunos = new HashMap<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)", new String[]{id_turma.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_aluno = cursor.getInt(0);
+                    String nomeAluno = cursor.getString(1);
+                    alunos.put(id_aluno, nomeAluno);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return alunos;
+    }
 
     public List<Integer> listarIdsAlunosPorProvaCorrigida(Integer id_prova){
         List<Integer> ids_alunos = new ArrayList<>();
@@ -2111,7 +2139,7 @@ public class BancoDados extends SQLiteOpenHelper {
      * logado caso não tenha, retorna uma lista vazia.
      */
     public List<String> listarEscolas(Integer status) {
-        ArrayList<String> escolas = new ArrayList<>();
+        List<String> escolas = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {

@@ -3,7 +3,6 @@ package online.padev.kariti.correction;
 import android.os.Build;
 import android.util.Log;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
@@ -25,7 +24,7 @@ import online.padev.kariti.BancoDados;
 import online.padev.kariti.utilities.Prova;
 
 
-public class Util {
+public class CoreKariti {
     List<Point> squaresQuestions = new ArrayList<>(); // Para armazenar apenas os quadrados da questões
     List<Point> squaresAltenatives = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas
     List<MatOfPoint> contours = new ArrayList<>(); // Para armazenar os contornos encontrados na imagem
@@ -39,7 +38,7 @@ public class Util {
     int height, width;
     private final double limit = 0.02;
 
-    public Util(Mat mat, Prova prova, BancoDados bancoDados, Integer id_alunoBD){
+    public CoreKariti(Mat mat, Prova prova, BancoDados bancoDados, Integer id_alunoBD){
         this.mat = mat;
         this.id_alunoBD = id_alunoBD;
         this.prova = prova;
@@ -172,7 +171,7 @@ public class Util {
             }
             // Aumentar o brilho
             Mat brighterImage = new Mat();
-            Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
+            org.opencv.core.Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
 
             // Aumentar o contraste
             Mat enhancedImage = new Mat();
@@ -262,7 +261,7 @@ public class Util {
         int height = matWarpOtsu.rows();
         int width = matWarpOtsu.cols();
         int totPixels = height * width;
-        int whitePixels = Core.countNonZero(matWarpOtsu);
+        int whitePixels = org.opencv.core.Core.countNonZero(matWarpOtsu);
         int blackPixels = totPixels - whitePixels;
 
         Log.e("porcentagem", "tot: "+totPixels+" black: "+blackPixels);

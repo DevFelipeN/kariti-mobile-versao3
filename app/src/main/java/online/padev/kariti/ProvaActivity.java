@@ -58,13 +58,16 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import online.padev.kariti.correction.CoreKariti;
+import online.padev.kariti.utilities.Prova;
+
 public class ProvaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 100;
     ImageButton voltar, iconeAjuda;
     Button btnCadastrarProva, btnGerarCartao, btnCorrigirProva, btnProvasCorrigida, editarProva;
     BancoDados bancoDados;
     TextView textViewTitulo;
-    Integer id_provaBD, id_provaCaptured;
+    Integer id_provaCaptured;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,6 +259,7 @@ public class ProvaActivity extends AppCompatActivity {
             }else{
                 return;
             }
+            /*
             if (!Compactador.listCartoes.isEmpty()) {
                 try {
                     File fileZip = creatDirectoreZip();
@@ -278,6 +282,8 @@ public class ProvaActivity extends AppCompatActivity {
                     return;
                 }
             }
+             */
+            AnimacaoCorrecao.encerra("Correcao finalizada");
             mensagem(handler, "Correção finalizada!!");
         }catch (Exception e){
             Log.e("ERRO", "ERRO AQUI44!!: "+e.toString());
@@ -310,12 +316,12 @@ public class ProvaActivity extends AppCompatActivity {
                     dialog.show();
 
                     buttonYes.setOnClickListener(v -> {
-                        String[] x = bancoDados.pegarDadosProva(id_provaBD);
+                        String[] x = bancoDados.pegarDadosProva(id_provaCaptured);
                         String nameProva = x[0];
                         String id_turma = x[1];
                         String nameTurma = bancoDados.pegarNomeTurma(id_turma);
                         Intent intent = new Intent(getApplicationContext(), VisualProvaCorrigidaActivity.class);
-                        intent.putExtra("id_prova", id_provaBD);
+                        intent.putExtra("id_prova", id_provaCaptured);
                         intent.putExtra("prova", nameProva);
                         intent.putExtra("turma", nameTurma);
                         startActivity(intent);
@@ -427,8 +433,8 @@ public class ProvaActivity extends AppCompatActivity {
                     circlesInterest.add(new Point(circExt.x, circExt.y));
                     circ++;
                     //Imgproc.drawContours(matAux, Collections.singletonList(circExt.contour), -1, new Scalar(255, 0, 0), -1);
-                    Point center = new Point(circExt.x, circExt.y);
-                    Imgproc.circle(matToWarp, center, (int) (circExt.radius + circExt.radius * 0.8), new Scalar(255, 255, 255), -1);
+                    //Point center = new Point(circExt.x, circExt.y);
+                    //Imgproc.circle(matToWarp, center, (int) (circExt.radius + circExt.radius * 0.8), new Scalar(255, 255, 255), -1);
                 }
             }
 
@@ -437,38 +443,37 @@ public class ProvaActivity extends AppCompatActivity {
 
             if (circ == 4){
                 List<Point> listOrganized = organize(circlesInterest);
-                int questionsBD = 0;
-                int alternativesBD = 0;
-                Bitmap imgToQrCode = matToBitmap(mat);
-                String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
+                //Bitmap imgToQrCode = matToBitmap(mat);
+                String textQrCode = scanQRCodeFromBitmap(bitmap);
                 if(textQrCode != null){
                     Mat matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
                     id_provaCaptured = Integer.parseInt(a[0]);
-                    if(!id_provaCaptured.equals(id_provaBD)){
-                        if(!bancoDados.verificaExisteProvaPId(id_provaCaptured)){
-                            //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
-                            Log.e("kariti","Prova não cadastrada!!");
-                            return;
-                        }
-                    }
-                    id_provaBD = id_provaCaptured;
-                    Integer[] questAlt = bancoDados.pegarQuestsAndAlts(id_provaBD);
-                    if(questAlt == null){
+
+                    if(!bancoDados.verificaExisteProvaPId(id_provaCaptured)){
+                        //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
+                        Log.e("kariti","Prova não cadastrada!!");
                         return;
                     }
-                    questionsBD = questAlt[0];
-                    alternativesBD = questAlt[1];
 
-                    Bitmap imgWarp = matToBitmap(matWarp);
-                    nameCartao = resultQrCode+"_"+questionsBD+"_"+alternativesBD;
-                    saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
-                    saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
+                    Prova prova = new Prova(id_provaCaptured, bancoDados);
 
-                    String n = nameCartao+".png";
-                    if(!Compactador.listCartoes.contains(n)) {
-                        Compactador.listCartoes.add(n);
+                    //Bitmap imgWarp = matToBitmap(matWarp);
+                    //nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
+                    //saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
+                    //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
+
+                    //Versão 3
+                    CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, Integer.parseInt(a[1]));
+                    boolean isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+
+                    if (isCorrect) {
+                        nameCartao = resultQrCode + "_" + prova.getNumQuestoes() + "_" + prova.getNumAlternativas();
+                        String n = nameCartao + ".png";
+                        if (!Compactador.listCartoes.contains(n)) {
+                            Compactador.listCartoes.add(n);
+                        }
                     }
                 }
             }

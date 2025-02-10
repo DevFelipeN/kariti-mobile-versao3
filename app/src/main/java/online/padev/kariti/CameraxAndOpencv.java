@@ -1,7 +1,6 @@
 package online.padev.kariti;
 
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
-import static online.padev.kariti.Compactador.id_provaOpenCV;
 import static online.padev.kariti.Compactador.listCartoes;
 
 import android.app.AlertDialog;
@@ -42,7 +41,6 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -52,7 +50,6 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.Moments;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,7 +66,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import online.padev.kariti.correction.Circle;
-import online.padev.kariti.correction.Util;
+import online.padev.kariti.correction.CoreKariti;
 import online.padev.kariti.utilities.Prova;
 
 public class CameraxAndOpencv extends AppCompatActivity {
@@ -200,6 +197,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
             processamento(imageProxy); //threshold OTSU
         }catch(Exception e){
             Log.e("kariti", e.toString());
+            imageProxy.close(); // Libera o frame se não for válido
         }
     }
 
@@ -214,10 +212,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
             int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
             if (rotationDegrees != 0) {
                 Mat rotatedMat = new Mat();
-                Core.rotate(mat, rotatedMat, rotationDegrees == 90 ? Core.ROTATE_90_CLOCKWISE :
-                        rotationDegrees == 180 ? Core.ROTATE_180 :
-                                rotationDegrees == 270 ? Core.ROTATE_90_COUNTERCLOCKWISE :
-                                        Core.ROTATE_90_CLOCKWISE);
+                org.opencv.core.Core.rotate(mat, rotatedMat, rotationDegrees == 90 ? org.opencv.core.Core.ROTATE_90_CLOCKWISE :
+                        rotationDegrees == 180 ? org.opencv.core.Core.ROTATE_180 :
+                                rotationDegrees == 270 ? org.opencv.core.Core.ROTATE_90_COUNTERCLOCKWISE :
+                                        org.opencv.core.Core.ROTATE_90_CLOCKWISE);
                 mat.release();
                 mat = rotatedMat;
             }
@@ -365,8 +363,8 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     id_alunoBD = Integer.parseInt(a[1]);
 
                     //Versão 3
-                    Util util = new Util(matWarp, prova, bancoDados, id_alunoBD);
-                    squares = util.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                    CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_alunoBD);
+                    squares = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                 }
                 if(squares){
                     Bitmap imgWarp = matToBitmap(matWarp);
@@ -394,8 +392,8 @@ public class CameraxAndOpencv extends AppCompatActivity {
             imageProxy.close();
 
         }catch (Exception e){
-            e.printStackTrace();
             Log.e("ERRO", e.toString());
+            imageProxy.close();
         }
 
     }
@@ -683,7 +681,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
         }
         // Aumentar o brilho
         Mat brighterImage = new Mat();
-        Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
+        org.opencv.core.Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
 
         // Aumentar o contraste
         Mat enhancedImage = new Mat();

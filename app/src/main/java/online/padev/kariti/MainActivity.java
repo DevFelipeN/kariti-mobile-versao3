@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import online.padev.kariti.emails.EnviarCodigo;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextnome, editTextemail, editTextsenha, editTextconfirmarSenha;
@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton ocultarSenha2;
     private String nome, email, senha, confirmacaoSenha, codigo;
     private BancoDados bancoDados;
-    private EnviarEmail enviarEmail;
+    private EnviarCodigo enviarCodigo;
     private GerarCodigoValidacao gerarCodigo;
 
     @Override
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         //cria uma instancia de outras classes
         bancoDados = new BancoDados(this);
-        enviarEmail = new EnviarEmail();
+        enviarCodigo = new EnviarCodigo();
         gerarCodigo = new GerarCodigoValidacao();
 
         cadastro.setOnClickListener(v ->{
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             Integer verificaSeExisteEmailBD = bancoDados.verificaExisteEmail(email); //verifica se existe este usuario no banco
             if (verificaSeExisteEmailBD == null){
                 codigo = gerarCodigo.gerarVerificador();
-                if (enviarEmail.enviaCodigo(email, codigo)){
+                if (enviarCodigo.enviaCodigo(email, codigo)){
                     carregarTelaCodigo();
                 } else {
                     Toast.makeText(MainActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();

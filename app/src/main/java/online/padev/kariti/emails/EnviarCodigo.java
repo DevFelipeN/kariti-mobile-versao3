@@ -1,4 +1,4 @@
-package online.padev.kariti;
+package online.padev.kariti.emails;
 
 
 import android.util.Log;
@@ -13,7 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class EnviarEmail {
+public class EnviarCodigo {
 
     public Boolean enviaCodigo(String email, String codigo) {
         Properties prop = System.getProperties();

@@ -21,6 +21,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import online.padev.kariti.cards.CreatCard;
+
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton iconeSair;
     FloatingActionButton btnEscolaDesativada, btnCadastrarEscola;
@@ -48,6 +50,10 @@ public class VisualEscolaActivity extends AppCompatActivity {
         txtDescricaoNovaEscola = findViewById(R.id.txtDescricaoNovaEscola);
 
         bancoDados = new BancoDados(this);
+
+        // ==========================================TESTE==================================
+        //CreatCard creatCard = new CreatCard(2, "Testando 123", bancoDados, this);
+        //creatCard.creatPdfCard();
 
         titulo.setText(String.format("%s","Acessar com:"));
 

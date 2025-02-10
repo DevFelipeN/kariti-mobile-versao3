@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import online.padev.kariti.emails.EnviarCodigo;
+
 public class CodSenhaActivity extends AppCompatActivity {
     private  EditText n1, n2, n3, n4;
     private TextView timeEspera, reenviarCodigo;
     private String v1, v2, v3, v4, nomeUsuario, senha, email, codigo;
     private GerarCodigoValidacao gerarCodigo;
-    private EnviarEmail enviarEmail;
+    private EnviarCodigo enviarCodigo;
     private static final long TEMPO_ESPERA = 60000;
     BancoDados bancoDados;
 
@@ -37,7 +39,7 @@ public class CodSenhaActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
         gerarCodigo = new GerarCodigoValidacao();
-        enviarEmail = new EnviarEmail();
+        enviarCodigo = new EnviarCodigo();
 
         //pega os dados mandados por intent de outra activity
         int identificacao = getIntent().getExtras().getInt("identificador");
@@ -65,7 +67,7 @@ public class CodSenhaActivity extends AppCompatActivity {
 
         reenviarCodigo.setOnClickListener(v -> {
             codigo = gerarCodigo.gerarVerificador();
-            if (enviarEmail.enviaCodigo(email, codigo)){
+            if (enviarCodigo.enviaCodigo(email, codigo)){
                 Toast.makeText(this, "Código reenviado com sucesso!", Toast.LENGTH_SHORT).show();
                 iniciarTemporizador();
             } else {

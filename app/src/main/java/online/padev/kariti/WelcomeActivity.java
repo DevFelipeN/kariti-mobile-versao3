@@ -28,14 +28,12 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.e("opencv","Erro ao tentar executar openCV");
         }
 
-        // ==========================================TESTE==================================
-        //CreatCard creatCard = new CreatCard(this);
-        //creatCard.creatPdfCard();
-
 
         bancoDados = new BancoDados(this);
 
+        //bancoDados.deletarCorrecao(1);
         //bancoDados.deletarCorrecao(2);
+        //bancoDados.deletarCorrecao(3);
 
 
         if(bancoDados.verificaExisteEmail("karitimobile@gmail.com") == null) {

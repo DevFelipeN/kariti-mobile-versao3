@@ -139,6 +139,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".WelcomeActivity"
+            android:launchMode="singleTask"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

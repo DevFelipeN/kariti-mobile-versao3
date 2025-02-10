@@ -29,42 +29,47 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
+
+import online.padev.kariti.BancoDados;
+import online.padev.kariti.utilities.Prova;
 
 public class CreatCard {
     Context context;
+    Integer id_provaBD;
+    Prova prova;
+    private double nota;
+    private String className, teacher;
+    Map<Integer, String> students;
 
-    public CreatCard(Context context){
+    public CreatCard(Integer id_provaBD, String className, BancoDados bancoDados, Context context){
+        this.id_provaBD = id_provaBD;
+        this.className = className;
+        this.teacher = bancoDados.pegarNomeUsuario(BancoDados.USER_ID);
+        prova = new Prova(id_provaBD, bancoDados);
+        students = bancoDados.listarAlunosPorTurma(prova.getId_turma());
+        nota = bancoDados.pegarNotaProva(id_provaBD.toString());
         this.context = context;
     }
+
+    public CreatCard(int numQuests, int numAlternatives, double nota){
+
+    }
+
 
     public boolean creatPdfCard(){
 
         try {
 
-            int numQuestoes = 40;
-            int numAlternatives = 6;
-
             //Criar documento PDF
             PdfDocument pdfDocument = new PdfDocument();
 
-            for (int c = 1; c < 2; c++) {
+            for (Map.Entry<Integer, String> student : students.entrySet()) {
 
-                String text = LibQr.formatTextToQr("2." + c);
-
-                Bitmap qrCode = LibQr.createQrCode(text);
-                //Log.e("qrtest", "t: "+text);
-
-
-                String studant = "Aluno " + c;
-                String teacher = "Felipe";
-                String proofName = "P1";
-                String className = "T5";
-                String date = "28 / 02 / 2025";
-                double nota = 20.00;
-                String totalGrade = String.format("%.2f", nota);
+                Bitmap qrCode = LibQr.createQrCode(id_provaBD+"."+student.getKey(), context);
 
                 // ============ Cria uma página A4 (1240 x 1240 px) ===========================================================
-                PageInfo pageInfo = new PageInfo.Builder(1240, 1754, c).create();
+                PageInfo pageInfo = new PageInfo.Builder(1240, 1754, 1).create();
                 PdfDocument.Page page = pdfDocument.startPage(pageInfo);
                 Canvas canvas = page.getCanvas();
 
@@ -79,11 +84,11 @@ public class CreatCard {
                 paint.setTextSize(26);
 
                 // ================ Monta o Cabeçalho da Prova ====================================================================
-                canvas.drawText("Aluno(a): " + studant, 80, 85, paint);
+                canvas.drawText("Aluno(a): " + student.getValue(), 80, 85, paint);
                 canvas.drawText("Professor(a): " + teacher, 80, 115, paint);
-                canvas.drawText("Prova: " + proofName, 80, 145, paint);
+                canvas.drawText("Prova: " + prova.getNomeProva(), 80, 145, paint);
                 canvas.drawText("Turma: " + className, 80, 175, paint);
-                canvas.drawText("Data: " + date, 80, 205, paint);
+                canvas.drawText("Data: " + prova.dateToDisplay(), 80, 205, paint);
 
                 // ================== fonte das linhas =============================================
                 Paint paintLine = new Paint();
@@ -121,11 +126,11 @@ public class CreatCard {
                 // ==================== Adiciona a nota total dentro do retângulo =====================================
                 paint.setTextSize(72);
                 if (nota >= 100) {
-                    canvas.drawText(totalGrade, 340, 410, paint);
+                    canvas.drawText(String.format("%.2f", nota), 340, 410, paint);
                 } else if (nota >= 10) {
-                    canvas.drawText(totalGrade, 360, 410, paint);
+                    canvas.drawText(String.format("%.2f", nota), 360, 410, paint);
                 } else {
-                    canvas.drawText(totalGrade, 380, 410, paint);
+                    canvas.drawText(String.format("%.2f", nota), 380, 410, paint);
                 }
 
                 // ===================== retângulo para a nota do aluno =========================================
@@ -152,17 +157,17 @@ public class CreatCard {
                 paintCircle.setStrokeWidth(2); // Espessura da borda do círculo
 
                 int questsAtual = 0;
-                if (numQuestoes > 20) {
+                if (prova.getNumQuestoes() > 20) {
                     questsAtual = 20;
                     alternativeSpacing = 60;
                     startQueresAltX = 242;
                     startOptionX = 244;
                 } else {
-                    questsAtual = numQuestoes;
+                    questsAtual = prova.getNumQuestoes();
                 }
 
                 // ===================== Adiciona os quadrados das alternativas ====================================
-                for (int alt = 1; alt <= numAlternatives; alt++) {
+                for (int alt = 1; alt <= prova.getNumAlternativas(); alt++) {
                     canvas.drawRect(startQueresAltX, 653, startQueresAltX + 20, 673, paint);
                     startQueresAltX += alternativeSpacing;
                 }
@@ -177,7 +182,7 @@ public class CreatCard {
                     canvas.drawText(i + "", 170, startQuestY, paintLetters); // Número da questão
 
                     int optionX = startOptionX;
-                    for (int a = 0; a < numAlternatives; a++) {
+                    for (int a = 0; a < prova.getNumAlternativas(); a++) {
                         canvas.drawText(letters[a] + "", optionX, startQuestY, paintLetters); // Alternativas
 
                         // Ajusta a posição do círculo para centralizar a letra
@@ -194,25 +199,25 @@ public class CreatCard {
                 }
 
                 // =========== Caso o número de questões seja maior que 20 questões =========================================
-                if (numQuestoes > 20) {
+                if (prova.getNumQuestoes() > 20) {
 
                     startQueresAltX = 753;
 
                     // ===================== Adiciona os quadrados das alternativas na direita da página  ====================================
-                    for (int alt = 1; alt <= numAlternatives; alt++) {
+                    for (int alt = 1; alt <= prova.getNumAlternativas(); alt++) {
                         canvas.drawRect(startQueresAltX, 653, startQueresAltX + 20, 673, paint);
                         startQueresAltX += alternativeSpacing;
                     }
 
                     // ===================== Adiciona os quadrados das questões, numeros e alternativas na direita da página ========================
                     startQuestY = 720; // Onde começa as questões em Y
-                    for (int i = 21; i <= numQuestoes; i++) {
+                    for (int i = 21; i <= prova.getNumQuestoes(); i++) {
                         canvas.drawRect(651, startQuestY - 20, 671, startQuestY, paint);
 
                         canvas.drawText(i + "", 681, startQuestY, paintLetters); // Número da questão
 
                         startOptionX = 756;
-                        for (int a = 0; a < numAlternatives; a++) {
+                        for (int a = 0; a < prova.getNumAlternativas(); a++) {
                             canvas.drawText(letters[a] + "", startOptionX, startQuestY, paintLetters); // Alternativas
 
                             // Ajusta a posição do círculo para centralizar a letra
@@ -275,26 +280,25 @@ public class CreatCard {
                     Log.e("card", "Erro: " + e.toString());
                 }
             } else {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                    ContentResolver resolver = context.getContentResolver(); // Usando o contexto fornecido
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(MediaStore.Downloads.DISPLAY_NAME, "prova-teste.pdf");
-                    contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
-                    contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+                ContentResolver resolver = context.getContentResolver(); // Usando o contexto fornecido
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.Downloads.DISPLAY_NAME, "prova-teste.pdf");
+                contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
+                contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
 
-                    Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
+                Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
 
-                    try {
-                        if (uri != null) {
-                            OutputStream outputStream = resolver.openOutputStream(uri);
-                            pdfDocument.writeTo(outputStream);
-                            pdfDocument.close();
-                            notifyDownloadComplete("prova-teste.pdf", uri);
-                        }
-                    } catch (Exception e) {
-                        Log.e("kariti", e.getMessage());
+                try {
+                    if (uri != null) {
+                        OutputStream outputStream = resolver.openOutputStream(uri);
+                        pdfDocument.writeTo(outputStream);
+                        pdfDocument.close();
+                        notifyDownloadComplete("prova-teste.pdf", uri);
                     }
+                } catch (Exception e) {
+                    Log.e("kariti", e.getMessage());
+                    return false;
                 }
             }
             return true;

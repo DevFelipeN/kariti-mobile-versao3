@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -26,10 +27,11 @@ import online.padev.kariti.utilities.Prova;
 
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
+    private static final int DATABASE_VERSION = 27;
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public BancoDados(Context context) {
-        super(context, DBNAME, null, 27);
+        super(context, DBNAME, null, DATABASE_VERSION);
     }
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
@@ -65,6 +67,9 @@ public class BancoDados extends SQLiteOpenHelper {
             Log.e("Error base_dados: ",e.getMessage());
         }
 
+    }
+    public int getDatabaseVersion() {
+        return DATABASE_VERSION;
     }
 
     /**
@@ -1717,6 +1722,29 @@ public class BancoDados extends SQLiteOpenHelper {
         try {
             base_dados = this.getReadableDatabase();
             cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE id_aluno = ? AND status = ? AND id_escola = ?", new String[]{id_aluno.toString(), "1", BancoDados.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                emailAluno = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar email do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return emailAluno;
+    }
+    public String pegarEmailUsuario(Integer id_usuario) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String emailAluno = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT email FROM usuario WHERE id_usuario = ?", new String[]{id_usuario.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 emailAluno = cursor.getString(0);
             }

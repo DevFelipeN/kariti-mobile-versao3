@@ -22,12 +22,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import online.padev.kariti.cards.CreatCard;
+import online.padev.kariti.emails.EnviarBackup;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton iconeSair;
     FloatingActionButton btnEscolaDesativada, btnCadastrarEscola;
     ImageButton iconeAjuda;
-    TextView titulo, txtDescricaoDesativadas, txtDescricaoNovaEscola;
+    TextView titulo, txtDescricaoDesativadas, txtDescricaoNovaEscola, backupBD;
     ListView listViewEscolas;
     EscolaAdapter adapter;
     private ArrayList<String> listaEscolasBD;
@@ -48,6 +49,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
         titulo = findViewById(R.id.toolbar_title);
         txtDescricaoDesativadas = findViewById(R.id.txtDescricaoDesativadas);
         txtDescricaoNovaEscola = findViewById(R.id.txtDescricaoNovaEscola);
+        backupBD = findViewById(R.id.textBackupBD);
 
         bancoDados = new BancoDados(this);
 
@@ -137,6 +139,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
                 sair();
             }
         });
+        backupBD.setOnClickListener(v -> dialogBackup());
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -236,5 +239,50 @@ public class VisualEscolaActivity extends AppCompatActivity {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
                 ContextCompat.getColor(this, R.color.azul)
         );
+    }
+    private void dialogBackup(){
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.backup_bd, null);
+
+        // Inicializar os elementos do layout
+        FloatingActionButton closedBackup = dialogView.findViewById(R.id.btnBackupBD);
+        TextView inform = dialogView.findViewById(R.id.titleBackup);
+        Button buttonYes = dialogView.findViewById(R.id.btnYes);
+        Button buttonNot = dialogView.findViewById(R.id.btnNot);
+
+
+        // Criar o AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(dialogView);
+        // Mostrar o diálogo
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonYes.setOnClickListener(v -> {
+            EnviarBackup enviarBackup = new EnviarBackup();
+            boolean isEnviar = enviarBackup.enviaBackup(this, bancoDados.pegarEmailUsuario(BancoDados.USER_ID), bancoDados.getDatabaseVersion());
+            if (isEnviar){
+                Toast.makeText(this, "Backup realizado com sucesso!!", Toast.LENGTH_SHORT).show();
+                backupGuidance();
+            }else{
+                Toast.makeText(this, "Erro ao tentar realizar backup!!", Toast.LENGTH_SHORT).show();
+            }
+            dialog.dismiss();
+        });
+
+        buttonNot.setOnClickListener(v -> dialog.dismiss());
+
+        closedBackup.setOnClickListener(v -> dialog.dismiss());
+    }
+    private void backupGuidance(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("KARITI")
+                .setMessage("Seus dados do Kariti foram enviados para seu e-mail \n\n" +
+                        "Para utilizar seus dados do Kariti em outro dispositivo siga as orientações do e-mail\n\n" +
+                        "Certifique-se de receber o e-mail antes de desinstalar o Kariti desse dispositivo.")
+                .setPositiveButton("Ok", (dialog, which) -> dialog.dismiss());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

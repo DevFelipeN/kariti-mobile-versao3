@@ -109,8 +109,8 @@
             style="@style/COLORIMGICONE"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:contentDescription="@string/iconeEmail"
             android:layout_marginStart="2dp"
+            android:contentDescription="@string/iconeEmail"
             app:layout_constraintBottom_toBottomOf="@+id/editTextEmail"
             app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
             app:layout_constraintHorizontal_bias="0.022"
@@ -249,6 +249,7 @@
         style="@style/BUTTONSTYLE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:text="@string/buttonCadastrar"
         android:textAlignment="center"
         android:textSize="14sp"
@@ -256,6 +257,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextConfirmNovaSenha" />
+
+    <TextView
+        android:id="@+id/textViewBackup"
+        style="@style/COLORTEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/txtBackupNovo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewBackupLink"
+        style="@style/COLORTXTCLICK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="16sp"
+        android:text="@string/txtBackupNovoLink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintStart_toEndOf="@+id/textViewBackup" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

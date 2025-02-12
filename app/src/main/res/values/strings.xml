@@ -38,6 +38,10 @@
     <string name="buttonCameraOpenCV">Capturar Agora</string>
     <string name="cadEscola">Cadastrar Escola</string>
     <string name="CorrectOpenCv">Como deseja corrigir sua prova?</string>
+    <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>
+    <string name="btnBackupBD">Mudar de dispositivo</string>
+    <string name="txtBackupNovo">Mudança de dipositivo? </string>
+    <string name="txtBackupNovoLink">Clique aqui </string>
     <string name="criaConta">Criar conta</string>
     <string name="continuar">Continuar</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -52,6 +56,8 @@
     <string name="login_failed">"Login failed"</string>
     <string name="textViewKariti">Kariti</string>
     <string name="buttonConfig">Configurações</string>
+    <string name="btnYes">SIM</string>
+    <string name="btnNo">NÃO</string>
     <string name="buttonValidar">Validar</string>
     <string name="textViewCancelar">Cancelar</string>
     <string name="textViewReenviar">Reenviar código</string>

@@ -6,12 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
+
+import online.padev.kariti.emails.EnviarBackup;
 import online.padev.kariti.emails.EnviarCodigo;
 
 public class LoginActivity extends AppCompatActivity {
@@ -37,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         EditTextEmail = findViewById(R.id.editTextLogin);
         EditTextSenha = findViewById(R.id.editTextSenha);
         ocultarSenha = findViewById(R.id.senhaoculta);
+
 
        // EditTextEmail.setText(String.format("%s","felipemartinsdonascimento4@gmail.com"));
         //EditTextSenha.setText(String.format("%s","123"));

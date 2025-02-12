@@ -32,6 +32,9 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
         <activity
+            android:name=".NewCardActivity"
+            android:exported="false" />
+        <activity
             android:name=".QuickTestActivity"
             android:exported="false" />
         <activity

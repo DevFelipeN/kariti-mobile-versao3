@@ -31,7 +31,6 @@ public class CadProvaActivity extends AppCompatActivity {
     List<String> listTurmas;
     ImageButton btnVoltar, questMenos, questMais, altMais, altMenos;
     String dataform;
-    Integer id_turma;
     TextView titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

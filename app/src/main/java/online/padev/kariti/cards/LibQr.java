@@ -27,7 +27,7 @@ import java.util.Hashtable;
 import online.padev.kariti.R;
 
 public class LibQr {
-
+    /*
     public static Bitmap createQrCode2(String text) {
         text = formatTextToQr(text);
         int width = 270;
@@ -51,9 +51,10 @@ public class LibQr {
             return null;
         }
     }
+     */
 
-    public static Bitmap createQrCode(String text, Context context ) {
-        text = formatTextToQr(text);
+    public static Bitmap createQrCode(String text, int typeQr, Context context ) {
+        text = formatTextToQr(text, typeQr);
         int width = 270;
         int height = 270;
         try {
@@ -90,8 +91,10 @@ public class LibQr {
         }
     }
 
-    public static String formatTextToQr(String text){
+    public static String formatTextToQr(String text, int typeQr){
         if (text == null) return null;
-        return String.format("%1$" + 40 + "s", text).replace(' ', '#'); // Monta uma string com no minimo 40 caracteres
+        char symbol = '#';
+        if (typeQr == 1) symbol = '$';
+        return String.format("%1$" + 40 + "s", text).replace(' ', symbol); // Monta uma string com no minimo 40 caracteres
     }
 }

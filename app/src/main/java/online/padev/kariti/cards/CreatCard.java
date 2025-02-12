@@ -52,7 +52,10 @@ public class CreatCard {
         this.context = context;
     }
 
-    public CreatCard(int numQuests, int numAlternatives, double nota){
+    public CreatCard(int numQuests, int numAlternatives){
+        prova = new Prova();
+        prova.setNumQuestoes(numQuests);
+        prova.setNumAlternativas(numAlternatives);
 
     }
 
@@ -97,6 +100,7 @@ public class CreatCard {
 
                 // ======================== Desenha a primeira linha ==========================================
                 canvas.drawLine(80, 280, 890, 280, paintLine);
+
                 // ========================= Desenha a segunda linha ==========================================
                 paintLine.setStrokeWidth(2); // Aumenta a espessura da linha
                 canvas.drawLine(80, 560, 1160, 560, paintLine);

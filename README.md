@@ -20,4 +20,3 @@ Nesta versão do aplicativo Kariti, foi alterado o marcador que delimita a regi�
 * 100% de acerto para todos os testes sintéticos
 * Mais práticidade na captura dos cartões
 * Melhor desempenho da aplicação
-* Mais praticidade

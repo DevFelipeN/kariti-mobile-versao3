@@ -23,6 +23,7 @@ import java.util.Collections;
 
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.emails.EnviarBackup;
+import online.padev.kariti.utilities.Prova;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton iconeSair;
@@ -54,7 +55,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         // ==========================================TESTE==================================
-        //CreatCard creatCard = new CreatCard(2, "Testando 123", bancoDados, this);
+        //Prova prova = new Prova();
+        //prova.setNomeProva("Teste 1");
+        //prova.setId_prova(10);
+        //prova.setNumQuestoes(10);
+        //prova.setNumAlternativas(5);
+        //prova.setDataProva("12/02/2025");
+        //CreatCard creatCard = new CreatCard(prova, "Master", "Turma teste", this);
         //creatCard.creatPdfCard();
 
         titulo.setText(String.format("%s","Acessar com:"));
@@ -249,7 +256,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
         TextView inform = dialogView.findViewById(R.id.titleBackup);
         Button buttonYes = dialogView.findViewById(R.id.btnYes);
         Button buttonNot = dialogView.findViewById(R.id.btnNot);
-
 
         // Criar o AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

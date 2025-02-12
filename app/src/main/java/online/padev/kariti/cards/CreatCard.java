@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import online.padev.kariti.BancoDados;
@@ -36,29 +37,31 @@ import online.padev.kariti.utilities.Prova;
 
 public class CreatCard {
     Context context;
-    Integer id_provaBD;
+    private int typeQr;
     Prova prova;
     private double nota;
     private String className, teacher;
     Map<Integer, String> students;
 
-    public CreatCard(Integer id_provaBD, String className, BancoDados bancoDados, Context context){
-        this.id_provaBD = id_provaBD;
-        this.className = className;
+    public CreatCard(Prova prova, BancoDados bancoDados, Context context){
+        this.prova = prova;
+        this.className = bancoDados.pegarNomeTurma(prova.getId_turma().toString());
         this.teacher = bancoDados.pegarNomeUsuario(BancoDados.USER_ID);
-        prova = new Prova(id_provaBD, bancoDados);
         students = bancoDados.listarAlunosPorTurma(prova.getId_turma());
-        nota = bancoDados.pegarNotaProva(id_provaBD.toString());
+        nota = bancoDados.pegarNotaProva(prova.getId_prova().toString());
         this.context = context;
+        typeQr = 0; // Isso indica que o QRcode a ser montado terá o padrão (id_prova e id_aluno)
     }
 
-    public CreatCard(int numQuests, int numAlternatives){
-        prova = new Prova();
-        prova.setNumQuestoes(numQuests);
-        prova.setNumAlternativas(numAlternatives);
-
+    public CreatCard(Prova prova, String teacher, String className, Context context){
+        this.prova = prova;
+        this.context = context;
+        this.className = className;
+        this.teacher = teacher;
+        students = new HashMap<>();
+        students.put(prova.getNumAlternativas(), " "); // Alterando dado do QRcode
+        typeQr = 1; // Isso indica que o QRcode a ser montado terá o padrão (numQuestões e numAlternativas)
     }
-
 
     public boolean creatPdfCard(){
 
@@ -69,7 +72,7 @@ public class CreatCard {
 
             for (Map.Entry<Integer, String> student : students.entrySet()) {
 
-                Bitmap qrCode = LibQr.createQrCode(id_provaBD+"."+student.getKey(), context);
+                Bitmap qrCode = LibQr.createQrCode(prova.getId_prova()+"."+student.getKey(), typeQr, context);
 
                 // ============ Cria uma página A4 (1240 x 1240 px) ===========================================================
                 PageInfo pageInfo = new PageInfo.Builder(1240, 1754, 1).create();
@@ -133,13 +136,12 @@ public class CreatCard {
                     canvas.drawText(String.format("%.2f", nota), 340, 410, paint);
                 } else if (nota >= 10) {
                     canvas.drawText(String.format("%.2f", nota), 360, 410, paint);
-                } else {
+                } else if (nota >= 1) { // Isso garante que quando nem um valor for atribuido a nota, nada será desenhado no retangulo (Prova rápida)
                     canvas.drawText(String.format("%.2f", nota), 380, 410, paint);
                 }
 
                 // ===================== retângulo para a nota do aluno =========================================
                 canvas.drawRect(660, 320, 890, 450, paintRectangle);
-
 
                 // Adicionar linhas e questões (Para 20 questões ou menos)
                 int startQuestY = 720; // Onde começa as questões em Y

@@ -103,10 +103,7 @@ public class ProvaActivity extends AppCompatActivity {
                 aviso("provas cadastradas");
             }
         });
-        voltar.setOnClickListener(v -> {
-            getOnBackPressedDispatcher();
-            finish();
-        });
+        voltar.setOnClickListener(v -> finish());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

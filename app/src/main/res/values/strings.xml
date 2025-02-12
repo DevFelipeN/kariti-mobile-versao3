@@ -65,6 +65,7 @@
     <string name="textViewbemVindo">SEJA BEM VINDO AO</string>
     <string name="textViewkariti">KARITI</string>
     <string name="buttonCadastreSe">Cadastre-se</string>
+    <string name="buttonDefaultPassword">Entrar sem senha</string>
     <string name="buttonLogin">Login</string>
     <string name="buttonEsqueciSenha">Esqueci Minha Senha</string>
     <string name="textViewLoginEntrar">Entre com seu Login*</string>
@@ -119,6 +120,7 @@
     <!--    Prova-->
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
+    <string name="buttonGerarCartaoRap">Gerar Cartão</string>
     <string name="buttonVisuProva">Visualizar Provas</string>
     <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>

@@ -21,6 +21,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         AppCompatButton botaoCadastro = findViewById(R.id.buttonCadastroW);
         AppCompatButton botaoLogin = findViewById(R.id.buttonLoginW);
+        AppCompatButton btnDefaultPassword = findViewById(R.id.buttonDefaultPassword);
 
         if (OpenCVLoader.initDebug()) {
             Log.e("opencv","Sucesso na inicialização do openCV");
@@ -39,12 +40,9 @@ public class WelcomeActivity extends AppCompatActivity {
         if(bancoDados.verificaExisteEmail("karitimobile@gmail.com") == null) {
             bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
         }
-        botaoCadastro.setOnClickListener(v -> {
-            mudarParaTelaCadastro();
-        });
-        botaoLogin.setOnClickListener(v -> {
-            mudarParaTelaLogin();
-        });
+        botaoCadastro.setOnClickListener(v -> mudarParaTelaCadastro());
+        botaoLogin.setOnClickListener(v -> mudarParaTelaLogin());
+        btnDefaultPassword.setOnClickListener(v -> startQuickTest());
     }
 
     /**
@@ -60,6 +58,13 @@ public class WelcomeActivity extends AppCompatActivity {
      */
     private void mudarParaTelaLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+    /**
+     * Este método carrega a opção de prova rápida
+     */
+    private void startQuickTest(){
+        Intent intent = new Intent(this, QuickTestActivity.class);
         startActivity(intent);
     }
 }

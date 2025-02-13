@@ -24,7 +24,7 @@ import javax.mail.internet.MimeMultipart;
 
 public class EnviarBackup {
 
-    public boolean enviaBackup(Context context, String email, int version) {
+    public boolean enviaBackup(String email, File fileZip) {
         Properties prop = System.getProperties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "465");
@@ -32,20 +32,9 @@ public class EnviarBackup {
         prop.put("mail.smtp.auth", "true");
 
         if (email == null){
-            Log.e("kariti", "Banco de dados não encontrado!");
+            Log.e("kariti", "Email não encontrado!");
             return false;
         }
-
-        File dbFile = context.getDatabasePath("base_dados.db");
-
-        if (!dbFile.exists()) {
-            Log.e("kariti", "Banco de dados não encontrado!");
-            return false;
-        }
-
-        // fecha qualquer execução do banco em aberto
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
-        db.close();
 
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
@@ -71,9 +60,9 @@ public class EnviarBackup {
 
             // Parte do anexo
             MimeBodyPart attachmentPart = new MimeBodyPart();
-            FileDataSource fileSource = new FileDataSource(dbFile);
+            FileDataSource fileSource = new FileDataSource(fileZip);
             attachmentPart.setDataHandler(new DataHandler(fileSource));
-            attachmentPart.setFileName("backup_kariti_"+version+".db"); // Nome do arquivo no e-mail
+            attachmentPart.setFileName("backup_kariti.zip"); // Nome do arquivo no e-mail
 
             // Monta o corpo do e-mail
             Multipart multipart = new MimeMultipart();

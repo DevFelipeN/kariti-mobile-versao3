@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +20,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.emails.EnviarBackup;
-import online.padev.kariti.utilities.Prova;
 
 public class VisualEscolaActivity extends AppCompatActivity {
     ImageButton iconeSair;
@@ -266,21 +277,133 @@ public class VisualEscolaActivity extends AppCompatActivity {
         dialog.show();
 
         buttonYes.setOnClickListener(v -> {
-            EnviarBackup enviarBackup = new EnviarBackup();
-            boolean isEnviar = enviarBackup.enviaBackup(this, bancoDados.pegarEmailUsuario(BancoDados.USER_ID), bancoDados.getDatabaseVersion());
-            if (isEnviar){
+            if (startBackup()){
                 Toast.makeText(this, "Backup realizado com sucesso!!", Toast.LENGTH_SHORT).show();
                 backupGuidance();
-            }else{
-                Toast.makeText(this, "Erro ao tentar realizar backup!!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            } else {
+                Toast.makeText(this, "Falha na realização do backup!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
-            dialog.dismiss();
         });
 
         buttonNot.setOnClickListener(v -> dialog.dismiss());
 
         closedBackup.setOnClickListener(v -> dialog.dismiss());
     }
+    private boolean startBackup(){
+        File dbFile = getDatabasePath("base_dados.db");
+        String email = bancoDados.pegarEmailUsuario(BancoDados.USER_ID);
+
+        // fecha qualquer execução do banco em aberto
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
+        db.close();
+
+        if (!dbFile.exists()) {
+            Log.e("kariti", "Banco de dados não encontrado!");
+            return false;
+        }
+
+        //Cria um diretorio para salvar o Json internamente
+        File jsonFile = getOutputJson();
+        if (!jsonFile.exists()){
+            Log.e("kariti", "Erro na criação de arquivo Json!");
+            return false;
+        }
+
+        // Criar o Jason contendo a versão do banco de dados
+        try {
+            if (!createJson(jsonFile)){
+                Log.e("kariti", "Falha na criaçao do Json!");
+                return false;
+            }
+        }catch (JSONException e){
+            Log.e("kariti", "Falha na criaçao do Json!");
+            return false;
+        }
+
+        File fileZip = createDirectoreZip();
+
+        // Criar ZIP contendo o JSON e o Banco de Dados
+        try (FileOutputStream fos = new FileOutputStream(fileZip);
+             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+
+            addFileInZip(dbFile, "base_dados.db", zipOut);
+            addFileInZip(jsonFile, "version_db.json", zipOut);
+        }catch (IOException e){
+            Log.e("kariti", e.toString());
+            return false;
+        }
+
+        EnviarBackup enviarBackup = new EnviarBackup();
+        return enviarBackup.enviaBackup(email, fileZip);
+    }
+    private void addFileInZip(File file, String nomeNoZip, ZipOutputStream zipOut) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ZipEntry zipEntry = new ZipEntry(nomeNoZip);
+            zipOut.putNextEntry(zipEntry);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                zipOut.write(buffer, 0, length);
+            }
+
+            zipOut.closeEntry();
+        }
+    }
+    private File getOutputJson(){
+        File fileJson = new File(getCacheDir(), "versionBackup.json");
+        if (!fileJson.exists()) {
+            try {
+                // Tenta criar o arquivo
+                if (fileJson.createNewFile()) {
+                    Log.e("kariti","Diretorio criado");
+                } else {
+                    Log.i("kariti", "Arquivo já existe.");
+                }
+            } catch (IOException e) {
+                Log.e("kariti", "Erro ao criar diretorio!");
+            }
+        }
+        return fileJson;
+    }
+    public File createDirectoreZip() {
+        try {
+            File fileZip = new File(getCacheDir(), "backup_kariti.zip");
+            if (!fileZip.exists()) {
+                try {
+                    // Tenta criar o arquivo
+                    if (fileZip.createNewFile()) {
+                        Log.e("kariti","Diretorio criado");
+                    } else {
+                        Log.i("kariti", "Arquivo já existe.");
+                    }
+                } catch (IOException e) {
+                    Log.e("kariti", "Erro ao criar diretorio!");
+                }
+            }
+            return fileZip;
+        }catch (Exception e){
+            Log.e("circles", e.toString());
+            return null;
+        }
+    }
+    private boolean createJson(File jsonFile) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("version_db", bancoDados.getDatabaseVersion());
+
+        // Salvar JSON no armazenamento interno
+        try (FileWriter writer = new FileWriter(jsonFile)){
+            writer.write(jsonObject.toString());
+            writer.flush();
+        }catch (Exception e){
+            Log.e("kariti", e.toString());
+            return false;
+        }
+        return true;
+    }
+
     private void backupGuidance(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("KARITI")

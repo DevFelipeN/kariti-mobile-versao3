@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import online.padev.kariti.Downloads.DownloadCartoes;
+import online.padev.kariti.downloads.DownloadCartoes;
 
 public class ProvaCartoesActivity extends AppCompatActivity {
     ImageButton voltar;

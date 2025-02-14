@@ -1,4 +1,4 @@
-package online.padev.kariti.utilities;
+package online.padev.kariti.dao;
 
 import java.io.Serializable;
 

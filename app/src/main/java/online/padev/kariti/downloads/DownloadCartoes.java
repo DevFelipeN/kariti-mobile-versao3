@@ -1,4 +1,4 @@
-package online.padev.kariti.Downloads;
+package online.padev.kariti.downloads;
 
 import android.app.DownloadManager;
 import android.app.NotificationChannel;
@@ -27,6 +27,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -35,20 +36,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DownloadResultadoCorrecao {
+//faz download das folhas de respostas a serem preenchidas
+public class DownloadCartoes {
     File arquivoCsv;
     Context context;
     String filePdf;
-    public DownloadResultadoCorrecao(File arquivoCsv, Context context, String filePdf){
+
+    public DownloadCartoes(File arquivoCsv, Context context, String filePdf) {
         this.context = context;
         this.arquivoCsv = arquivoCsv;
         this.filePdf = filePdf;
     }
 
-    public void solicitarResultadoCorrecao(FileOutputStream fos, File fSaida, DownloadManager baixarPdf) {
+    public void baixarCartoesV9(FileOutputStream fos, File fSaida, DownloadManager baixarPdf) {
         Thread thread = new Thread(() -> {
             try {
-                String URL = "http://kariti.online/src/services/download_grades/download.php";
+                String URL = "http://kariti.online/src/services/download_template/download.php";
                 HttpClient client = new DefaultHttpClient();
                 HttpPost post = new HttpPost(URL);
                 MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
@@ -61,13 +64,14 @@ public class DownloadResultadoCorrecao {
                 HttpEntity httpEntity = response.getEntity();
                 InputStream is = httpEntity.getContent();
                 int inByte;
-                byte[]buffer = new byte[1024];
-                while((inByte = is.read(buffer)) != -1)
+                byte[] buffer = new byte[1024];
+                while ((inByte = is.read(buffer)) != -1) {
                     fos.write(buffer, 0, inByte);
-                is.close();
+                }
                 fos.close();
+                is.close();
                 baixarPdf.addCompletedDownload(filePdf, "Cartao Resposta: " + filePdf, true, "application /pdf", fSaida.getAbsolutePath(), fSaida.length(), true);
-                Log.e("Kariti", "Fim");
+
             } catch (Exception e) {
                 Log.e("kariti", e.toString());
             }
@@ -78,10 +82,10 @@ public class DownloadResultadoCorrecao {
     /**
      * Método usado para download de cartões respostas, em dispositivos com versão 10 e superiores
      */
-    public void baixarResultadoCorrecao11() {
+    public void baixarCartoesV11() {
         Thread thread = new Thread(() -> {
             try {
-                String URL = "http://kariti.online/src/services/download_grades/download.php";
+                String URL = "http://kariti.online/src/services/download_template/download.php";
                 HttpClient client = new DefaultHttpClient();
                 HttpPost post = new HttpPost(URL);
                 MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
@@ -106,6 +110,7 @@ public class DownloadResultadoCorrecao {
                     contentValues.put(MediaStore.Downloads.DISPLAY_NAME, filePdf);
                     contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
                     contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+
 
                     Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
 

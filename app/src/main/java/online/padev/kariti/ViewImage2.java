@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
-import online.padev.kariti.utilities.Gabarito;
+import online.padev.kariti.dao.Gabarito;
 
 public class ViewImage2 extends AppCompatActivity {
 

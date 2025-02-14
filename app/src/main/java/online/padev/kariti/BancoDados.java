@@ -6,11 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.SortedList;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -20,10 +18,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
-import online.padev.kariti.utilities.Gabarito;
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Gabarito;
+import online.padev.kariti.dao.Prova;
 
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";

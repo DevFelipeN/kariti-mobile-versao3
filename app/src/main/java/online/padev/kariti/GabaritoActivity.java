@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import online.padev.kariti.utilities.Gabarito;
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Gabarito;
+import online.padev.kariti.dao.Prova;
 
 public class GabaritoActivity extends AppCompatActivity {
     private TextView txtViewNotaProva, txtViewProva, txtViewTurma, txtViewData;

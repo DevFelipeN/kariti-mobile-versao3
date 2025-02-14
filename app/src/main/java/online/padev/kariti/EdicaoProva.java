@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Prova;
 
 public class EdicaoProva extends AppCompatActivity {
     private EditText editTextNomeProva;

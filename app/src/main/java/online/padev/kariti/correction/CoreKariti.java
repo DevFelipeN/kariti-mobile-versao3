@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import online.padev.kariti.BancoDados;
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Prova;
 
 
 public class CoreKariti {

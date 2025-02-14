@@ -24,17 +24,19 @@ import javax.mail.internet.MimeMultipart;
 
 public class EnviarBackup {
 
+    /**
+     * Este método é responsável por enviar um e-mail ao usuário
+     * contendo dados de backup do Kariti para ser inserido em outro dispositivo
+     * @param email referente ao email do usuario para qual deve ser enviado o e-mail
+     * @param fileZip ditório onde esta disponivel o arquivo de backup para ser carregado como anexo no e-mail
+     * @return retorna um valor booleano com o resultado da operação
+     */
     public boolean enviaBackup(String email, File fileZip) {
         Properties prop = System.getProperties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "465");
         prop.put("mail.smtp.ssl.enable", "true");
         prop.put("mail.smtp.auth", "true");
-
-        if (email == null){
-            Log.e("kariti", "Email não encontrado!");
-            return false;
-        }
 
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override

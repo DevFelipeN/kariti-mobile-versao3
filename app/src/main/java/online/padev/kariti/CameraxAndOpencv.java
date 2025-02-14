@@ -67,7 +67,7 @@ import java.util.concurrent.TimeUnit;
 
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Prova;
 
 public class CameraxAndOpencv extends AppCompatActivity {
 

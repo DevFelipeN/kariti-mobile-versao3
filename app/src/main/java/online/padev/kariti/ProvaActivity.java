@@ -1,7 +1,5 @@
 package online.padev.kariti;
 
-import static online.padev.kariti.Compactador.listCartoes;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -23,7 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +56,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Prova;
 
 public class ProvaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 100;

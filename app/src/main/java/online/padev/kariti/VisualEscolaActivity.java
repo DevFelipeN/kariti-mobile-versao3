@@ -264,7 +264,6 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         // Inicializar os elementos do layout
         FloatingActionButton closedBackup = dialogView.findViewById(R.id.btnBackupBD);
-        TextView inform = dialogView.findViewById(R.id.titleBackup);
         Button buttonYes = dialogView.findViewById(R.id.btnYes);
         Button buttonNot = dialogView.findViewById(R.id.btnNot);
 
@@ -277,6 +276,10 @@ public class VisualEscolaActivity extends AppCompatActivity {
         dialog.show();
 
         buttonYes.setOnClickListener(v -> {
+            if (!VerificaConexaoInternet.verificaConexao(this)) {
+                Toast.makeText(this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
             if (startBackup()){
                 Toast.makeText(this, "Backup realizado com sucesso!!", Toast.LENGTH_SHORT).show();
                 backupGuidance();
@@ -291,10 +294,18 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         closedBackup.setOnClickListener(v -> dialog.dismiss());
     }
+
+    /**
+     * Este método controla todo o processo de backup do banco de dados
+     * para envio por email do usuário atual logado na aplicação
+     * @return retorna um valor booleano indicando se todo o processo obteve sucesso
+     */
     private boolean startBackup(){
         File dbFile = getDatabasePath("base_dados.db");
         String email = bancoDados.pegarEmailUsuario(BancoDados.USER_ID);
-
+        if (email == null){
+            return false;
+        }
         // fecha qualquer execução do banco em aberto
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         db.close();
@@ -324,7 +335,7 @@ public class VisualEscolaActivity extends AppCompatActivity {
 
         File fileZip = createDirectoreZip();
 
-        // Criar ZIP contendo o JSON e o Banco de Dados
+        // Cria um ZIP contendo o JSON e o Banco de Dados
         try (FileOutputStream fos = new FileOutputStream(fileZip);
              ZipOutputStream zipOut = new ZipOutputStream(fos)) {
 
@@ -338,6 +349,14 @@ public class VisualEscolaActivity extends AppCompatActivity {
         EnviarBackup enviarBackup = new EnviarBackup();
         return enviarBackup.enviaBackup(email, fileZip);
     }
+
+    /**
+     * Este método adiciona arquivos a um zip
+     * @param file caminho do arquivo a ser adicionado no zip
+     * @param nomeNoZip nome do arquivo no zip
+     * @param zipOut saida onde será criado o zip
+     * @throws IOException
+     */
     private void addFileInZip(File file, String nomeNoZip, ZipOutputStream zipOut) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
             ZipEntry zipEntry = new ZipEntry(nomeNoZip);
@@ -352,6 +371,11 @@ public class VisualEscolaActivity extends AppCompatActivity {
             zipOut.closeEntry();
         }
     }
+
+    /**
+     * Este método cria um diretório para armazenamento de um arquivo Json
+     * @return retorna o diretório criado
+     */
     private File getOutputJson(){
         File fileJson = new File(getCacheDir(), "versionBackup.json");
         if (!fileJson.exists()) {
@@ -368,6 +392,11 @@ public class VisualEscolaActivity extends AppCompatActivity {
         }
         return fileJson;
     }
+
+    /**
+     * Este método cria um diretório para armazenamento de um arquivo zip
+     * @return retorna o diretório criado
+     */
     public File createDirectoreZip() {
         try {
             File fileZip = new File(getCacheDir(), "backup_kariti.zip");
@@ -389,6 +418,13 @@ public class VisualEscolaActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    /**
+     * Este método cria um json com a informação da versão do banco de dados atual
+     * @param jsonFile diretório criado para armazenamento do json
+     * @return returna um valor booleano referente ao resultado da operação
+     * @throws JSONException indica que este metodo pode lançar uma exceção que deve ser tratada
+     */
     private boolean createJson(File jsonFile) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("version_db", bancoDados.getDatabaseVersion());

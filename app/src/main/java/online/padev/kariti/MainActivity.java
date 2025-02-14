@@ -180,26 +180,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Dado um arquivo .zip selecionado pelo usuario, reerente ao backup do Kariti
+     * este método gerencia todo o processo de restauração do banco de dados no dispositivo atual
+     * @param dbUri parâmetro contendo o endereço do arquivo selecionado
+     */
     public void restoreDataBase(Uri dbUri) {
         try {
             File fileBackup = extractDataBase(dbUri);
             if (fileBackup == null) {
-                Toast.makeText(this, "Erro restauração dos seus dados no Kariti!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Erro na restauração dos seus dados no Kariti!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Acessa versão do banco de dados de backup
             JSONObject jsonObject = extrairJson(dbUri);
             if (jsonObject == null) {
                 Toast.makeText(this, "Erro restauração dos seus dados no Kariti!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String version = jsonObject.getString("version_db");
             // Pega a versão do arquivo de backup
+            String version = jsonObject.getString("version_db");
             int backupVersion = Integer.parseInt(version);
 
-            Log.e("version", String.format("%s",backupVersion));
+            //Log.e("version", String.format("%s",backupVersion));
 
             // Obtém o diretório do banco de dados do app
             File fileDbCurrent = getDatabasePath("base_dados.db");
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             if (backupVersion < currentVersion) {
-                Toast.makeText(this, "Este backup é uma versão mais antiga do app!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Inválido, este backup é uma versão mais antiga do app!", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -220,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
             SQLiteDatabase db = SQLiteDatabase.openDatabase(fileDbCurrent.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
             db.close();
 
-            // Abre um InputStream do arquivo recebido por e-mail
             InputStream inputStream = new FileInputStream(fileBackup);
 
             // Copia os dados do arquivo recebido para o banco de dados do app
@@ -240,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("kariti", e.toString());
-            Toast.makeText(this, "Erro restauração dos seus dados no Kariti!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Erro na restauração dos seus dados no Kariti!", Toast.LENGTH_LONG).show();
         }
     }
     private void selectFileBackupDialog(){
@@ -254,18 +258,24 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     private void sucessRestoration(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("KARITI")
-                .setMessage("Seus dados foram restaurados com sucesso nesse dispositivo.\n" +
+                .setMessage("Seus dados foram restaurados com sucesso neste dispositivo.\n" +
                         "Agora basta realizar login no Kariti e continuar usando.")
-                .setPositiveButton("Sim", (dialog, which) -> {
+                .setPositiveButton("OK", (dialog, which) -> {
                     dialog.dismiss();
                     finish();
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    /**
+     * Cria um dretório temporário para armazenar o banco
+     * @return retorna o diretório criado
+     */
     public File createDirectoreDBtemp() {
         try {
             File fileDB = new File(getCacheDir(), "backup_kariti.db");
@@ -287,6 +297,13 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    /**
+     * Dado o uri do arquivo .zip selecionado pelo usuário
+     * este método extrai o arquivo .db contendo banco de dados e salva no armazenamento interno do dispositivo
+     * @param zipUri parâmetro contendo o endereço do arquivo
+     * @return retorna o diretório onde será salvo o arquivo .db
+     */
 
     public File extractDataBase(Uri zipUri) {
         try {
@@ -325,11 +342,19 @@ public class MainActivity extends AppCompatActivity {
 
             zipInputStream.close();
             return tempDB;
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             Log.e("ZIP", "Erro ao extrair banco do ZIP: " + e.getMessage());
             return null;
         }
     }
+
+    /**
+     * Dado o uri do arquivo .zip selecionado pelo usuário
+     * este método extrai o arquivo .json contendo a informação da versão do banco de dados
+     * @param zipUri parâmetro contendo o endereço do arquivo
+     * @return retorna um JSONObject com a informação
+     */
     public JSONObject extrairJson(Uri zipUri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(zipUri);
@@ -370,5 +395,3 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 }
-
-    

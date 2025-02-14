@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,7 +16,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import online.padev.kariti.utilities.Prova;
+import online.padev.kariti.dao.Prova;
 
 public class CadProvaActivity extends AppCompatActivity {
     Button datePickerButton;

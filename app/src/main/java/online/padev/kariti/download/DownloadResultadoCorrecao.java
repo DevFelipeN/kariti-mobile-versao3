@@ -1,4 +1,4 @@
-package online.padev.kariti.downloads;
+package online.padev.kariti.download;
 
 import android.app.DownloadManager;
 import android.app.NotificationChannel;

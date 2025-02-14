@@ -77,7 +77,7 @@ public class CadProvaActivity extends AppCompatActivity {
         });
         altMais.setOnClickListener(v -> {
             int alter = Integer.parseInt(qtdAlter.getText().toString());
-            if(alter < 7)
+            if(alter < 6)
                 alter ++;
             qtdAlter.setText(String.valueOf(alter));
         });

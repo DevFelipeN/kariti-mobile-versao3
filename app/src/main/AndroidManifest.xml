@@ -35,7 +35,7 @@
             android:name=".NewCardActivity"
             android:exported="false" />
         <activity
-            android:name=".QuickTestActivity"
+            android:name=".QuickCardActivity"
             android:exported="false" />
         <activity
             android:name=".ViewImage"

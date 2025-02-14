@@ -9,8 +9,6 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
-import online.padev.kariti.cards.CreatCard;
-
 public class WelcomeActivity extends AppCompatActivity {
     BancoDados bancoDados;
 
@@ -64,7 +62,7 @@ public class WelcomeActivity extends AppCompatActivity {
      * Este método carrega a opção de prova rápida
      */
     private void startQuickTest(){
-        Intent intent = new Intent(this, QuickTestActivity.class);
+        Intent intent = new Intent(this, QuickCardActivity.class);
         startActivity(intent);
     }
 }

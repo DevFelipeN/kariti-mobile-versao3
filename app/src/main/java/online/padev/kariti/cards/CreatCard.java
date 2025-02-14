@@ -94,7 +94,11 @@ public class CreatCard {
                 canvas.drawText("Professor(a): " + teacher, 80, 115, paint);
                 canvas.drawText("Prova: " + prova.getNomeProva(), 80, 145, paint);
                 canvas.drawText("Turma: " + className, 80, 175, paint);
-                canvas.drawText("Data: " + prova.dateToDisplay(), 80, 205, paint);
+                if(prova.getDataProva() != null) {
+                    canvas.drawText("Data: " + prova.dateToDisplay(), 80, 205, paint);
+                } else {
+                    canvas.drawText("Data: ", 80, 205, paint);
+                }
 
                 // ================== fonte das linhas =============================================
                 Paint paintLine = new Paint();

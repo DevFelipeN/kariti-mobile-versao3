@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import online.padev.kariti.downloads.DownloadResultadoCorrecao;
+import online.padev.kariti.download.DownloadResultadoCorrecao;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     ImageButton voltar;

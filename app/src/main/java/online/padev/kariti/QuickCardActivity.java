@@ -1,5 +1,6 @@
 package online.padev.kariti;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -9,7 +10,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class QuickTestActivity extends AppCompatActivity {
+public class QuickCardActivity extends AppCompatActivity {
 
     ImageButton voltar, iconeAjuda;
     Button btnNewCard, btnCorrect;
@@ -18,7 +19,7 @@ public class QuickTestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prova_rapida);
+        setContentView(R.layout.activity_quick_card);
 
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconeAjuda = findViewById(R.id.iconHelp);
@@ -28,7 +29,7 @@ public class QuickTestActivity extends AppCompatActivity {
 
         textViewTitle.setText(String.format("%s", "Prova Rápida"));
 
-        btnNewCard.setOnClickListener(v -> Toast.makeText(this, "New Card", Toast.LENGTH_SHORT).show());
+        btnNewCard.setOnClickListener(v -> startNewCard());
         btnCorrect.setOnClickListener(v -> Toast.makeText(this, "New Correction", Toast.LENGTH_SHORT).show());
         iconeAjuda.setOnClickListener(v -> Toast.makeText(this, "Implement Information", Toast.LENGTH_SHORT).show());
         
@@ -41,5 +42,9 @@ public class QuickTestActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private void startNewCard(){
+        Intent intent = new Intent(this, NewCardActivity.class);
+        startActivity(intent);
     }
 }

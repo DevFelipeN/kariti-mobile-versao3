@@ -1043,7 +1043,7 @@ public class BancoDados extends SQLiteOpenHelper {
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de provas cadastradas no banco! "+e.getMessage());
-            return null;
+            return false;
         } finally {
             if(base_dados != null && base_dados.isOpen()){
                 base_dados.close();

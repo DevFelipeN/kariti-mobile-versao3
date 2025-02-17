@@ -24,8 +24,7 @@ import java.util.Objects;
 import online.padev.kariti.dao.Prova;
 
 public class EdicaoProva extends AppCompatActivity {
-    private EditText editTextNomeProva;
-    private TextView textViewNumQuestoes, textViewNumAlternativas;
+    private EditText editTextNomeProva, qtdQuest, qtdAlter;
     private Spinner spinnerTurma;
     private ImageButton btnMenosQuestoes, btnMaisQuestoes, btnMenosAlternativas, btnMaisAlternativas, btnVoltar;
     private Button btnAvancar, btnData;
@@ -48,8 +47,8 @@ public class EdicaoProva extends AppCompatActivity {
         editTextNomeProva = findViewById(R.id.editTextNomeProva);
         spinnerTurma = findViewById(R.id.spinnerTurmaPprova);
         titulo = findViewById(R.id.toolbar_title);
-        textViewNumQuestoes = findViewById(R.id.textViewQuantity);
-        textViewNumAlternativas = findViewById(R.id.textVieAlter);
+        qtdQuest = findViewById(R.id.editTextQtdQuests);
+        qtdAlter = findViewById(R.id.editTextQtdAlter);
 
         btnMenosQuestoes = findViewById(R.id.imageButtonMenosQuest);
         btnMaisQuestoes = findViewById(R.id.imageButtonMaisQuest);
@@ -67,8 +66,8 @@ public class EdicaoProva extends AppCompatActivity {
         provaAtual = new Prova();
 
         editTextNomeProva.setText(String.format("%s", provaBD.getNomeProva()));
-        textViewNumQuestoes.setText(String.format("%s", provaBD.getNumQuestoes()));
-        textViewNumAlternativas.setText(String.format("%s", provaBD.getNumAlternativas()));
+        qtdQuest.setText(String.format("%s", provaBD.getNumQuestoes()));
+        qtdAlter.setText(String.format("%s", provaBD.getNumAlternativas()));
         btnData.setText(provaBD.dateToDisplay());
 
         listTurma = bancoDados.listarNomesTurmas(); // Lista todas as turmas da escola atual
@@ -78,28 +77,40 @@ public class EdicaoProva extends AppCompatActivity {
         spinnerTurma.setSelection(position);
 
         btnMaisQuestoes.setOnClickListener(view -> {
-            int quest = Integer.parseInt(textViewNumQuestoes.getText().toString());
+            int quest = 0;
+            if (!qtdQuest.getText().toString().trim().isEmpty()){
+                quest = Integer.parseInt(qtdQuest.getText().toString());
+            }
             if(quest < 20)
                 quest ++;
-            textViewNumQuestoes.setText(String.valueOf(quest));
+            qtdQuest.setText(String.valueOf(quest));
         });
         btnMenosQuestoes.setOnClickListener(view -> {
-            int quest = Integer.parseInt(textViewNumQuestoes.getText().toString());
+            int quest = 0;
+            if (!qtdQuest.getText().toString().trim().isEmpty()){
+                quest = Integer.parseInt(qtdQuest.getText().toString());
+            }
             if(quest > 0)
                 quest --;
-            textViewNumQuestoes.setText(String.valueOf(quest));
+            qtdQuest.setText(String.valueOf(quest));
         });
         btnMaisAlternativas.setOnClickListener(view -> {
-            int alter = Integer.parseInt(textViewNumAlternativas.getText().toString());
-            if(alter < 7)
+            int alter = 0;
+            if (!qtdAlter.getText().toString().trim().isEmpty()) {
+                alter = Integer.parseInt(qtdAlter.getText().toString());
+            }
+            if(alter < 6)
                 alter ++;
-            textViewNumAlternativas.setText(String.valueOf(alter));
+            qtdAlter.setText(String.valueOf(alter));
         });
         btnMenosAlternativas.setOnClickListener(view -> {
-            int alter = Integer.parseInt(textViewNumAlternativas.getText().toString());
+            int alter = 0;
+            if (!qtdAlter.getText().toString().trim().isEmpty()) {
+                alter = Integer.parseInt(qtdAlter.getText().toString());
+            }
             if(alter > 0)
                 alter --;
-            textViewNumAlternativas.setText(String.valueOf(alter));
+            qtdAlter.setText(String.valueOf(alter));
         });
 
 
@@ -129,8 +140,6 @@ public class EdicaoProva extends AppCompatActivity {
                 provaAtual.setId_prova(id_provaBD);
                 provaAtual.setNomeProva(editTextNomeProva.getText().toString());
                 provaAtual.setDataProva(btnData.getText().toString());
-                provaAtual.setNumQuestoes(Integer.parseInt(textViewNumQuestoes.getText().toString()));
-                provaAtual.setNumAlternativas(Integer.parseInt(textViewNumAlternativas.getText().toString()));
                 provaAtual.setId_turma(bancoDados.pegarIdTurma(nomeTurmaAtual));
 
                 if (provaAtual.getNomeProva().trim().isEmpty()) { //verifica se o campo prova esta vazio
@@ -138,10 +147,6 @@ public class EdicaoProva extends AppCompatActivity {
                     return;
                 }
                 if (provaAtual.isDifferent(provaBD)) { //Verifica se os dados da prova foram alterados
-                    if (provaAtual.getNumQuestoes() == 0 || provaAtual.getNumAlternativas() == 0) {
-                        Toast.makeText(EdicaoProva.this, "Quantidade de questões e/ou alternativas, não podem ser igual a 0.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     if (!provaAtual.getNomeProva().equals(provaBD.getNomeProva()) || !provaAtual.getId_turma().equals(provaBD.getId_turma())) {
                         Boolean verificaProva = bancoDados.verificaExisteProvaPNome(provaAtual.getNomeProva(), provaAtual.getId_turma().toString());
                         if (verificaProva == null) {
@@ -153,6 +158,26 @@ public class EdicaoProva extends AppCompatActivity {
                             return;
                         }
                     }
+
+                    if(qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")){
+                        Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")){
+                        Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (Integer.parseInt(qtdQuest.getText().toString()) > 20){
+                        dialogLimitMaxQuest();
+                        return;
+                    }
+                    if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
+                        dialogLimitMaxAlter();
+                        return;
+                    }
+                    provaAtual.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
+                    provaAtual.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
                     status = 1; // isso indica que foram realizadas alterações nos dados da prova
                     confirmeAlteracaoDados();
                 } else {
@@ -204,5 +229,20 @@ public class EdicaoProva extends AppCompatActivity {
         intent.putExtra("status", status);
         startActivity(intent);
         finish();
+    }
+
+    private void dialogLimitMaxQuest(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 20 questões!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+    private void dialogLimitMaxAlter(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 6 alternativas!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

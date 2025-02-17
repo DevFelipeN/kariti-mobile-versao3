@@ -61,7 +61,7 @@ import online.padev.kariti.dao.Prova;
 public class ProvaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 100;
     ImageButton voltar, iconeAjuda;
-    Button btnCadastrarProva, btnGerarCartao, btnCorrigirProva, btnProvasCorrigida, editarProva;
+    Button btnCadastrarProva, btnGerarCartao, btnCorrigirProva, btnViewProvas, editarProva;
     BancoDados bancoDados;
     TextView textViewTitulo;
     Integer id_provaCaptured;
@@ -75,7 +75,7 @@ public class ProvaActivity extends AppCompatActivity {
         btnCadastrarProva = findViewById(R.id.buttonCadProva);
         btnGerarCartao = findViewById(R.id.buttonGerarCatao);
         btnCorrigirProva = findViewById(R.id.buttonCorrigirProva);
-        btnProvasCorrigida = findViewById(R.id.buttonVisuProva);
+        btnViewProvas = findViewById(R.id.buttonVisuProva);
         editarProva = findViewById(R.id.buttonEdicaoProva);
         textViewTitulo = findViewById(R.id.toolbar_title);
 
@@ -86,7 +86,7 @@ public class ProvaActivity extends AppCompatActivity {
         iconeAjuda.setOnClickListener(v -> ajuda());
         btnCadastrarProva.setOnClickListener(v -> carregarCadastroProva());
         btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
-        btnProvasCorrigida.setOnClickListener(v -> carregarTelaProvasCorrigida());
+        btnViewProvas.setOnClickListener(v -> startViewProvas());
         btnCorrigirProva.setOnClickListener(v -> {
             Boolean verificaProva = bancoDados.verificaExisteProvaCadastrada();
             if (verificaProva == null){
@@ -133,17 +133,13 @@ public class ProvaActivity extends AppCompatActivity {
             aviso("provas cadastradas");
         }
     }
-    private void carregarTelaProvasCorrigida(){
-        Boolean verificaExisteProvaCorrigida = bancoDados.verificaExisteProvaCorrigida();
-        if (verificaExisteProvaCorrigida == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(verificaExisteProvaCorrigida){
+    private void startViewProvas(){
+        Boolean existsProva = bancoDados.verificaExisteProvaCadastrada();
+        if(existsProva){
             Intent intent = new Intent(this, VisualProvaActivity2.class);
             startActivity(intent);
         }else{
-            aviso("provas corrigidas");
+            aviso("provas cadastradas");
         }
     }
     private void aviso(String descricao){

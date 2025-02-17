@@ -128,12 +128,14 @@
             tools:layout_editor_absoluteX="133dp"
             tools:layout_editor_absoluteY="332dp" />
 
-        <TextView
-            android:id="@+id/textViewQuantity"
+        <EditText
+            android:id="@+id/editTextQtdQuests"
             style="@style/COLORTEXT"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_row="0"
+            android:maxLength="2"
+            android:inputType="number"
             android:layout_column="2"
             android:paddingTop="10dp"
             android:text="@string/buttonQtd"
@@ -175,13 +177,15 @@
             tools:layout_editor_absoluteX="133dp"
             tools:layout_editor_absoluteY="332dp" />
 
-        <TextView
-            android:id="@+id/textVieAlter"
+        <EditText
+            android:id="@+id/editTextQtdAlter"
             style="@style/COLORTEXT"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:paddingTop="10dp"
             android:layout_marginTop="20dp"
+            android:inputType="number"
+            android:maxLength="2"
             android:text="@string/buttonQtd"
             android:textAlignment="center"
             android:textSize="20sp" />

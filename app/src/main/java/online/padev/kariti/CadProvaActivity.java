@@ -1,10 +1,12 @@
 package online.padev.kariti;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,8 +23,7 @@ import online.padev.kariti.dao.Prova;
 public class CadProvaActivity extends AppCompatActivity {
     Button datePickerButton;
     Calendar calendar;
-    EditText nomeProva;
-    TextView qtdQuest, qtdAlter;
+    EditText nomeProva, qtdQuest, qtdAlter;
     Button btnGerProva;
     Spinner spinnerTurma;
     BancoDados bancoDados;
@@ -40,8 +41,8 @@ public class CadProvaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.imgBtnVoltar);
         btnGerProva = findViewById(R.id.btnGerarProva);
         nomeProva = findViewById(R.id.editTextNomeProva);
-        qtdQuest = findViewById(R.id.textViewQuantity);
-        qtdAlter = findViewById(R.id.textVieAlter);
+        qtdQuest = findViewById(R.id.editTextQtdQuests);
+        qtdAlter = findViewById(R.id.editTextQtdAlter);
         questMais = findViewById(R.id.imageButtonMaisQuest);
         questMenos = findViewById(R.id.imageButtonMenosQuest);
         altMais = findViewById(R.id.imgBtnMaisAlter);
@@ -64,77 +65,103 @@ public class CadProvaActivity extends AppCompatActivity {
         spinnerTurma.setAdapter(adapter);
 
         questMais.setOnClickListener(v -> {
-            int quest = Integer.parseInt(qtdQuest.getText().toString());
+            int quest = 0;
+            if (!qtdQuest.getText().toString().trim().isEmpty()){
+                quest = Integer.parseInt(qtdQuest.getText().toString());
+            }
             if(quest < 20)
                 quest ++;
             qtdQuest.setText(String.valueOf(quest));
         });
         questMenos.setOnClickListener(v -> {
-            int quest = Integer.parseInt(qtdQuest.getText().toString());
+            int quest = 0;
+            if (!qtdQuest.getText().toString().trim().isEmpty()){
+                quest = Integer.parseInt(qtdQuest.getText().toString());
+            }
             if(quest > 0)
                 quest --;
             qtdQuest.setText(String.valueOf(quest));
         });
         altMais.setOnClickListener(v -> {
-            int alter = Integer.parseInt(qtdAlter.getText().toString());
+            int alter = 0;
+            if (!qtdAlter.getText().toString().trim().isEmpty()) {
+                alter = Integer.parseInt(qtdAlter.getText().toString());
+            }
             if(alter < 6)
                 alter ++;
             qtdAlter.setText(String.valueOf(alter));
         });
         altMenos.setOnClickListener(v -> {
-            int alter = Integer.parseInt(qtdAlter.getText().toString());
+            int alter = 0;
+            if (!qtdAlter.getText().toString().trim().isEmpty()) {
+                alter = Integer.parseInt(qtdAlter.getText().toString());
+            }
             if(alter > 0)
                 alter --;
             qtdAlter.setText(String.valueOf(alter));
         });
         btnGerProva.setOnClickListener(v -> {
+            try {
+                prova.setNomeProva(nomeProva.getText().toString());
 
-            prova.setNomeProva(nomeProva.getText().toString());
-            prova.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
-            prova.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+                if (prova.getNomeProva().trim().isEmpty()) {
+                    Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (spinnerTurma.getSelectedItem() == "Selecione a Turma") {
+                    Toast.makeText(CadProvaActivity.this, "Selecione uma turma!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String nomeTurma = spinnerTurma.getSelectedItem().toString();
+                prova.setId_turma(bancoDados.pegarIdTurma(nomeTurma));
 
-            if(prova.getNomeProva().trim().isEmpty()){
-                Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(spinnerTurma.getSelectedItem() == "Selecione a Turma"){
-                Toast.makeText(CadProvaActivity.this, "Selecione uma turma!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            String nomeTurma = spinnerTurma.getSelectedItem().toString();
-            prova.setId_turma(bancoDados.pegarIdTurma(nomeTurma));
+                if (datePickerButton.getText().toString().equals("Selecionar Data")) {
+                    Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                prova.setDataProva(datePickerButton.getText().toString());
 
-            if(datePickerButton.getText().toString().equals("Selecionar Data")){
-                Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            prova.setDataProva(datePickerButton.getText().toString());
+                if (qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")) {
+                    Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")) {
+                    Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            if(prova.getNumQuestoes() == 0){
-                Toast.makeText(CadProvaActivity.this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(prova.getNumAlternativas() == 0){
-                Toast.makeText(CadProvaActivity.this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                if (Integer.parseInt(qtdQuest.getText().toString()) > 20) {
+                    dialogLimitMaxQuest();
+                    return;
+                }
+                if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
+                    dialogLimitMaxAlter();
+                    return;
+                }
 
-            if(prova.getId_turma() == null){
+                prova.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
+                prova.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+
+                if (prova.getId_turma() == null) {
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova.getNomeProva(), prova.getId_turma().toString());
+                if (verificaProva == null) {
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (verificaProva) {
+                    Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, " + prova.getNomeProva(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                carregarTelaGabarito();
+            }catch (Exception e){
+                Log.e("kariti", e.toString());
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                return;
             }
-
-            Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova.getNomeProva(), prova.getId_turma().toString());
-            if(verificaProva == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(verificaProva) {
-                Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, "+prova.getNomeProva(), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            carregarTelaGabarito();
         });
         // Obtém a instância do calendário com a data atual
         calendar = Calendar.getInstance();
@@ -181,5 +208,19 @@ public class CadProvaActivity extends AppCompatActivity {
         intent.putExtra("direcao", "novaProva");
         startActivity(intent);
         finish();
+    }
+    private void dialogLimitMaxQuest(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 20 questões!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+    private void dialogLimitMaxAlter(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 6 alternativas!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

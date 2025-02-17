@@ -44,12 +44,12 @@ public class NewCardActivity extends AppCompatActivity {
         className = findViewById(R.id.editTextNameClass);
         teacherName = findViewById(R.id.editTextNameTeacher);
         datePickerButton = findViewById(R.id.datePickerNewCard);
-        questMais = findViewById(R.id.imageButtonMaisQuest);
-        questMenos = findViewById(R.id.imageButtonMenosQuest);
-        altMais = findViewById(R.id.imgBtnMaisAlter);
-        altMenos = findViewById(R.id.imgBtnMenoAlter);
-        qtdQuest = findViewById(R.id.editTextQtdQuests);
-        qtdAlter = findViewById(R.id.editTextQtdAlters);
+        questMais = findViewById(R.id.imgButtonMaisQuestNewCard);
+        questMenos = findViewById(R.id.imgButtonMenosQuestNewCard);
+        altMais = findViewById(R.id.imgBtnMaisAlterNewCard);
+        altMenos = findViewById(R.id.imgBtnMenoAlterNewCard);
+        qtdQuest = findViewById(R.id.editTextQtdQuestNewCard);
+        qtdAlter = findViewById(R.id.editTextQtdAlterNewCard);
         btnGenerateCard = findViewById(R.id.btnNewCard);
         textViewTitle = findViewById(R.id.toolbar_title);
 
@@ -170,7 +170,7 @@ public class NewCardActivity extends AppCompatActivity {
         return simpleDateFormat.format(calendar.getTime());
     }
 
-    public void dialogLimitMaxQuest(){
+    private void dialogLimitMaxQuest(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 20 questões!");
@@ -178,13 +178,14 @@ public class NewCardActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void dialogLimitMaxAlter(){
+    private void dialogLimitMaxAlter(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 6 alternativas!");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
+
     private void solicitaPermissaoNotificacao(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -216,13 +217,15 @@ public class NewCardActivity extends AppCompatActivity {
             }
         }
     }
-    public void permissaoDNotificacaoNegada(){
+
+    private void permissaoDNotificacaoNegada(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
         builder.setMessage("O Kariti não será capaz de notifica-lo sobre os downloads realizados!");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
+
     private void permissaoNegada(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO");
@@ -230,6 +233,7 @@ public class NewCardActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
+
     private void solicitaPermissao(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -238,6 +242,7 @@ public class NewCardActivity extends AppCompatActivity {
             generateCard();
         }
     }
+
     private void infoDownloadCard(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Cartão gerado com sucesso");

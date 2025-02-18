@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import online.padev.kariti.BancoDados;
+import online.padev.kariti.dao.Gabarito;
 import online.padev.kariti.dao.Prova;
 
 
@@ -28,7 +29,7 @@ public class CoreKariti {
     List<Point> squaresQuestions = new ArrayList<>(); // Para armazenar apenas os quadrados da questões
     List<Point> squaresAltenatives = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas
     List<MatOfPoint> contours = new ArrayList<>(); // Para armazenar os contornos encontrados na imagem
-    Map<Integer, Integer> gabarito = new HashMap<>(); // Para armazenar a questão (Key) e a resposta associada a questão
+    HashMap<Integer, Integer> gabaritoResult = new HashMap<>(); // Para armazenar a questão (Key) e a resposta associada a questão
     List<SquaresCircles> squaresCircles = new ArrayList<>(); // Para armazenar a questão e os circulos associados a essa questão
     List<Circle> markedCircles = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem
     Integer id_alunoBD;
@@ -36,57 +37,83 @@ public class CoreKariti {
     BancoDados bancoDados;
     Prova prova;
     int height, width;
+    private String gabarito;
+    private int typeProva;
     private final double limit = 0.02;
 
+    /**
+     * Este construtor deve ser invocado quando a prova que se deseja corrigir,
+     * está cadastrada no banco de dados do aplicativo
+     * @param mat imagem cortada do cartão resposta
+     * @param prova dados da prova a ser corrigida
+     * @param bancoDados instância do banco para cadastro da correção
+     * @param id_alunoBD id do aluno associado ao prova a ser corrigida
+     */
     public CoreKariti(Mat mat, Prova prova, BancoDados bancoDados, Integer id_alunoBD){
         this.mat = mat;
         this.id_alunoBD = id_alunoBD;
         this.prova = prova;
         this.bancoDados = bancoDados;
+        gabarito = bancoDados.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
+        typeProva = 0; //Isso indica que a correção a ser realizada será salva em banco
     }
 
     /**
-     * Método para validação de imagens para correção baseado nos contornos referentes aos quadrados das questões e alternativas
-     * @return retorna true caso a imagem seja válida para correção e false caso contrário
+     * Este construtor deve ser invocado quando a prova a ser corrigida,
+     * não esta cadastrada no banco de dados
+     * @param mat imagem cortada do cartão resposta
+     * @param prova dados da prova a ser corrigida
      */
-    public boolean correctCard() {
+    public CoreKariti(Mat mat, Prova prova, String gabarito){
+        this.mat = mat;
+        this.prova = prova;
+        this.gabarito = gabarito;
+        typeProva = 1; //Isso indica que a correção a ser realizada NÃO será salva em banco
+    }
+
+
+    /**
+     * Método para gerenciamento de validação de imagens para correção baseado nos contornos referentes aos quadrados das questões e alternativas
+     * @return retorna um HashMap contendo o resultado da correção caso correção bem sucedida e null caso contrário
+     */
+    public HashMap<Integer, Integer> correctCard() {
         if (squares()){
-            //return true;
-            return getAnswers();
+            if (getAnswers()){
+                return gabaritoResult;
+            } else return null;
         }else {
-            Log.e("correct", "W1");
-            return false;
+            return null;
         }
     }
 
     /**
      * Este méto é chamado após validação da imagem, procura as marcações referentes as respostas
      * e associa as suas respectivas questões e alternativas.
-     * @return retorna o estatus da correção como um valor booleano
+     * @return retorna o status da correção como um valor booleano
      */
     private boolean getAnswers(){
         // Seleciona apenas os contornos dentro do limite definido
         if(!circlesOfInterest()){
-            Log.e("correct", "W2");
             return false;
         }
 
         // Ordena a lista de circulos em ordem crescente em y
         if(!sortCirclesOrder()){
-            Log.e("correct", "W3");
             return false;
         }
         // Associa os circulos a sua respectiva questão e alternativa
         if(!compareSquaresAndCircles()){
-            Log.e("correct", "W4");
             return false;
         }
-        // Insere as respostas encontradas para essa prova no banco
-        boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabarito, prova.getId_prova(), id_alunoBD);
-        if(!insertCorrectBD){
-            Log.e("correct", "W5");
-            return false;
+        if (typeProva == 0){
+            // Insere as respostas encontradas para essa prova no banco
+            boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabaritoResult, prova.getId_prova(), id_alunoBD);
+            if(!insertCorrectBD){
+                Log.e("correct", "W5");
+                return false;
+            }
         }
+
         //Desenha um quadrado nos quatro cantos da imagem
         paintCantos();
         //Numera os quedrados das questões
@@ -382,20 +409,20 @@ public class CoreKariti {
                     }
                     //Log.e("correcao", "q: "+listCirc.size());
                     //Log.e("correcao","markings: "+markings);
-                    gabarito.put(i + 1, Integer.valueOf(markings));
+                    gabaritoResult.put(i + 1, Integer.valueOf(markings));
                 } else {
                     Point circ = listCirc.get(0);
                     if (circ.x != 0) {
                         for (int j = 0; j < squaresAltenatives.size(); j++) {
                             Point alt = squaresAltenatives.get(j);
                             if (getProportion(alt.x, circ.x, thresholdX)) {
-                                gabarito.put(i + 1, letters[j]);
+                                gabaritoResult.put(i + 1, letters[j]);
                                 paintCircle(circ, letters[j], i);
                                 break;
                             }
                         }
                     } else {
-                        gabarito.put(i + 1, 0);
+                        gabaritoResult.put(i + 1, 0);
                     }
                 }
             }
@@ -414,12 +441,10 @@ public class CoreKariti {
 
     private void paintCircle(Point p, int mark, int quest){
         try {
-            String gabaritoBD = bancoDados.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
-            //Log.e("correcao", "c: " + gabaritoBD);
             double x = p.x - (width * 0.01);
             double y = p.y + (height * 0.01);
             char d = (char) (Integer.parseInt(String.valueOf(mark)) - 1 + 'A');
-            char r = (char) ('A' + Integer.parseInt(String.valueOf(gabaritoBD.charAt(quest))) - 1);
+            char r = (char) ('A' + Integer.parseInt(String.valueOf(gabarito.charAt(quest))) - 1);
             if (d == r) {
                 Imgproc.circle(mat, p, (int) (width * 0.016), new Scalar(0, 255, 0), -1);
                 Imgproc.putText(mat, String.valueOf(d), new Point(x,y), Imgproc.FONT_HERSHEY_SIMPLEX, width * 0.0008, new Scalar(0, 0, 0), 2);

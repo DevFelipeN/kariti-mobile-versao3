@@ -1,5 +1,6 @@
 package online.padev.kariti.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import online.padev.kariti.BancoDados;

@@ -1473,6 +1473,7 @@ public class BancoDados extends SQLiteOpenHelper {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         String nomeProva = "";
+        Log.e("kariti","Erro ao tentar pegar nome da Prova: id! "+id_prova);
         try {
             base_dados = this.getReadableDatabase();
             cursor = base_dados.rawQuery("SELECT nomeProva FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});

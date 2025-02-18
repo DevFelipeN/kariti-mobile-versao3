@@ -51,7 +51,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -456,9 +458,9 @@ public class ProvaActivity extends AppCompatActivity {
 
                     //Versão 3
                     CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, Integer.parseInt(a[1]));
-                    boolean isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                    HashMap<Integer, Integer> isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
 
-                    if (isCorrect) {
+                    if (isCorrect != null) {
                         nameCartao = resultQrCode + "_" + prova.getNumQuestoes() + "_" + prova.getNumAlternativas();
                         String n = nameCartao + ".png";
                         if (!Compactador.listCartoes.contains(n)) {

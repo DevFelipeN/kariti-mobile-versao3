@@ -14,11 +14,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -60,6 +62,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -79,9 +82,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
     BancoDados bancoDados;
     Prova prova;
     ImageAnalysis imageAnalysis;
-    Integer id_provaBD, id_provaCaptured, id_alunoBD;
+    Integer id_provaCaptured, id_alunoBD;
     private boolean isActivityFinishing = false;
     private boolean isQrCodePositive = false;
+    private int typeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +162,26 @@ public class CameraxAndOpencv extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        String msg = "";
+        if (typeMessage == 1) {
+            msg = "Prova não cadastrada. \n\n" +
+                    "Verifique se a escola selecionada é a qual pertence esta prova!";
+        }
+        if (typeMessage == 2){
+            msg = "Para corrigir esta prova você precisa realizar login no Kariti";
+        }
+        if (typeMessage == 3){
+            msg = "Cartão gerado em prova rápida.\n\n" +
+                    "Portanto, só pode ser corrigido na mesma seção!";
+        }
+        if (typeMessage != 0){
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        }
     }
 
     private void startCamera() {
@@ -337,6 +361,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
             //Converte imagem para ser mostrada na tela
             Bitmap imgBitmap = matToBitmap(matAux);
+            HashMap<Integer, Integer> correction = new HashMap<>();
 
             if (circ == 4){
                 boolean squares = false;
@@ -348,23 +373,54 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
 
-                    id_provaCaptured = Integer.parseInt(a[0]);
+                    // Verifica se a prova capaturada é uma prova cujo o QRCode apresente o padrão # (isso indica que essa prova pode estar cadastrada)
+                    if (String.valueOf(textQrCode.charAt(0)).equals("#")){
+                        if (BancoDados.USER_ID != null) { // Isso garante que esse tipo de cartão seja corrigido apenas com o usuário logado
 
-                    if(!bancoDados.verificaExisteProvaPId(id_provaCaptured)){
-                        //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
-                        Log.e("kariti","Prova não cadastrada!!");
-                        imageProxy.close();
-                        mat.release();
-                        return;
+                            id_provaCaptured = Integer.parseInt(a[0]);
+
+                            if (!bancoDados.verificaExisteProvaPId(id_provaCaptured)) {
+                                imageProxy.close();
+                                mat.release();
+                                typeMessage = 1;
+                                finish();
+                            }
+
+                            prova = new Prova(id_provaCaptured, bancoDados);
+
+                            id_alunoBD = Integer.parseInt(a[1]);
+
+                            //Versão 3
+                            CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_alunoBD);
+                            correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                        }else {
+                            mat.release();
+                            imageProxy.close();
+                            typeMessage = 2;
+                            finish();
+                        }
+                    } else { // Entra aqui se a prova capturada não esta cadastrada
+                        if (BancoDados.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
+                            prova = new Prova();
+                            prova.setId_prova(0);
+                            prova.setNumQuestoes(Integer.parseInt(a[0]));
+                            prova.setNumAlternativas(Integer.parseInt(a[1]));
+
+                            String gabaritoTeste = "1234512345";
+
+                            //Versão 3
+                            CoreKariti core = new CoreKariti(matWarp, prova, gabaritoTeste);
+                            correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                        }else {
+                            mat.release();
+                            imageProxy.close();
+                            typeMessage = 3;
+                            finish();
+                        }
                     }
-
-                    prova = new Prova(id_provaCaptured, bancoDados);
-
-                    id_alunoBD = Integer.parseInt(a[1]);
-
-                    //Versão 3
-                    CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_alunoBD);
-                    squares = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                    if (correction != null){
+                        squares = true;
+                    }
                 }
                 if(squares){
                     Bitmap imgWarp = matToBitmap(matWarp);
@@ -375,16 +431,26 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 }
             }
             if(!isActivityFinishing && isQrCodePositive){
-                //Compactador.id_provaOpenCV = id_provaBD;
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
-                Intent intent = new Intent(this, ViewImage2.class);
-                intent.putExtra("filePath", filePath);
-                intent.putExtra("id_prova", prova.getId_prova());
-                intent.putExtra("id_aluno", id_alunoBD);
-                intent.putExtra("nameImag", nameCartao);
-                startActivity(intent);
-                finish();
+                if (prova.getId_prova() == 0){
+                    Intent intent = new Intent(this, ViewImageActivity.class);
+                    intent.putExtra("filePath", filePath);
+                    intent.putExtra("status", 1);
+                    intent.putExtra("id_prova", prova.getId_prova());
+                    intent.putExtra("gabarito", "1234512345");
+                    intent.putExtra("resultGabarito", correction);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Intent intent = new Intent(this, ViewImageActivity.class);
+                    intent.putExtra("filePath", filePath);
+                    intent.putExtra("id_prova", prova.getId_prova());
+                    intent.putExtra("status", 0);
+                    intent.putExtra("id_aluno", id_alunoBD);
+                    startActivity(intent);
+                    finish();
+                }
             }
             runOnUiThread(() -> edgeImageView.setImageBitmap(imgBitmap));
 
@@ -466,7 +532,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
         }
     }
     private String processeQrCode(String qrCode){
-        String qrCodeConteudo = qrCode.replaceAll("#", "");
+        String qrCodeConteudo = qrCode.replaceAll("[#$]", "");
         String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
         String id_prova = partes[0];
         String id_aluno = partes[1];
@@ -657,7 +723,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
         return qrCodeResult;
     }
 
-    public void avidoDeCancelamento(){
+    private void avidoDeCancelamento(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("ATENÇÃO!")
                 .setMessage("Caso confirme essa ação, o processo de correção em andamento, será cancelado!\n\n" +

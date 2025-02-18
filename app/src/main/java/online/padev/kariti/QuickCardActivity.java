@@ -30,7 +30,7 @@ public class QuickCardActivity extends AppCompatActivity {
         textViewTitle.setText(String.format("%s", "Prova Rápida"));
 
         btnNewCard.setOnClickListener(v -> startNewCard());
-        btnCorrect.setOnClickListener(v -> Toast.makeText(this, "New Correction", Toast.LENGTH_SHORT).show());
+        btnCorrect.setOnClickListener(v -> startCorrection());
         iconeAjuda.setOnClickListener(v -> Toast.makeText(this, "Implement Information", Toast.LENGTH_SHORT).show());
         
 
@@ -45,6 +45,10 @@ public class QuickCardActivity extends AppCompatActivity {
     }
     private void startNewCard(){
         Intent intent = new Intent(this, NewCardActivity.class);
+        startActivity(intent);
+    }
+    public void startCorrection(){
+        Intent intent = new Intent(getApplicationContext(), CameraxAndOpencv.class);
         startActivity(intent);
     }
 }

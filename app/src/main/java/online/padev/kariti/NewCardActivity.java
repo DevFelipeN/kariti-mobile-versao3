@@ -245,10 +245,14 @@ public class NewCardActivity extends AppCompatActivity {
 
     private void infoDownloadCard(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
         builder.setTitle("Cartão gerado com sucesso");
         builder.setMessage("O cartão resposta foi gerado e está disponível na pasta de downloads do seu dispositvo.\n\n" +
                 "Você pode realizar impressão da quantidade de cartões necessários a partir do cartão que acabou de ser gerado!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            dialog.dismiss();
+            finish();
+        });
         builder.show();
     }
 }

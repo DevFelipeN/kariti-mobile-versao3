@@ -29,7 +29,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import online.padev.kariti.BancoDados;
@@ -281,7 +284,7 @@ public class CreatCard {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 // Salvar arquivo
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "prova-teste.pdf");
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), prova.getNomeProva()+dataHoraAtual()+".pdf");
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
                     pdfDocument.writeTo(fos);
@@ -304,7 +307,7 @@ public class CreatCard {
                         OutputStream outputStream = resolver.openOutputStream(uri);
                         pdfDocument.writeTo(outputStream);
                         pdfDocument.close();
-                        notifyDownloadComplete("prova-teste.pdf", uri);
+                        notifyDownloadComplete(prova.getNomeProva()+dataHoraAtual()+".pdf", uri);
                     }
                 } catch (Exception e) {
                     Log.e("kariti", e.getMessage());
@@ -358,6 +361,11 @@ public class CreatCard {
             return;
         }
         notificationManager.notify(1, builder.build());
+    }
+    private String dataHoraAtual(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        Date date = new Date();
+        return sdf.format(date);
     }
 
 }

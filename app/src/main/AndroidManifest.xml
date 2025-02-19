@@ -80,6 +80,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ProvaCartoesActivity2"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".GabaritoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

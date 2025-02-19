@@ -128,7 +128,7 @@ public class ProvaActivity extends AppCompatActivity {
             return;
         }
         if (verificaProvaCad) {
-            Intent intent = new Intent(this, ProvaCartoesActivity.class);
+            Intent intent = new Intent(this, ProvaCartoesActivity2.class);
             intent.putExtra("endereco", 2);
             startActivity(intent);
         }else{

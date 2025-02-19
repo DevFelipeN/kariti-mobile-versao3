@@ -1,6 +1,7 @@
 package online.padev.kariti.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import online.padev.kariti.BancoDados;
@@ -11,9 +12,7 @@ public class Gabarito {
     private Integer resposta;
     private float nota;
     private List<Gabarito> gabarito;
-
-    public Gabarito() {
-    }
+    public static List<Gabarito> gabaritoDefault = new ArrayList<>(); // Guarda o gabarito de provas rapidas
 
     public Gabarito(BancoDados bancoDados, Integer id_provaBD){
         gabarito = bancoDados.listarDadosGabarito(id_provaBD);

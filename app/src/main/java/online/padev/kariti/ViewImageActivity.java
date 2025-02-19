@@ -86,9 +86,11 @@ public class ViewImageActivity extends AppCompatActivity {
         }else{
             newIntent();
         }
+
         continuar.setOnClickListener(v -> newIntent());
         encerrar.setOnClickListener(v -> finish());
         voltar.setOnClickListener(v -> finish());
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

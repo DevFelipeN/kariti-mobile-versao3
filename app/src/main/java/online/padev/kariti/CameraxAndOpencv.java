@@ -60,6 +60,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -70,6 +71,7 @@ import java.util.concurrent.TimeUnit;
 
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
+import online.padev.kariti.dao.Gabarito;
 import online.padev.kariti.dao.Prova;
 
 public class CameraxAndOpencv extends AppCompatActivity {
@@ -178,9 +180,8 @@ public class CameraxAndOpencv extends AppCompatActivity {
             msg = "Cartão gerado em prova rápida.\n\n" +
                     "Portanto, só pode ser corrigido na mesma seção!";
         }
-        if (typeMessage != 0){
+        if (!Arrays.asList(0,4,5).contains(typeMessage)){
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-
         }
     }
 
@@ -203,6 +204,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 imageAnalysis = new ImageAnalysis.Builder()
                         .setTargetAspectRatio(AspectRatio.RATIO_16_9)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        //.setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
                         .build();
                 imageAnalysis.setAnalyzer(cameraExecutor, this::processImage);
 
@@ -221,6 +223,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
             processamento(imageProxy); //threshold OTSU
         }catch(Exception e){
             Log.e("kariti", e.toString());
+        }finally {
             imageProxy.close(); // Libera o frame se não for válido
         }
     }
@@ -362,13 +365,13 @@ public class CameraxAndOpencv extends AppCompatActivity {
             //Converte imagem para ser mostrada na tela
             Bitmap imgBitmap = matToBitmap(matAux);
             HashMap<Integer, Integer> correction = new HashMap<>();
+            String gabaritoDefault = "";
 
             if (circ == 4){
                 boolean squares = false;
                 Bitmap imgToQrCode = matToBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
                 if(textQrCode != null){
-                    Log.e("QRcode", "QR: "+textQrCode);
                     matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
@@ -393,7 +396,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                             //Versão 3
                             CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_alunoBD);
                             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
-                        }else {
+                        } else {
                             mat.release();
                             imageProxy.close();
                             typeMessage = 2;
@@ -401,16 +404,32 @@ public class CameraxAndOpencv extends AppCompatActivity {
                         }
                     } else { // Entra aqui se a prova capturada não esta cadastrada
                         if (BancoDados.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
-                            prova = new Prova();
-                            prova.setId_prova(0);
-                            prova.setNumQuestoes(Integer.parseInt(a[0]));
-                            prova.setNumAlternativas(Integer.parseInt(a[1]));
+                                prova = new Prova();
+                                prova.setId_prova(0);
+                                prova.setNumQuestoes(Integer.parseInt(a[0]));
+                                prova.setNumAlternativas(Integer.parseInt(a[1]));
+                            if (Gabarito.gabaritoDefault != null && !Gabarito.gabaritoDefault.isEmpty()) {
+                                if (prova.getNumQuestoes() == Prova.numQuestsDefault && prova.getNumAlternativas() == Prova.numAlternativesDefault) {
 
-                            String gabaritoTeste = "1234512345";
+                                    for (Gabarito g : Gabarito.gabaritoDefault){
+                                        gabaritoDefault += g.getResposta();
+                                    }
 
-                            //Versão 3
-                            CoreKariti core = new CoreKariti(matWarp, prova, gabaritoTeste);
-                            correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                                    //Versão 3
+                                    CoreKariti core = new CoreKariti(matWarp, prova, gabaritoDefault);
+                                    correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                                }else {
+                                    mat.release();
+                                    imageProxy.close();
+                                    typeMessage = 4;
+                                    startGabaritoDefault();
+                                }
+                            } else {
+                                mat.release();
+                                imageProxy.close();
+                                typeMessage  = 5;
+                                startGabaritoDefault();
+                            }
                         }else {
                             mat.release();
                             imageProxy.close();
@@ -418,7 +437,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                             finish();
                         }
                     }
-                    if (correction != null){
+                    if (correction != null && !correction.isEmpty()){
                         squares = true;
                     }
                 }
@@ -433,12 +452,13 @@ public class CameraxAndOpencv extends AppCompatActivity {
             if(!isActivityFinishing && isQrCodePositive){
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
+                imageProxy.close();
                 if (prova.getId_prova() == 0){
                     Intent intent = new Intent(this, ViewImageActivity.class);
                     intent.putExtra("filePath", filePath);
                     intent.putExtra("status", 1);
                     intent.putExtra("id_prova", prova.getId_prova());
-                    intent.putExtra("gabarito", "1234512345");
+                    intent.putExtra("gabarito", gabaritoDefault);
                     intent.putExtra("resultGabarito", correction);
                     startActivity(intent);
                     finish();
@@ -459,6 +479,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
         }catch (Exception e){
             Log.e("ERRO", e.toString());
+        }finally {
             imageProxy.close();
         }
 
@@ -807,6 +828,17 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     });
                 }
             });
+        }
+    }
+    private void startGabaritoDefault(){
+        if (!isActivityFinishing) {
+            isActivityFinishing = true; //Isso garante que a próxima activity seja invocada apenas uma vez
+            Intent intent = new Intent(this, GabaritoActivity.class);
+            intent.putExtra("direcao", "cardDefault");
+            intent.putExtra("typeMessage", typeMessage);
+            intent.putExtra("prova", prova);
+            startActivity(intent);
+            finish();
         }
     }
 }

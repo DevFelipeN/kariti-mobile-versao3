@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,8 +43,9 @@ public class GabaritoActivity extends AppCompatActivity {
 
     private BancoDados bancoDados;
     private Prova dadosProva;
+    private String direcion;
 
-    int status;
+    private int status, typeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,74 +71,102 @@ public class GabaritoActivity extends AppCompatActivity {
         titulo.setText(String.format("%s","Gabarito"));
 
         dadosProva = (Prova) getIntent().getSerializableExtra("prova");
+        direcion = getIntent().getExtras().getString("direcao");
 
-        if(dadosProva.getId_prova() != null){
+
+        if(dadosProva.getId_prova() != null && !dadosProva.getId_prova().equals(0)){
             status = getIntent().getExtras().getInt("status");
             btnCadastrarProva.setText(String.format("%s","Salvar"));
         }
 
-        txtViewProva.setText(String.format("Prova: %s", dadosProva.getNomeProva()));
-        txtViewTurma.setText(String.format("Turma: %s", bancoDados.pegarNomeTurma(dadosProva.getId_turma().toString())));
-        txtViewData.setText(String.format("Data: %s", dadosProva.dateToDisplay()));
+        if (!direcion.equals("cardDefault")) {
+            txtViewProva.setText(String.format("Prova: %s", dadosProva.getNomeProva()));
+            txtViewTurma.setText(String.format("Turma: %s", bancoDados.pegarNomeTurma(dadosProva.getId_turma().toString())));
+            txtViewData.setText(String.format("Data: %s", dadosProva.dateToDisplay()));
+        } else {
+            txtViewProva.setVisibility(View.GONE);
+            txtViewData.setVisibility(View.GONE);
+            txtViewTurma.setVisibility(View.GONE);
+            btnCadastrarProva.setText(String.format("%s","Salvar"));
+            typeMessage = getIntent().getExtras().getInt("typeMessage");
+            if (typeMessage == 4){ // indica que já existe um gabarito default cadastrado e que um novo deve ser cadastrado para prova rápida
+                differentCardNotice();
+            }
+            if (typeMessage == 5){
+                newGabaritoDefault();
+            }
+        }
 
         btnCadastrarProva.setOnClickListener(v -> {
             btnCadastrarProva.setEnabled(false);
             boolean respostaSelecionada = true;
             boolean respostasNotasPreenchidas = true;
 
-            //Verica aqui se todas as respostas fora marcadas
-            for (RadioGroup radioGroup : listRadioGroups) {
-                if (radioGroup.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(GabaritoActivity.this, "Por favor, selecione uma resposta para todas as questões.", Toast.LENGTH_SHORT).show();
-                    respostaSelecionada = false;
-                    break;
-                }
-            }
-            // Verifica se todos os campos de notas foram preenchidos
-            for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
-                LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
-                EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
-                String nt = pontosEditText.getText().toString();
-                if (nt.isEmpty()) {
-                    Toast.makeText(GabaritoActivity.this, "Por favor, preencha todas as notas para as questões.", Toast.LENGTH_SHORT).show();
-                    respostasNotasPreenchidas = false;
-                    break;
-                }
-            }
+            try {
 
-            if (respostaSelecionada && respostasNotasPreenchidas) { //Caso todas as alternativas forem marcadas e as notas adicionadas
-
-                if (!notaFinal()){
-                    btnCadastrarProva.setEnabled(true);
-                    return;
-                }
-                if(!notas.isEmpty()){
-                    for(int i = 1; i <= dadosProva.getNumQuestoes(); i++){
-                        Integer resp = alternativasEscolhidas.get(i-1);
-                        float notaQuestaoI = notas.get(i-1);
-                        Log.e("notas","n1: "+notaQuestaoI);
-                        Gabarito g = new Gabarito(i, resp + 1, notaQuestaoI);
-                        gabarito.add(g);
+                //Verica aqui se todas as respostas fora marcadas
+                for (RadioGroup radioGroup : listRadioGroups) {
+                    if (radioGroup.getCheckedRadioButtonId() == -1) {
+                        Toast.makeText(GabaritoActivity.this, "Por favor, selecione uma resposta para todas as questões.", Toast.LENGTH_SHORT).show();
+                        respostaSelecionada = false;
+                        break;
                     }
-
-                    if (dadosProva.getId_prova() == null){
-                        if (bancoDados.cadastrarProva(dadosProva, gabarito)){
-                            dialogProvaSucess("cadastrada");
-                        } else {
-                            avisoErroDeCadastro("no cadastro");
-                        }
-                    }else{
-                        if (bancoDados.alterarDadosProva(dadosProva, gabarito, status)){
-                            dialogProvaSucess("alterada");
-                        }else{
-                            avisoErroDeCadastro("na alteração");
-                        }
+                }
+                // Verifica se todos os campos de notas foram preenchidos
+                for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+                    LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
+                    EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+                    String nt = pontosEditText.getText().toString();
+                    if (nt.isEmpty()) {
+                        Toast.makeText(GabaritoActivity.this, "Por favor, preencha todas as notas para as questões.", Toast.LENGTH_SHORT).show();
+                        respostasNotasPreenchidas = false;
+                        break;
                     }
-                }else{
-                    Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
+                }
+
+                if (respostaSelecionada && respostasNotasPreenchidas) { //Caso todas as alternativas forem marcadas e as notas adicionadas
+
+                    if (!notaFinal()) {
+                        btnCadastrarProva.setEnabled(true);
+                        return;
+                    }
+                    if (!notas.isEmpty()) {
+                        for (int i = 1; i <= dadosProva.getNumQuestoes(); i++) {
+                            Integer resp = alternativasEscolhidas.get(i - 1);
+                            float notaQuestaoI = notas.get(i - 1);
+                            Log.e("notas", "n1: " + notaQuestaoI);
+                            Gabarito g = new Gabarito(i, resp + 1, notaQuestaoI);
+                            gabarito.add(g);
+                        }
+
+                        if (dadosProva.getId_prova() == null) {
+                            if (bancoDados.cadastrarProva(dadosProva, gabarito)) {
+                                dialogProvaSucess("cadastrada");
+                            } else {
+                                avisoErroDeCadastro("no cadastro");
+                            }
+                        } else if (!dadosProva.getId_prova().equals(0)) {
+                            if (bancoDados.alterarDadosProva(dadosProva, gabarito, status)) {
+                                dialogProvaSucess("alterada");
+                            } else {
+                                avisoErroDeCadastro("na alteração");
+                            }
+                        } else { // Entra nessa estrutura quando o gabarito pertencer a uma prova rápida
+                            Gabarito.gabaritoDefault = gabarito;
+                            Prova.numQuestsDefault = dadosProva.getNumQuestoes();
+                            Prova.numAlternativesDefault = dadosProva.getNumAlternativas();
+                            dialogHelpCorrectDefault();
+                        }
+                    } else {
+                        Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
+                        btnCadastrarProva.setEnabled(true);
+                    }
+                } else {
                     btnCadastrarProva.setEnabled(true);
                 }
-            }else{
+            }catch (Exception e){
+                Log.e("kariti", e.toString());
+                Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
                 btnCadastrarProva.setEnabled(true);
             }
        });
@@ -233,7 +263,7 @@ public class GabaritoActivity extends AppCompatActivity {
         });
 
     }
-    public void dialogProvaSucess(String text){
+    private void dialogProvaSucess(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
         builder.setTitle("Prova "+text+" com sucesso!")
                 .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
@@ -243,7 +273,7 @@ public class GabaritoActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    public void avisoErroDeCadastro(String text){
+    private void avisoErroDeCadastro(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
         builder.setTitle("AVISO!")
                 .setMessage("Falha "+text+" da prova, por favor tente novamente!")
@@ -251,7 +281,7 @@ public class GabaritoActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    public void baixarCartoes() {
+    private void baixarCartoes() {
         Intent intent = new Intent(this, ProvaCartoesActivity.class);
         intent.putExtra("prova", dadosProva.getNomeProva());
         intent.putExtra("id_turma", dadosProva.getId_turma());
@@ -293,7 +323,7 @@ public class GabaritoActivity extends AppCompatActivity {
             return false;
         }
     }
-    public void dialogHelpDetalhes() {
+    private void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("olá, agora é hora de preencher o gabarito da sua prova.\n" +
@@ -303,15 +333,70 @@ public class GabaritoActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    public void avisoVoltar(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+    private void avisoVoltar(){
+        if (!direcion.equals("cardDefault")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+            builder.setTitle("ATENÇÃO!")
+                    .setMessage("Ao confirmar essa ação, os dados dessa prova serão perdidos!\n\n" +
+                            "Deseja realmente voltar?")
+                    .setPositiveButton("SIM", (dialog, which) -> finish())
+                    .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        } else {
+            if (Gabarito.gabaritoDefault != null && !Gabarito.gabaritoDefault.isEmpty()){
+                Toast.makeText(this, "Seu gabarito anterior ainda foi mantido!", Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                finish();
+            }
+        }
+    }
+    private void dialogHelpCorrectDefault() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Gabarito preenchido");
+        builder.setMessage("Agora você pode realizar a correção de todas as provas que se aplicam a esse gabarito!");
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            dialog.dismiss();
+            startCamera();
+        });
+        builder.show();
+    }
+    private void startCamera(){
+        Intent intent = new Intent(this, CameraxAndOpencv.class);
+        startActivity(intent);
+        finish();
+    }
+    private void differentCardNotice(){
+        View overlayView = findViewById(R.id.overlayView);
+        overlayView.setVisibility(View.VISIBLE);
+        btnCadastrarProva.setVisibility(View.GONE);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
         builder.setTitle("ATENÇÃO!")
-                .setMessage("Ao confirmar essa ação, os dados dessa prova serão perdidos!\n\n" +
-                        "Deseja realmente voltar?")
-                .setPositiveButton("SIM", (dialog, which) -> finish())
-                .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
-        AlertDialog alertDialog = builder.create();
+                .setMessage("Este cartão é diferente do modelo de gabarito que você tem criado!\n\n" +
+                        "Para corrigir este cartão, você deve criar outro gabarito referente a esse modelo de cartão.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    overlayView.setVisibility(View.GONE);
+                    btnCadastrarProva.setVisibility(View.VISIBLE);
+                    dialog.dismiss();
+                })
+
+                .setNegativeButton("Cancelar", (dialog, which) -> startCamera());
+        android.app.AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    private void newGabaritoDefault(){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Caro(a) professor(a)")
+                .setMessage("Antes de iniciar a correção, por favor, preencha o gabarito da(s) prova(s) que deseja corrigir!\n\n" +
+                        "Você só precisa preencher o gabarito uma vez para corrigir todas as suas provas.")
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
 
+                .setNegativeButton("Cancelar", (dialog, which) -> finish());
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 }

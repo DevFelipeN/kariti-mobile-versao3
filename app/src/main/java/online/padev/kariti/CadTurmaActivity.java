@@ -61,7 +61,7 @@ public class CadTurmaActivity extends AppCompatActivity{
 
         bancoDados = new BancoDados(this);
 
-        nomesAluno = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
+        nomesAluno = bancoDados.listarNomesAlunos(1);
         if (!nomesAluno.isEmpty()){
             nomesAluno.add(0, "Selecionar Alunos");
             nomesAluno.add(1, "Todos");

@@ -10,6 +10,9 @@ public class Prova implements Serializable {
     private String nomeProva, dataProva;
     private int numQuestoes, numAlternativas;
 
+    public static int numQuestsDefault; //Essa variável serve como controle da correção de prova rápida
+    public static int numAlternativesDefault; //Essa variável serve como controle da correção de prova rápida
+
     public Prova() {
     }
 

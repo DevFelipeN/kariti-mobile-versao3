@@ -12,9 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -85,8 +83,9 @@ public class CameraxAndOpencv extends AppCompatActivity {
     Prova prova;
     ImageAnalysis imageAnalysis;
     Integer id_provaCaptured, id_alunoBD;
-    private boolean isActivityFinishing = false;
-    private boolean isQrCodePositive = false;
+    private boolean isActivityFinishing = false; // Garante que não seja realizada mais de uma chamada a proxima activity que exibe a imagem com a correção
+    private boolean isCorrectSucess = false; // Indica que a correção foi ou não bem sucedida
+    private boolean isImageProx = false; //Controla o fluxo de imagens a serem processadas (evita que multiplas imagens sejam processadas por vez)
     private int typeMessage;
 
     @Override
@@ -117,50 +116,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
         }else{
             Log.e("OpenCV", "OpenCV carregado com sucesso!");
         }
-        encerrar.setOnClickListener(v -> {
-            encerrar.setEnabled(false);
-            if(listCartoes.isEmpty()){
-                finish();
-            }
-            Handler handler = new Handler(Looper.getMainLooper());
-            new Thread(){
-                @Override
-                public void run() {
-                    super.run();
-                    try {
-                        File fileZip = creatDirectoreZip();
-                        File directoreImgs = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-                        if(Compactador.compactador(directoreImgs, fileZip.getAbsolutePath())){
-                            listCartoes.clear();
-                            try {
-                                File dir = getCacheDir();
-                                File fileJson = getOutputJson(dir);
-                                UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
-                            } catch (Exception e){
-                                Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
-                                finish();
-                            }
-                        }else{
-                            Log.e("kariti", "Erro de compactação!!!");
-                        }
-                        mensagem(handler, "Correção finalizada!");
-                    }catch (Exception e){
-                        Log.e("kariti",e.getMessage());
-                        finish();
-                    }
-                }
-            }.start();
-            iniciaAnimacaoCorrecao();
-        });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if(Compactador.listCartoes.isEmpty()){
-                    Compactador.id_provaOpenCV = 0;
                     finish();
-                }else{
-                    avidoDeCancelamento();
-                }
             }
         });
 
@@ -220,19 +179,19 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
     private void processImage(@NonNull ImageProxy imageProxy) {
         try {
-            processamento(imageProxy); //threshold OTSU
+            if (!isImageProx) {
+                isImageProx = true;
+                startCorrectCard(imageProxy); //threshold OTSU
+            } else imageProxy.close();
         }catch(Exception e){
             Log.e("kariti", e.toString());
-        }finally {
-            imageProxy.close(); // Libera o frame se não for válido
         }
     }
 
-    public void processamento(ImageProxy imageProxy){
+    public void startCorrectCard(ImageProxy imageProxy){
         try {
             Mat mat = imageProxyToMat(imageProxy);
             if (mat == null) {
-                imageProxy.close(); // Libera o frame se não for válido
                 return;
             }
             // Corrige a orientação da imagem
@@ -247,7 +206,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 mat = rotatedMat;
             }
 
-            Mat matToWarp = mat.clone();//Imagem para pintar os circulos encontrados de branco e aplicar o corte
+            Mat matToWarp = mat.clone();//Imagem para aplicar o corte
             Mat matAux = mat.clone();//Imagem para ser desenhado os contornos
 
             //Log.e("matToWarp", "Channels: " + matToWarp.channels() + ", Type: " + matToWarp.type());
@@ -255,7 +214,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
             //Aumenta o brilho e contranste da imagem
             Mat matEnhanced = enhanceImage(matAux);
             if(matEnhanced == null){
-                imageProxy.close(); // Libera o frame se não for válido
                 return;
             }
 
@@ -290,7 +248,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                         Rect boundingRect = Imgproc.boundingRect(contour);
                         Circle circle = new Circle(center.x, center.y, radius[0], boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height, contour, Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true));
                         circulos.add(circle);
-                        Imgproc.drawContours(matAux, Collections.singletonList(contour), -1, new Scalar(0, 255, 0), 1);
+                        Imgproc.drawContours(matAux, Collections.singletonList(contour), -1, new Scalar(0, 255, 0), 2);
                     }
                 }
             }
@@ -368,7 +326,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
             String gabaritoDefault = "";
 
             if (circ == 4){
-                boolean squares = false;
                 Bitmap imgToQrCode = matToBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
                 if(textQrCode != null){
@@ -383,7 +340,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
                             id_provaCaptured = Integer.parseInt(a[0]);
 
                             if (!bancoDados.verificaExisteProvaPId(id_provaCaptured)) {
-                                imageProxy.close();
                                 mat.release();
                                 typeMessage = 1;
                                 finish();
@@ -398,7 +354,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
                             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                         } else {
                             mat.release();
-                            imageProxy.close();
                             typeMessage = 2;
                             finish();
                         }
@@ -420,44 +375,42 @@ public class CameraxAndOpencv extends AppCompatActivity {
                                     correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                                 }else {
                                     mat.release();
-                                    imageProxy.close();
                                     typeMessage = 4;
-                                    startGabaritoDefault();
+                                    Bitmap imgWarp = matToBitmap(matWarp);
+                                    nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
+                                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao);
+                                    startGabaritoDefault(filePath);
                                 }
                             } else {
                                 mat.release();
-                                imageProxy.close();
                                 typeMessage  = 5;
-                                startGabaritoDefault();
+                                Bitmap imgWarp = matToBitmap(matWarp);
+                                nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
+                                filePath = saveBitmapAndGetPath(imgWarp, nameCartao);
+                                startGabaritoDefault(filePath);
                             }
                         }else {
                             mat.release();
-                            imageProxy.close();
                             typeMessage = 3;
                             finish();
                         }
                     }
-                    if (correction != null && !correction.isEmpty()){
-                        squares = true;
-                    }
                 }
-                if(squares){
+                if(correction != null && !correction.isEmpty()){
                     Bitmap imgWarp = matToBitmap(matWarp);
-                    isQrCodePositive = true;
                     nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
                     //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
+                    isCorrectSucess = true;
                 }
             }
-            if(!isActivityFinishing && isQrCodePositive){
+            if(!isActivityFinishing && isCorrectSucess){
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
-                imageProxy.close();
                 if (prova.getId_prova() == 0){
                     Intent intent = new Intent(this, ViewImageActivity.class);
                     intent.putExtra("filePath", filePath);
                     intent.putExtra("status", 1);
-                    intent.putExtra("id_prova", prova.getId_prova());
                     intent.putExtra("gabarito", gabaritoDefault);
                     intent.putExtra("resultGabarito", correction);
                     startActivity(intent);
@@ -473,20 +426,17 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 }
             }
             runOnUiThread(() -> edgeImageView.setImageBitmap(imgBitmap));
-
-            mat.release();
-            imageProxy.close();
-
         }catch (Exception e){
             Log.e("ERRO", e.toString());
         }finally {
+            isImageProx = false;
             imageProxy.close();
         }
 
     }
 
 
-    public static boolean isInside(Circle circExt, Circle circInt) {
+    private boolean isInside(Circle circExt, Circle circInt) {
         double xInt = circInt.x, yInt = circInt.y;
         double xExtI = circExt.xR, yExtI = circExt.yR;
         double xExtF = xExtI + circExt.wR, yExtF = yExtI + circExt.hR;
@@ -581,7 +531,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
             startCamera();
         }
     }
-    public String saveBitmapAndGetPath(Bitmap bitmap, String name) {
+    private String saveBitmapAndGetPath(Bitmap bitmap, String name) {
         File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
 
         // Cria o diretório se não existir
@@ -601,23 +551,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
     }
 
-    private File getOutputJson(File dir){
-        File fileJson = new File(dir, "json.json");
-        if (!fileJson.exists()) {
-            try {
-                // Tenta criar o arquivo
-                if (fileJson.createNewFile()) {
-                    Log.e("kariti","Diretorio criado");
-                } else {
-                    Log.i("kariti", "Arquivo já existe.");
-                }
-            } catch (IOException e) {
-                Log.e("kariti", "Erro ao criar diretorio!");
-            }
-        }
-        return fileJson;
-    }
-
     public static String leitor(String path) throws IOException {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         String linha = "", texto = "";
@@ -628,33 +561,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
         buffRead.close();
         //texto = "{}";
         return texto;
-    }
-
-    public void iniciaAnimacaoCorrecao(){
-        Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
-        startActivity(intent);
-    }
-
-    public File creatDirectoreZip() {
-        try {
-            File fileZip = new File(getCacheDir(), "saida.zip");
-            if (!fileZip.exists()) {
-                try {
-                    // Tenta criar o arquivo
-                    if (fileZip.createNewFile()) {
-                        Log.e("kariti","Diretorio criado");
-                    } else {
-                        Log.i("kariti", "Arquivo já existe.");
-                    }
-                } catch (IOException e) {
-                    Log.e("kariti", "Erro ao criar diretorio!");
-                }
-            }
-            return fileZip;
-        }catch (Exception e){
-            Log.e("circles", e.toString());
-            return null;
-        }
     }
     private void shutdownExecutorService() {
         // Chama shutdown para não aceitar novas tarefas
@@ -744,23 +650,6 @@ public class CameraxAndOpencv extends AppCompatActivity {
         return qrCodeResult;
     }
 
-    private void avidoDeCancelamento(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO!")
-                .setMessage("Caso confirme essa ação, o processo de correção em andamento, será cancelado!\n\n" +
-                        "Deseja realmente voltar")
-                .setPositiveButton("SIM", (dialog, which) -> {
-                    Compactador.listCartoes.clear();
-                    Compactador.id_provaOpenCV = 0;
-                    finish();
-                })
-                .setNegativeButton("NÃO", (dialog, which) -> {
-                    // Código para lidar com o clique no botão Cancelar, se necessário
-                });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     private static Mat enhanceImage(Mat matImage) {
         if (matImage.empty()) {
             System.out.println("Erro ao carregar a imagem.");
@@ -781,61 +670,13 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
         return enhancedImage;
     }
-
-    private void mensagem(Handler handler, String msg){
-        if (!isFinishing() && !isDestroyed()) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    //Toast.makeText(ProvaActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    // Inflar o layout customizado
-                    LayoutInflater inflater = getLayoutInflater();
-                    View dialogView = inflater.inflate(R.layout.open_correction_details, null);
-
-                    // Inicializar os elementos do layout
-                    TextView inform = dialogView.findViewById(R.id.tituloInform);
-                    Button buttonYes = dialogView.findViewById(R.id.buttonYesOpen);
-                    Button buttonNot = dialogView.findViewById(R.id.buttonNotOpen);
-
-                    inform.setText("Prova(s) corrigida(s).\n  Deseja visualizar correção?");
-
-                    // Criar o AlertDialog
-                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(CameraxAndOpencv.this);
-                    builder.setCancelable(false);
-                    builder.setView(dialogView);
-                    // Mostrar o diálogo
-                    androidx.appcompat.app.AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                    buttonYes.setOnClickListener(v -> {
-                        String[] x = bancoDados.pegarDadosProva(Compactador.id_provaOpenCV);
-                        String nameProva = x[0];
-                        String id_turma = x[1];
-                        String nameTurma = bancoDados.pegarNomeTurma(id_turma);
-                        Intent intent = new Intent(getApplicationContext(), VisualProvaCorrigidaActivity.class);
-                        intent.putExtra("id_prova", Compactador.id_provaOpenCV);
-                        intent.putExtra("prova", nameProva);
-                        intent.putExtra("turma", nameTurma);
-                        startActivity(intent);
-                        Compactador.id_provaOpenCV = 0;
-                        dialog.dismiss();
-                        finish();
-                    });
-
-                    buttonNot.setOnClickListener(v -> {
-                        dialog.dismiss();
-                        finish();
-                    });
-                }
-            });
-        }
-    }
-    private void startGabaritoDefault(){
+    private void startGabaritoDefault(String filePath){
         if (!isActivityFinishing) {
             isActivityFinishing = true; //Isso garante que a próxima activity seja invocada apenas uma vez
             Intent intent = new Intent(this, GabaritoActivity.class);
             intent.putExtra("direcao", "cardDefault");
             intent.putExtra("typeMessage", typeMessage);
+            intent.putExtra("filePath", filePath);
             intent.putExtra("prova", prova);
             startActivity(intent);
             finish();

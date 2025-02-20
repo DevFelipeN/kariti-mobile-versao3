@@ -77,7 +77,7 @@ public class CreatCard {
 
                 Bitmap qrCode = LibQr.createQrCode(prova.getId_prova()+"."+student.getKey(), typeQr, context);
 
-                // ============ Cria uma página A4 (1240 x 1240 px) ===========================================================
+                // ============ Cria uma página A4 (1240 x 1754px) ===========================================================
                 PageInfo pageInfo = new PageInfo.Builder(1240, 1754, 1).create();
                 PdfDocument.Page page = pdfDocument.startPage(pageInfo);
                 Canvas canvas = page.getCanvas();
@@ -125,7 +125,10 @@ public class CreatCard {
                 paint.setTextSize(16);
                 canvas.drawText("Nome do Aluno", 80, 300, paint);
 
-                // ======================== Adiciona mensagem de atenção ========================================
+                // ========================= Adiciona texto no final da pagina ==================================
+                canvas.drawText("Gerado por: Kariti", 60, 1720, paint);
+
+                // ======================== Adiciona mensagens de atenção ========================================
                 canvas.drawText("ATENÇÃO: NÃO RASURE ESTE CARTÃO", 80, 550, paint);
 
                 // ===================== fonte dos retângulos ==================================================

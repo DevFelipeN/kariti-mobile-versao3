@@ -5,7 +5,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -22,11 +25,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import online.padev.kariti.correction.CoreKariti;
 import online.padev.kariti.dao.Gabarito;
 import online.padev.kariti.dao.Prova;
 
@@ -45,7 +55,7 @@ public class GabaritoActivity extends AppCompatActivity {
     private Prova dadosProva;
     private String direcion;
 
-    private int status, typeMessage;
+    private int statusEdition, typeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +85,7 @@ public class GabaritoActivity extends AppCompatActivity {
 
 
         if(dadosProva.getId_prova() != null && !dadosProva.getId_prova().equals(0)){
-            status = getIntent().getExtras().getInt("status");
+            statusEdition = getIntent().getExtras().getInt("status");
             btnCadastrarProva.setText(String.format("%s","Salvar"));
         }
 
@@ -146,7 +156,7 @@ public class GabaritoActivity extends AppCompatActivity {
                                 avisoErroDeCadastro("no cadastro");
                             }
                         } else if (!dadosProva.getId_prova().equals(0)) {
-                            if (bancoDados.alterarDadosProva(dadosProva, gabarito, status)) {
+                            if (bancoDados.alterarDadosProva(dadosProva, gabarito, statusEdition)) {
                                 dialogProvaSucess("alterada");
                             } else {
                                 avisoErroDeCadastro("na alteração");
@@ -359,7 +369,7 @@ public class GabaritoActivity extends AppCompatActivity {
         builder.setMessage("Agora você pode realizar a correção de todas as provas que se aplicam a esse gabarito!");
         builder.setPositiveButton("OK", (dialog, which) -> {
             dialog.dismiss();
-            startCamera();
+            correctFirstDefault();
         });
         builder.show();
     }
@@ -399,4 +409,94 @@ public class GabaritoActivity extends AppCompatActivity {
         android.app.AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    private void correctFirstDefault(){
+        try {
+            String gabaritoDefault = "";
+            for (Gabarito g : Gabarito.gabaritoDefault) {
+                gabaritoDefault += g.getResposta();
+            }
+            String filePath = getIntent().getExtras().getString("filePath");
+            if (filePath == null || gabaritoDefault.isEmpty()) {
+                startCamera();
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            Mat matWarp = new Mat();
+            org.opencv.android.Utils.bitmapToMat(bitmap, matWarp);
+            if (matWarp.channels() != 3) {
+                Imgproc.cvtColor(matWarp, matWarp, Imgproc.COLOR_RGBA2RGB);
+            }
+            //Versão 3
+            HashMap<Integer, Integer> correction;
+            CoreKariti core = new CoreKariti(matWarp, dadosProva, gabaritoDefault);
+            correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+            if (correction != null && !correction.isEmpty()){
+                deleteAllImages();
+                Bitmap imgWarp = matToBitmap(matWarp);
+                String nameCartao = "first_"+dadosProva.getNumQuestoes()+"_"+dadosProva.getNumAlternativas();
+                String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
+                startViewImageDefault(correction, gabaritoDefault, filePathPaint);
+            } else {
+                startCamera();
+            }
+        } catch (Exception e) {
+            Log.e("kariti", e.toString());
+            startCamera();
+        }
+    }
+    private void startViewImageDefault(HashMap<Integer, Integer> correction, String gabaritoDefault, String filePathPaint){
+        try {
+            Intent intent = new Intent(this, ViewImageActivity.class);
+            intent.putExtra("filePath", filePathPaint);
+            intent.putExtra("gabarito", gabaritoDefault);
+            intent.putExtra("resultGabarito", correction);
+            intent.putExtra("status", 1);
+            startActivity(intent);
+            finish();
+        } catch (Exception e){
+            Log.e("kariti", e.toString());
+            startCamera();
+        }
+    }
+    private void deleteAllImages() {
+        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
+
+        if (externalDir.exists() && externalDir.isDirectory()) {
+            File[] files = externalDir.listFiles(); // Lista todos os arquivos no diretório
+
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && file.delete()) {
+                        Log.e("kariti", "Diretório limpo: " + file.getName());
+                    } else {
+                        Log.e("kariti", "Erro ao tentar limpar diretório: " + file.getName());
+                    }
+                }
+            }
+        }
+    }
+    private Bitmap matToBitmap(Mat mat) {
+        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+        org.opencv.android.Utils.matToBitmap(mat, bitmap);
+        return bitmap;
+    }
+    public String saveBitmapAndGetPath(Bitmap bitmap, String name) {
+        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
+
+        // Cria o diretório se não existir
+        if (!externalDir.exists()) {
+            externalDir.mkdirs();
+        }
+
+        File imageFile = new File(externalDir, name+".png");
+        try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.flush();
+            return imageFile.getAbsolutePath();
+        } catch (IOException e) {
+            Log.e("kariti", e.toString());
+            return null;
+        }
+
+    }
+
 }

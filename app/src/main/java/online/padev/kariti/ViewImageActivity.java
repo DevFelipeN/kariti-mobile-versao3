@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import online.padev.kariti.correction.CoreKariti;
 import online.padev.kariti.dao.Gabarito;
+import online.padev.kariti.dao.Prova;
 
 public class ViewImageActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class ViewImageActivity extends AppCompatActivity {
     private TextView textViewNomeAluno, textViewNomeProva, textViewNotaAluno, textViewAcertos, textViewErros, titulo;
     private Integer id_prova, id_aluno;
     float notaAluno;
-    int acertos, erros;
+    int acertos, erros, typeMessage;
     private String nomeAluno, nomeProva;
     private BancoDados bancoDados;
 
@@ -76,7 +78,15 @@ public class ViewImageActivity extends AppCompatActivity {
             resultCorrecaoDefault();
         }
 
+
         String filePath = getIntent().getStringExtra("filePath");
+        File file = new File(filePath);
+        if (file.exists()){
+            Log.e("kariti", "diretório existe!!");
+        }else {
+            Log.e("kariti", "diretório NÃO existe!!");
+        }
+        Log.e("kariti", "FilePath: "+filePath);
         if (filePath != null){
             Bitmap bitmap = BitmapFactory.decodeFile(filePath);
             imageProcessada.setImageBitmap(bitmap);
@@ -110,6 +120,7 @@ public class ViewImageActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
     private void resultCorrecaoBD(){
         Gabarito gabarito = new Gabarito(bancoDados, id_prova);
         List<Gabarito> listGabarito = gabarito.getGabarito();

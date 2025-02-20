@@ -39,7 +39,7 @@ public class CoreKariti {
     int height, width;
     private String gabarito;
     private int typeProva;
-    private final double limit = 0.02;
+    private final double limit = 0.01;
 
     /**
      * Este construtor deve ser invocado quando a prova que se deseja corrigir,
@@ -79,6 +79,7 @@ public class CoreKariti {
     public HashMap<Integer, Integer> correctCard() {
         if (squares()){
             if (getAnswers()){
+                Log.e("kariti", "ppppaaaassseeei aaaaqqqqqiiii");
                 return gabaritoResult;
             } else return null;
         }else {
@@ -322,7 +323,7 @@ public class CoreKariti {
 
                 if (areaCircle > 0) {
                     //double circularity = areaContour / areaCircle;
-                    if (radius[0] < width * limit && center.y < yP1 && center.y > yP2 && center.x > xP2 && center.x < xP3) {
+                    if (radius[0] < width * 0.02 && center.y < yP1 && center.y > yP2 && center.x > xP2 && center.x < xP3) {
                         Rect boundingRect = Imgproc.boundingRect(contour);
                         Circle circle = new Circle(center.x, center.y, radius[0], boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height, contour, Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true));
                         markedCircles.add(circle);
@@ -368,8 +369,10 @@ public class CoreKariti {
         try {
             double thresholdY = height * limit;
             double thresholdX = width * limit;
-            for (int i = 0; i < squaresQuestions.size(); i++) { // Intera sobre todas as questoes
-                List<Point> box_rows = new ArrayList<>();
+
+            // ================ Intera sob todos os quadrados das questões =======================================================
+            for (int i = 0; i < squaresQuestions.size(); i++) {
+                List<Point> box_rows = new ArrayList<>();  // Lista para armazenar temporariamente os contornos (circulos) associados a questão atual
                 Point questionY = squaresQuestions.get(i);
                 for (int j = 0; j < markedCircles.size(); j++) {
                     Circle circleY = markedCircles.get(j);
@@ -383,6 +386,7 @@ public class CoreKariti {
                 SquaresCircles sc = new SquaresCircles(squaresQuestions.get(i), box_rows);
                 squaresCircles.add(sc);
             }
+
             int[] letters = new int[8];
             for (int l = 0; l < 8; l++) {
                 letters[l] = l + 1;

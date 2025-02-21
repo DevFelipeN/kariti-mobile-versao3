@@ -27,71 +27,85 @@ import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.dao.Prova;
 
 public class ProvaCartoesActivity2 extends AppCompatActivity {
-    ImageButton voltar;
-    Button btnBaixarCartoes;
-    Integer id_turmaBD, endereco, id_provaBD;
+    ImageButton toGoBack;
+    Button btnGenerateCards;
+    Integer id_turmaBD, address, id_provaBD;
     String nameProva, className;
-    List<String> listagemProvas, listaTurmas, listaAlunos;
+    List<String> listProvas, listTurmas, listAlunos;
     BancoDados bancoDados;
     Spinner spinnerTurma, spinnerProva, spinnerAluno;
-    TextView titulo;
+    TextView title;
     Prova prova;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova_cartoes);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
+        toGoBack = findViewById(R.id.imgBtnVoltar);
         spinnerTurma = findViewById(R.id.spinnerTurma);
         spinnerProva = findViewById(R.id.spinnerProva);
         spinnerAluno = findViewById(R.id.spinnerAlunos);
-        btnBaixarCartoes = findViewById(R.id.baixarcatoes);
-        titulo = findViewById(R.id.toolbar_title);
+        btnGenerateCards = findViewById(R.id.baixarcatoes);
+        title = findViewById(R.id.toolbar_title);
 
         bancoDados = new BancoDados(this);
 
-        titulo.setText(String.format("%s","Cartões"));
+        title.setText(String.format("%s","Cartões"));
 
-        endereco = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
-        nameProva = getIntent().getExtras().getString("prova");
-        listaTurmas = bancoDados.listarTurmasPorProva();
-        if(listaTurmas == null){
+        address = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
+
+        listTurmas = bancoDados.listarTurmasPorProva();
+        if(listTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
         }
+        listTurmas.add(0,"Selecione a turma");
 
-        if(endereco.equals(2)){ //para quando a activity que a chamou foi ProvaActivity
-            listaTurmas.add(0,"Selecione a turma");
-            SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listaTurmas);
+        if(address.equals(2)){ //para quando a activity que a chamou foi ProvaActivity
+            SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listTurmas);
             spinnerTurma.setAdapter(adapterTurma);
 
-        }else if(endereco.equals(1)) { //para quando a activity que chamou for Gabarito
+        }else if(address.equals(1)) { //para quando a activity que chamou for Gabarito
             id_turmaBD = getIntent().getExtras().getInt("id_turma");
             className = bancoDados.pegarNomeTurma(String.valueOf(id_turmaBD));
+            nameProva = getIntent().getExtras().getString("prova");
             if (className == null){
-                Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            listaTurmas.add(0, className);
-            SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listaTurmas);
+
+            int indexTurma = listTurmas.indexOf(className); // Identifica a posicão da turma na lista
+            SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listTurmas);
             spinnerTurma.setAdapter(adapterTurma);
-            //Lista todas provas pertecentes a turma selecionada
-            listagemProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
-            if (listagemProvas == null){
-                Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            if (indexTurma != -1){
+                spinnerTurma.setSelection(indexTurma);
+            }
+
+            //============ Lista todas provas pertecentes a turma selecionada =======================
+            listProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
+            if (listProvas == null){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            listagemProvas.add(0, nameProva);
-            SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity2.this, listagemProvas);
+
+            int indexProva = listProvas.indexOf(nameProva);
+            SpinnerAdapter adapterProva = new SpinnerAdapter(this, listProvas);
             spinnerProva.setAdapter(adapterProva);
-            //Lista todos os alunos pertecentes a turma selecionada
-            listaAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
-            if (listaAlunos == null){
-                Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            spinnerProva.postDelayed(() -> {
+                if (indexProva != -1) {
+                    spinnerProva.setSelection(indexProva);
+                }
+            }, 200);
+
+
+            // ============ Lista todos os alunos pertencentes a turma selecionada =======================================
+            listAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
+            if (listAlunos == null){
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            listaAlunos.add(0, "Todos");
-            SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity2.this, listaAlunos);
+            listAlunos.add(0, "Todos");
+            SpinnerAdapter adapterAluno = new SpinnerAdapter(this, listAlunos);
             spinnerAluno.setAdapter(adapterAluno);
         }
 
@@ -99,39 +113,47 @@ public class ProvaCartoesActivity2 extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0){
-                    className = spinnerTurma.getSelectedItem().toString();
-                    id_turmaBD = bancoDados.pegarIdTurma(className);
-                    if (id_turmaBD == null){
-                        Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    listagemProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
-                    if (listagemProvas == null){
-                        Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity2.this, listagemProvas);
-                    spinnerProva.setAdapter(adapterProva);
+                    try {
+                        className = spinnerTurma.getSelectedItem().toString();
+                        id_turmaBD = bancoDados.pegarIdTurma(className);
+                        if (id_turmaBD == null) {
+                            Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        listProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
+                        if (listProvas == null) {
+                            Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity2.this, listProvas);
+                        spinnerProva.setAdapter(adapterProva);
 
-                    listaAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
-                    if (listaAlunos == null){
+                        listAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
+                        if (listAlunos == null) {
+                            Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        listAlunos.add(0, "Todos");
+                        SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity2.this, listAlunos);
+                        spinnerAluno.setAdapter(adapterAluno);
+                    } catch (Exception e){
+                        Log.e("kariti", e.toString());
                         Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                        return;
+                        finish();
                     }
-                    listaAlunos.add(0, "Todos");
-                    SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity2.this, listaAlunos);
-                    spinnerAluno.setAdapter(adapterAluno);
+                } else {
+                    int indexClass = listTurmas.indexOf(className);
+                    spinnerTurma.setSelection(indexClass);
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        btnBaixarCartoes.setOnClickListener(v -> {
-            btnBaixarCartoes.setEnabled(false);
-            solicitaPermissaoNotificacao();
-
+        btnGenerateCards.setOnClickListener(v -> {
+            btnGenerateCards.setEnabled(false);
             try {
+                solicitaPermissaoNotificacao();
                 if(spinnerProva.getSelectedItem() != null) {
                     nameProva = spinnerProva.getSelectedItem().toString();
                     //String aluno = spinnerAluno.getSelectedItem().toString();
@@ -147,11 +169,11 @@ public class ProvaCartoesActivity2 extends AppCompatActivity {
                 Log.e("kariti",e.getMessage());
                 Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente.", Toast.LENGTH_SHORT).show();
             }finally {
-                btnBaixarCartoes.setEnabled(true);
+                btnGenerateCards.setEnabled(true);
             }
 
         });
-        voltar.setOnClickListener(view -> finish());
+        toGoBack.setOnClickListener(view -> finish());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

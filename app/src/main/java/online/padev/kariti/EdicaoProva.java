@@ -146,6 +146,26 @@ public class EdicaoProva extends AppCompatActivity {
                     Toast.makeText(EdicaoProva.this, "Informe o nome da Prova!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")){
+                    Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")){
+                    Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (Integer.parseInt(qtdQuest.getText().toString()) > 20){
+                    dialogLimitMaxQuest();
+                    return;
+                }
+                if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
+                    dialogLimitMaxAlter();
+                    return;
+                }
+                provaAtual.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
+                provaAtual.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+
                 if (provaAtual.isDifferent(provaBD)) { //Verifica se os dados da prova foram alterados
                     if (!provaAtual.getNomeProva().equals(provaBD.getNomeProva()) || !provaAtual.getId_turma().equals(provaBD.getId_turma())) {
                         Boolean verificaProva = bancoDados.verificaExisteProvaPNome(provaAtual.getNomeProva(), provaAtual.getId_turma().toString());
@@ -158,26 +178,6 @@ public class EdicaoProva extends AppCompatActivity {
                             return;
                         }
                     }
-
-                    if(qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")){
-                        Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if(qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")){
-                        Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (Integer.parseInt(qtdQuest.getText().toString()) > 20){
-                        dialogLimitMaxQuest();
-                        return;
-                    }
-                    if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
-                        dialogLimitMaxAlter();
-                        return;
-                    }
-                    provaAtual.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
-                    provaAtual.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
                     status = 1; // isso indica que foram realizadas alterações nos dados da prova
                     confirmeAlteracaoDados();
                 } else {
@@ -210,6 +210,7 @@ public class EdicaoProva extends AppCompatActivity {
 
     private void confirmeAlteracaoDados(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
         builder.setTitle("ATENÇÃO")
                 .setMessage("Confirma as alterações realizadas para esta prova? ")
                 .setPositiveButton("Confirmar", (dialog, which) -> carregarTelaGabarito())
@@ -219,6 +220,7 @@ public class EdicaoProva extends AppCompatActivity {
     }
 
     private void carregarTelaGabarito(){
+        Log.e("kariti", "status: "+status);
         Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
         if (status == 0){
             intent.putExtra("prova", provaBD);

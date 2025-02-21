@@ -127,7 +127,7 @@ public class GabaritoActivity extends AppCompatActivity {
                     LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
                     EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
                     String nt = pontosEditText.getText().toString();
-                    if (nt.isEmpty()) {
+                    if (nt.isEmpty() || nt.trim().equals(".")) {
                         Toast.makeText(GabaritoActivity.this, "Por favor, preencha todas as notas para as questões.", Toast.LENGTH_SHORT).show();
                         respostasNotasPreenchidas = false;
                         break;
@@ -169,14 +169,12 @@ public class GabaritoActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
-                        btnCadastrarProva.setEnabled(true);
                     }
-                } else {
-                    btnCadastrarProva.setEnabled(true);
                 }
             }catch (Exception e){
                 Log.e("kariti", e.toString());
                 Toast.makeText(this, "Falha no sistema, tente novamente", Toast.LENGTH_SHORT).show();
+            }finally {
                 btnCadastrarProva.setEnabled(true);
             }
        });
@@ -275,24 +273,26 @@ public class GabaritoActivity extends AppCompatActivity {
     }
     private void dialogProvaSucess(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+        builder.setCancelable(false);
         builder.setTitle("Prova "+text+" com sucesso!")
-                .setMessage("Selecione uma das opções a seguir, para ter acesso aos Cartões Resposta.")
+                .setMessage("Você pode realizar o download na tela a seguir ou em outro momento pelo menu inicial de provas na opção 'Gerar Cartões'.")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    baixarCartoes();
+                    generatCards();
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
     private void avisoErroDeCadastro(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
+        builder.setCancelable(false);
         builder.setTitle("AVISO!")
                 .setMessage("Falha "+text+" da prova, por favor tente novamente!")
                 .setPositiveButton("Sair", (dialog, which) -> finish());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    private void baixarCartoes() {
-        Intent intent = new Intent(this, ProvaCartoesActivity.class);
+    private void generatCards() {
+        Intent intent = new Intent(this, ProvaCartoesActivity2.class);
         intent.putExtra("prova", dadosProva.getNomeProva());
         intent.putExtra("id_turma", dadosProva.getId_turma());
         intent.putExtra("endereco", 1);

@@ -81,7 +81,7 @@ public class CadTurmaActivity extends AppCompatActivity{
                 if (position != 0) {
                     alunoSelecionado = spinnerAluno.getSelectedItem().toString();
                     if(alunoSelecionado.equals("Todos")){
-                        listadAlunos = (ArrayList<String>) bancoDados.listarNomesAlunos(1);
+                        listadAlunos = bancoDados.listarNomesAlunos(1);
                         if(listadAlunos == null){
                             Toast.makeText(CadTurmaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;

@@ -1,5 +1,7 @@
 package online.padev.kariti.dao;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 import online.padev.kariti.BancoDados;
@@ -89,5 +91,11 @@ public class Prova implements Serializable {
         String data = this.getDataProva();
         String[] itens = data.split("-");
         return itens[2]+"/"+itens[1]+"/"+itens[0];
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "prova{nome: "+this.nomeProva+", id_turma: "+this.id_turma+", data: "+this.dataProva+", questões: "+this.numQuestoes+", Alternativas: "+this.numAlternativas+"}";
     }
 }

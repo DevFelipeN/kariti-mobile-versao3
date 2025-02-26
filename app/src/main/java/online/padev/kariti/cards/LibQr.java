@@ -97,4 +97,5 @@ public class LibQr {
         if (typeQr == 1) symbol = '$';
         return String.format("%1$" + 40 + "s", text).replace(' ', symbol); // Monta uma string com no minimo 40 caracteres
     }
+
 }

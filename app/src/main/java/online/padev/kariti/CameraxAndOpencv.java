@@ -130,7 +130,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
         String msg = "";
         if (typeMessage == 1) {
             msg = "Prova não cadastrada. \n\n" +
-                    "Verifique se a escola selecionada é a qual pertence esta prova!";
+                    "Verifique se a escola selecionada é a qual pertence essa prova!";
         }
         if (typeMessage == 2){
             msg = "Para corrigir esta prova você precisa realizar login no Kariti";

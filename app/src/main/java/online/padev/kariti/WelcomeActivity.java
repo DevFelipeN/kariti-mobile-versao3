@@ -9,6 +9,9 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
+import online.padev.kariti.cards.CorrectionReportCard;
+import online.padev.kariti.correction.TesterSimulation;
+
 public class WelcomeActivity extends AppCompatActivity {
     BancoDados bancoDados;
 
@@ -30,7 +33,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         bancoDados = new BancoDados(this);
 
-        //bancoDados.deletarCorrecao(1);
+        //bancoDados.deletarCorrecao(61);
         //bancoDados.deletarCorrecao(2);
         //bancoDados.deletarCorrecao(3);
 
@@ -41,6 +44,14 @@ public class WelcomeActivity extends AppCompatActivity {
         botaoCadastro.setOnClickListener(v -> mudarParaTelaCadastro());
         botaoLogin.setOnClickListener(v -> mudarParaTelaLogin());
         btnDefaultPassword.setOnClickListener(v -> startQuickTest());
+
+        //TesterSimulation t = new TesterSimulation(bancoDados);
+        //for(int n = 68; n < 128; n++) {
+          //t.insertCorrectionFiction(60, n);
+        //}
+
+        CorrectionReportCard createReport = new CorrectionReportCard(this, bancoDados, 60);
+        createReport.generateCorrectionReport(0);
     }
 
     /**

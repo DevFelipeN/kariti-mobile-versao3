@@ -285,9 +285,11 @@ public class CreatCard {
                 pdfDocument.finishPage(page);
             }
 
+            String fileName = prova.getNomeProva()+dataHoraAtual()+".pdf";
+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 // Salvar arquivo
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), prova.getNomeProva()+dataHoraAtual()+".pdf");
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
                     pdfDocument.writeTo(fos);
@@ -298,7 +300,7 @@ public class CreatCard {
             } else {
                 ContentResolver resolver = context.getContentResolver(); // Usando o contexto fornecido
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.Downloads.DISPLAY_NAME, "prova-teste.pdf");
+                contentValues.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
                 contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
                 contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
@@ -310,7 +312,7 @@ public class CreatCard {
                         OutputStream outputStream = resolver.openOutputStream(uri);
                         pdfDocument.writeTo(outputStream);
                         pdfDocument.close();
-                        notifyDownloadComplete(prova.getNomeProva()+dataHoraAtual()+".pdf", uri);
+                        notifyDownloadComplete(fileName, uri);
                     }
                 } catch (Exception e) {
                     Log.e("kariti", e.getMessage());

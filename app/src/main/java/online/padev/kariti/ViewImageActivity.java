@@ -122,8 +122,7 @@ public class ViewImageActivity extends AppCompatActivity {
     }
 
     private void resultCorrecaoBD(){
-        Gabarito gabarito = new Gabarito(bancoDados, id_prova);
-        List<Gabarito> listGabarito = gabarito.getGabarito();
+        List<Gabarito> listGabarito = bancoDados.listarDadosGabarito(id_prova);
         List<String> respostasDadas = bancoDados.listarRespostasDadas(id_prova, id_aluno);
 
         for (int i = 0; i < listGabarito.size(); i++){

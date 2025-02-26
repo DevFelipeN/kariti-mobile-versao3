@@ -21,6 +21,7 @@ import java.util.Map;
 
 import online.padev.kariti.dao.Gabarito;
 import online.padev.kariti.dao.Prova;
+import online.padev.kariti.dao.Student;
 
 public class BancoDados extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
@@ -2019,6 +2020,65 @@ public class BancoDados extends SQLiteOpenHelper {
         }
         return alunos;
     }
+    public List<Student> listStudentsClassFull(Integer id_class) {
+        List<Student> students = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno, email FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)", new String[]{id_class.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_student = cursor.getInt(0);
+                    String nameStudent = cursor.getString(1);
+                    String email = cursor.getString(2);
+                    Student st = new Student(id_student, nameStudent, email);
+                    students.add(st);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return students;
+    }
+
+    public List<Student> listStudentExamCorrect(Integer id_class) {
+        List<Student> students = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno, email FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) AND id_aluno IN (SELECT id_aluno FROM resultadoCorrecao)", new String[]{id_class.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_student = cursor.getInt(0);
+                    String nameStudent = cursor.getString(1);
+                    String email = cursor.getString(2);
+                    Student st = new Student(id_student, nameStudent, email);
+                    students.add(st);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return students;
+    }
 
     public List<Integer> listarIdsAlunosPorProvaCorrigida(Integer id_prova){
         List<Integer> ids_alunos = new ArrayList<>();
@@ -2129,10 +2189,10 @@ public class BancoDados extends SQLiteOpenHelper {
     /**
      * Este método obtém as notas de cada questão de uma prova.
      * @param id_prova codigo da prova que se deseja saber as notas das questões.
-     * @return lista com um item de texto para cada questão correspondendo a nota.
+     * @return lista com as notas.
      * */
     public List<Float> listarNotasPorQuestao(Integer id_prova) {
-        List<Float>  notas = new ArrayList<>();
+        List<Float> notas = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
@@ -2220,7 +2280,7 @@ public class BancoDados extends SQLiteOpenHelper {
     }
 
     public List<String> listarRespostasDadas(Integer id_prova, Integer id_aluno) {
-        ArrayList<String> respostasDadas = new ArrayList<>();
+        List<String> respostasDadas = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {

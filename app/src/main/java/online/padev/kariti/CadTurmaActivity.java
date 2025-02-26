@@ -123,20 +123,27 @@ public class CadTurmaActivity extends AppCompatActivity{
             if(listadAlunos.isEmpty()){
                 listarAlunosListView.setVisibility(View.GONE);
                 tituloAlunos.setVisibility(View.GONE);
+                spinnerAluno.setSelection(0);
             }
             adapterAlunos.notifyDataSetChanged();
             Toast.makeText(CadTurmaActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
         });
         menosAnonimos.setOnClickListener(view -> {
-            int menos = Integer.parseInt(alunosAnonimos.getText().toString());
-            if(menos > 0)
-                menos --;
-            alunosAnonimos.setText(String.valueOf(menos));
+            int numAnonimos = 0;
+            if (!alunosAnonimos.getText().toString().trim().isEmpty()){
+                numAnonimos = Integer.parseInt(alunosAnonimos.getText().toString());
+            }
+            if(numAnonimos > 0)
+                numAnonimos --;
+            alunosAnonimos.setText(String.valueOf(numAnonimos));
         });
         maisAnonimos.setOnClickListener(view -> {
-            int mais = Integer.parseInt(alunosAnonimos.getText().toString());
-            mais ++;
-            alunosAnonimos.setText(String.valueOf(mais));
+            int numAnonimos = 0;
+            if (!alunosAnonimos.getText().toString().trim().isEmpty()){
+                numAnonimos = Integer.parseInt(alunosAnonimos.getText().toString());
+            }
+            numAnonimos ++;
+            alunosAnonimos.setText(String.valueOf(numAnonimos));
         });
 
         btnCadastrarTurma.setOnClickListener(v -> {
@@ -147,11 +154,11 @@ public class CadTurmaActivity extends AppCompatActivity{
                     Toast.makeText(CadTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (listadAlunos.isEmpty() && alunosAnonimos.getText().toString().equals("0")) {
+                String numAnonimo = alunosAnonimos.getText().toString().trim();
+                if (listadAlunos.isEmpty() && (numAnonimo.equals("0") || numAnonimo.isEmpty())) {
                     aviso();
                     return;
                 }
-                Integer totAnonimos = Integer.valueOf(alunosAnonimos.getText().toString());
                 Boolean verificaTurma = bancoDados.verificaExisteTurmaPorNome(turma);
                 if (verificaTurma == null){
                     Toast.makeText(CadTurmaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
@@ -176,7 +183,12 @@ public class CadTurmaActivity extends AppCompatActivity{
                         }else Log.e("kariti","Erro ao tentar cadastrar na turma o aluno: "+aluno);
                     }
                 }
-                if (!totAnonimos.equals(0)){
+
+                int totAnonimos = 0;
+                if (!numAnonimo.isEmpty()) {
+                    totAnonimos = Integer.parseInt(numAnonimo);
+                }
+                if (totAnonimos != 0){
                     int tamanho = String.valueOf(totAnonimos).length();
                     for (int x = 1; x <= totAnonimos; x++) {
                         String anonimo = "Aluno "+ String.format("%0"+tamanho+"d",x);
@@ -188,11 +200,13 @@ public class CadTurmaActivity extends AppCompatActivity{
                         }else  Log.e("kariti","Erro ao tentar cadastrar anônimo: "+x);
                     }
                 }
-                Toast.makeText(CadTurmaActivity.this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
                 recarregarVisualTurma();
             }catch (Exception e){
                 Toast.makeText(this, "Erro: turma não cadastrada corretamente!!", Toast.LENGTH_SHORT).show();
                 recarregarVisualTurma();
+            } finally {
+                btnCadastrarTurma.setEnabled(true);
             }
         });
         voltar.setOnClickListener(view -> {

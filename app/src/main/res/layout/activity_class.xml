@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fundo_night"
-    tools:context="online.padev.kariti.VisualTurmaActivity">
+    tools:context="online.padev.kariti.ClassActivity">
 
     <include
         android:id="@+id/include"

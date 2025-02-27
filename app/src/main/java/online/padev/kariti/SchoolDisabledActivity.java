@@ -38,7 +38,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
 
         iconHelp.setOnClickListener(v -> ajuda());
 
-        listDisabledBD = (ArrayList<String>) dataBase.listarEscolas(0);
+        listDisabledBD = dataBase.listarEscolas(0);
         if (listDisabledBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();

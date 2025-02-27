@@ -213,8 +213,8 @@ public class VisualEscolaActivity extends AppCompatActivity {
         dialog.show();
 
         btnCadastrar.setOnClickListener(v -> {
-            String nomeEscola = editTextEscola.getText().toString();
-            if (!nomeEscola.trim().isEmpty()) {
+            String nomeEscola = editTextEscola.getText().toString().trim();
+            if (!nomeEscola.isEmpty()){
                 Boolean verificaEscola = bancoDados.verificaExisteEscola(nomeEscola);
                 if(verificaEscola == null){
                     Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();

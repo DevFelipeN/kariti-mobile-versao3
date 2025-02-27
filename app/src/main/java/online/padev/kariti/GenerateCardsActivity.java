@@ -26,7 +26,7 @@ import java.util.Objects;
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.dao.Prova;
 
-public class ProvaCartoesActivity2 extends AppCompatActivity {
+public class GenerateCardsActivity extends AppCompatActivity {
     ImageButton toGoBack;
     Button btnGenerateCards;
     Integer id_turmaBD, address, id_provaBD;
@@ -117,28 +117,28 @@ public class ProvaCartoesActivity2 extends AppCompatActivity {
                         className = spinnerTurma.getSelectedItem().toString();
                         id_turmaBD = bancoDados.pegarIdTurma(className);
                         if (id_turmaBD == null) {
-                            Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         listProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
                         if (listProvas == null) {
-                            Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        SpinnerAdapter adapterProva = new SpinnerAdapter(ProvaCartoesActivity2.this, listProvas);
+                        SpinnerAdapter adapterProva = new SpinnerAdapter(GenerateCardsActivity.this, listProvas);
                         spinnerProva.setAdapter(adapterProva);
 
                         listAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
                         if (listAlunos == null) {
-                            Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         listAlunos.add(0, "Todos");
-                        SpinnerAdapter adapterAluno = new SpinnerAdapter(ProvaCartoesActivity2.this, listAlunos);
+                        SpinnerAdapter adapterAluno = new SpinnerAdapter(GenerateCardsActivity.this, listAlunos);
                         spinnerAluno.setAdapter(adapterAluno);
                     } catch (Exception e){
                         Log.e("kariti", e.toString());
-                        Toast.makeText(ProvaCartoesActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {
@@ -188,9 +188,8 @@ public class ProvaCartoesActivity2 extends AppCompatActivity {
         if (creatCard.creatPdfCard()){
             infoDownloadCard();
         } else {
-            Toast.makeText(this, "Falha na geração do cartão resposta!", Toast.LENGTH_SHORT).show();
+            notifyFailureDownload();
         }
-
     }
 
     private void solicitaPermissaoNotificacao(){
@@ -258,6 +257,16 @@ public class ProvaCartoesActivity2 extends AppCompatActivity {
             finish();
         });
 
+        builder.show();
+    }
+    private void notifyFailureDownload(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("KARITI");
+        builder.setMessage("Ocorreu uma falha ao tentar gerar os cartões dessa prova, se a falha persistir: \n" +
+                "1 - Verifique se possui armazenamento diponível para realização de downloads" +
+                "2 - Reinicie o Kariti!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

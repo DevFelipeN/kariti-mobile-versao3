@@ -149,8 +149,8 @@ public class CadTurmaActivity extends AppCompatActivity{
         btnCadastrarTurma.setOnClickListener(v -> {
             btnCadastrarTurma.setEnabled(false);
             try {
-                String turma = nomeTurma.getText().toString();
-                if(turma.trim().isEmpty()) {
+                String turma = nomeTurma.getText().toString().trim();
+                if(turma.isEmpty()) {
                     Toast.makeText(CadTurmaActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -183,7 +183,6 @@ public class CadTurmaActivity extends AppCompatActivity{
                         }else Log.e("kariti","Erro ao tentar cadastrar na turma o aluno: "+aluno);
                     }
                 }
-
                 int totAnonimos = 0;
                 if (!numAnonimo.isEmpty()) {
                     totAnonimos = Integer.parseInt(numAnonimo);

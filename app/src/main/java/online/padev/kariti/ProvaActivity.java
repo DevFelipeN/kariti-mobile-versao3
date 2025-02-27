@@ -53,7 +53,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -128,7 +127,7 @@ public class ProvaActivity extends AppCompatActivity {
             return;
         }
         if (verificaProvaCad) {
-            Intent intent = new Intent(this, ProvaCartoesActivity2.class);
+            Intent intent = new Intent(this, GenerateCardsActivity.class);
             intent.putExtra("endereco", 2);
             startActivity(intent);
         }else{

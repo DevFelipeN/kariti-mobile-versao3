@@ -62,7 +62,7 @@ public class CreatCard {
         this.className = className;
         this.teacher = teacher;
         students = new HashMap<>();
-        students.put(prova.getNumAlternativas(), " "); // Alterando dado do QRcode
+        students.put(prova.getNumAlternativas(), ""); // Alterando dado do QRcode
         typeQr = 1; // Isso indica que o QRcode a ser montado terá o padrão (numQuestões e numAlternativas)
     }
 
@@ -285,7 +285,7 @@ public class CreatCard {
                 pdfDocument.finishPage(page);
             }
 
-            String fileName = prova.getNomeProva()+dataHoraAtual()+".pdf";
+            String fileName = prova.getNomeProva()+"_"+dataHoraAtual()+".pdf";
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 // Salvar arquivo
@@ -295,7 +295,8 @@ public class CreatCard {
                     pdfDocument.writeTo(fos);
                     pdfDocument.close();
                 } catch (IOException e) {
-                    Log.e("card", "Erro: " + e.toString());
+                    Log.e("card", "Erro: " + e);
+                    return false;
                 }
             } else {
                 ContentResolver resolver = context.getContentResolver(); // Usando o contexto fornecido

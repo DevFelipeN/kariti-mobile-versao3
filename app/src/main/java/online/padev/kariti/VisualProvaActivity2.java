@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import online.padev.kariti.dao.Prova;
+
 public class VisualProvaActivity2 extends AppCompatActivity {
     ImageButton voltar;
     String nomeTurma, nomeProva;
@@ -119,11 +121,19 @@ public class VisualProvaActivity2 extends AppCompatActivity {
             return;
         }
         if(verificaProva){
+            Prova prova = new Prova(id_prova, bancoDados);
+            Intent intent = new Intent(this, CorrectionReportActivity.class);
+            intent.putExtra("prova", prova);
+            startActivity(intent);
+
+            /*
             Intent intent = new Intent(this, VisualProvaCorrigidaActivity.class);
             intent.putExtra("prova", nomeProva);
             intent.putExtra("id_prova", id_prova);
             intent.putExtra("turma", nomeTurma);
             startActivity(intent);
+
+             */
         }else {
             Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();
         }

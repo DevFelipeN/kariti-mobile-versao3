@@ -48,7 +48,7 @@ public class QuickCardActivity extends AppCompatActivity {
 
     }
     private void startNewCard(){
-        Intent intent = new Intent(this, NewCardActivity.class);
+        Intent intent = new Intent(this, GenerateCardDefaultActivity.class);
         startActivity(intent);
     }
     public void startCorrection(){

@@ -68,38 +68,45 @@ public class MainActivity extends AppCompatActivity {
         gerarCodigo = new GerarCodigoValidacao();
 
         cadastro.setOnClickListener(v ->{
-            if (!VerificaConexaoInternet.verificaConexao(MainActivity.this)) {
-                Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            nome = editTextnome.getText().toString();
-            email = editTextemail.getText().toString();
-            senha = editTextsenha.getText().toString();
-            confirmacaoSenha = editTextconfirmarSenha.getText().toString();
-            if (nome.trim().isEmpty() || senha.trim().isEmpty() || confirmacaoSenha.trim().isEmpty() || email.trim().isEmpty()) {
-                Toast.makeText(MainActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!senha.equals(confirmacaoSenha)) {
-                Toast.makeText(MainActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Integer verificaSeExisteEmailBD = bancoDados.verificaExisteEmail(email); //verifica se existe este usuario no banco
-            if (verificaSeExisteEmailBD == null){
-                codigo = gerarCodigo.gerarVerificador();
-                if (enviarCodigo.enviaCodigo(email, codigo)){
-                    carregarTelaCodigo();
-                } else {
-                    Toast.makeText(MainActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
+            cadastro.setEnabled(false);
+            try {
+                if (!VerificaConexaoInternet.verificaConexao(MainActivity.this)) {
+                    Toast.makeText(MainActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            } else if(verificaSeExisteEmailBD.equals(-1)){
-                Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(MainActivity.this, "Já existe um usuário associado a esse e-mail, cadastrado!", Toast.LENGTH_SHORT).show();
+                nome = editTextnome.getText().toString().trim();
+                email = editTextemail.getText().toString().trim();
+                senha = editTextsenha.getText().toString().trim();
+                confirmacaoSenha = editTextconfirmarSenha.getText().toString().trim();
+                if (nome.isEmpty() || senha.isEmpty() || confirmacaoSenha.isEmpty() || email.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(MainActivity.this, "E-mail Inválido!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!senha.equals(confirmacaoSenha)) {
+                    Toast.makeText(MainActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Integer verificaSeExisteEmailBD = bancoDados.verificaExisteEmail(email); //verifica se existe este usuario no banco
+                if (verificaSeExisteEmailBD == null) {
+                    codigo = gerarCodigo.gerarVerificador();
+                    if (enviarCodigo.enviaCodigo(email, codigo)) {
+                        carregarTelaCodigo();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
+                    }
+                } else if (verificaSeExisteEmailBD.equals(-1)) {
+                    Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Já existe um usuário associado a esse e-mail, cadastrado!", Toast.LENGTH_SHORT).show();
+                }
+            }catch (Exception e){
+                Log.e("kariti", e.toString());
+            }finally {
+                cadastro.setEnabled(true);
             }
         });
 

@@ -29,43 +29,52 @@ public class CadAlunoActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         cadastrar.setOnClickListener(view -> {
-            String nome = nomeAluno.getText().toString();
-            String email = emailAluno.getText().toString();
-            if (nome.trim().isEmpty()) {
-                Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Boolean verificaAluno = bancoDados.verificaExisteAlunoPNome(nome);
-            if(verificaAluno == null){
-                Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (verificaAluno) {
-                Toast.makeText(CadAlunoActivity.this, "Identificamos que esse aluno já está cadastrado!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!email.trim().isEmpty()) {
-                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    Toast.makeText(CadAlunoActivity.this, "E-mail do aluno, inválido!", Toast.LENGTH_SHORT).show();
+            cadastrar.setEnabled(false);
+            try {
+                String nome = nomeAluno.getText().toString().trim();
+                String email = emailAluno.getText().toString().trim();
+                if (nome.isEmpty()) {
+                    Toast.makeText(CadAlunoActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Boolean verificaEmail = bancoDados.verificaExisteEmailAluno(email);
-                if(verificaEmail == null){
+                Boolean verificaAluno = bancoDados.verificaExisteAlunoPNome(nome);
+                if (verificaAluno == null) {
                     Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (verificaEmail){
-                    Toast.makeText(CadAlunoActivity.this, "Este e-mail já esta vinculado a um aluno cadastrado!", Toast.LENGTH_SHORT).show();
+                if (verificaAluno) {
+                    Toast.makeText(CadAlunoActivity.this, "Identificamos que esse aluno já está cadastrado!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            }
-            Log.e("kariti","Email: "+email);
+                if (!email.trim().isEmpty()) {
+                    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        Toast.makeText(CadAlunoActivity.this, "E-mail do aluno, inválido!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Boolean verificaEmail = bancoDados.verificaExisteEmailAluno(email);
+                    if (verificaEmail == null) {
+                        Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (verificaEmail) {
+                        Toast.makeText(CadAlunoActivity.this, "Este e-mail já esta vinculado a um aluno cadastrado!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                Log.e("kariti", "Email: " + email);
 
-            Integer inserirtAluno = bancoDados.cadastrarAluno(nome, email, 1);
-            if (inserirtAluno != -1) {
-                Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                recarregarVisualAluno();
-            } else {Toast.makeText(CadAlunoActivity.this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();}
+                Integer inserirtAluno = bancoDados.cadastrarAluno(nome, email, 1);
+                if (inserirtAluno != -1) {
+                    Toast.makeText(CadAlunoActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                    recarregarVisualAluno();
+                } else {
+                    Toast.makeText(CadAlunoActivity.this, "Aluno não cadastrado!", Toast.LENGTH_SHORT).show();
+                }
+            }catch (Exception e){
+                Log.e("kariti", e.toString());
+            }finally {
+                cadastrar.setEnabled(true);
+            }
 
         });
         voltar.setOnClickListener(view -> {

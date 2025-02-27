@@ -127,6 +127,7 @@
     <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
     <string name="editTextNomeProva">Digite o nome  da prova*</string>
+    <string name="editTextNomeProvaDefault">Nome  da prova</string>
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNameTeacher">Nome do professor</string>
     <string name="textViewDataProva">Data da Prova</string>

@@ -25,7 +25,7 @@ import java.util.Locale;
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.dao.Prova;
 
-public class NewCardActivity extends AppCompatActivity {
+public class GenerateCardDefaultActivity extends AppCompatActivity {
 
     EditText qtdQuest, qtdAlter, provaName, className, teacherName;
     Calendar calendar;
@@ -117,39 +117,46 @@ public class NewCardActivity extends AppCompatActivity {
 
         btnGenerateCard.setOnClickListener(v -> {
             solicitaPermissaoNotificacao();
-            if(provaName.getText().toString().trim().isEmpty()){
-                Toast.makeText(this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            btnGenerateCard.setEnabled(false);
+            try {
+                if (provaName.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            if(qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")){
-                Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")){
-                Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                if (qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")) {
+                    Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")) {
+                    Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            if (Integer.parseInt(qtdQuest.getText().toString()) > 20){
-                dialogLimitMaxQuest();
-                return;
-            }
-            if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
-                dialogLimitMaxAlter();
-                return;
-            }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
-                solicitaPermissao();
-            }else {
-                generateCard();
+                if (Integer.parseInt(qtdQuest.getText().toString()) > 20) {
+                    dialogLimitMaxQuest();
+                    return;
+                }
+                if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
+                    dialogLimitMaxAlter();
+                    return;
+                }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    solicitaPermissao();
+                } else {
+                    generateCard();
+                }
+            }catch (Exception e){
+                Log.e("kariti", e.toString());
+            }finally {
+                btnGenerateCard.setEnabled(true);
             }
 
         });
     }
     private void generateCard(){
         prova = new Prova();
-        prova.setNomeProva(provaName.getText().toString());
+        prova.setNomeProva(provaName.getText().toString().trim());
         prova.setId_prova(Integer.parseInt(qtdQuest.getText().toString()));
         prova.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
         prova.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
@@ -160,7 +167,7 @@ public class NewCardActivity extends AppCompatActivity {
         if (creatCard.creatPdfCard()){
             infoDownloadCard();
         } else {
-            Toast.makeText(this, "Falha na geração do cartão resposta!", Toast.LENGTH_SHORT).show();
+            notifyFailureDownload();
         }
     }
 
@@ -253,6 +260,15 @@ public class NewCardActivity extends AppCompatActivity {
             dialog.dismiss();
             finish();
         });
+        builder.show();
+    }
+    private void notifyFailureDownload(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("KARITI");
+        builder.setMessage("Ocorreu uma falha ao tentar gerar o cartão resposta, se a falha persistir: \n" +
+                "1 - Verifique se possui armazenamento diponível para realização de downloads" +
+                "2 - Reinicie o Kariti!");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

@@ -32,7 +32,7 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
         <activity
-            android:name=".NewCardActivity"
+            android:name=".GenerateCardDefaultActivity"
             android:exported="false" />
         <activity
             android:name=".QuickCardActivity"
@@ -68,6 +68,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".CorrectionReportActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".VisualProvaActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -80,7 +84,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaCartoesActivity2"
+            android:name=".GenerateCardsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

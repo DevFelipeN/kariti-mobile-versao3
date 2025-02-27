@@ -34,7 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
         bancoDados = new BancoDados(this);
 
         //bancoDados.deletarCorrecao(61);
-        //bancoDados.deletarCorrecao(2);
+        //bancoDados.deletarCorrecao(1);
         //bancoDados.deletarCorrecao(3);
 
 
@@ -46,12 +46,12 @@ public class WelcomeActivity extends AppCompatActivity {
         btnDefaultPassword.setOnClickListener(v -> startQuickTest());
 
         //TesterSimulation t = new TesterSimulation(bancoDados);
-        //for(int n = 68; n < 128; n++) {
-          //t.insertCorrectionFiction(60, n);
+        //for(int n = 190; n < 195; n++) {
+          //t.insertCorrectionFiction(62, n);
         //}
 
-        CorrectionReportCard createReport = new CorrectionReportCard(this, bancoDados, 60);
-        createReport.generateCorrectionReport(0);
+        //CorrectionReportCard createReport = new CorrectionReportCard(this, bancoDados, 62);
+        //createReport.generateCorrectionReport(0);
     }
 
     /**

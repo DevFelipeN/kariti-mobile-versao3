@@ -41,15 +41,15 @@ import java.util.Locale;
 import online.padev.kariti.download.DownloadResultadoCorrecao;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
-    ImageButton voltar;
-    Button btnBaixarCartoes;
-    ArrayList<String> respostasDadas, gabarito;
-    ArrayList<Integer> listaIdAlunos;
+    ImageButton toGoBack;
+    Button btnGenerateCorrectionReport;
+    List<String> respostasDadas, gabarito;
+    List<Integer> listaIdAlunos;
     Integer id_prova, id_aluno, qtdQuestoesProva;
     String nomeProva, nomeTurma, filePdf;
     TextView txtProva;
     List<String[]> dadosProvaCorrigida;
-    ArrayList<Float> peso;
+    List<Float> peso;
     TextView titulo;
     private File filecsv;
 
@@ -60,8 +60,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_prova_corrigida);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
-        btnBaixarCartoes = findViewById(R.id.buttonBaixarResultado);
+        toGoBack = findViewById(R.id.imgBtnVoltar);
+        btnGenerateCorrectionReport = findViewById(R.id.buttonBaixarResultado);
         txtProva = findViewById(R.id.textViewProvaResult);
         titulo = findViewById(R.id.toolbar_title);
 
@@ -75,10 +75,10 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
         txtProva.setText(String.format("%s","Prova: "+nomeProva));
 
-        listaIdAlunos = (ArrayList<Integer>) bancoDados.listarIdsAlunosPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
+        listaIdAlunos = bancoDados.listarIdsAlunosPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
         qtdQuestoesProva = bancoDados.pegarQtdQuestoes(id_prova.toString());
-        peso = (ArrayList<Float>) bancoDados.listarNotasPorQuestao(id_prova);
-        gabarito = (ArrayList<String>) bancoDados.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
+        peso = bancoDados.listarNotasPorQuestao(id_prova);
+        gabarito = bancoDados.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
 
         if (qtdQuestoesProva == null || gabarito == null || peso == null || listaIdAlunos == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
@@ -185,8 +185,8 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
             });
         }
-        btnBaixarCartoes.setOnClickListener(v -> {
-            btnBaixarCartoes.setEnabled(false);
+        btnGenerateCorrectionReport.setOnClickListener(v -> {
+            btnGenerateCorrectionReport.setEnabled(false);
             solicitaPermissaoNotificacao();
             try {
                 dadosProvaCorrigida = new ArrayList<>();
@@ -220,10 +220,12 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
                 }
             }catch (Exception e){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
+            } finally {
+                btnGenerateCorrectionReport.setEnabled(true);
             }
 
         });
-        voltar.setOnClickListener(view -> {
+        toGoBack.setOnClickListener(view -> {
             getOnBackPressedDispatcher();
             finish();
         });

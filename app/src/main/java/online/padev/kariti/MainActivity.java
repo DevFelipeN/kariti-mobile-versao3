@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
      * Este método inicializa a tela de verificação de codigo, para autenticação de cadastro do usuário.
      */
     private void carregarTelaCodigo(){
-        Intent proxima = new Intent(this, CodSenhaActivity.class);
+        Intent proxima = new Intent(this, CodeValidationActivity.class);
         proxima.putExtra("identificador", 0);
         proxima.putExtra("nome", nome);
         proxima.putExtra("email", email);

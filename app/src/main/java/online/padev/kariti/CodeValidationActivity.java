@@ -1,0 +1,181 @@
+package online.padev.kariti;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import online.padev.kariti.emails.EnviarCodigo;
+
+public class CodeValidationActivity extends AppCompatActivity {
+    private  EditText n1, n2, n3, n4;
+    private TextView textViewTime, textViewResendCode;
+    private String v1, v2, v3, v4, nameUser, password, email, code;
+    private GerarCodigoValidacao generateCode;
+    private EnviarCodigo sendCode;
+    private static final long WAITING_TIME = 60000;
+    BancoDados dataBase;
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_code_validation);
+
+        TextView textViewCancel = findViewById(R.id.textViewCancelar);
+        Button btnValidationCode = findViewById(R.id.buttonValidarSenhaw);
+        TextView msgValidation = findViewById(R.id.textViewMsgValidacao);
+        textViewTime = findViewById(R.id.textViewTime);
+        textViewResendCode = findViewById(R.id.textViewReenviar);
+
+        dataBase = new BancoDados(this);
+        generateCode = new GerarCodigoValidacao();
+        sendCode = new EnviarCodigo();
+
+        //pega os dados mandados por intent de outra activity
+        int identifier = getIntent().getExtras().getInt("identificador");
+        nameUser = getIntent().getExtras().getString("nome");
+        password = getIntent().getExtras().getString("senha");
+        email = getIntent().getExtras().getString("email");
+        code = getIntent().getExtras().getString("codigo");
+
+        String msg = "Código de validação enviado para " + email +"\n\nPor favor, verifique sua caixa de e-mail.";
+        msgValidation.setText(msg);
+
+        startTime(); // Inicia o tempo de 1 minuto
+
+        n1 = findViewById(R.id.editTextNumber);
+        n2 = findViewById(R.id.editTextNumber2);
+        n3 = findViewById(R.id.editTextNumber3);
+        n4 = findViewById(R.id.editTextNumber4);
+
+        n1.requestFocus();
+
+        addTextWatcher(n1, n2, null);
+        addTextWatcher(n2, n3, n1);
+        addTextWatcher(n3, n4, n2);
+        addTextWatcher(n4, null, n3);
+
+        textViewResendCode.setOnClickListener(v -> {
+            code = generateCode.gerarVerificador();
+            if (sendCode.enviaCodigo(email, code)){
+                Toast.makeText(this, "Código reenviado com sucesso!", Toast.LENGTH_SHORT).show();
+                startTime();
+            } else {
+                Toast.makeText(this, "Erro: Email não Enviado!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        textViewCancel.setOnClickListener(v -> finish());
+        btnValidationCode.setOnClickListener(v -> {
+            btnValidationCode.setEnabled(false);
+            try {
+                //ler o codigo digitado pelo usuário
+                v1 = n1.getText().toString();
+                v2 = n2.getText().toString();
+                v3 = n3.getText().toString();
+                v4 = n4.getText().toString();
+                String codeInformed = v1 + v2 + v3 + v4;
+                if (code.equals(codeInformed)) {
+                    if (identifier == 0) {
+                        Boolean insertUserBD = dataBase.cadastrarUsuario(nameUser, password, email);
+                        if (insertUserBD == null) {
+                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (insertUserBD) {
+                            startLoginActivity();
+                        } else {
+                            Toast.makeText(this, "Erro: Usuário não registrado corretamente! ", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        startUpdatePassword();
+                    }
+                } else {
+                    Toast.makeText(this, "Código Inválido!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e){
+                Log.e("kariti", e.toString());
+            } finally {
+                btnValidationCode.setEnabled(true);
+            }
+        });
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
+    }
+    private void addTextWatcher(final EditText currentEditText, final EditText nextEditText, final EditText previousEditText) {
+        currentEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 1 && nextEditText != null) {
+                    nextEditText.requestFocus();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 0 && previousEditText != null) {
+                    previousEditText.requestFocus();
+                }
+            }
+        });
+    }
+
+    /**
+     * Este método inicializa a tela de Login
+     */
+    private void startLoginActivity(){
+        Toast.makeText(this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Este método inicializa a tela de Atualização de senha
+     */
+    private void startUpdatePassword(){
+        Integer id_user = getIntent().getExtras().getInt("id_usuario");
+        String nameUserBD = dataBase.pegarNomeUsuario(id_user);
+        Intent intent = new Intent(this, AtualizarSenha.class);
+        intent.putExtra("id_usuario", id_user);
+        intent.putExtra("nome", nameUserBD);
+        intent.putExtra("email", email);
+        startActivity(intent);
+        finish();
+    }
+    private void startTime() {
+        new CountDownTimer(WAITING_TIME, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                long segundosRestantes = millisUntilFinished / 1000;
+                textViewTime.setText(String.format("%s","Aguarde " + segundosRestantes+" segundos para reeviar o código."));
+            }
+
+            public void onFinish() {
+                // Quando o tempo acabar, habilitar o botão para reenviar o código
+                textViewTime.setText(String.format("%s",""));
+
+                textViewResendCode.setEnabled(true); // Habilitar o botão
+            }
+
+        }.start();
+    }
+}

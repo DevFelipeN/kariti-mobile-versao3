@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnAccess, forgetPassword;
     ImageButton btnHidePassword;
     BancoDados dataBase;
-    CodSenhaActivity validationCodeActivity;
+    CodeValidationActivity validationCodeActivity;
     EnviarCodigo sendCode;
     GerarCodigoValidacao generateCode;
     @Override
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         dataBase = new BancoDados(this);
         sendCode = new EnviarCodigo();
         generateCode = new GerarCodigoValidacao();
-        validationCodeActivity = new CodSenhaActivity();
+        validationCodeActivity = new CodeValidationActivity();
 
         btnAccess.setOnClickListener(v -> {
             btnAccess.setEnabled(false);
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
      * Este método inicializa a tela de verificação de código, para autenticação de cadastro do usuário.
      */
     private void startCodeValidationActivity(){
-        Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
+        Intent proxima = new Intent(getApplicationContext(), CodeValidationActivity.class);
         proxima.putExtra("identificador", 1);
         proxima.putExtra("id_usuario", id_user);
         proxima.putExtra("email", emailInformed);

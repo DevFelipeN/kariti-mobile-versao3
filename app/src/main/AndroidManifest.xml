@@ -148,7 +148,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CodSenhaActivity"
+            android:name=".CodeValidationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

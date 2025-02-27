@@ -14,60 +14,60 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
-    ImageButton voltar;
-    TextView turmaCadastrada, txtViewQtdAnonimos;
-    BancoDados bancoDados;
-    ListView listViewAlunos;
-    ArrayList<String> listaAlunosDaTurma;
-    String id_turma;
-    Integer qtdAnonimos;
+public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
+    ImageButton back;
+    TextView textViewClassName, txtViewNumAnonymous;
+    BancoDados dataBase;
+    ListView listViewStudents;
+    List<String> listStudentsClass;
+    String id_class;
+    Integer numAnonymousBD;
     private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dados_turma);
+        setContentView(R.layout.activity_class_details);
 
-        voltar = findViewById(R.id.imgBtnVoltarDados);
-        listViewAlunos = findViewById(R.id.listViewDados);
-        txtViewQtdAnonimos = findViewById(R.id.textViewqtdAnonimos);
-        turmaCadastrada = findViewById(R.id.textViewTurmaCad);
+        back = findViewById(R.id.imgBtnVoltarDados);
+        listViewStudents = findViewById(R.id.listViewDados);
+        txtViewNumAnonymous = findViewById(R.id.textViewqtdAnonimos);
+        textViewClassName = findViewById(R.id.textViewTurmaCad);
 
-        bancoDados = new BancoDados(this);
+        dataBase = new BancoDados(this);
 
-        id_turma = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
-        String nomeTurma = bancoDados.pegarNomeTurma(id_turma);
-        if (nomeTurma == null){
+        id_class = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
+        String className = dataBase.pegarNomeTurma(id_class);
+        if (className == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        turmaCadastrada.setText(String.format("Turma: %s", nomeTurma));
+        textViewClassName.setText(String.format("Turma: %s", className));
 
-        listaAlunosDaTurma = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma);
-        if (listaAlunosDaTurma == null){
+        listStudentsClass = dataBase.listarAlunosPorTurma(id_class);
+        if (listStudentsClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
-        qtdAnonimos = bancoDados.pegarQtdAlunosPorStatus(id_turma, 0);
-        if (qtdAnonimos == null){
+        numAnonymousBD = dataBase.pegarQtdAlunosPorStatus(id_class, 0);
+        if (numAnonymousBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
-        txtViewQtdAnonimos.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s", qtdAnonimos, listaAlunosDaTurma.size()));
-        DesativadaAdapter adapter = new DesativadaAdapter(this, listaAlunosDaTurma, listaAlunosDaTurma);
-        listViewAlunos.setAdapter(adapter);
+        txtViewNumAnonymous.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s", numAnonymousBD, listStudentsClass.size()));
+        DesativadaAdapter adapterStudents = new DesativadaAdapter(this, listStudentsClass, listStudentsClass);
+        listViewStudents.setAdapter(adapterStudents);
 
-        voltar.setOnClickListener(view -> {
-            recarregarVisualTurma();
+        back.setOnClickListener(view -> {
+            restartVisualClass();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                recarregarVisualTurma();
+                restartVisualClass();
             }
         });
     }
@@ -81,28 +81,28 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuEditar) {
-            telaEditar();
+            startEditClass();
             return true;
         }
         return true;
     }
 
-    public void telaEditar(){
-        Boolean provasCorrigidas = bancoDados.verificaExisteCorrecaoPorTurma(id_turma);
-        if (provasCorrigidas == null){
+    private void startEditClass(){
+        Boolean provasCorreciton = dataBase.verificaExisteCorrecaoPorTurma(id_class);
+        if (provasCorreciton == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!provasCorrigidas){
-            Intent intent = new Intent(this, EditarTurmaActivity.class);
-            intent.putExtra("id_turma", id_turma);
+        if(!provasCorreciton){
+            Intent intent = new Intent(this, ClassEditActivity.class);
+            intent.putExtra("id_turma", id_class);
             startActivityForResult(intent, REQUEST_CODE);
         }else{
-            avisoNotExluir();
+            notifyImpossibilityEdit();
         }
     }
-    public void avisoNotExluir(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(DadosTurmaActivity.this);
+    public void notifyImpossibilityEdit(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ClassDetailsActivity.this);
         builder.setTitle("Atenção!")
                 .setMessage("Esta turma possui vínculo com uma ou mais prova(s) já corrigidas, não sendo possível editar!");
         AlertDialog alertDialog = builder.create();
@@ -116,7 +116,7 @@ public class DadosTurmaActivity extends AppCompatActivity implements PopupMenu.O
             startActivity(getIntent());
         }
     }
-    public void recarregarVisualTurma(){
+    public void restartVisualClass(){
         setResult(RESULT_OK);
         finish();
     }

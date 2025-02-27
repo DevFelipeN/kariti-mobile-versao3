@@ -100,11 +100,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EditarTurmaActivity"
+            android:name=".ClassEditActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DadosTurmaActivity"
+            android:name=".ClassDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -112,7 +112,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CadTurmaActivity"
+            android:name=".ClassRegistrationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

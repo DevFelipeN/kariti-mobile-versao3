@@ -107,7 +107,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
         });
     }
     private void telaDadosTurma(Integer idTurma) {
-        Intent intent = new Intent(this, DadosTurmaActivity.class);
+        Intent intent = new Intent(this, ClassDetailsActivity.class);
         intent.putExtra("idTurma", idTurma);
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -132,7 +132,7 @@ public class VisualTurmaActivity extends AppCompatActivity {
     }
 
     private void carregarTelaCadTurma(){
-        Intent intent = new Intent(this, CadTurmaActivity.class);
+        Intent intent = new Intent(this, ClassRegistrationActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
 

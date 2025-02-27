@@ -14,14 +14,15 @@ import androidx.annotation.Nullable;
 import online.padev.kariti.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DesativadaAdapter extends ArrayAdapter<String> {
 
-    private ArrayList<String> escolas, ids;
+    private List<String> escolas, ids;
 
     private Context context;
 
-    public DesativadaAdapter(Context context, ArrayList<String> escolas, ArrayList<String> ids) {
+    public DesativadaAdapter(Context context, List<String> escolas, List<String> ids) {
         super(context, R.layout.custom_escola_desativada, escolas);
         this.context = context;
         this.escolas = escolas;

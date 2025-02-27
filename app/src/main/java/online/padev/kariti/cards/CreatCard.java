@@ -42,16 +42,16 @@ public class CreatCard {
     Context context;
     private int typeQr;
     Prova prova;
-    private double nota;
+    private double note;
     private String className, teacher;
     Map<Integer, String> students;
 
-    public CreatCard(Prova prova, BancoDados bancoDados, Context context){
+    public CreatCard(Prova prova, BancoDados dataBase, Context context){
         this.prova = prova;
-        this.className = bancoDados.pegarNomeTurma(prova.getId_turma().toString());
-        this.teacher = bancoDados.pegarNomeUsuario(BancoDados.USER_ID);
-        students = bancoDados.listarAlunosPorTurma(prova.getId_turma());
-        nota = bancoDados.pegarNotaProva(prova.getId_prova().toString());
+        this.className = dataBase.pegarNomeTurma(prova.getId_class().toString());
+        this.teacher = dataBase.pegarNomeUsuario(BancoDados.USER_ID);
+        students = dataBase.listarAlunosPorTurma(prova.getId_class());
+        note = dataBase.pegarNotaProva(prova.getId_prova().toString());
         this.context = context;
         typeQr = 0; // Isso indica que o QRcode a ser montado terá o padrão (id_prova e id_aluno)
     }
@@ -62,7 +62,7 @@ public class CreatCard {
         this.className = className;
         this.teacher = teacher;
         students = new HashMap<>();
-        students.put(prova.getNumAlternativas(), ""); // Alterando dado do QRcode
+        students.put(prova.getNumAlternatives(), ""); // Alterando dado do QRcode
         typeQr = 1; // Isso indica que o QRcode a ser montado terá o padrão (numQuestões e numAlternativas)
     }
 
@@ -95,9 +95,9 @@ public class CreatCard {
                 // ================ Monta o Cabeçalho da Prova ====================================================================
                 canvas.drawText("Aluno(a): " + student.getValue(), 80, 85, paint);
                 canvas.drawText("Professor(a): " + teacher, 80, 115, paint);
-                canvas.drawText("Prova: " + prova.getNomeProva(), 80, 145, paint);
+                canvas.drawText("Prova: " + prova.getNameProva(), 80, 145, paint);
                 canvas.drawText("Turma: " + className, 80, 175, paint);
-                if(prova.getDataProva() != null) {
+                if(prova.getDateProva() != null) {
                     canvas.drawText("Data: " + prova.dateToDisplay(), 80, 205, paint);
                 } else {
                     canvas.drawText("Data: ", 80, 205, paint);
@@ -142,12 +142,12 @@ public class CreatCard {
 
                 // ==================== Adiciona a nota total dentro do retângulo =====================================
                 paint.setTextSize(72);
-                if (nota >= 100) {
-                    canvas.drawText(String.format("%.2f", nota), 340, 410, paint);
-                } else if (nota >= 10) {
-                    canvas.drawText(String.format("%.2f", nota), 360, 410, paint);
-                } else if (nota >= 1) { // Isso garante que quando nem um valor for atribuido a nota, nada será desenhado no retangulo (Prova rápida)
-                    canvas.drawText(String.format("%.2f", nota), 380, 410, paint);
+                if (note >= 100) {
+                    canvas.drawText(String.format("%.2f", note), 340, 410, paint);
+                } else if (note >= 10) {
+                    canvas.drawText(String.format("%.2f", note), 360, 410, paint);
+                } else if (note >= 1) { // Isso garante que quando nem um valor for atribuido a nota, nada será desenhado no retangulo (Prova rápida)
+                    canvas.drawText(String.format("%.2f", note), 380, 410, paint);
                 }
 
                 // ===================== retângulo para a nota do aluno =========================================
@@ -173,17 +173,17 @@ public class CreatCard {
                 paintCircle.setStrokeWidth(2); // Espessura da borda do círculo
 
                 int questsAtual = 0;
-                if (prova.getNumQuestoes() > 20) {
+                if (prova.getNumQuestions() > 20) {
                     questsAtual = 20;
                     alternativeSpacing = 60;
                     startQueresAltX = 242;
                     startOptionX = 244;
                 } else {
-                    questsAtual = prova.getNumQuestoes();
+                    questsAtual = prova.getNumQuestions();
                 }
 
                 // ===================== Adiciona os quadrados das alternativas ====================================
-                for (int alt = 1; alt <= prova.getNumAlternativas(); alt++) {
+                for (int alt = 1; alt <= prova.getNumAlternatives(); alt++) {
                     canvas.drawRect(startQueresAltX, 653, startQueresAltX + 20, 673, paint);
                     startQueresAltX += alternativeSpacing;
                 }
@@ -198,7 +198,7 @@ public class CreatCard {
                     canvas.drawText(i + "", 170, startQuestY, paintLetters); // Número da questão
 
                     int optionX = startOptionX;
-                    for (int a = 0; a < prova.getNumAlternativas(); a++) {
+                    for (int a = 0; a < prova.getNumAlternatives(); a++) {
                         canvas.drawText(letters[a] + "", optionX, startQuestY, paintLetters); // Alternativas
 
                         // Ajusta a posição do círculo para centralizar a letra
@@ -215,25 +215,25 @@ public class CreatCard {
                 }
 
                 // =========== Caso o número de questões seja maior que 20 questões =========================================
-                if (prova.getNumQuestoes() > 20) {
+                if (prova.getNumQuestions() > 20) {
 
                     startQueresAltX = 753;
 
                     // ===================== Adiciona os quadrados das alternativas na direita da página  ====================================
-                    for (int alt = 1; alt <= prova.getNumAlternativas(); alt++) {
+                    for (int alt = 1; alt <= prova.getNumAlternatives(); alt++) {
                         canvas.drawRect(startQueresAltX, 653, startQueresAltX + 20, 673, paint);
                         startQueresAltX += alternativeSpacing;
                     }
 
                     // ===================== Adiciona os quadrados das questões, numeros e alternativas na direita da página ========================
                     startQuestY = 720; // Onde começa as questões em Y
-                    for (int i = 21; i <= prova.getNumQuestoes(); i++) {
+                    for (int i = 21; i <= prova.getNumQuestions(); i++) {
                         canvas.drawRect(651, startQuestY - 20, 671, startQuestY, paint);
 
                         canvas.drawText(i + "", 681, startQuestY, paintLetters); // Número da questão
 
                         startOptionX = 756;
-                        for (int a = 0; a < prova.getNumAlternativas(); a++) {
+                        for (int a = 0; a < prova.getNumAlternatives(); a++) {
                             canvas.drawText(letters[a] + "", startOptionX, startQuestY, paintLetters); // Alternativas
 
                             // Ajusta a posição do círculo para centralizar a letra
@@ -285,7 +285,7 @@ public class CreatCard {
                 pdfDocument.finishPage(page);
             }
 
-            String fileName = prova.getNomeProva()+"_"+dataHoraAtual()+".pdf";
+            String fileName = prova.getNameProva()+"_"+dataHoraAtual()+".pdf";
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 // Salvar arquivo

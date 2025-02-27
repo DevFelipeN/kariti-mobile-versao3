@@ -1,32 +1,29 @@
 package online.padev.kariti.dao;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import online.padev.kariti.BancoDados;
-
 public class Gabarito {
-    private Integer questao;
-    private Integer resposta;
-    private float nota;
+    private Integer question;
+    private Integer response;
+    private float note;
     public static List<Gabarito> gabaritoDefault = new ArrayList<>(); // Guarda o gabarito de provas rapidas
 
-    public Gabarito(Integer questao, Integer resposta, float nota) {
-        this.questao = questao;
-        this.resposta = resposta;
-        this.nota = nota;
+    public Gabarito(Integer question, Integer response, float note) {
+        this.question = question;
+        this.response = response;
+        this.note = note;
     }
 
-    public Integer getQuestao() {
-        return questao;
+    public Integer getQuestion() {
+        return question;
     }
 
-    public Integer getResposta() {
-        return resposta;
+    public Integer getResponse() {
+        return response;
     }
 
-    public float getNota() {
-        return nota;
+    public float getNote() {
+        return note;
     }
 }

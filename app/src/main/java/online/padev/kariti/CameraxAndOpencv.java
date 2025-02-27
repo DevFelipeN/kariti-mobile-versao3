@@ -3,7 +3,6 @@ package online.padev.kariti;
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
 import static online.padev.kariti.Compactador.listCartoes;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,13 +10,10 @@ import android.graphics.ImageFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -361,13 +357,13 @@ public class CameraxAndOpencv extends AppCompatActivity {
                         if (BancoDados.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
                                 prova = new Prova();
                                 prova.setId_prova(0);
-                                prova.setNumQuestoes(Integer.parseInt(a[0]));
-                                prova.setNumAlternativas(Integer.parseInt(a[1]));
+                                prova.setNumQuestions(Integer.parseInt(a[0]));
+                                prova.setNumAlternatives(Integer.parseInt(a[1]));
                             if (Gabarito.gabaritoDefault != null && !Gabarito.gabaritoDefault.isEmpty()) {
-                                if (prova.getNumQuestoes() == Prova.numQuestsDefault && prova.getNumAlternativas() == Prova.numAlternativesDefault) {
+                                if (prova.getNumQuestions() == Prova.numQuestsDefault && prova.getNumAlternatives() == Prova.numAlternativesDefault) {
 
                                     for (Gabarito g : Gabarito.gabaritoDefault){
-                                        gabaritoDefault += g.getResposta();
+                                        gabaritoDefault += g.getResponse();
                                     }
 
                                     //Versão 3
@@ -377,7 +373,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                                     mat.release();
                                     typeMessage = 4;
                                     Bitmap imgWarp = matToBitmap(matWarp);
-                                    nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
+                                    nameCartao = resultQrCode+"_"+prova.getNumQuestions()+"_"+prova.getNumAlternatives();
                                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao);
                                     startGabaritoDefault(filePath);
                                 }
@@ -385,7 +381,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                                 mat.release();
                                 typeMessage  = 5;
                                 Bitmap imgWarp = matToBitmap(matWarp);
-                                nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
+                                nameCartao = resultQrCode+"_"+prova.getNumQuestions()+"_"+prova.getNumAlternatives();
                                 filePath = saveBitmapAndGetPath(imgWarp, nameCartao);
                                 startGabaritoDefault(filePath);
                             }
@@ -398,7 +394,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 }
                 if(correction != null && !correction.isEmpty()){
                     Bitmap imgWarp = matToBitmap(matWarp);
-                    nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
+                    nameCartao = resultQrCode+"_"+prova.getNumQuestions()+"_"+prova.getNumAlternatives();
                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
                     //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
                     isCorrectSucess = true;

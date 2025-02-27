@@ -8,9 +8,9 @@ import online.padev.kariti.BancoDados;
 
 public class Prova implements Serializable {
     private Integer id_prova;
-    private Integer id_turma;
-    private String nomeProva, dataProva;
-    private int numQuestoes, numAlternativas;
+    private Integer id_class;
+    private String nameProva, dateProva;
+    private int numQuestions, numAlternatives;
 
     public static int numQuestsDefault; //Essa variável serve como controle da correção de prova rápida
     public static int numAlternativesDefault; //Essa variável serve como controle da correção de prova rápida
@@ -21,19 +21,19 @@ public class Prova implements Serializable {
     public Prova(Integer id_prova, BancoDados bancoDados) {
         this.id_prova = id_prova;
         String[] dados = bancoDados.pegarTodosDadosProva(id_prova);
-        this.nomeProva = dados[0];
-        this.id_turma = Integer.valueOf(dados[1]);
-        this.dataProva = dados[2];
-        this.numQuestoes = Integer.parseInt(dados[3]);
-        this.numAlternativas = Integer.parseInt(dados[4]);
+        this.nameProva = dados[0];
+        this.id_class = Integer.valueOf(dados[1]);
+        this.dateProva = dados[2];
+        this.numQuestions = Integer.parseInt(dados[3]);
+        this.numAlternatives = Integer.parseInt(dados[4]);
     }
 
-    public Integer getId_turma() {
-        return id_turma;
+    public Integer getId_class() {
+        return id_class;
     }
 
-    public void setId_turma(Integer id_turma){
-        this.id_turma = id_turma;
+    public void setId_class(Integer id_class){
+        this.id_class = id_class;
     }
 
     public Integer getId_prova() {
@@ -44,51 +44,51 @@ public class Prova implements Serializable {
         this.id_prova = id_prova;
     }
 
-    public String getNomeProva() {
-        return nomeProva;
+    public String getNameProva() {
+        return nameProva;
     }
 
-    public void setNomeProva(String nomeProva) {
-        this.nomeProva = nomeProva;
+    public void setNameProva(String nameProva) {
+        this.nameProva = nameProva;
     }
 
-    public String getDataProva() {
-        return dataProva;
+    public String getDateProva() {
+        return dateProva;
     }
 
-    public void setDataProva(String dataProva) {
-        this.dataProva = formatDateToCompare(dataProva);
+    public void setDateProva(String dateProva) {
+        this.dateProva = formatDateToCompare(dateProva);
     }
 
-    public int getNumQuestoes() {
-        return numQuestoes;
+    public int getNumQuestions() {
+        return numQuestions;
     }
 
-    public void setNumQuestoes(int numQuestoes) {
-        this.numQuestoes = numQuestoes;
+    public void setNumQuestions(int numQuestions) {
+        this.numQuestions = numQuestions;
     }
 
-    public int getNumAlternativas() {
-        return numAlternativas;
+    public int getNumAlternatives() {
+        return numAlternatives;
     }
 
-    public void setNumAlternativas(int numAlternativas) {
-        this.numAlternativas = numAlternativas;
+    public void setNumAlternatives(int numAlternatives) {
+        this.numAlternatives = numAlternatives;
     }
 
     public boolean isDifferent(Prova outraProva) {
-        return !this.nomeProva.equals(outraProva.getNomeProva()) ||
-                !this.id_turma.equals(outraProva.getId_turma()) ||
-                !this.dataProva.equals(outraProva.getDataProva()) ||
-                this.numQuestoes != outraProva.getNumQuestoes() ||
-                this.numAlternativas != outraProva.getNumAlternativas();
+        return !this.nameProva.equals(outraProva.getNameProva()) ||
+                !this.id_class.equals(outraProva.getId_class()) ||
+                !this.dateProva.equals(outraProva.getDateProva()) ||
+                this.numQuestions != outraProva.getNumQuestions() ||
+                this.numAlternatives != outraProva.getNumAlternatives();
     }
     private String formatDateToCompare(String data){
         String[] itens = data.split("/");
         return itens[2]+"-"+itens[1]+"-"+itens[0];
     }
     public String dateToDisplay(){
-        String data = this.getDataProva();
+        String data = this.getDateProva();
         String[] itens = data.split("-");
         return itens[2]+"/"+itens[1]+"/"+itens[0];
     }
@@ -96,6 +96,6 @@ public class Prova implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "prova{nome: "+this.nomeProva+", id_turma: "+this.id_turma+", data: "+this.dataProva+", questões: "+this.numQuestoes+", Alternativas: "+this.numAlternativas+"}";
+        return "prova{nome: "+this.nameProva +", id_turma: "+this.id_class +", data: "+this.dateProva +", questões: "+this.numQuestions +", Alternativas: "+this.numAlternatives +"}";
     }
 }

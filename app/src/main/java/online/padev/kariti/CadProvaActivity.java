@@ -102,9 +102,9 @@ public class CadProvaActivity extends AppCompatActivity {
         });
         btnGerProva.setOnClickListener(v -> {
             try {
-                prova.setNomeProva(nomeProva.getText().toString());
+                prova.setNameProva(nomeProva.getText().toString());
 
-                if (prova.getNomeProva().trim().isEmpty()) {
+                if (prova.getNameProva().trim().isEmpty()) {
                     Toast.makeText(CadProvaActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -113,13 +113,13 @@ public class CadProvaActivity extends AppCompatActivity {
                     return;
                 }
                 String nomeTurma = spinnerTurma.getSelectedItem().toString();
-                prova.setId_turma(bancoDados.pegarIdTurma(nomeTurma));
+                prova.setId_class(bancoDados.pegarIdTurma(nomeTurma));
 
                 if (datePickerButton.getText().toString().equals("Selecionar Data")) {
                     Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                prova.setDataProva(datePickerButton.getText().toString());
+                prova.setDateProva(datePickerButton.getText().toString());
 
                 if (qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")) {
                     Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
@@ -139,21 +139,21 @@ public class CadProvaActivity extends AppCompatActivity {
                     return;
                 }
 
-                prova.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
-                prova.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+                prova.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
+                prova.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
 
-                if (prova.getId_turma() == null) {
+                if (prova.getId_class() == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova.getNomeProva(), prova.getId_turma().toString());
+                Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova.getNameProva(), prova.getId_class().toString());
                 if (verificaProva == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (verificaProva) {
-                    Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, " + prova.getNomeProva(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadProvaActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, " + prova.getNameProva(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 

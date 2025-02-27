@@ -27,31 +27,6 @@ import java.util.Hashtable;
 import online.padev.kariti.R;
 
 public class LibQr {
-    /*
-    public static Bitmap createQrCode2(String text) {
-        text = formatTextToQr(text);
-        int width = 270;
-        int height = 270;
-        try {
-            Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
-            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height, hints);
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            return bitmap;
-
-        } catch (WriterException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-     */
 
     public static Bitmap createQrCode(String text, int typeQr, Context context ) {
         text = formatTextToQr(text, typeQr);

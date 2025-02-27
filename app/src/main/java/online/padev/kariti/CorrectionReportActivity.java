@@ -60,12 +60,12 @@ public class CorrectionReportActivity extends AppCompatActivity {
 
         prova = (Prova) getIntent().getSerializableExtra("prova");
 
-        className = bancoDados.pegarNomeTurma(prova.getId_turma().toString());
+        className = bancoDados.pegarNomeTurma(prova.getId_class().toString());
 
-        txtViewProva.setText(String.format("%s","Prova: "+prova.getNomeProva()));
+        txtViewProva.setText(String.format("%s","Prova: "+prova.getNameProva()));
 
         gabarito = bancoDados.listarDadosGabarito(prova.getId_prova());
-        students = bancoDados.listStudentExamCorrect(prova.getId_turma());
+        students = bancoDados.listStudentExamCorrect(prova.getId_class());
 
         if (gabarito == null || students == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
@@ -88,11 +88,11 @@ public class CorrectionReportActivity extends AppCompatActivity {
             answersGiven = bancoDados.listarRespostasDadas(prova.getId_prova(), student.getId_student()); // lista as respostas dos alunos em formato de letras
             incrementResponse(); //caso quantidade de respostadas dadas, menor que o esperado, incrementa!
             if(!checkStatusCorrection) {
-                for (int i = 0; i < prova.getNumQuestoes(); i++) {
+                for (int i = 0; i < prova.getNumQuestions(); i++) {
                     Gabarito g = gabarito.get(i);
-                    char correctResponse = (char) ('A' + g.getResposta() - 1);
+                    char correctResponse = (char) ('A' + g.getResponse() - 1);
                     if (String.valueOf(correctResponse).equals(answersGiven.get(i))) {
-                        nota += g.getNota();
+                        nota += g.getNote();
                         acertos += 1;
                     }
                 }
@@ -218,8 +218,8 @@ public class CorrectionReportActivity extends AppCompatActivity {
     }
     private void incrementResponse(){
         int numRespostas = answersGiven.size(); //Quantidade de respostas cadastradas no BD
-        if (numRespostas < prova.getNumQuestoes()){ //Caso quantidade de respostas dadas menor q de questões
-            for (int a = numRespostas; a < prova.getNumQuestoes(); a++){
+        if (numRespostas < prova.getNumQuestions()){ //Caso quantidade de respostas dadas menor q de questões
+            for (int a = numRespostas; a < prova.getNumQuestions(); a++){
                 answersGiven.add(a, "-"); //Aumenta o tamanho da lista até o tamanho da questões
             }
         }

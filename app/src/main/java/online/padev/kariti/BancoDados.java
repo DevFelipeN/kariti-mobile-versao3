@@ -282,21 +282,21 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados.beginTransaction();
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeProva", dadosProva.getNomeProva());
-            contentValues.put("dataProva", dadosProva.getDataProva());
-            contentValues.put("qtdQuestoes", dadosProva.getNumQuestoes());
-            contentValues.put("qtdAlternativas", dadosProva.getNumAlternativas());
-            contentValues.put("id_turma", dadosProva.getId_turma());
+            contentValues.put("nomeProva", dadosProva.getNameProva());
+            contentValues.put("dataProva", dadosProva.getDateProva());
+            contentValues.put("qtdQuestoes", dadosProva.getNumQuestions());
+            contentValues.put("qtdAlternativas", dadosProva.getNumAlternatives());
+            contentValues.put("id_turma", dadosProva.getId_class());
             Integer inserirProva = Math.toIntExact(base_dados.insert("prova", null, contentValues));
 
             if (!inserirProva.equals(-1)){
                 for (Gabarito g : gabarito){
-                    Log.e("respostasGabarito", "Q: "+g.getQuestao()+" R: "+g.getResposta()+ "nota: "+g.getNota());
+                    Log.e("respostasGabarito", "Q: "+g.getQuestion()+" R: "+g.getResponse()+ "nota: "+g.getNote());
                     ContentValues contentValues2 = new ContentValues();
                     contentValues2.put("id_prova", inserirProva);
-                    contentValues2.put("questao", g.getQuestao());
-                    contentValues2.put("resposta", g.getResposta());
-                    contentValues2.put("nota", g.getNota());
+                    contentValues2.put("questao", g.getQuestion());
+                    contentValues2.put("resposta", g.getResponse());
+                    contentValues2.put("nota", g.getNote());
                     Integer inserirGabarito = Math.toIntExact(base_dados.insert("gabarito", null, contentValues2));
                     if(!inserirGabarito.equals(-1)){
                         Log.e("kariti", "Resultado de correção cadastrado com sucesso");
@@ -739,11 +739,11 @@ public class BancoDados extends SQLiteOpenHelper {
 
                 String altera = "UPDATE prova SET nomeProva = ?, dataProva = ?, qtdQuestoes = ?, qtdAlternativas = ?, id_turma = ?  WHERE id_prova = ?";
                 stmtUpProva = base_dado.compileStatement(altera);
-                stmtUpProva.bindString(1, prova.getNomeProva());
-                stmtUpProva.bindString(2, prova.getDataProva());
-                stmtUpProva.bindLong(3, prova.getNumQuestoes());
-                stmtUpProva.bindLong(4, prova.getNumAlternativas());
-                stmtUpProva.bindLong(5, prova.getId_turma());
+                stmtUpProva.bindString(1, prova.getNameProva());
+                stmtUpProva.bindString(2, prova.getDateProva());
+                stmtUpProva.bindLong(3, prova.getNumQuestions());
+                stmtUpProva.bindLong(4, prova.getNumAlternatives());
+                stmtUpProva.bindLong(5, prova.getId_class());
                 stmtUpProva.bindLong(6, prova.getId_prova());
                 int result = stmtUpProva.executeUpdateDelete();
                 if (result == 0) {
@@ -762,12 +762,12 @@ public class BancoDados extends SQLiteOpenHelper {
             Log.e("kariti", "Gabrito deletado 1");
 
             for (Gabarito g : gabarito){
-                Log.e("respostasGabarito", "Q: "+g.getQuestao()+" R: "+g.getResposta()+ " nota: "+g.getNota());
+                Log.e("respostasGabarito", "Q: "+g.getQuestion()+" R: "+g.getResponse()+ " nota: "+g.getNote());
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("id_prova", prova.getId_prova());
-                contentValues.put("questao", g.getQuestao());
-                contentValues.put("resposta", g.getResposta());
-                contentValues.put("nota", g.getNota());
+                contentValues.put("questao", g.getQuestion());
+                contentValues.put("resposta", g.getResponse());
+                contentValues.put("nota", g.getNote());
                 Integer inserirGabarito = Math.toIntExact(base_dado.insert("gabarito", null, contentValues));
                 if(!inserirGabarito.equals(-1)){
                     Log.e("kariti", "Resultado de correção cadastrado com sucesso");

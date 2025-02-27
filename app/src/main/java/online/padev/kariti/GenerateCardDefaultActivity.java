@@ -156,12 +156,12 @@ public class GenerateCardDefaultActivity extends AppCompatActivity {
     }
     private void generateCard(){
         prova = new Prova();
-        prova.setNomeProva(provaName.getText().toString().trim());
+        prova.setNameProva(provaName.getText().toString().trim());
         prova.setId_prova(Integer.parseInt(qtdQuest.getText().toString()));
-        prova.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
-        prova.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+        prova.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
+        prova.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
         if (!datePickerButton.getText().toString().equals("Selecionar Data")){
-            prova.setDataProva(datePickerButton.getText().toString());
+            prova.setDateProva(datePickerButton.getText().toString());
         }
         CreatCard creatCard = new CreatCard(prova, teacherName.getText().toString(), className.getText().toString(), this);
         if (creatCard.creatPdfCard()){

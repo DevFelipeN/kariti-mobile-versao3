@@ -65,13 +65,13 @@ public class EdicaoProva extends AppCompatActivity {
         provaBD = new Prova(id_provaBD, bancoDados);
         provaAtual = new Prova();
 
-        editTextNomeProva.setText(String.format("%s", provaBD.getNomeProva()));
-        qtdQuest.setText(String.format("%s", provaBD.getNumQuestoes()));
-        qtdAlter.setText(String.format("%s", provaBD.getNumAlternativas()));
+        editTextNomeProva.setText(String.format("%s", provaBD.getNameProva()));
+        qtdQuest.setText(String.format("%s", provaBD.getNumQuestions()));
+        qtdAlter.setText(String.format("%s", provaBD.getNumAlternatives()));
         btnData.setText(provaBD.dateToDisplay());
 
         listTurma = bancoDados.listarNomesTurmas(); // Lista todas as turmas da escola atual
-        int position = listTurma.indexOf(bancoDados.pegarNomeTurma(provaBD.getId_turma().toString()));
+        int position = listTurma.indexOf(bancoDados.pegarNomeTurma(provaBD.getId_class().toString()));
         SpinnerAdapter adapter = new SpinnerAdapter(this, listTurma);
         spinnerTurma.setAdapter(adapter);
         spinnerTurma.setSelection(position);
@@ -138,11 +138,11 @@ public class EdicaoProva extends AppCompatActivity {
             try {
                 nomeTurmaAtual = spinnerTurma.getSelectedItem().toString(); // nome da turma não tem como ser vazio!
                 provaAtual.setId_prova(id_provaBD);
-                provaAtual.setNomeProva(editTextNomeProva.getText().toString());
-                provaAtual.setDataProva(btnData.getText().toString());
-                provaAtual.setId_turma(bancoDados.pegarIdTurma(nomeTurmaAtual));
+                provaAtual.setNameProva(editTextNomeProva.getText().toString());
+                provaAtual.setDateProva(btnData.getText().toString());
+                provaAtual.setId_class(bancoDados.pegarIdTurma(nomeTurmaAtual));
 
-                if (provaAtual.getNomeProva().trim().isEmpty()) { //verifica se o campo prova esta vazio
+                if (provaAtual.getNameProva().trim().isEmpty()) { //verifica se o campo prova esta vazio
                     Toast.makeText(EdicaoProva.this, "Informe o nome da Prova!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -163,18 +163,18 @@ public class EdicaoProva extends AppCompatActivity {
                     dialogLimitMaxAlter();
                     return;
                 }
-                provaAtual.setNumQuestoes(Integer.parseInt(qtdQuest.getText().toString()));
-                provaAtual.setNumAlternativas(Integer.parseInt(qtdAlter.getText().toString()));
+                provaAtual.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
+                provaAtual.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
 
                 if (provaAtual.isDifferent(provaBD)) { //Verifica se os dados da prova foram alterados
-                    if (!provaAtual.getNomeProva().equals(provaBD.getNomeProva()) || !provaAtual.getId_turma().equals(provaBD.getId_turma())) {
-                        Boolean verificaProva = bancoDados.verificaExisteProvaPNome(provaAtual.getNomeProva(), provaAtual.getId_turma().toString());
+                    if (!provaAtual.getNameProva().equals(provaBD.getNameProva()) || !provaAtual.getId_class().equals(provaBD.getId_class())) {
+                        Boolean verificaProva = bancoDados.verificaExisteProvaPNome(provaAtual.getNameProva(), provaAtual.getId_class().toString());
                         if (verificaProva == null) {
                             Toast.makeText(EdicaoProva.this, "Erro na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (verificaProva) {
-                            Toast.makeText(EdicaoProva.this, "Esta turma já pussui uma prova cadastrada com esse nome, " + provaAtual.getNomeProva(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EdicaoProva.this, "Esta turma já pussui uma prova cadastrada com esse nome, " + provaAtual.getNameProva(), Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }

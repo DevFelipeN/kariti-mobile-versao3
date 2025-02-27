@@ -90,8 +90,8 @@ public class GabaritoActivity extends AppCompatActivity {
         }
 
         if (!direcion.equals("cardDefault")) {
-            txtViewProva.setText(String.format("Prova: %s", dadosProva.getNomeProva()));
-            txtViewTurma.setText(String.format("Turma: %s", bancoDados.pegarNomeTurma(dadosProva.getId_turma().toString())));
+            txtViewProva.setText(String.format("Prova: %s", dadosProva.getNameProva()));
+            txtViewTurma.setText(String.format("Turma: %s", bancoDados.pegarNomeTurma(dadosProva.getId_class().toString())));
             txtViewData.setText(String.format("Data: %s", dadosProva.dateToDisplay()));
         } else {
             txtViewProva.setVisibility(View.GONE);
@@ -141,7 +141,7 @@ public class GabaritoActivity extends AppCompatActivity {
                         return;
                     }
                     if (!notas.isEmpty()) {
-                        for (int i = 1; i <= dadosProva.getNumQuestoes(); i++) {
+                        for (int i = 1; i <= dadosProva.getNumQuestions(); i++) {
                             Integer resp = alternativasEscolhidas.get(i - 1);
                             float notaQuestaoI = notas.get(i - 1);
                             Log.e("notas", "n1: " + notaQuestaoI);
@@ -163,8 +163,8 @@ public class GabaritoActivity extends AppCompatActivity {
                             }
                         } else { // Entra nessa estrutura quando o gabarito pertencer a uma prova rápida
                             Gabarito.gabaritoDefault = gabarito;
-                            Prova.numQuestsDefault = dadosProva.getNumQuestoes();
-                            Prova.numAlternativesDefault = dadosProva.getNumAlternativas();
+                            Prova.numQuestsDefault = dadosProva.getNumQuestions();
+                            Prova.numAlternativesDefault = dadosProva.getNumAlternatives();
                             dialogHelpCorrectDefault();
                         }
                     } else {
@@ -179,8 +179,8 @@ public class GabaritoActivity extends AppCompatActivity {
             }
        });
 
-        int quantidadeQuestoes = dadosProva.getNumQuestoes();
-        int quantidadeAlternativas = dadosProva.getNumAlternativas();
+        int quantidadeQuestoes = dadosProva.getNumQuestions();
+        int quantidadeAlternativas = dadosProva.getNumAlternatives();
         txtViewNotaProva.setText(String.format("%s","Nota total da prova " + quantidadeQuestoes + " pontos."));
 
         String[] letras = new String[quantidadeAlternativas];
@@ -293,8 +293,8 @@ public class GabaritoActivity extends AppCompatActivity {
     }
     private void generatCards() {
         Intent intent = new Intent(this, GenerateCardsActivity.class);
-        intent.putExtra("prova", dadosProva.getNomeProva());
-        intent.putExtra("id_turma", dadosProva.getId_turma());
+        intent.putExtra("prova", dadosProva.getNameProva());
+        intent.putExtra("id_turma", dadosProva.getId_class());
         intent.putExtra("endereco", 1);
         startActivity(intent);
         finish();
@@ -413,7 +413,7 @@ public class GabaritoActivity extends AppCompatActivity {
         try {
             String gabaritoDefault = "";
             for (Gabarito g : Gabarito.gabaritoDefault) {
-                gabaritoDefault += g.getResposta();
+                gabaritoDefault += g.getResponse();
             }
             String filePath = getIntent().getExtras().getString("filePath");
             if (filePath == null || gabaritoDefault.isEmpty()) {
@@ -432,7 +432,7 @@ public class GabaritoActivity extends AppCompatActivity {
             if (correction != null && !correction.isEmpty()){
                 deleteAllImages();
                 Bitmap imgWarp = matToBitmap(matWarp);
-                String nameCartao = "first_"+dadosProva.getNumQuestoes()+"_"+dadosProva.getNumAlternativas();
+                String nameCartao = "first_"+dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives();
                 String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
                 startViewImageDefault(correction, gabaritoDefault, filePathPaint);
             } else {

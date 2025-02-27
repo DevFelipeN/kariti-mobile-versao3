@@ -18,10 +18,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import online.padev.kariti.BancoDados;
-import online.padev.kariti.dao.Gabarito;
 import online.padev.kariti.dao.Prova;
 
 
@@ -32,9 +30,9 @@ public class CoreKariti {
     HashMap<Integer, Integer> gabaritoResult = new HashMap<>(); // Para armazenar a questão (Key) e a resposta associada a questão
     List<SquaresCircles> squaresCircles = new ArrayList<>(); // Para armazenar a questão e os circulos associados a essa questão
     List<Circle> markedCircles = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem
-    Integer id_alunoBD;
+    Integer id_studentBD;
     Mat mat; // Faz referência a imagem cortada
-    BancoDados bancoDados;
+    BancoDados dataBase;
     Prova prova;
     int height, width;
     private String gabarito;
@@ -46,15 +44,15 @@ public class CoreKariti {
      * está cadastrada no banco de dados do aplicativo
      * @param mat imagem cortada do cartão resposta
      * @param prova dados da prova a ser corrigida
-     * @param bancoDados instância do banco para cadastro da correção
-     * @param id_alunoBD id do aluno associado ao prova a ser corrigida
+     * @param dataBase instância do banco para cadastro da correção
+     * @param id_studentBD id do aluno associado ao prova a ser corrigida
      */
-    public CoreKariti(Mat mat, Prova prova, BancoDados bancoDados, Integer id_alunoBD){
+    public CoreKariti(Mat mat, Prova prova, BancoDados dataBase, Integer id_studentBD){
         this.mat = mat;
-        this.id_alunoBD = id_alunoBD;
+        this.id_studentBD = id_studentBD;
         this.prova = prova;
-        this.bancoDados = bancoDados;
-        gabarito = bancoDados.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
+        this.dataBase = dataBase;
+        gabarito = dataBase.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
         typeProva = 0; //Isso indica que a correção a ser realizada será salva em banco
     }
 
@@ -108,7 +106,7 @@ public class CoreKariti {
         }
         if (typeProva == 0){
             // Insere as respostas encontradas para essa prova no banco
-            boolean insertCorrectBD = bancoDados.cadastrarCorrecao(gabaritoResult, prova.getId_prova(), id_alunoBD);
+            boolean insertCorrectBD = dataBase.cadastrarCorrecao(gabaritoResult, prova.getId_prova(), id_studentBD);
             if(!insertCorrectBD){
                 Log.e("correct", "W5");
                 return false;
@@ -184,7 +182,7 @@ public class CoreKariti {
             //Imgproc.threshold(grayWarp, mat, 0, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
             //Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2BGR);
 
-            return quest == prova.getNumQuestoes() && alt == prova.getNumAlternativas();
+            return quest == prova.getNumQuestions() && alt == prova.getNumAlternatives();
 
         }catch (Exception e){
             Log.e("correcao", "E1: "+e.toString());

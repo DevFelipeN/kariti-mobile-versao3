@@ -20,9 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import online.padev.kariti.correction.CoreKariti;
 import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
 
 public class ViewImageActivity extends AppCompatActivity {
 
@@ -127,9 +125,9 @@ public class ViewImageActivity extends AppCompatActivity {
 
         for (int i = 0; i < listGabarito.size(); i++){
             Gabarito g = listGabarito.get(i); // g contém questao, resposta e nota, respectivamente
-            char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResposta())) - 1);
+            char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResponse())) - 1);
             if (respostasDadas.get(i).equals(String.valueOf(r))){
-                notaAluno += g.getNota();
+                notaAluno += g.getNote();
                 acertos += 1;
             }else{
                 erros += 1;

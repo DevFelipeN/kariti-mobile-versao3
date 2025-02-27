@@ -13,87 +13,87 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
-    ImageButton voltar;
-    EditText editTxtNomeAluno, editTxtEmailAluno;
-    Button btnSalvar;
-    String alunoBD, emailBD;
-    Integer id_aluno;
-    BancoDados bancoDados;
+public class StudentEditActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
+    ImageButton back;
+    EditText editTxtNameStudent, editTxtEmail;
+    Button btnSave;
+    String nameStudentBD, emailBD;
+    private Integer id_student;
+    BancoDados dataBase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editar_aluno);
+        setContentView(R.layout.activity_student_edit);
 
-        editTxtNomeAluno = findViewById(R.id.editTextAlunoCadastrado);
-        editTxtEmailAluno = findViewById(R.id.editTextEmailCadastrado);
-        btnSalvar = findViewById(R.id.buttonSalvarEditAluno);
-        voltar = findViewById(R.id.imgBtnVoltaEscola);
+        editTxtNameStudent = findViewById(R.id.editTextAlunoCadastrado);
+        editTxtEmail = findViewById(R.id.editTextEmailCadastrado);
+        btnSave = findViewById(R.id.buttonSalvarEditAluno);
+        back = findViewById(R.id.imgBtnVoltaEscola);
 
-        bancoDados = new BancoDados(this);
+        dataBase = new BancoDados(this);
 
-        infoEditarAluno();
+        noticeEdit();
 
-        id_aluno = getIntent().getExtras().getInt("id_aluno");
-        alunoBD = bancoDados.pegaNomeAlunoPStatus(id_aluno, 1);
-        emailBD = bancoDados.pegarEmailAluno(id_aluno);
-        if (alunoBD == null || emailBD == null){
+        id_student = getIntent().getExtras().getInt("id_aluno");
+        nameStudentBD = dataBase.pegaNomeAlunoPStatus(id_student, 1);
+        emailBD = dataBase.pegarEmailAluno(id_student);
+        if (nameStudentBD == null || emailBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
-        editTxtNomeAluno.setText(alunoBD); //Mostra o nome do aluno
-        editTxtEmailAluno.setText(emailBD); //Mostra o e-mail do aluno
+        editTxtNameStudent.setText(nameStudentBD); //Mostra o nome do aluno
+        editTxtEmail.setText(emailBD); //Mostra o e-mail do aluno
 
-        btnSalvar.setOnClickListener(view -> {
-            String nomeAlunoAtual = editTxtNomeAluno.getText().toString().trim();
-            String emailAlunoAtual = editTxtEmailAluno.getText().toString().trim();
-            if (nomeAlunoAtual.equals(alunoBD) && emailAlunoAtual.equals(emailBD)){
+        btnSave.setOnClickListener(view -> {
+            String nameStudentCurrent = editTxtNameStudent.getText().toString().trim();
+            String emailCurrent = editTxtEmail.getText().toString().trim();
+            if (nameStudentCurrent.equals(nameStudentBD) && emailCurrent.equals(emailBD)){
                 Toast.makeText(this, "Sem alterações realizadas", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(nomeAlunoAtual.trim().isEmpty()){
-                Toast.makeText(EditarAlunoActivity.this, "Informe o nome do aluno!", Toast.LENGTH_SHORT).show();
+            if(nameStudentCurrent.isEmpty()){
+                Toast.makeText(StudentEditActivity.this, "Informe o nome do aluno!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (!alunoBD.equals(nomeAlunoAtual)){
-                Boolean verificaNovoAluno = bancoDados.verificaExisteAlunoPNome(nomeAlunoAtual);
-                if (verificaNovoAluno == null) {
+            if (!nameStudentBD.equals(nameStudentCurrent)){
+                Boolean checkStudentExists = dataBase.verificaExisteAlunoPNome(nameStudentCurrent);
+                if (checkStudentExists == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (verificaNovoAluno) {
+                if (checkStudentExists) {
                     Toast.makeText(this, "Já existe um aluno com esse nome, cadastrado nesta escola!", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
-            if (!emailAlunoAtual.equals(emailBD) && !emailAlunoAtual.trim().isEmpty()) {
-                if (!Patterns.EMAIL_ADDRESS.matcher(emailAlunoAtual).matches()) {
+            if (!emailCurrent.equals(emailBD) && !emailCurrent.isEmpty()) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(emailCurrent).matches()) {
                     Toast.makeText(this, "E-mail inválido", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
-            Boolean alterarDadosAluno = bancoDados.alterarDadosAluno(nomeAlunoAtual, emailAlunoAtual, id_aluno);
-            if (alterarDadosAluno == null){
+            Boolean updateStudentBD = dataBase.alterarDadosAluno(nameStudentCurrent, emailCurrent, id_student);
+            if (updateStudentBD == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (alterarDadosAluno) {
-                Toast.makeText(EditarAlunoActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
-                recarregarVisualAlunos();
+            if (updateStudentBD) {
+                Toast.makeText(StudentEditActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                restartStudentActivity();
             } else {
-                Toast.makeText(EditarAlunoActivity.this, "Erro: alteração nao realizada!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentEditActivity.this, "Erro: alteração nao realizada!", Toast.LENGTH_SHORT).show();
             }
         });
-        voltar.setOnClickListener(view -> recarregarVisualAlunos());
+        back.setOnClickListener(view -> restartStudentActivity());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                recarregarVisualAlunos();
+                restartStudentActivity();
             }
         });
     }
-    public void recarregarVisualAlunos(){
-        if(bancoDados.verificaExisteAlunosPorEscola()){
+    private void restartStudentActivity(){
+        if(dataBase.verificaExisteAlunosPorEscola()){
             setResult(RESULT_OK);
             finish();
         }else{
@@ -112,14 +112,14 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuExcluirAluno) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(StudentEditActivity.this);
             builder.setTitle("Atenção!")
                     .setMessage("Deseja realmente excluir o aluno?")
                     .setPositiveButton("Sim", (dialog, which) -> {
-                        Boolean deletarAluno = bancoDados.deletarAluno(id_aluno);
+                        Boolean deletarAluno = dataBase.deletarAluno(id_student);
                         if (deletarAluno) {
                             Toast.makeText(this, "Aluno excluido com sucesso", Toast.LENGTH_SHORT).show();
-                            recarregarVisualAlunos();
+                            restartStudentActivity();
                         }else{
                             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             finish();
@@ -135,8 +135,8 @@ public class EditarAlunoActivity extends AppCompatActivity implements PopupMenu.
             return false;
         }
     }
-    public void infoEditarAluno(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(EditarAlunoActivity.this);
+    private void noticeEdit(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(StudentEditActivity.this);
         builder.setTitle("Ajuda")
                 .setMessage("Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());

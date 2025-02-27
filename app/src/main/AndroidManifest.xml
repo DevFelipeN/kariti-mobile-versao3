@@ -96,7 +96,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EditarAlunoActivity"
+            android:name=".StudentEditActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -128,11 +128,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VisualAlunoActivity"
+            android:name=".StudentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CadAlunoActivity"
+            android:name=".StudentRegistrationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

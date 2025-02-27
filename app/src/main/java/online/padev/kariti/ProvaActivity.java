@@ -460,7 +460,7 @@ public class ProvaActivity extends AppCompatActivity {
                     HashMap<Integer, Integer> isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
 
                     if (isCorrect != null) {
-                        nameCartao = resultQrCode + "_" + prova.getNumQuestoes() + "_" + prova.getNumAlternativas();
+                        nameCartao = resultQrCode + "_" + prova.getNumQuestions() + "_" + prova.getNumAlternatives();
                         String n = nameCartao + ".png";
                         if (!Compactador.listCartoes.contains(n)) {
                             Compactador.listCartoes.add(n);

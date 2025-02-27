@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.ArrayList;
 //compactar arquivos para enviar
-public class Compactador{
+public class Compactor {
     public static ArrayList<String> listCartoes = new ArrayList<>();
     public static ArrayList<String> datasImgs = new ArrayList<>();
     public static Integer id_provaOpenCV;

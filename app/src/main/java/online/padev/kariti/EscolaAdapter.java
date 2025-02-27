@@ -14,13 +14,14 @@ import androidx.annotation.Nullable;
 import online.padev.kariti.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EscolaAdapter extends ArrayAdapter<String> {
 
-    private ArrayList<String> escolas, ids;
+    private List<String> escolas, ids;
     private Context context;
 
-    public EscolaAdapter(Context context, ArrayList<String> escolas, ArrayList<String> ids) {
+    public EscolaAdapter(Context context, List<String> escolas, List<String> ids) {
         super(context, R.layout.list_escola, escolas);
         this.context = context;
         this.escolas = escolas;

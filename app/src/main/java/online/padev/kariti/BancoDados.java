@@ -2112,7 +2112,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? ORDER BY id_turma DESC", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     String nomeTurma = cursor.getString(0);
@@ -2139,7 +2139,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ORDER BY id_turma DESC", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
             if (cursor != null && cursor.moveToFirst()) {
                 do{
                     String nomeTurma = cursor.getString(0);

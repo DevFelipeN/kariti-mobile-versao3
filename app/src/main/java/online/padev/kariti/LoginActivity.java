@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void startSchools(){
-        Intent intent = new Intent(this, VisualEscolaActivity.class);
+        Intent intent = new Intent(this, SchoolActivity.class);
         startActivity(intent);
         finish();
     }

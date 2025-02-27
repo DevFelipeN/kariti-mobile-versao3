@@ -462,8 +462,8 @@ public class ProvaActivity extends AppCompatActivity {
                     if (isCorrect != null) {
                         nameCartao = resultQrCode + "_" + prova.getNumQuestions() + "_" + prova.getNumAlternatives();
                         String n = nameCartao + ".png";
-                        if (!Compactador.listCartoes.contains(n)) {
-                            Compactador.listCartoes.add(n);
+                        if (!Compactor.listCartoes.contains(n)) {
+                            Compactor.listCartoes.add(n);
                         }
                     }
                 }

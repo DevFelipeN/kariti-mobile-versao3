@@ -35,7 +35,7 @@
             android:name=".GenerateCardDefaultActivity"
             android:exported="false" />
         <activity
-            android:name=".QuickCardActivity"
+            android:name=".ProvaFastActivity"
             android:exported="false" />
         <activity
             android:name=".ViewImage"
@@ -116,7 +116,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EscolaDesativadaActivity"
+            android:name=".SchoolDisabledActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -140,7 +140,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VisualEscolaActivity"
+            android:name=".SchoolActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

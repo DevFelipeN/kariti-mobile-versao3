@@ -1,7 +1,7 @@
 package online.padev.kariti;
 
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
-import static online.padev.kariti.Compactador.listCartoes;
+import static online.padev.kariti.Compactor.listCartoes;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -78,7 +78,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
     BancoDados bancoDados;
     Prova prova;
     ImageAnalysis imageAnalysis;
-    Integer id_provaCaptured, id_alunoBD;
+    Integer id_provaCaptured, id_studentBD;
     private boolean isActivityFinishing = false; // Garante que não seja realizada mais de uma chamada a proxima activity que exibe a imagem com a correção
     private boolean isCorrectSucess = false; // Indica que a correção foi ou não bem sucedida
     private boolean isImageProx = false; //Controla o fluxo de imagens a serem processadas (evita que multiplas imagens sejam processadas por vez)
@@ -343,10 +343,10 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
                             prova = new Prova(id_provaCaptured, bancoDados);
 
-                            id_alunoBD = Integer.parseInt(a[1]);
+                            id_studentBD = Integer.parseInt(a[1]);
 
                             //Versão 3
-                            CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_alunoBD);
+                            CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_studentBD);
                             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                         } else {
                             mat.release();
@@ -416,7 +416,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     intent.putExtra("filePath", filePath);
                     intent.putExtra("id_prova", prova.getId_prova());
                     intent.putExtra("status", 0);
-                    intent.putExtra("id_aluno", id_alunoBD);
+                    intent.putExtra("id_aluno", id_studentBD);
                     startActivity(intent);
                     finish();
                 }

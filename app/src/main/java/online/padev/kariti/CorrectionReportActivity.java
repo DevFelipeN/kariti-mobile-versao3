@@ -42,7 +42,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
     List<Student> students;
     Prova prova;
     TextView title;
-    BancoDados bancoDados;
+    BancoDados dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +54,18 @@ public class CorrectionReportActivity extends AppCompatActivity {
         txtViewProva = findViewById(R.id.textViewProvaResult);
         title = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBase = new BancoDados(this);
 
         title.setText(String.format("%s","Provas Corrigidas"));
 
         prova = (Prova) getIntent().getSerializableExtra("prova");
 
-        className = bancoDados.pegarNomeTurma(prova.getId_class().toString());
+        className = dataBase.pegarNomeTurma(prova.getId_class().toString());
 
         txtViewProva.setText(String.format("%s","Prova: "+prova.getNameProva()));
 
-        gabarito = bancoDados.listarDadosGabarito(prova.getId_prova());
-        students = bancoDados.listStudentExamCorrect(prova.getId_class());
+        gabarito = dataBase.listarDadosGabarito(prova.getId_prova());
+        students = dataBase.listStudentExamCorrect(prova.getId_class());
 
         if (gabarito == null || students == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
@@ -80,12 +80,12 @@ public class CorrectionReportActivity extends AppCompatActivity {
         for(Student student : students) { // interage sob esses alunos
             float nota = 0;
             int acertos = 0;
-            Boolean checkStatusCorrection = bancoDados.verificaSituacaoCorrecao(prova.getId_prova(), student.getId_student(), -1);
+            Boolean checkStatusCorrection = dataBase.verificaSituacaoCorrecao(prova.getId_prova(), student.getId_student(), -1);
             if(checkStatusCorrection == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            answersGiven = bancoDados.listarRespostasDadas(prova.getId_prova(), student.getId_student()); // lista as respostas dos alunos em formato de letras
+            answersGiven = dataBase.listarRespostasDadas(prova.getId_prova(), student.getId_student()); // lista as respostas dos alunos em formato de letras
             incrementResponse(); //caso quantidade de respostadas dadas, menor que o esperado, incrementa!
             if(!checkStatusCorrection) {
                 for (int i = 0; i < prova.getNumQuestions(); i++) {
@@ -152,7 +152,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
             tableLayout.addView(row);
 
             cell4.setOnClickListener(v -> {
-                Boolean checkStatusCorrection2 = bancoDados.verificaSituacaoCorrecao(prova.getId_prova(), v.getId(), -1);
+                Boolean checkStatusCorrection2 = dataBase.verificaSituacaoCorrecao(prova.getId_prova(), v.getId(), -1);
                 if(checkStatusCorrection2 == null){
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
                     return;
@@ -198,7 +198,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
     }
 
     private void generateCorrectionReport(){
-        CorrectionReportCard createReport = new CorrectionReportCard(this, bancoDados, prova.getId_prova());
+        CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, prova.getId_prova());
         boolean requestStatus = createReport.generateCorrectionReport(1);
         if (requestStatus){
             notifySucessDownload();

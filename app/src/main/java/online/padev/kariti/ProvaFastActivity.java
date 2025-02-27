@@ -14,19 +14,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import online.padev.kariti.dao.Gabarito;
 import online.padev.kariti.dao.Prova;
 
-public class QuickCardActivity extends AppCompatActivity {
+public class ProvaFastActivity extends AppCompatActivity {
 
-    ImageButton voltar, iconeAjuda;
+    ImageButton back, iconHelp;
     Button btnNewCard, btnCorrect;
     TextView textViewTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quick_card);
+        setContentView(R.layout.activity_prova_fast);
 
-        voltar = findViewById(R.id.imgBtnVoltaDescola);
-        iconeAjuda = findViewById(R.id.iconHelp);
+        back = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelp = findViewById(R.id.iconHelp);
         textViewTitle = findViewById(R.id.toolbar_title);
         btnNewCard = findViewById(R.id.buttonNewProvaRapida);
         btnCorrect = findViewById(R.id.buttonCorrigi);
@@ -35,10 +35,10 @@ public class QuickCardActivity extends AppCompatActivity {
 
         btnNewCard.setOnClickListener(v -> startNewCard());
         btnCorrect.setOnClickListener(v -> startCorrection());
-        iconeAjuda.setOnClickListener(v -> Toast.makeText(this, "Implement Information", Toast.LENGTH_SHORT).show());
+        iconHelp.setOnClickListener(v -> Toast.makeText(this, "Implement Information", Toast.LENGTH_SHORT).show());
         
 
-        voltar.setOnClickListener(v -> outputController());
+        back.setOnClickListener(v -> outputController());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

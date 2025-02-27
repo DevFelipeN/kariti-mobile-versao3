@@ -40,8 +40,8 @@ public class ViewImage extends AppCompatActivity {
     }
     private void confirmaCartao(String nameCartao){
         String n = nameCartao+".png";
-        if(!Compactador.listCartoes.contains(n)) {
-            Compactador.listCartoes.add(n);
+        if(!Compactor.listCartoes.contains(n)) {
+            Compactor.listCartoes.add(n);
             Toast.makeText(this, "Imagem adicionada a fila!!", Toast.LENGTH_SHORT).show();
             newIntent();
         }else{

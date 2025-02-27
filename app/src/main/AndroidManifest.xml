@@ -38,10 +38,7 @@
             android:name=".ProvaFastActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewImage"
-            android:exported="false" />
-        <activity
-            android:name=".ViewImageActivity"
+            android:name=".ViewCardCorrectedActivity"
             android:exported="false" />
         <activity
             android:name=".CameraxAndOpencv"

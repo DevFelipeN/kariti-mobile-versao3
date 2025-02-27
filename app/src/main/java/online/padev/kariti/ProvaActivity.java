@@ -1,5 +1,7 @@
 package online.padev.kariti;
 
+import static online.padev.kariti.correction.CoreKariti.listCartoes;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -462,14 +464,14 @@ public class ProvaActivity extends AppCompatActivity {
                     if (isCorrect != null) {
                         nameCartao = resultQrCode + "_" + prova.getNumQuestions() + "_" + prova.getNumAlternatives();
                         String n = nameCartao + ".png";
-                        if (!Compactor.listCartoes.contains(n)) {
-                            Compactor.listCartoes.add(n);
+                        if (!listCartoes.contains(n)) {
+                            listCartoes.add(n);
                         }
                     }
                 }
             }
         }catch (Exception e){
-            Log.e("ERRO", "ERRO AQUI55!!: "+e.toString());
+            Log.e("ERRO", "ERRO AQUI55!!: "+e);
         }
 
     }

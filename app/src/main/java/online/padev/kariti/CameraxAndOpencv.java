@@ -1,7 +1,6 @@
 package online.padev.kariti;
 
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
-import static online.padev.kariti.Compactor.listCartoes;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,8 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -75,7 +72,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
     private ProcessCameraProvider cameraProvider;
     private ImageView edgeImageView;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    BancoDados bancoDados;
+    BancoDados dataBase;
     Prova prova;
     ImageAnalysis imageAnalysis;
     Integer id_provaCaptured, id_studentBD;
@@ -89,24 +86,15 @@ public class CameraxAndOpencv extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camerax_and_opencv);
 
-        Button encerrar = findViewById(R.id.buttonEncerrar);
         camera = findViewById(R.id.previewCameraX);
         cameraExecutor = Executors.newSingleThreadExecutor();
         edgeImageView = findViewById(R.id.edgeImageView);
 
-        //String test = Util.getOurSqr();
-
-        //Toast.makeText(this, test, Toast.LENGTH_SHORT).show();
-
-        if(listCartoes.isEmpty()){
-            encerrar.setVisibility(View.INVISIBLE);
-        }
-
-        bancoDados = new BancoDados(this);
+        dataBase = new BancoDados(this);
 
         requestCameraPermission();
-
         startCamera();
+
         if (!OpenCVLoader.initDebug()) {
             Log.e("OpenCV", "Falha ao carregar o OpenCV!");
         }else{
@@ -335,18 +323,18 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
                             id_provaCaptured = Integer.parseInt(a[0]);
 
-                            if (!bancoDados.verificaExisteProvaPId(id_provaCaptured)) {
+                            if (!dataBase.verificaExisteProvaPId(id_provaCaptured)) {
                                 mat.release();
                                 typeMessage = 1;
                                 finish();
                             }
 
-                            prova = new Prova(id_provaCaptured, bancoDados);
+                            prova = new Prova(id_provaCaptured, dataBase);
 
                             id_studentBD = Integer.parseInt(a[1]);
 
                             //Versão 3
-                            CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, id_studentBD);
+                            CoreKariti core = new CoreKariti(matWarp, prova, dataBase, id_studentBD);
                             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                         } else {
                             mat.release();
@@ -404,7 +392,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
                 if (prova.getId_prova() == 0){
-                    Intent intent = new Intent(this, ViewImageActivity.class);
+                    Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
                     intent.putExtra("filePath", filePath);
                     intent.putExtra("status", 1);
                     intent.putExtra("gabarito", gabaritoDefault);
@@ -412,7 +400,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else{
-                    Intent intent = new Intent(this, ViewImageActivity.class);
+                    Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
                     intent.putExtra("filePath", filePath);
                     intent.putExtra("id_prova", prova.getId_prova());
                     intent.putExtra("status", 0);

@@ -24,6 +24,7 @@ import online.padev.kariti.dao.Prova;
 
 
 public class CoreKariti {
+    public static List<String> listCartoes = new ArrayList<>(); // Controla os cartoes selecionados do armaazenamento do dispositivo para correção
     List<Point> squaresQuestions = new ArrayList<>(); // Para armazenar apenas os quadrados da questões
     List<Point> squaresAltenatives = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas
     List<MatOfPoint> contours = new ArrayList<>(); // Para armazenar os contornos encontrados na imagem

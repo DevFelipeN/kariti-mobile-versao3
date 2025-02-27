@@ -445,7 +445,7 @@ public class GabaritoActivity extends AppCompatActivity {
     }
     private void startViewImageDefault(HashMap<Integer, Integer> correction, String gabaritoDefault, String filePathPaint){
         try {
-            Intent intent = new Intent(this, ViewImageActivity.class);
+            Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
             intent.putExtra("filePath", filePathPaint);
             intent.putExtra("gabarito", gabaritoDefault);
             intent.putExtra("resultGabarito", correction);

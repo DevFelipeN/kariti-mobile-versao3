@@ -47,7 +47,7 @@ public class UploadEjson {
                 fos.close();
                 UploadEjson.fimUpload(dir, bancoDados);
             } catch (Exception e) {
-                AnimacaoCorrecao.encerra("erro");
+                AnimationCorrectionActivity.encerra("erro");
             }
         });
         thread.start();
@@ -98,16 +98,16 @@ public class UploadEjson {
                 }
                 if (bancoDados.cadastrarCorrecao(provas)){
                     Log.e("kariti","passei 1");
-                    AnimacaoCorrecao.encerra("sucesso");
+                    AnimationCorrectionActivity.encerra("sucesso");
                 }else{
                     Log.e("kariti","passei 2");
-                    AnimacaoCorrecao.encerra("erro");
+                    AnimationCorrectionActivity.encerra("erro");
                 }
             }
         }catch (Exception e){
             Log.e("Kariti", e.toString());
             Log.e("kariti","passei 3");
-            AnimacaoCorrecao.encerra("erro");
+            AnimationCorrectionActivity.encerra("erro");
         }
     }
 }

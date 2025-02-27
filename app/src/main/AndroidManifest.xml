@@ -47,7 +47,7 @@
             android:name=".CameraxAndOpencv"
             android:exported="false" />
         <activity
-            android:name=".AnimacaoCorrecao"
+            android:name=".AnimationCorrectionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -163,7 +163,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".UserRegistrationActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
 

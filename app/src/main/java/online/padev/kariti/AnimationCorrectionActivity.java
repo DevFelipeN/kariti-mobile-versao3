@@ -6,26 +6,26 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AnimacaoCorrecao extends AppCompatActivity {
-    TextView titulo, informativo;
-        static AnimacaoCorrecao instanciaEncerra;
+public class AnimationCorrectionActivity extends AppCompatActivity {
+    TextView titleActivity, informativo;
+        static AnimationCorrectionActivity instanciaEncerra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_animacao_correcao);
+        setContentView(R.layout.activity_animation_correction);
 
         instanciaEncerra = this;
 
         ImageButton btnVoltar = findViewById(R.id.imgBtnVoltar);
-        titulo = findViewById(R.id.toolbar_title);
+        titleActivity = findViewById(R.id.toolbar_title);
         informativo = findViewById(R.id.textViewInformativo);
 
         informativo.setText(String.format(" %s ","Correção em andamento...\n\n" +
                 "Após a correção, acesse 'Visualizar Provas', em seguida selecione a prova desejada!\n\n" +
                 "Por favor, aguarde..."));
 
-        titulo.setText(String.format("%s","Corrigindo..."));
+        titleActivity.setText(String.format("%s","Corrigindo..."));
         btnVoltar.setOnClickListener(v -> {
             getOnBackPressedDispatcher();
             finish();

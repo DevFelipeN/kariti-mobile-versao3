@@ -55,7 +55,7 @@ public class WelcomeActivity extends AppCompatActivity {
      *Este método carrega a tela de cadastro de usuário
      */
     private void startRegistrationUser(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, UserRegistrationActivity.class);
         startActivity(intent);
     }
 

@@ -274,7 +274,7 @@ public class ProvaActivity extends AppCompatActivity {
                 }
             }
              */
-            AnimacaoCorrecao.encerra("Correcao finalizada");
+            AnimationCorrectionActivity.encerra("Correcao finalizada");
             mensagem(handler, "Correção finalizada!!");
         }catch (Exception e){
             Log.e("ERRO", "ERRO AQUI44!!: "+e.toString());
@@ -617,7 +617,7 @@ public class ProvaActivity extends AppCompatActivity {
     }
 
     public void iniciaAnimacaoCorrecao(){
-        Intent intent = new Intent(getApplicationContext(), AnimacaoCorrecao.class);
+        Intent intent = new Intent(getApplicationContext(), AnimationCorrectionActivity.class);
         startActivity(intent);
     }
 

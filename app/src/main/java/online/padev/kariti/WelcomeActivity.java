@@ -9,19 +9,16 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
-import online.padev.kariti.cards.CorrectionReportCard;
-import online.padev.kariti.correction.TesterSimulation;
-
 public class WelcomeActivity extends AppCompatActivity {
-    BancoDados bancoDados;
+    BancoDados dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        AppCompatButton botaoCadastro = findViewById(R.id.buttonCadastroW);
-        AppCompatButton botaoLogin = findViewById(R.id.buttonLoginW);
+        AppCompatButton btnRegistration = findViewById(R.id.buttonCadastroW);
+        AppCompatButton btnLogin = findViewById(R.id.buttonLoginW);
         AppCompatButton btnDefaultPassword = findViewById(R.id.buttonDefaultPassword);
 
         if (OpenCVLoader.initDebug()) {
@@ -31,19 +28,19 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
 
-        bancoDados = new BancoDados(this);
+        dataBase = new BancoDados(this);
 
         //bancoDados.deletarCorrecao(61);
         //bancoDados.deletarCorrecao(1);
         //bancoDados.deletarCorrecao(3);
 
 
-        if(bancoDados.verificaExisteEmail("karitimobile@gmail.com") == null) {
-            bancoDados.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
+        if(dataBase.verificaExisteEmail("karitimobile@gmail.com") == null) {
+            dataBase.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
         }
-        botaoCadastro.setOnClickListener(v -> mudarParaTelaCadastro());
-        botaoLogin.setOnClickListener(v -> mudarParaTelaLogin());
-        btnDefaultPassword.setOnClickListener(v -> startQuickTest());
+        btnRegistration.setOnClickListener(v -> startRegistrationUser());
+        btnLogin.setOnClickListener(v -> startLogin());
+        btnDefaultPassword.setOnClickListener(v -> startProvaDefault());
 
         //TesterSimulation t = new TesterSimulation(bancoDados);
         //for(int n = 190; n < 195; n++) {
@@ -57,7 +54,7 @@ public class WelcomeActivity extends AppCompatActivity {
     /**
      *Este método carrega a tela de cadastro de usuário
      */
-    private void mudarParaTelaCadastro(){
+    private void startRegistrationUser(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -65,14 +62,14 @@ public class WelcomeActivity extends AppCompatActivity {
     /**
      * Este método carrega a tela de Login
      */
-    private void mudarParaTelaLogin(){
+    private void startLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
     /**
      * Este método carrega a opção de prova rápida
      */
-    private void startQuickTest(){
+    private void startProvaDefault(){
         Intent intent = new Intent(this, QuickCardActivity.class);
         startActivity(intent);
     }

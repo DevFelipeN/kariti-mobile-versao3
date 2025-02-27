@@ -5,116 +5,124 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.io.File;
-
-import online.padev.kariti.emails.EnviarBackup;
 import online.padev.kariti.emails.EnviarCodigo;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText EditTextEmail, EditTextSenha;
-    private String emailInformado, senhaInformada, codigo;
-    private Integer id_usuario;
-    TextView criarConta;
-    Button btnEntrar, esqueciSenha;
-    ImageButton ocultarSenha;
-    BancoDados bancoDados;
-    CodSenhaActivity codSenhaActivity;
-    EnviarCodigo enviarCodigo;
-    GerarCodigoValidacao gerarCodigo;
+    EditText EditTextEmail, EditTextPassword;
+    private String emailInformed, passwordInformed, codeValidation;
+    private Integer id_user;
+    TextView registerNewConta;
+    Button btnAccess, forgetPassword;
+    ImageButton btnHidePassword;
+    BancoDados dataBase;
+    CodSenhaActivity validationCodeActivity;
+    EnviarCodigo sendCode;
+    GerarCodigoValidacao generateCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btnEntrar = findViewById(R.id.buttonEntrarL);
-        esqueciSenha = findViewById(R.id.buttonEsqueciSenhaL);
-        criarConta = findViewById(R.id.textViewCriarConta);
+        btnAccess = findViewById(R.id.buttonEntrarL);
+        forgetPassword = findViewById(R.id.buttonEsqueciSenhaL);
+        registerNewConta = findViewById(R.id.textViewCriarConta);
         EditTextEmail = findViewById(R.id.editTextLogin);
-        EditTextSenha = findViewById(R.id.editTextSenha);
-        ocultarSenha = findViewById(R.id.senhaoculta);
+        EditTextPassword = findViewById(R.id.editTextSenha);
+        btnHidePassword = findViewById(R.id.senhaoculta);
 
+        dataBase = new BancoDados(this);
+        sendCode = new EnviarCodigo();
+        generateCode = new GerarCodigoValidacao();
+        validationCodeActivity = new CodSenhaActivity();
 
-       // EditTextEmail.setText(String.format("%s","felipemartinsdonascimento4@gmail.com"));
-        //EditTextSenha.setText(String.format("%s","123"));
-
-        bancoDados = new BancoDados(this);
-        enviarCodigo = new EnviarCodigo();
-        gerarCodigo = new GerarCodigoValidacao();
-        codSenhaActivity = new CodSenhaActivity();
-
-        btnEntrar.setOnClickListener(v -> {
-            emailInformado = EditTextEmail.getText().toString();
-            senhaInformada = EditTextSenha.getText().toString();
-            if (emailInformado.trim().isEmpty()){
-                Toast.makeText(LoginActivity.this, "Informe seu e-mail!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (senhaInformada.trim().isEmpty()){
-                Toast.makeText(LoginActivity.this, "Informe a senha!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(!Patterns.EMAIL_ADDRESS.matcher(emailInformado).matches()) {
-                Toast.makeText(LoginActivity.this, "E-mail Inválido", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Integer id_usuario = bancoDados.verificaAutenticacao(emailInformado, senhaInformada);
-            if (id_usuario == null || id_usuario == -1) {
-                Toast.makeText(this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            BancoDados.USER_ID = id_usuario;
-            carregarTelaInicial();
-        });
-        esqueciSenha.setOnClickListener(v -> {
-            if(!VerificaConexaoInternet.verificaConexao(LoginActivity.this)){
-                Toast.makeText(LoginActivity.this, "Sem conexão de rede!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            emailInformado = EditTextEmail.getText().toString();
-            if(emailInformado.trim().isEmpty()) {
-                alerteEsqueciSenha();
-                return;
-            }
-            id_usuario = bancoDados.verificaExisteEmail(emailInformado);
-            if(id_usuario == null || id_usuario == -1) {
-                Toast.makeText(this, "E-mail não encontrado!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            codigo = gerarCodigo.gerarVerificador();
-            if (enviarCodigo.enviaCodigo(emailInformado, codigo)) {
-                carregarTelaCodigo();
-            }else {
-                Toast.makeText(LoginActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
+        btnAccess.setOnClickListener(v -> {
+            btnAccess.setEnabled(false);
+            try {
+                emailInformed = EditTextEmail.getText().toString().trim();
+                passwordInformed = EditTextPassword.getText().toString().trim();
+                if (emailInformed.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Informe seu e-mail!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (passwordInformed.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Informe a senha!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(emailInformed).matches()) {
+                    Toast.makeText(this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                id_user = dataBase.verificaAutenticacao(emailInformed, passwordInformed);
+                if (id_user == null || id_user == -1) {
+                    Toast.makeText(this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                BancoDados.USER_ID = id_user;
+                startSchools();
+            } catch (Exception e){
+                Log.e("kariti", e.toString());
+            } finally {
+                btnAccess.setEnabled(true);
             }
         });
+        forgetPassword.setOnClickListener(v -> {
+            forgetPassword.setEnabled(false);
+            try {
+                if (!VerificaConexaoInternet.verificaConexao(this)) {
+                    Toast.makeText(this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                emailInformed = EditTextEmail.getText().toString().trim();
+                if (emailInformed.isEmpty()) {
+                    notifyInformedEmail();
+                    return;
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(emailInformed).matches()) {
+                    Toast.makeText(LoginActivity.this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                id_user = dataBase.verificaExisteEmail(emailInformed);
+                if (id_user == null || id_user == -1) {
+                    Toast.makeText(this, "E-mail não encontrado!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                codeValidation = generateCode.gerarVerificador();
+                if (sendCode.enviaCodigo(emailInformed, codeValidation)) {
+                    startCodeValidationActivity();
+                } else {
+                    Toast.makeText(this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e){
+                Log.e("kariti", e.toString());
+            } finally {
+                forgetPassword.setEnabled(true);
+            }
+        });
 
-        EditTextSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        ocultarSenha.setOnClickListener(v -> {
+        EditTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        btnHidePassword.setOnClickListener(v -> {
 //                Verifica se a senha está visivel ou oculta.
-            if(EditTextSenha.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
+            if(EditTextPassword.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
 //                  Se a senha está visivel ou oculta.
-                EditTextSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                ocultarSenha.setImageResource(R.mipmap.senhaoff);
+                EditTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnHidePassword.setImageResource(R.mipmap.senhaoff);
             } else {
-                EditTextSenha.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                ocultarSenha.setImageResource(R.mipmap.senhaon);
+                EditTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnHidePassword.setImageResource(R.mipmap.senhaon);
             }
-            EditTextSenha.setSelection(EditTextSenha.getText().length());
+            EditTextPassword.setSelection(EditTextPassword.getText().length());
         });
 
-        criarConta.setOnClickListener(v -> mudarParaTelaCadastro());
+        registerNewConta.setOnClickListener(v -> startNewUserRegistration());
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -123,17 +131,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    private void carregarTelaInicial(){
+    private void startSchools(){
         Intent intent = new Intent(this, VisualEscolaActivity.class);
         startActivity(intent);
         finish();
     }
-    private void mudarParaTelaCadastro(){
+    private void startNewUserRegistration(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-    private void alerteEsqueciSenha(){
+    private void notifyInformedEmail(){
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setTitle("Esqueceu sua senha?")
                 .setMessage("Por favor, informe seu e-mail cadastrado no campo E-mail, em seguida pressione 'Esqueci Minha Senha'")
@@ -144,12 +152,12 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Este método inicializa a tela de verificação de código, para autenticação de cadastro do usuário.
      */
-    private void carregarTelaCodigo(){
+    private void startCodeValidationActivity(){
         Intent proxima = new Intent(getApplicationContext(), CodSenhaActivity.class);
         proxima.putExtra("identificador", 1);
-        proxima.putExtra("id_usuario", id_usuario);
-        proxima.putExtra("email", emailInformado);
-        proxima.putExtra("codigo", codigo);
+        proxima.putExtra("id_usuario", id_user);
+        proxima.putExtra("email", emailInformed);
+        proxima.putExtra("codigo", codeValidation);
         startActivity(proxima);
         finish();
     }

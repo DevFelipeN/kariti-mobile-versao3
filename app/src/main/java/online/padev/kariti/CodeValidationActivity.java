@@ -154,7 +154,7 @@ public class CodeValidationActivity extends AppCompatActivity {
     private void startUpdatePassword(){
         Integer id_user = getIntent().getExtras().getInt("id_usuario");
         String nameUserBD = dataBase.pegarNomeUsuario(id_user);
-        Intent intent = new Intent(this, AtualizarSenha.class);
+        Intent intent = new Intent(this, UpdatePasswordActivity.class);
         intent.putExtra("id_usuario", id_user);
         intent.putExtra("nome", nameUserBD);
         intent.putExtra("email", email);

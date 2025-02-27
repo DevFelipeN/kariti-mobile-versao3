@@ -124,7 +124,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AtualizarSenha"
+            android:name=".UpdatePasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

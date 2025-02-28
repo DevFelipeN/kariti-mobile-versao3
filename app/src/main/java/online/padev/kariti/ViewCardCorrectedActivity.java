@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import online.padev.kariti.dao.Gabarito;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class ViewCardCorrectedActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
     float noteStudent;
     int numCorrect, numIncorrect;
     private String nameStudent, nameProva;
-    private BancoDados dataBase;
+    private DataBaseKariti dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
         titleActivity = findViewById(R.id.toolbar_title);
         btnContinue = findViewById(R.id.buttonContinuar);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         titleActivity.setText(String.format("%s", "Prova Corrigida"));
 

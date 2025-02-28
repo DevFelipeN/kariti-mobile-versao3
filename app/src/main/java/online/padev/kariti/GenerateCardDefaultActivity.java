@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import online.padev.kariti.cards.CreatCard;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Prova;
 
 public class GenerateCardDefaultActivity extends AppCompatActivity {
 

@@ -21,18 +21,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class StudentActivity extends AppCompatActivity {
     ImageButton back;
     EditText editTextSearch;
     List<String> listStudents;
     FloatingActionButton btnRegistration;
-    MyAdapter adapterStudent;
+    AdapterClickableList adapterStudent;
     TextView titleActivity, textViewNumStudents, descritionAddStudent;
     RecyclerView recyclerView;
     private static final int REQUEST_CODE = 1;
     private Integer id_student;
 
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class StudentActivity extends AppCompatActivity {
         btnRegistration = findViewById(R.id.iconaddaluno);
         editTextSearch = findViewById(R.id.editTextBuscar);
         recyclerView = findViewById(R.id.listSelecAluno);
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
         textViewNumStudents = findViewById(R.id.totalAlunos);
         descritionAddStudent = findViewById(R.id.txtDescricaoAddAluno);
 
@@ -62,7 +64,7 @@ public class StudentActivity extends AppCompatActivity {
         textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ listStudents.size()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterStudent = new MyAdapter(this, listStudents, this::onItemClick, this::onItemLongClick);
+        adapterStudent = new AdapterClickableList(this, listStudents, this::onItemClick, this::onItemLongClick);
         recyclerView.setAdapter(adapterStudent);
 
         editTextSearch.addTextChangedListener(new TextWatcher(){

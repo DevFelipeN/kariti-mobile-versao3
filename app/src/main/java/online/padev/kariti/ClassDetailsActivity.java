@@ -17,10 +17,12 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Objects;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton back;
     TextView textViewClassName, txtViewNumAnonymous;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     ListView listViewStudents;
     List<String> listStudentsClass;
     String id_class;
@@ -36,7 +38,7 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
         txtViewNumAnonymous = findViewById(R.id.textViewqtdAnonimos);
         textViewClassName = findViewById(R.id.textViewTurmaCad);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         id_class = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
         String className = dataBase.pegarNomeTurma(id_class);
@@ -58,7 +60,7 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
             finish();
         }
         txtViewNumAnonymous.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s", numAnonymousBD, listStudentsClass.size()));
-        DesativadaAdapter adapterStudents = new DesativadaAdapter(this, listStudentsClass, listStudentsClass);
+        AdapterDisabledSchool adapterStudents = new AdapterDisabledSchool(this, listStudentsClass, listStudentsClass);
         listViewStudents.setAdapter(adapterStudents);
 
         back.setOnClickListener(view -> {

@@ -13,13 +13,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class StudentEditActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton back;
     EditText editTxtNameStudent, editTxtEmail;
     Button btnSave;
     String nameStudentBD, emailBD;
     private Integer id_student;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
         btnSave = findViewById(R.id.buttonSalvarEditAluno);
         back = findViewById(R.id.imgBtnVoltaEscola);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         noticeEdit();
 

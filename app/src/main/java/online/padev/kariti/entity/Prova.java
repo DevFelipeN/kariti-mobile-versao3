@@ -1,10 +1,10 @@
-package online.padev.kariti.dao;
+package online.padev.kariti.entity;
 
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
-import online.padev.kariti.BancoDados;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class Prova implements Serializable {
     private Integer id_prova;
@@ -18,9 +18,9 @@ public class Prova implements Serializable {
     public Prova() {
     }
 
-    public Prova(Integer id_prova, BancoDados bancoDados) {
+    public Prova(Integer id_prova, DataBaseKariti dataBaseKariti) {
         this.id_prova = id_prova;
-        String[] dados = bancoDados.pegarTodosDadosProva(id_prova);
+        String[] dados = dataBaseKariti.pegarTodosDadosProva(id_prova);
         this.nameProva = dados[0];
         this.id_class = Integer.valueOf(dados[1]);
         this.dateProva = dados[2];

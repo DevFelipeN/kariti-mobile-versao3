@@ -37,21 +37,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import online.padev.kariti.BancoDados;
+import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.R;
-import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
-import online.padev.kariti.dao.Student;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Student;
 
 public class CorrectionReportCard {
 
     Context context;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     List<Gabarito> gabarito;
     List<Student> students;
     Prova prova;
 
-    public CorrectionReportCard(Context context, BancoDados dataBase, Integer id_provaBD) {
+    public CorrectionReportCard(Context context, DataBaseKariti dataBase, Integer id_provaBD) {
         this.context = context;
         this.dataBase = dataBase;
         prova = new Prova(id_provaBD, dataBase);

@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class VisualProvaActivity extends AppCompatActivity {
     ImageButton voltar;
     Button bntVisualProva;
@@ -22,7 +24,7 @@ public class VisualProvaActivity extends AppCompatActivity {
     Spinner spinnerProva, spinnerTurma, spinnerAluno;
     List<String> listaProvas, listaTurmas, listaAlunos;
     TextView titulo;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +39,16 @@ public class VisualProvaActivity extends AppCompatActivity {
 
         titulo.setText(String.format("%s","Provas"));
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
-        listaTurmas = (ArrayList<String>) bancoDados.listarTurmasPorProva();
+        listaTurmas = (ArrayList<String>) dataBaseKariti.listarTurmasPorProva();
         if (listaTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();
         }
 
         listaTurmas.add(0, "Selecione a turma");
-        SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listaTurmas);
+        AdapterSpinner adapterTurma = new AdapterSpinner(this, listaTurmas);
         spinnerTurma.setAdapter(adapterTurma);
 
         spinnerTurma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -54,27 +56,27 @@ public class VisualProvaActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0) {
                     nomeTurma = spinnerTurma.getSelectedItem().toString();
-                    id_turma = bancoDados.pegarIdTurma(nomeTurma);
+                    id_turma = dataBaseKariti.pegarIdTurma(nomeTurma);
                     if (id_turma == null){
                         Toast.makeText(VisualProvaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 2", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    listaProvas = (ArrayList<String>) bancoDados.listarNomesProvasPorTurma(id_turma.toString());
+                    listaProvas = (ArrayList<String>) dataBaseKariti.listarNomesProvasPorTurma(id_turma.toString());
                     if (listaProvas == null){
                         Toast.makeText(VisualProvaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 3", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    SpinnerAdapter adapterProva = new SpinnerAdapter(VisualProvaActivity.this, listaProvas);
+                    AdapterSpinner adapterProva = new AdapterSpinner(VisualProvaActivity.this, listaProvas);
                     spinnerProva.setAdapter(adapterProva);
 
-                    listaAlunos = (ArrayList<String>) bancoDados.listarAlunosPorTurma(id_turma.toString());
+                    listaAlunos = (ArrayList<String>) dataBaseKariti.listarAlunosPorTurma(id_turma.toString());
                     if (listaAlunos == null){
                         Toast.makeText(VisualProvaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 4", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     listaAlunos.add(0, "Alunos");
-                    SpinnerAdapter adapterAluno = new SpinnerAdapter(VisualProvaActivity.this, listaAlunos);
+                    AdapterSpinner adapterAluno = new AdapterSpinner(VisualProvaActivity.this, listaAlunos);
                     spinnerAluno.setAdapter(adapterAluno);
                 }
             }
@@ -99,12 +101,12 @@ public class VisualProvaActivity extends AppCompatActivity {
             return;
         }
         nomeProva = spinnerProva.getSelectedItem().toString();
-        id_prova = bancoDados.pegarIdProvaPorTurma(nomeProva, id_turma);
+        id_prova = dataBaseKariti.pegarIdProvaPorTurma(nomeProva, id_turma);
         if (id_prova == null){
             Toast.makeText(VisualProvaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
             return;
         }
-        Boolean verificaProva = bancoDados.verificaExisteCorrecao(id_prova.toString());
+        Boolean verificaProva = dataBaseKariti.verificaExisteCorrecao(id_prova.toString());
         if (verificaProva == null){
             Toast.makeText(VisualProvaActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 6", Toast.LENGTH_SHORT).show();
             return;

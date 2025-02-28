@@ -13,10 +13,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+
 import java.util.List;
 
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class VisualProvaActivity2 extends AppCompatActivity {
     ImageButton voltar;
@@ -24,10 +25,10 @@ public class VisualProvaActivity2 extends AppCompatActivity {
     Integer id_turma, id_prova;
     List<String> listaProvas, listaTurmas;
     RecyclerView recyclerView;
-    MyAdapter adapterProvas;
+    AdapterClickableList adapterProvas;
     TextView titulo;
     Spinner spinnerTurma;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,47 +41,47 @@ public class VisualProvaActivity2 extends AppCompatActivity {
 
         titulo.setText(String.format("%s","Provas"));
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
-        listaTurmas = bancoDados.listarTurmasPorProva();
+        listaTurmas = dataBaseKariti.listarTurmasPorProva();
         if (listaTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();
         }
 
         //listaTurmas.add(0, "Turmas");
-        SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listaTurmas);
+        AdapterSpinner adapterTurma = new AdapterSpinner(this, listaTurmas);
         spinnerTurma.setAdapter(adapterTurma);
         spinnerTurma.setSelection(0);
         nomeTurma = spinnerTurma.getSelectedItem().toString();
-        id_turma = bancoDados.pegarIdTurma(nomeTurma);
+        id_turma = dataBaseKariti.pegarIdTurma(nomeTurma);
         if (id_turma == null){
             Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        listaProvas = bancoDados.listarNomesProvasPorTurma(id_turma.toString());
+        listaProvas = dataBaseKariti.listarNomesProvasPorTurma(id_turma.toString());
         if (listaProvas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterProvas = new MyAdapter(this, listaProvas, this::onItemClick, this::onItemLongClick);
+        adapterProvas = new AdapterClickableList(this, listaProvas, this::onItemClick, this::onItemLongClick);
         recyclerView.setAdapter(adapterProvas);
 
         spinnerTurma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 nomeTurma = spinnerTurma.getSelectedItem().toString();
-                id_turma = bancoDados.pegarIdTurma(nomeTurma);
+                id_turma = dataBaseKariti.pegarIdTurma(nomeTurma);
                 listaProvas.clear();
-                listaProvas = bancoDados.listarNomesProvasPorTurma(id_turma.toString());
+                listaProvas = dataBaseKariti.listarNomesProvasPorTurma(id_turma.toString());
                 if (listaProvas == null){
                     Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(VisualProvaActivity2.this));
-                adapterProvas = new MyAdapter(VisualProvaActivity2.this, listaProvas, VisualProvaActivity2.this::onItemClick, VisualProvaActivity2.this::onItemLongClick);
+                adapterProvas = new AdapterClickableList(VisualProvaActivity2.this, listaProvas, VisualProvaActivity2.this::onItemClick, VisualProvaActivity2.this::onItemLongClick);
                 recyclerView.setAdapter(adapterProvas);
             }
 
@@ -102,7 +103,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
     }
     public void onItemClick(int position) {
         nomeProva = listaProvas.get(position);
-        id_prova = bancoDados.pegarIdProvaPorTurma(nomeProva, id_turma);
+        id_prova = dataBaseKariti.pegarIdProvaPorTurma(nomeProva, id_turma);
         if (id_prova == null){
             Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
             return;
@@ -111,17 +112,17 @@ public class VisualProvaActivity2 extends AppCompatActivity {
     }
     public void onItemLongClick(int position) {
         nomeProva = listaProvas.get(position);
-        id_prova = bancoDados.pegarIdProvaPorTurma(nomeProva, id_turma);
+        id_prova = dataBaseKariti.pegarIdProvaPorTurma(nomeProva, id_turma);
         solicitaExcluirOuEditar(position);
     }
     private void telaVisualProvaSelecionada(){
-        Boolean verificaProva = bancoDados.verificaExisteCorrecao(id_prova.toString());
+        Boolean verificaProva = dataBaseKariti.verificaExisteCorrecao(id_prova.toString());
         if (verificaProva == null){
             Toast.makeText(VisualProvaActivity2.this, "Falha de comunicação! \n\n Por favor, tente novamente 6", Toast.LENGTH_SHORT).show();
             return;
         }
         if(verificaProva){
-            Prova prova = new Prova(id_prova, bancoDados);
+            Prova prova = new Prova(id_prova, dataBaseKariti);
             Intent intent = new Intent(this, CorrectionReportActivity.class);
             intent.putExtra("prova", prova);
             startActivity(intent);
@@ -148,7 +149,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
         alertDialog.show();
     }
     private void editarProva(){
-        if(bancoDados.verificaExisteCorrecao(id_prova.toString())){
+        if(dataBaseKariti.verificaExisteCorrecao(id_prova.toString())){
             avisoProvaNaoEditavel();
         }else {
             Intent intent = new Intent(this, EdicaoProva.class);
@@ -176,7 +177,7 @@ public class VisualProvaActivity2 extends AppCompatActivity {
         alertDialog.show();
     }
     private void deleteProva(int position){
-        if (bancoDados.deletarProva(id_prova)){
+        if (dataBaseKariti.deletarProva(id_prova)){
             listaProvas.remove(nomeProva);
             provaApagada(position);
         }else{

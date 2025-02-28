@@ -133,7 +133,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DetalhesEscolaActivity"
+            android:name=".MenuInitialActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

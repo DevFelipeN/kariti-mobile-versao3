@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarCodigo;
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView registerNewConta;
     Button btnAccess, forgetPassword;
     ImageButton btnHidePassword;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     CodeValidationActivity validationCodeActivity;
     EnviarCodigo sendCode;
     GerarCodigoValidacao generateCode;
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         EditTextPassword = findViewById(R.id.editTextSenha);
         btnHidePassword = findViewById(R.id.senhaoculta);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
         sendCode = new EnviarCodigo();
         generateCode = new GerarCodigoValidacao();
         validationCodeActivity = new CodeValidationActivity();
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                BancoDados.USER_ID = id_user;
+                DataBaseKariti.USER_ID = id_user;
                 startSchools();
             } catch (Exception e){
                 Log.e("kariti", e.toString());

@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class ClassEditActivity extends AppCompatActivity {
     ImageButton back, iconHelp;
     ImageView moreAnonymous, lessAnonymous;
@@ -26,8 +28,8 @@ public class ClassEditActivity extends AppCompatActivity {
     EditText editTxtClass, editTxtAnonymous;
     List<String> studentsRegisteredClass, studentsSchool;
     private String id_Class, nameClassBD, nameClassCurrent, studentSelected;
-    BancoDados dataBase;
-    AdapterExclAluno adapterStudentsRegistered;
+    DataBaseKariti dataBase;
+    AdapterStudentOnDelete adapterStudentsRegistered;
     Spinner spinnerStudent;
     Button btnSave;
     private Integer id_student, numAnonymousBD;
@@ -50,7 +52,7 @@ public class ClassEditActivity extends AppCompatActivity {
         iconHelp = findViewById(R.id.iconHelp);
         titleActvity = findViewById(R.id.toolbar_title);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
         studentsRegisteredClass = new ArrayList<>();
 
         titleActvity.setText(String.format("%s","Atualização"));
@@ -69,7 +71,7 @@ public class ClassEditActivity extends AppCompatActivity {
             spinnerStudent.setVisibility(View.GONE);
         }
 
-        SpinnerAdapter adapterSpinner = new SpinnerAdapter(this, studentsSchool);
+        AdapterSpinner adapterSpinner = new AdapterSpinner(this, studentsSchool);
         spinnerStudent.setAdapter(adapterSpinner);
         spinnerStudent.setSelection(0);
 
@@ -98,7 +100,7 @@ public class ClassEditActivity extends AppCompatActivity {
             titleStudent.setVisibility(View.GONE);
             listViewStudents.setVisibility(View.GONE);
         }
-        adapterStudentsRegistered = new AdapterExclAluno(this, studentsRegisteredClass);
+        adapterStudentsRegistered = new AdapterStudentOnDelete(this, studentsRegisteredClass);
         listViewStudents.setAdapter(adapterStudentsRegistered);
 
         //Identifica o aluno selecionado no Spinner e adiciona no listView
@@ -113,7 +115,7 @@ public class ClassEditActivity extends AppCompatActivity {
                         return;
                     }
                     studentsRegisteredClass.add(studentSelected);
-                    adapterStudentsRegistered = new AdapterExclAluno(ClassEditActivity.this, studentsRegisteredClass);
+                    adapterStudentsRegistered = new AdapterStudentOnDelete(ClassEditActivity.this, studentsRegisteredClass);
                     listViewStudents.setAdapter(adapterStudentsRegistered);
                     titleStudent.setVisibility(View.VISIBLE);
                     listViewStudents.setVisibility(View.VISIBLE);

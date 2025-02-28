@@ -62,8 +62,9 @@ import java.util.concurrent.TimeUnit;
 
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class CameraxAndOpencv extends AppCompatActivity {
 
@@ -72,7 +73,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
     private ProcessCameraProvider cameraProvider;
     private ImageView edgeImageView;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     Prova prova;
     ImageAnalysis imageAnalysis;
     Integer id_provaCaptured, id_studentBD;
@@ -90,7 +91,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
         cameraExecutor = Executors.newSingleThreadExecutor();
         edgeImageView = findViewById(R.id.edgeImageView);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         requestCameraPermission();
         startCamera();
@@ -319,7 +320,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
 
                     // Verifica se a prova capaturada é uma prova cujo o QRCode apresente o padrão # (isso indica que essa prova pode estar cadastrada)
                     if (String.valueOf(textQrCode.charAt(0)).equals("#")){
-                        if (BancoDados.USER_ID != null) { // Isso garante que esse tipo de cartão seja corrigido apenas com o usuário logado
+                        if (DataBaseKariti.USER_ID != null) { // Isso garante que esse tipo de cartão seja corrigido apenas com o usuário logado
 
                             id_provaCaptured = Integer.parseInt(a[0]);
 
@@ -342,7 +343,7 @@ public class CameraxAndOpencv extends AppCompatActivity {
                             finish();
                         }
                     } else { // Entra aqui se a prova capturada não esta cadastrada
-                        if (BancoDados.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
+                        if (DataBaseKariti.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
                                 prova = new Prova();
                                 prova.setId_prova(0);
                                 prova.setNumQuestions(Integer.parseInt(a[0]));

@@ -19,8 +19,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import online.padev.kariti.BancoDados;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.Prova;
 
 
 public class CoreKariti {
@@ -33,7 +33,7 @@ public class CoreKariti {
     List<Circle> markedCircles = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem
     Integer id_studentBD;
     Mat mat; // Faz referência a imagem cortada
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     Prova prova;
     int height, width;
     private String gabarito;
@@ -48,7 +48,7 @@ public class CoreKariti {
      * @param dataBase instância do banco para cadastro da correção
      * @param id_studentBD id do aluno associado ao prova a ser corrigida
      */
-    public CoreKariti(Mat mat, Prova prova, BancoDados dataBase, Integer id_studentBD){
+    public CoreKariti(Mat mat, Prova prova, DataBaseKariti dataBase, Integer id_studentBD){
         this.mat = mat;
         this.id_studentBD = id_studentBD;
         this.prova = prova;

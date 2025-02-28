@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import online.padev.kariti.BancoDados;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.Prova;
 
 public class CreatCard {
     Context context;
@@ -46,10 +46,10 @@ public class CreatCard {
     private String className, teacher;
     Map<Integer, String> students;
 
-    public CreatCard(Prova prova, BancoDados dataBase, Context context){
+    public CreatCard(Prova prova, DataBaseKariti dataBase, Context context){
         this.prova = prova;
         this.className = dataBase.pegarNomeTurma(prova.getId_class().toString());
-        this.teacher = dataBase.pegarNomeUsuario(BancoDados.USER_ID);
+        this.teacher = dataBase.pegarNomeUsuario(DataBaseKariti.USER_ID);
         students = dataBase.listarAlunosPorTurma(prova.getId_class());
         note = dataBase.pegarNotaProva(prova.getId_prova().toString());
         this.context = context;

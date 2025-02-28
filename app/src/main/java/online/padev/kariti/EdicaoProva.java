@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class EdicaoProva extends AppCompatActivity {
     private EditText editTextNomeProva, qtdQuest, qtdAlter;
@@ -32,7 +33,7 @@ public class EdicaoProva extends AppCompatActivity {
     private String nomeTurmaAtual;
     private Integer id_provaBD;
     private TextView titulo;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     Prova provaBD, provaAtual;
     private int status;
     private List<String> listTurma;
@@ -58,11 +59,11 @@ public class EdicaoProva extends AppCompatActivity {
 
         titulo.setText(String.format("%s","Editar Prova"));
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
         id_provaBD = Objects.requireNonNull(getIntent().getExtras()).getInt("id_prova");
 
-        provaBD = new Prova(id_provaBD, bancoDados);
+        provaBD = new Prova(id_provaBD, dataBaseKariti);
         provaAtual = new Prova();
 
         editTextNomeProva.setText(String.format("%s", provaBD.getNameProva()));
@@ -70,9 +71,9 @@ public class EdicaoProva extends AppCompatActivity {
         qtdAlter.setText(String.format("%s", provaBD.getNumAlternatives()));
         btnData.setText(provaBD.dateToDisplay());
 
-        listTurma = bancoDados.listarNomesTurmas(); // Lista todas as turmas da escola atual
-        int position = listTurma.indexOf(bancoDados.pegarNomeTurma(provaBD.getId_class().toString()));
-        SpinnerAdapter adapter = new SpinnerAdapter(this, listTurma);
+        listTurma = dataBaseKariti.listarNomesTurmas(); // Lista todas as turmas da escola atual
+        int position = listTurma.indexOf(dataBaseKariti.pegarNomeTurma(provaBD.getId_class().toString()));
+        AdapterSpinner adapter = new AdapterSpinner(this, listTurma);
         spinnerTurma.setAdapter(adapter);
         spinnerTurma.setSelection(position);
 
@@ -140,7 +141,7 @@ public class EdicaoProva extends AppCompatActivity {
                 provaAtual.setId_prova(id_provaBD);
                 provaAtual.setNameProva(editTextNomeProva.getText().toString());
                 provaAtual.setDateProva(btnData.getText().toString());
-                provaAtual.setId_class(bancoDados.pegarIdTurma(nomeTurmaAtual));
+                provaAtual.setId_class(dataBaseKariti.pegarIdTurma(nomeTurmaAtual));
 
                 if (provaAtual.getNameProva().trim().isEmpty()) { //verifica se o campo prova esta vazio
                     Toast.makeText(EdicaoProva.this, "Informe o nome da Prova!", Toast.LENGTH_SHORT).show();
@@ -168,7 +169,7 @@ public class EdicaoProva extends AppCompatActivity {
 
                 if (provaAtual.isDifferent(provaBD)) { //Verifica se os dados da prova foram alterados
                     if (!provaAtual.getNameProva().equals(provaBD.getNameProva()) || !provaAtual.getId_class().equals(provaBD.getId_class())) {
-                        Boolean verificaProva = bancoDados.verificaExisteProvaPNome(provaAtual.getNameProva(), provaAtual.getId_class().toString());
+                        Boolean verificaProva = dataBaseKariti.verificaExisteProvaPNome(provaAtual.getNameProva(), provaAtual.getId_class().toString());
                         if (verificaProva == null) {
                             Toast.makeText(EdicaoProva.this, "Erro na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
                             return;

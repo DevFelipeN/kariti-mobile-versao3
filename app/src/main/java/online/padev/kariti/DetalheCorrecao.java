@@ -12,16 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
+
+import online.padev.kariti.database.DataBaseKariti;
 
 public class DetalheCorrecao extends AppCompatActivity {
 
     ImageButton voltar;
     String nomeAluno, status;
     Integer id_aluno, id_prova, qtdQuestoes;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     TextView alunoDetalhe, notaTotal;
     List<String> respostasDadas, gabarito;
     List<Float> peso;
@@ -38,14 +40,14 @@ public class DetalheCorrecao extends AppCompatActivity {
         notaTotal = findViewById(R.id.textViewNotaTotalDetalhe);
         titulo = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
         titulo.setText(String.format("%s","Detalhes"));
 
         id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         id_prova = getIntent().getExtras().getInt("id_prova");
-        nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
-        qtdQuestoes = bancoDados.pegarQtdQuestoes(id_prova.toString());
+        nomeAluno = dataBaseKariti.pegaNomeAluno(id_aluno);
+        qtdQuestoes = dataBaseKariti.pegarQtdQuestoes(id_prova.toString());
 
         if (nomeAluno == null || qtdQuestoes == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
@@ -54,9 +56,9 @@ public class DetalheCorrecao extends AppCompatActivity {
 
         alunoDetalhe.setText(String.format("%s","Aluno: "+nomeAluno));
         //Carrega todas as respostas ordenadas por questao
-        respostasDadas = bancoDados.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
-        gabarito = bancoDados.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
-        peso = bancoDados.listarNotasPorQuestao(id_prova);
+        respostasDadas = dataBaseKariti.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
+        gabarito = dataBaseKariti.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
+        peso = dataBaseKariti.listarNotasPorQuestao(id_prova);
 
         if (respostasDadas == null || gabarito == null || peso == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();

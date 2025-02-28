@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Objects;
 
 import online.padev.kariti.cards.CreatCard;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class GenerateCardsActivity extends AppCompatActivity {
     ImageButton toGoBack;
@@ -32,7 +33,7 @@ public class GenerateCardsActivity extends AppCompatActivity {
     Integer id_turmaBD, address, id_provaBD;
     String nameProva, className;
     List<String> listProvas, listTurmas, listAlunos;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     Spinner spinnerTurma, spinnerProva, spinnerAluno;
     TextView title;
     Prova prova;
@@ -48,13 +49,13 @@ public class GenerateCardsActivity extends AppCompatActivity {
         btnGenerateCards = findViewById(R.id.baixarcatoes);
         title = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
         title.setText(String.format("%s","Cartões"));
 
         address = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
 
-        listTurmas = bancoDados.listarTurmasPorProva();
+        listTurmas = dataBaseKariti.listarTurmasPorProva();
         if(listTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
@@ -62,12 +63,12 @@ public class GenerateCardsActivity extends AppCompatActivity {
         listTurmas.add(0,"Selecione a turma");
 
         if(address.equals(2)){ //para quando a activity que a chamou foi ProvaActivity
-            SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listTurmas);
+            AdapterSpinner adapterTurma = new AdapterSpinner(this, listTurmas);
             spinnerTurma.setAdapter(adapterTurma);
 
         }else if(address.equals(1)) { //para quando a activity que chamou for Gabarito
             id_turmaBD = getIntent().getExtras().getInt("id_turma");
-            className = bancoDados.pegarNomeTurma(String.valueOf(id_turmaBD));
+            className = dataBaseKariti.pegarNomeTurma(String.valueOf(id_turmaBD));
             nameProva = getIntent().getExtras().getString("prova");
             if (className == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
@@ -75,21 +76,21 @@ public class GenerateCardsActivity extends AppCompatActivity {
             }
 
             int indexTurma = listTurmas.indexOf(className); // Identifica a posicão da turma na lista
-            SpinnerAdapter adapterTurma = new SpinnerAdapter(this, listTurmas);
+            AdapterSpinner adapterTurma = new AdapterSpinner(this, listTurmas);
             spinnerTurma.setAdapter(adapterTurma);
             if (indexTurma != -1){
                 spinnerTurma.setSelection(indexTurma);
             }
 
             //============ Lista todas provas pertecentes a turma selecionada =======================
-            listProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
+            listProvas = dataBaseKariti.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
             if (listProvas == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             int indexProva = listProvas.indexOf(nameProva);
-            SpinnerAdapter adapterProva = new SpinnerAdapter(this, listProvas);
+            AdapterSpinner adapterProva = new AdapterSpinner(this, listProvas);
             spinnerProva.setAdapter(adapterProva);
             spinnerProva.postDelayed(() -> {
                 if (indexProva != -1) {
@@ -99,13 +100,13 @@ public class GenerateCardsActivity extends AppCompatActivity {
 
 
             // ============ Lista todos os alunos pertencentes a turma selecionada =======================================
-            listAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
+            listAlunos = dataBaseKariti.listarAlunosPorTurma(id_turmaBD.toString());
             if (listAlunos == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
             listAlunos.add(0, "Todos");
-            SpinnerAdapter adapterAluno = new SpinnerAdapter(this, listAlunos);
+            AdapterSpinner adapterAluno = new AdapterSpinner(this, listAlunos);
             spinnerAluno.setAdapter(adapterAluno);
         }
 
@@ -115,26 +116,26 @@ public class GenerateCardsActivity extends AppCompatActivity {
                 if(position!=0){
                     try {
                         className = spinnerTurma.getSelectedItem().toString();
-                        id_turmaBD = bancoDados.pegarIdTurma(className);
+                        id_turmaBD = dataBaseKariti.pegarIdTurma(className);
                         if (id_turmaBD == null) {
                             Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        listProvas = bancoDados.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
+                        listProvas = dataBaseKariti.listarNomesProvasPorTurma(String.valueOf(id_turmaBD));
                         if (listProvas == null) {
                             Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        SpinnerAdapter adapterProva = new SpinnerAdapter(GenerateCardsActivity.this, listProvas);
+                        AdapterSpinner adapterProva = new AdapterSpinner(GenerateCardsActivity.this, listProvas);
                         spinnerProva.setAdapter(adapterProva);
 
-                        listAlunos = bancoDados.listarAlunosPorTurma(id_turmaBD.toString());
+                        listAlunos = dataBaseKariti.listarAlunosPorTurma(id_turmaBD.toString());
                         if (listAlunos == null) {
                             Toast.makeText(GenerateCardsActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         listAlunos.add(0, "Todos");
-                        SpinnerAdapter adapterAluno = new SpinnerAdapter(GenerateCardsActivity.this, listAlunos);
+                        AdapterSpinner adapterAluno = new AdapterSpinner(GenerateCardsActivity.this, listAlunos);
                         spinnerAluno.setAdapter(adapterAluno);
                     } catch (Exception e){
                         Log.e("kariti", e.toString());
@@ -157,7 +158,7 @@ public class GenerateCardsActivity extends AppCompatActivity {
                 if(spinnerProva.getSelectedItem() != null) {
                     nameProva = spinnerProva.getSelectedItem().toString();
                     //String aluno = spinnerAluno.getSelectedItem().toString();
-                    id_provaBD = bancoDados.pegarIdProvaPorTurma(nameProva, id_turmaBD);
+                    id_provaBD = dataBaseKariti.pegarIdProvaPorTurma(nameProva, id_turmaBD);
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
                         solicitaPermissao();
                     }else {
@@ -183,8 +184,8 @@ public class GenerateCardsActivity extends AppCompatActivity {
     }
 
     private void generateCard(){
-        prova = new Prova(id_provaBD, bancoDados);
-        CreatCard creatCard = new CreatCard(prova, bancoDados, this);
+        prova = new Prova(id_provaBD, dataBaseKariti);
+        CreatCard creatCard = new CreatCard(prova, dataBaseKariti, this);
         if (creatCard.creatPdfCard()){
             infoDownloadCard();
         } else {

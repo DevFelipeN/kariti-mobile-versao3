@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarCodigo;
 
 public class CodeValidationActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class CodeValidationActivity extends AppCompatActivity {
     private GerarCodigoValidacao generateCode;
     private EnviarCodigo sendCode;
     private static final long WAITING_TIME = 60000;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -38,7 +39,7 @@ public class CodeValidationActivity extends AppCompatActivity {
         textViewTime = findViewById(R.id.textViewTime);
         textViewResendCode = findViewById(R.id.textViewReenviar);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
         generateCode = new GerarCodigoValidacao();
         sendCode = new EnviarCodigo();
 

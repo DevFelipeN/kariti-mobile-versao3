@@ -59,13 +59,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class ProvaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 100;
     ImageButton voltar, iconeAjuda;
     Button btnCadastrarProva, btnGerarCartao, btnCorrigirProva, btnViewProvas, editarProva;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     TextView textViewTitulo;
     Integer id_provaCaptured;
     @Override
@@ -82,7 +83,7 @@ public class ProvaActivity extends AppCompatActivity {
         editarProva = findViewById(R.id.buttonEdicaoProva);
         textViewTitulo = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
         textViewTitulo.setText(String.format("%s","Prova"));
 
@@ -91,7 +92,7 @@ public class ProvaActivity extends AppCompatActivity {
         btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
         btnViewProvas.setOnClickListener(v -> startViewProvas());
         btnCorrigirProva.setOnClickListener(v -> {
-            Boolean verificaProva = bancoDados.verificaExisteProvaCadastrada();
+            Boolean verificaProva = dataBaseKariti.verificaExisteProvaCadastrada();
             if (verificaProva == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -112,7 +113,7 @@ public class ProvaActivity extends AppCompatActivity {
         });
     }
     private void carregarCadastroProva(){
-        Boolean verificaTurma = bancoDados.verificaExisteTurmas();
+        Boolean verificaTurma = dataBaseKariti.verificaExisteTurmas();
         if (verificaTurma == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
@@ -123,7 +124,7 @@ public class ProvaActivity extends AppCompatActivity {
         }else aviso("turmas cadastradas");
     }
     private void carregarTelaGerarCartao(){
-        Boolean verificaProvaCad = bancoDados.verificaExisteProvaCadastrada();
+        Boolean verificaProvaCad = dataBaseKariti.verificaExisteProvaCadastrada();
         if (verificaProvaCad == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
@@ -137,7 +138,7 @@ public class ProvaActivity extends AppCompatActivity {
         }
     }
     private void startViewProvas(){
-        Boolean existsProva = bancoDados.verificaExisteProvaCadastrada();
+        Boolean existsProva = dataBaseKariti.verificaExisteProvaCadastrada();
         if(existsProva){
             Intent intent = new Intent(this, VisualProvaActivity2.class);
             startActivity(intent);
@@ -309,10 +310,10 @@ public class ProvaActivity extends AppCompatActivity {
                     dialog.show();
 
                     buttonYes.setOnClickListener(v -> {
-                        String[] x = bancoDados.pegarDadosProva(id_provaCaptured);
+                        String[] x = dataBaseKariti.pegarDadosProva(id_provaCaptured);
                         String nameProva = x[0];
                         String id_turma = x[1];
-                        String nameTurma = bancoDados.pegarNomeTurma(id_turma);
+                        String nameTurma = dataBaseKariti.pegarNomeTurma(id_turma);
                         Intent intent = new Intent(getApplicationContext(), VisualProvaCorrigidaActivity.class);
                         intent.putExtra("id_prova", id_provaCaptured);
                         intent.putExtra("prova", nameProva);
@@ -444,13 +445,13 @@ public class ProvaActivity extends AppCompatActivity {
                     String[] a = resultQrCode.split("_");
                     id_provaCaptured = Integer.parseInt(a[0]);
 
-                    if(!bancoDados.verificaExisteProvaPId(id_provaCaptured)){
+                    if(!dataBaseKariti.verificaExisteProvaPId(id_provaCaptured)){
                         //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
                         Log.e("kariti","Prova não cadastrada!!");
                         return;
                     }
 
-                    Prova prova = new Prova(id_provaCaptured, bancoDados);
+                    Prova prova = new Prova(id_provaCaptured, dataBaseKariti);
 
                     //Bitmap imgWarp = matToBitmap(matWarp);
                     //nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
@@ -458,7 +459,7 @@ public class ProvaActivity extends AppCompatActivity {
                     //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
 
                     //Versão 3
-                    CoreKariti core = new CoreKariti(matWarp, prova, bancoDados, Integer.parseInt(a[1]));
+                    CoreKariti core = new CoreKariti(matWarp, prova, dataBaseKariti, Integer.parseInt(a[1]));
                     HashMap<Integer, Integer> isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
 
                     if (isCorrect != null) {

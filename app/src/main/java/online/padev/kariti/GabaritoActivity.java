@@ -37,8 +37,9 @@ import java.util.List;
 import java.util.Map;
 
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class GabaritoActivity extends AppCompatActivity {
     private TextView txtViewNotaProva, txtViewProva, txtViewTurma, txtViewData;
@@ -51,7 +52,7 @@ public class GabaritoActivity extends AppCompatActivity {
     private Map<Integer, Integer> alternativasEscolhidas;
     private List<Gabarito> gabarito = new ArrayList<>();
 
-    private BancoDados bancoDados;
+    private DataBaseKariti dataBaseKariti;
     private Prova dadosProva;
     private String direcion;
 
@@ -73,7 +74,7 @@ public class GabaritoActivity extends AppCompatActivity {
         txtViewNotaProva = findViewById(R.id.txtViewNotaProva);
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
         dadosProva = new Prova();
         listRadioGroups = new ArrayList<>();
         alternativasEscolhidas = new HashMap<>();
@@ -91,7 +92,7 @@ public class GabaritoActivity extends AppCompatActivity {
 
         if (!direcion.equals("cardDefault")) {
             txtViewProva.setText(String.format("Prova: %s", dadosProva.getNameProva()));
-            txtViewTurma.setText(String.format("Turma: %s", bancoDados.pegarNomeTurma(dadosProva.getId_class().toString())));
+            txtViewTurma.setText(String.format("Turma: %s", dataBaseKariti.pegarNomeTurma(dadosProva.getId_class().toString())));
             txtViewData.setText(String.format("Data: %s", dadosProva.dateToDisplay()));
         } else {
             txtViewProva.setVisibility(View.GONE);
@@ -150,13 +151,13 @@ public class GabaritoActivity extends AppCompatActivity {
                         }
 
                         if (dadosProva.getId_prova() == null) {
-                            if (bancoDados.cadastrarProva(dadosProva, gabarito)) {
+                            if (dataBaseKariti.cadastrarProva(dadosProva, gabarito)) {
                                 dialogProvaSucess("cadastrada");
                             } else {
                                 avisoErroDeCadastro("no cadastro");
                             }
                         } else if (!dadosProva.getId_prova().equals(0)) {
-                            if (bancoDados.alterarDadosProva(dadosProva, gabarito, statusEdition)) {
+                            if (dataBaseKariti.alterarDadosProva(dadosProva, gabarito, statusEdition)) {
                                 dialogProvaSucess("alterada");
                             } else {
                                 avisoErroDeCadastro("na alteração");

@@ -11,23 +11,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import online.padev.kariti.R;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class DesativadaAdapter extends ArrayAdapter<String> {
+public class AdapterStudentOnDelete extends ArrayAdapter<String> {
 
-    private List<String> escolas, ids;
-
+    private List<String> alunos;
     private Context context;
 
-    public DesativadaAdapter(Context context, List<String> escolas, List<String> ids) {
-        super(context, R.layout.custom_escola_desativada, escolas);
+    public AdapterStudentOnDelete(Context context, List<String> alunos) {
+        super(context, R.layout.list_alunos_delete, alunos);
         this.context = context;
-        this.escolas = escolas;
-        this.ids = ids;
-
+        this.alunos = alunos;
     }
 
     @NonNull
@@ -36,15 +30,12 @@ public class DesativadaAdapter extends ArrayAdapter<String> {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.custom_escola_desativada, null);
+            view = inflater.inflate(R.layout.list_alunos_delete, null);
         }
 
-        TextView textViewNome = view.findViewById(R.id.textViewNome);
+        TextView textViewNome = view.findViewById(R.id.textViewNomeAluno);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
-
-        String nomeEscola = escolas.get(position);
-        String idEscola = ids.get(position);
-        textViewNome.setText(nomeEscola);
+        textViewNome.setText(alunos.get(position));
 
 
         return view;

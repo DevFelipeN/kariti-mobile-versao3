@@ -11,15 +11,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import online.padev.kariti.database.DataBaseKariti;
 
 public class SchoolDisabledActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton back, iconHelp;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     List<String> listDisabledBD;
     TextView textViewTitle;
-    DesativadaAdapter adapterDisabled;
+    AdapterDisabledSchool adapterDisabled;
     ListView listViewDisabled;
     private Integer id_school;
     @Override
@@ -32,7 +33,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
         textViewTitle = findViewById(R.id.toolbar_title);
         iconHelp = findViewById(R.id.iconHelp);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         textViewTitle.setText(String.format("%s","Desativadas"));
 
@@ -44,7 +45,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
             finish();
         }
 
-        adapterDisabled = new DesativadaAdapter(this, listDisabledBD, listDisabledBD);
+        adapterDisabled = new AdapterDisabledSchool(this, listDisabledBD, listDisabledBD);
         listViewDisabled.setAdapter(adapterDisabled);
 
         listViewDisabled.setOnItemLongClickListener((parent, view, position, id) -> {

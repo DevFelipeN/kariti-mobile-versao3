@@ -11,8 +11,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Prova;
 
 public class ProvaFastActivity extends AppCompatActivity {
 

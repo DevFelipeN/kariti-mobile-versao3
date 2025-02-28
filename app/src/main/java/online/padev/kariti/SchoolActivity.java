@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarBackup;
 
 public class SchoolActivity extends AppCompatActivity {
@@ -41,9 +42,9 @@ public class SchoolActivity extends AppCompatActivity {
     FloatingActionButton btnSchoolDisabled, btnRegistrationSchool;
     TextView titleActivity, txtDescriptionDisabled, txtDescriptionNewSchool, backupBD;
     ListView listViewSchools;
-    EscolaAdapter adapterSchool;
+    AdapterClickableSchool adapterSchool;
     private List<String> listSchoolsBD;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     private static final int REQUEST_CODE = 1;
     private Integer id_school;
 
@@ -62,7 +63,7 @@ public class SchoolActivity extends AppCompatActivity {
         txtDescriptionNewSchool = findViewById(R.id.txtDescricaoNovaEscola);
         backupBD = findViewById(R.id.textBackupBD);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         titleActivity.setText(String.format("%s","Acessar com:"));
 
@@ -78,12 +79,12 @@ public class SchoolActivity extends AppCompatActivity {
                 registrationNewSchool();
             }
         }
-        adapterSchool = new EscolaAdapter(this, listSchoolsBD, listSchoolsBD);
+        adapterSchool = new AdapterClickableSchool(this, listSchoolsBD, listSchoolsBD);
         listViewSchools.setAdapter(adapterSchool);
 
         listViewSchools.setOnItemClickListener((parent, view, position, id) -> {
-            BancoDados.ID_ESCOLA = dataBase.pegarIdEscola(adapterSchool.getItem(position));
-            if (BancoDados.ID_ESCOLA == null || BancoDados.ID_ESCOLA == -1){
+            DataBaseKariti.ID_ESCOLA = dataBase.pegarIdEscola(adapterSchool.getItem(position));
+            if (DataBaseKariti.ID_ESCOLA == null || DataBaseKariti.ID_ESCOLA == -1){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -155,7 +156,7 @@ public class SchoolActivity extends AppCompatActivity {
         }
     }
     private void exit(){
-        BancoDados.USER_ID = null;
+        DataBaseKariti.USER_ID = null;
         finish();
         Toast.makeText(SchoolActivity.this, "Usuário desconectado", Toast.LENGTH_SHORT).show();
     }
@@ -170,7 +171,7 @@ public class SchoolActivity extends AppCompatActivity {
         builder.show();
     }
     private void startMenuInitial(){
-        Intent intent = new Intent(this, DetalhesEscolaActivity.class);
+        Intent intent = new Intent(this, MenuInitialActivity.class);
         startActivity(intent);
     }
     private void startSchoolsDisabled() {
@@ -289,7 +290,7 @@ public class SchoolActivity extends AppCompatActivity {
      */
     private boolean startBackup(){
         File dbFile = getDatabasePath("base_dados.db");
-        String email = dataBase.pegarEmailUsuario(BancoDados.USER_ID);
+        String email = dataBase.pegarEmailUsuario(DataBaseKariti.USER_ID);
         if (email == null){
             return false;
         }

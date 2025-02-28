@@ -3,12 +3,12 @@ package online.padev.kariti.correction;
 import java.util.HashMap;
 import java.util.Random;
 
-import online.padev.kariti.BancoDados;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class TesterSimulation {
-    BancoDados bancoDados;
-    public TesterSimulation(BancoDados bancoDados){
-        this.bancoDados = bancoDados;
+    DataBaseKariti dataBaseKariti;
+    public TesterSimulation(DataBaseKariti dataBaseKariti){
+        this.dataBaseKariti = dataBaseKariti;
     }
     public void insertCorrectionFiction(Integer id_prova, Integer id_aluno){
         HashMap<Integer, Integer> result = new HashMap<>();
@@ -17,6 +17,6 @@ public class TesterSimulation {
             int resp = new Random().nextInt(5);
             result.put(i+1, resp);
         }
-        bancoDados.cadastrarCorrecao(result, id_prova, id_aluno);
+        dataBaseKariti.cadastrarCorrecao(result, id_prova, id_aluno);
     }
 }

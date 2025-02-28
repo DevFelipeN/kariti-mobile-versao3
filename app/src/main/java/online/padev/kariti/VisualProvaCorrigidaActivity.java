@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.download.DownloadResultadoCorrecao;
 
 public class VisualProvaCorrigidaActivity extends AppCompatActivity {
@@ -53,7 +54,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
     TextView titulo;
     private File filecsv;
 
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
         txtProva = findViewById(R.id.textViewProvaResult);
         titulo = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
 
         titulo.setText(String.format("%s","Provas Corrigidas"));
 
@@ -75,10 +76,10 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
         txtProva.setText(String.format("%s","Prova: "+nomeProva));
 
-        listaIdAlunos = bancoDados.listarIdsAlunosPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
-        qtdQuestoesProva = bancoDados.pegarQtdQuestoes(id_prova.toString());
-        peso = bancoDados.listarNotasPorQuestao(id_prova);
-        gabarito = bancoDados.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
+        listaIdAlunos = dataBaseKariti.listarIdsAlunosPorProvaCorrigida(id_prova); //pega todos os alunos com provas corrigidas
+        qtdQuestoesProva = dataBaseKariti.pegarQtdQuestoes(id_prova.toString());
+        peso = dataBaseKariti.listarNotasPorQuestao(id_prova);
+        gabarito = dataBaseKariti.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
 
         if (qtdQuestoesProva == null || gabarito == null || peso == null || listaIdAlunos == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
@@ -94,12 +95,12 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             float nota = 0;
             int acertos = 0;
             id_aluno = id;
-            Boolean verificaCorrecao = bancoDados.verificaSituacaoCorrecao(id_prova, id_aluno, -1);
+            Boolean verificaCorrecao = dataBaseKariti.verificaSituacaoCorrecao(id_prova, id_aluno, -1);
             if(verificaCorrecao == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            respostasDadas = (ArrayList<String>) bancoDados.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
+            respostasDadas = (ArrayList<String>) dataBaseKariti.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
             incrementaRespostas(); //caso quantidade de respostadas dadas, menor que o esperado, incrementa!
             if(!verificaCorrecao) {
                 for (int i = 0; i < qtdQuestoesProva; i++) {
@@ -121,7 +122,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
 
             // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            String nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
+            String nomeAluno = dataBaseKariti.pegaNomeAluno(id_aluno);
             if (nomeAluno == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 9", Toast.LENGTH_SHORT).show();
                 finish();
@@ -169,7 +170,7 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             tableLayout.addView(row);
 
             cell4.setOnClickListener(v -> {
-                Boolean verificaCorrecao2 = bancoDados.verificaSituacaoCorrecao(id_prova, v.getId(), -1);
+                Boolean verificaCorrecao2 = dataBaseKariti.verificaSituacaoCorrecao(id_prova, v.getId(), -1);
                 if(verificaCorrecao2 == null){
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
                     return;
@@ -190,18 +191,18 @@ public class VisualProvaCorrigidaActivity extends AppCompatActivity {
             solicitaPermissaoNotificacao();
             try {
                 dadosProvaCorrigida = new ArrayList<>();
-                String prof = bancoDados.pegarNomeUsuario();
-                String qtdAlternativas = String.valueOf(bancoDados.pegarQtdAlternativas(id_prova.toString()));
-                String nota = String.valueOf(bancoDados.pegarNotaProva(id_prova.toString()));
-                String dataProva = bancoDados.pegarDataProva(id_prova.toString());
+                String prof = dataBaseKariti.pegarNomeUsuario();
+                String qtdAlternativas = String.valueOf(dataBaseKariti.pegarQtdAlternativas(id_prova.toString()));
+                String nota = String.valueOf(dataBaseKariti.pegarNotaProva(id_prova.toString()));
+                String dataProva = dataBaseKariti.pegarDataProva(id_prova.toString());
                 for(int id_aluno: listaIdAlunos) {
-                    if(!bancoDados.verificaSituacaoCorrecao(id_prova, id_aluno, -1)) {
-                        String nomeAluno = bancoDados.pegaNomeAluno(id_aluno);
-                        String respostasDadas = bancoDados.listarRespostasDadasNumero(id_prova, id_aluno);
+                    if(!dataBaseKariti.verificaSituacaoCorrecao(id_prova, id_aluno, -1)) {
+                        String nomeAluno = dataBaseKariti.pegaNomeAluno(id_aluno);
+                        String respostasDadas = dataBaseKariti.listarRespostasDadasNumero(id_prova, id_aluno);
                         //respostasDadas = respostasDadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        String respostasEsperadas = bancoDados.listarRespostasGabaritoNumerico(id_prova.toString());
+                        String respostasEsperadas = dataBaseKariti.listarRespostasGabaritoNumerico(id_prova.toString());
                         respostasEsperadas = respostasEsperadas.replaceAll("(?<=\\d)(?=\\d)", ",");
-                        String notasQuestoes = bancoDados.listarNotasProva(id_prova.toString());
+                        String notasQuestoes = dataBaseKariti.listarNotasProva(id_prova.toString());
                         notasQuestoes = notasQuestoes.replaceAll("(?<=\\d)(?=\\d)", ",");
                         dadosProvaCorrigida.add(new String[]{id_prova.toString(), nomeProva, prof, nomeTurma, dataProva, qtdQuestoesProva.toString(), qtdAlternativas, nota, respostasDadas, respostasEsperadas, String.valueOf(id_aluno), nomeAluno, notasQuestoes});
                     }

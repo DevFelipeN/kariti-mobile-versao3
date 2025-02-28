@@ -16,6 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class ClassActivity extends AppCompatActivity {
     ImageButton back;
     FloatingActionButton btnNewClass;
@@ -23,7 +25,7 @@ public class ClassActivity extends AppCompatActivity {
     private List<String> listClass;
     TextView title, descriptionNewTurma;
     private Integer id_class;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class ClassActivity extends AppCompatActivity {
 
         title.setText(String.format("%s","Turmas"));
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         listClass = dataBase.listarNomesTurmas();
         if (listClass == null){
@@ -48,7 +50,7 @@ public class ClassActivity extends AppCompatActivity {
         if(listClass.isEmpty()){
             startNewClassActivity();
         }
-        EscolaAdapter adapterClass = new EscolaAdapter(this, listClass, listClass);
+        AdapterClickableSchool adapterClass = new AdapterClickableSchool(this, listClass, listClass);
         listViewClass.setAdapter(adapterClass);
 
         listViewClass.setOnItemClickListener((parent, view, position, id) -> {

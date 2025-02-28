@@ -12,13 +12,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class UpdatePasswordActivity extends AppCompatActivity{
     private Integer id_user;
     String nameUser, email, newPassword, confirmedNewPassword;
     EditText editTextNewPassword, editTextConfirmedNewPassword;
     TextView textViewDescription, titleActivity;
     Button btnUpdate;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     ImageButton hidePassword, hidePassword2, back;
 
     @Override
@@ -35,7 +37,7 @@ public class UpdatePasswordActivity extends AppCompatActivity{
         hidePassword = findViewById(R.id.senhaoculta);
         titleActivity = findViewById(R.id.toolbar_title);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         id_user = getIntent().getExtras().getInt("id_usuario");
         nameUser = getIntent().getExtras().getString("nome");

@@ -1,4 +1,4 @@
-package online.padev.kariti.dao;
+package online.padev.kariti.entity;
 
 import java.util.ArrayList;
 import java.util.List;

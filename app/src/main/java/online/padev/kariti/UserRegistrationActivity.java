@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarCodigo;
 
 public class UserRegistrationActivity extends AppCompatActivity {
@@ -42,7 +43,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private ImageButton hidePassword;
     private ImageButton hidePassword2;
     private String name, email, password, confirmPassword, code;
-    private BancoDados dataBase;
+    private DataBaseKariti dataBase;
     private EnviarCodigo sendCode;
     private GerarCodigoValidacao generateCode;
     TextView textViewBackup;
@@ -63,7 +64,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         textViewBackup = findViewById(R.id.textViewBackupLink);
 
         //cria uma instancia de outras classes
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
         sendCode = new EnviarCodigo();
         generateCode = new GerarCodigoValidacao();
 

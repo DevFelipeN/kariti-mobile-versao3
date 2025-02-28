@@ -11,68 +11,69 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DetalhesEscolaActivity extends AppCompatActivity {
-    ImageButton btnVoltar, iconeAjuda;
-    Button btnTurma, btnAluno, btnProva;
-    TextView textViewEscola;
-    BancoDados bancoDados;
-    String nomeEscola;
+import online.padev.kariti.database.DataBaseKariti;
+
+public class MenuInitialActivity extends AppCompatActivity {
+    ImageButton back, iconHelp;
+    Button btnClass, btnStudent, btnProva;
+    TextView textViewSchool;
+    DataBaseKariti dataBase;
+    private String nameSchool;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_escola);
+        setContentView(R.layout.activity_menu_initial);
 
-        btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
-        btnVoltar.setVisibility(View.VISIBLE);
-        iconeAjuda = findViewById(R.id.iconHelp);
+        back = findViewById(R.id.imgBtnVoltaDescola);
+        back.setVisibility(View.VISIBLE);
+        iconHelp = findViewById(R.id.iconHelp);
 
-        btnTurma = findViewById(R.id.btnTurma);
-        btnAluno = findViewById(R.id.buttonAluno);
+        btnClass = findViewById(R.id.btnTurma);
+        btnStudent = findViewById(R.id.buttonAluno);
         btnProva = findViewById(R.id.btnProva);
-        textViewEscola = findViewById(R.id.toolbar_title);
+        textViewSchool = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
-        nomeEscola = bancoDados.pegarNomeEscola();
-        if (nomeEscola == null){ //vericação caso ocorra exceções no Banco
+        nameSchool = dataBase.pegarNomeEscola();
+        if (nameSchool == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        textViewEscola.setText(nomeEscola);
+        textViewSchool.setText(nameSchool);
 
-        btnTurma.setOnClickListener(v -> carregarTelaTurma());
-        btnAluno.setOnClickListener(v -> carregarTelaAluno());
-        btnProva.setOnClickListener(v -> carregarTelaProva());
-        iconeAjuda.setOnClickListener(v -> ajuda());
+        btnClass.setOnClickListener(v -> startClass());
+        btnStudent.setOnClickListener(v -> startStudent());
+        btnProva.setOnClickListener(v -> startProva());
+        iconHelp.setOnClickListener(v -> help());
 
-        btnVoltar.setOnClickListener(v -> {
-            BancoDados.ID_ESCOLA = null;
-            getOnBackPressedDispatcher();
+        back.setOnClickListener(v -> {
+            DataBaseKariti.ID_ESCOLA = null;
             finish();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                BancoDados.ID_ESCOLA = null;
+                DataBaseKariti.ID_ESCOLA = null;
                 finish();
             }
         });
     }
-    public void carregarTelaTurma(){
+    private void startClass(){
         Intent intent = new Intent(this, ClassActivity.class);
         startActivity(intent);
     }
-    public void carregarTelaAluno(){
+    private void startStudent(){
         Intent intent = new Intent(this, StudentActivity.class);
         startActivity(intent);
     }
-    public void carregarTelaProva(){
+    private void startProva(){
         Intent intent = new Intent(this, ProvaActivity.class);
         startActivity(intent);
     }
 
-    public void ajuda() {
+    public void help() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("• Clique na opção \"Aluno\" para cadastrar seus estudantes, independentemente das turmas às quais eles pertencem. Caso não deseje cadastrar os alunos, será possível cadastrar estudantes anônimos (sem definição de nome) em etapa posterior.\n\n\n" +

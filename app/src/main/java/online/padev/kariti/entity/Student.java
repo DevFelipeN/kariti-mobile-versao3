@@ -1,4 +1,4 @@
-package online.padev.kariti.dao;
+package online.padev.kariti.entity;
 
 public class Student {
     private Integer id_student;

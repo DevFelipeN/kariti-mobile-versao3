@@ -1,4 +1,4 @@
-package online.padev.kariti;
+package online.padev.kariti.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,16 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
-import online.padev.kariti.dao.Student;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Student;
 
-public class BancoDados extends SQLiteOpenHelper {
+public class DataBaseKariti extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
     private static final int DATABASE_VERSION = 27;
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
-    public BancoDados(Context context) {
+    public DataBaseKariti(Context context) {
         super(context, DBNAME, null, DATABASE_VERSION);
     }
     @Override
@@ -110,7 +110,7 @@ public class BancoDados extends SQLiteOpenHelper {
             ContentValues contentValues = new ContentValues();
             contentValues.put("nomeEscola", nomeEscola);
             contentValues.put("status", status);
-            contentValues.put("id_usuario", BancoDados.USER_ID);
+            contentValues.put("id_usuario", DataBaseKariti.USER_ID);
             long inserir = base_dados.insert("escola", null, contentValues);
             return inserir != -1;
         } catch (Exception e){
@@ -130,7 +130,7 @@ public class BancoDados extends SQLiteOpenHelper {
             base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put("nomeTurma", nomeTurma);
-            contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+            contentValues.put("id_escola", DataBaseKariti.ID_ESCOLA);
             long inserir = base_dados.insert("turma", null, contentValues);
             id_turma = Math.toIntExact(inserir);
             Log.e("kariti","Id_turma Atual: "+id_turma);
@@ -403,7 +403,7 @@ public class BancoDados extends SQLiteOpenHelper {
             contentValues.put("nomeAluno", nomeAluno);
             contentValues.put("email", email);
             contentValues.put("status", status);
-            contentValues.put("id_escola", BancoDados.ID_ESCOLA);
+            contentValues.put("id_escola", DataBaseKariti.ID_ESCOLA);
             long inserir = base_dados.insert("aluno", null, contentValues);
             if(inserir != -1){
                 return Math.toIntExact(inserir);
@@ -887,7 +887,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE email = ? AND id_escola = ?", new String[]{email, BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE email = ? AND id_escola = ?", new String[]{email, DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro na vericação do email na tabela aluno: "+e.getMessage());
@@ -980,7 +980,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, DataBaseKariti.USER_ID.toString()});
             return cursor != null && cursor.moveToFirst();
         } catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de escola no banco! "+e.getMessage());
@@ -1040,7 +1040,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova, turma WHERE prova.id_turma = turma.id_turma AND turma.id_escola = ?", new String[]{BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT id_prova FROM prova, turma WHERE prova.id_turma = turma.id_turma AND turma.id_escola = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de provas cadastradas no banco! "+e.getMessage());
@@ -1059,7 +1059,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova, turma WHERE prova.id_turma = turma.id_turma AND turma.id_escola = ? AND id_prova IN (SELECT id_prova FROM resultadoCorrecao)", new String[]{BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT id_prova FROM prova, turma WHERE prova.id_turma = turma.id_turma AND turma.id_escola = ? AND id_prova IN (SELECT id_prova FROM resultadoCorrecao)", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de provas corrigidas! "+e.getMessage());
@@ -1117,7 +1117,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ? AND id_escola = ?", new String[]{nome, BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ? AND id_escola = ?", new String[]{nome, DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
@@ -1136,7 +1136,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE id_escola = ? AND status = 1", new String[]{BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE id_escola = ? AND status = 1", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
@@ -1155,7 +1155,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE id_escola = ?", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE id_escola = ?", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de turma! "+e.getMessage());
@@ -1175,7 +1175,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE nomeTurma = ? and id_escola = ?", new String[]{turma, String.valueOf(BancoDados.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE nomeTurma = ? and id_escola = ?", new String[]{turma, String.valueOf(DataBaseKariti.ID_ESCOLA)});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de turma! "+e.getMessage());
@@ -1329,7 +1329,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String nomeTurma = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_turma = ? AND id_escola = ?", new String[]{id_turma, BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_turma = ? AND id_escola = ?", new String[]{id_turma, DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 nomeTurma = cursor.getString(0);
             }
@@ -1353,7 +1353,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String nomeAluno = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ? AND status = ?", new String[]{id_aluno.toString(), BancoDados.ID_ESCOLA.toString(), status.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ? AND status = ?", new String[]{id_aluno.toString(), DataBaseKariti.ID_ESCOLA.toString(), status.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 nomeAluno = cursor.getString(0);
             }
@@ -1377,7 +1377,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String nomeAluno = "";
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ?", new String[]{id_aluno.toString(), BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ?", new String[]{id_aluno.toString(), DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 nomeAluno = cursor.getString(0);
             }
@@ -1500,7 +1500,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Integer id_aluno = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE nomeAluno = ? AND id_escola = ?", new String[]{nomeAluno, BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE nomeAluno = ? AND id_escola = ?", new String[]{nomeAluno, DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 id_aluno = cursor.getInt(0);
             }
@@ -1552,7 +1552,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Integer id_escola = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_escola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, BancoDados.USER_ID.toString()});
+            cursor = base_dados.rawQuery("SELECT id_escola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, DataBaseKariti.USER_ID.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 id_escola = cursor.getInt(0);
             }
@@ -1599,7 +1599,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Integer[] id_prova = new Integer[2];
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova, id_turma FROM prova WHERE nomeProva = ? AND id_turma IN (SELECT id_turma FROM turma WHERE id_escola = ?)", new String[]{nomeProva, BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT id_prova, id_turma FROM prova WHERE nomeProva = ? AND id_turma IN (SELECT id_turma FROM turma WHERE id_escola = ?)", new String[]{nomeProva, DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 id_prova[0] = cursor.getInt(0);
                 id_prova[1] = cursor.getInt(1);
@@ -1624,7 +1624,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Integer id_turma = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE nomeTurma = ? AND id_escola = ?", new String[]{nomeTurma, BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE nomeTurma = ? AND id_escola = ?", new String[]{nomeTurma, DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 id_turma = cursor.getInt(0);
             }
@@ -1720,7 +1720,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String emailAluno = "";
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE id_aluno = ? AND status = ? AND id_escola = ?", new String[]{id_aluno.toString(), "1", BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE id_aluno = ? AND status = ? AND id_escola = ?", new String[]{id_aluno.toString(), "1", DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 emailAluno = cursor.getString(0);
             }
@@ -1766,7 +1766,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String nomeEscola = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_escola = ? AND id_usuario = ?", new String[]{BancoDados.ID_ESCOLA.toString(), BancoDados.USER_ID.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_escola = ? AND id_usuario = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString(), DataBaseKariti.USER_ID.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 nomeEscola = cursor.getString(0);
             }
@@ -1789,7 +1789,7 @@ public class BancoDados extends SQLiteOpenHelper {
         String nomeUsuario = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{BancoDados.USER_ID.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{DataBaseKariti.USER_ID.toString()});
             if (cursor != null && cursor.moveToFirst()){
                 nomeUsuario = cursor.getString(0);
             }
@@ -1839,7 +1839,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados  = this.getReadableDatabase();
-            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT id_aluno) FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) AND status = ? AND id_escola = ?", new String[]{id_turma, status.toString(), BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT id_aluno) FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) AND status = ? AND id_escola = ?", new String[]{id_turma, status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 qtdAnonimos  = cursor.getInt(0);
             }
@@ -1862,7 +1862,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE status = ? AND id_escola = ? ORDER BY nomeAluno ASC", new String[]{status.toString(), BancoDados.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE status = ? AND id_escola = ? ORDER BY nomeAluno ASC", new String[]{status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     String nomeAluno = cursor.getString(0);
@@ -1920,7 +1920,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_escola = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{BancoDados.ID_ESCOLA.toString(), id_turma});
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_escola = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), id_turma});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     String aluno = cursor.getString(0);
@@ -1946,7 +1946,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_escola = ? AND status = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{BancoDados.ID_ESCOLA.toString(), status.toString(), id_turma});
+            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_escola = ? AND status = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), status.toString(), id_turma});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     String aluno = cursor.getString(0);
@@ -2086,7 +2086,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             db = this.getReadableDatabase();
-            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM resultadoCorrecao where id_prova = ?) AND id_escola = ? ORDER BY nomeAluno", new String[]{id_prova.toString(), BancoDados.ID_ESCOLA.toString()});
+            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM resultadoCorrecao where id_prova = ?) AND id_escola = ? ORDER BY nomeAluno", new String[]{id_prova.toString(), DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Integer id_aluno = cursor.getInt(0);
@@ -2112,7 +2112,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? ORDER BY id_turma DESC", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? ORDER BY id_turma DESC", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     String nomeTurma = cursor.getString(0);
@@ -2139,7 +2139,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ORDER BY id_turma DESC", new String[]{String.valueOf(BancoDados.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ORDER BY id_turma DESC", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
             if (cursor != null && cursor.moveToFirst()) {
                 do{
                     String nomeTurma = cursor.getString(0);
@@ -2230,7 +2230,7 @@ public class BancoDados extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_usuario = ? AND status = ?  ORDER BY nomeEscola ASC", new String[]{BancoDados.USER_ID.toString(), status.toString()});
+            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_usuario = ? AND status = ?  ORDER BY nomeEscola ASC", new String[]{DataBaseKariti.USER_ID.toString(), status.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     String escola = cursor.getString(0);

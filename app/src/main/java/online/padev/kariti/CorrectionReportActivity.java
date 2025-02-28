@@ -28,9 +28,10 @@ import androidx.core.content.ContextCompat;
 import java.util.List;
 
 import online.padev.kariti.cards.CorrectionReportCard;
-import online.padev.kariti.dao.Gabarito;
-import online.padev.kariti.dao.Prova;
-import online.padev.kariti.dao.Student;
+import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Student;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class CorrectionReportActivity extends AppCompatActivity {
     ImageButton toGoBack;
@@ -42,7 +43,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
     List<Student> students;
     Prova prova;
     TextView title;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
         txtViewProva = findViewById(R.id.textViewProvaResult);
         title = findViewById(R.id.toolbar_title);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         title.setText(String.format("%s","Provas Corrigidas"));
 

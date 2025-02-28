@@ -10,11 +10,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class StudentRegistrationActivity extends AppCompatActivity {
     ImageButton back;
     EditText editTextNameStudent, EditTextEmail;
     Button btnSave;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         back = findViewById(R.id.imgBtnVoltaEscola);
         btnSave = findViewById(R.id.buttonSalvarEdit);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         btnSave.setOnClickListener(view -> {
             btnSave.setEnabled(false);

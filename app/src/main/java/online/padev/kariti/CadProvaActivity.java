@@ -18,7 +18,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import online.padev.kariti.dao.Prova;
+import online.padev.kariti.entity.Prova;
+import online.padev.kariti.database.DataBaseKariti;
 
 public class CadProvaActivity extends AppCompatActivity {
     Button datePickerButton;
@@ -26,7 +27,7 @@ public class CadProvaActivity extends AppCompatActivity {
     EditText nomeProva, qtdQuest, qtdAlter;
     Button btnGerProva;
     Spinner spinnerTurma;
-    BancoDados bancoDados;
+    DataBaseKariti dataBaseKariti;
     Prova prova;
     List<String> listTurmas;
     ImageButton btnVoltar, questMenos, questMais, altMais, altMenos;
@@ -50,18 +51,18 @@ public class CadProvaActivity extends AppCompatActivity {
         spinnerTurma = findViewById(R.id.spinnerTurmaPprova);
         titulo = findViewById(R.id.toolbar_title);
 
-        bancoDados = new BancoDados(this);
+        dataBaseKariti = new DataBaseKariti(this);
         prova = new Prova();
 
         titulo.setText(String.format("%s","Nova Prova"));
 
-        listTurmas = bancoDados.listarNomesTurmas(); //Obtem a lista das turmas delimitadas pertecentes a escola atual
+        listTurmas = dataBaseKariti.listarNomesTurmas(); //Obtem a lista das turmas delimitadas pertecentes a escola atual
         if(listTurmas == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
         listTurmas.add(0, "Selecione a Turma");
-        SpinnerAdapter adapter = new SpinnerAdapter(this, listTurmas);
+        AdapterSpinner adapter = new AdapterSpinner(this, listTurmas);
         spinnerTurma.setAdapter(adapter);
 
         questMais.setOnClickListener(v -> {
@@ -113,7 +114,7 @@ public class CadProvaActivity extends AppCompatActivity {
                     return;
                 }
                 String nomeTurma = spinnerTurma.getSelectedItem().toString();
-                prova.setId_class(bancoDados.pegarIdTurma(nomeTurma));
+                prova.setId_class(dataBaseKariti.pegarIdTurma(nomeTurma));
 
                 if (datePickerButton.getText().toString().equals("Selecionar Data")) {
                     Toast.makeText(CadProvaActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
@@ -147,7 +148,7 @@ public class CadProvaActivity extends AppCompatActivity {
                     return;
                 }
 
-                Boolean verificaProva = bancoDados.verificaExisteProvaPNome(prova.getNameProva(), prova.getId_class().toString());
+                Boolean verificaProva = dataBaseKariti.verificaExisteProvaPNome(prova.getNameProva(), prova.getId_class().toString());
                 if (verificaProva == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;

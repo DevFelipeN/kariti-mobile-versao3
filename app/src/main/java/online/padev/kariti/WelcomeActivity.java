@@ -9,8 +9,10 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class WelcomeActivity extends AppCompatActivity {
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         //bancoDados.deletarCorrecao(61);
         //bancoDados.deletarCorrecao(1);

@@ -20,6 +20,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class ClassRegistrationActivity extends AppCompatActivity{
     ImageButton back, iconHelp;
     Toolbar toolbar;
@@ -27,11 +29,11 @@ public class ClassRegistrationActivity extends AppCompatActivity{
     ImageView lessAnonymous, moreAnonymous;
     ListView listViewStudents;
     Button btnRegistration;
-    BancoDados dataBase;
+    DataBaseKariti dataBase;
     Spinner spinnerStudent;
     String studentSelected;
     Integer id_class = 0;
-    AdapterExclAluno adapterStudents;
+    AdapterStudentOnDelete adapterStudents;
     TextView titleActivity, titleAnonymous;
     List<String> listStudentSelected = new ArrayList<>(), listStudentsSpinner;
     @Override
@@ -59,7 +61,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
         listViewStudents.setVisibility(View.GONE);
         titleAnonymous.setVisibility(View.GONE);
 
-        dataBase = new BancoDados(this);
+        dataBase = new DataBaseKariti(this);
 
         listStudentsSpinner = dataBase.listarNomesAlunos(1);
         if (!listStudentsSpinner.isEmpty()){
@@ -70,7 +72,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
             listViewStudents.setVisibility(View.GONE);
         }
 
-        SpinnerAdapter adapter = new SpinnerAdapter(this, listStudentsSpinner);
+        AdapterSpinner adapter = new AdapterSpinner(this, listStudentsSpinner);
         spinnerStudent.setAdapter(adapter);
         spinnerStudent.setSelection(0);
 
@@ -86,7 +88,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                             Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        adapterStudents = new AdapterExclAluno(ClassRegistrationActivity.this, listStudentSelected);
+                        adapterStudents = new AdapterStudentOnDelete(ClassRegistrationActivity.this, listStudentSelected);
                         listViewStudents.setAdapter(adapterStudents);
                         listViewStudents.setVisibility(View.VISIBLE);
                         titleAnonymous.setVisibility(View.VISIBLE);
@@ -104,7 +106,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                         }
                         if (i != 1) {
                             listStudentSelected.add(studentSelected);
-                            adapterStudents = new AdapterExclAluno(ClassRegistrationActivity.this, listStudentSelected);
+                            adapterStudents = new AdapterStudentOnDelete(ClassRegistrationActivity.this, listStudentSelected);
                             listViewStudents.setAdapter(adapterStudents);
                             listViewStudents.setVisibility(View.VISIBLE);
                             titleAnonymous.setVisibility(View.VISIBLE);

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements Filterable {
+public class AdapterClickableList extends RecyclerView.Adapter<AdapterClickableList.ViewHolder> implements Filterable {
 
     private List<String> dataList;
     private List<String> dataListFull; // Lista completa para pesquisa
@@ -29,7 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
         void onItemLongClick(int position);
     }
 
-    public MyAdapter(Context context, List<String> data, final OnItemClickListener clickListener, final OnItemLongClickListener longClickListener) {
+    public AdapterClickableList(Context context, List<String> data, final OnItemClickListener clickListener, final OnItemLongClickListener longClickListener) {
         this.dataList = data;
         this.dataListFull = new ArrayList<>(data); // Cria uma cópia da lista original
         this.inflater = LayoutInflater.from(context);

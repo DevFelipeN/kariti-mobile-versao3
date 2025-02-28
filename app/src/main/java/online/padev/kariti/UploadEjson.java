@@ -20,10 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import online.padev.kariti.database.DataBaseKariti;
+
 public class UploadEjson {
     static Integer id_prova, id_aluno, resultCorrect, questao, respostaDada, questAnterior, respostaAnterior;
     static String mensagem, respostaDupla;
-    public static void enviarArquivosP(File arquivo, FileOutputStream fos, File dir, BancoDados bancoDados) {
+    public static void enviarArquivosP(File arquivo, FileOutputStream fos, File dir, DataBaseKariti dataBaseKariti) {
         Thread thread = new Thread(() -> {
             try {
                 String URL = "http://kariti.online/src/pages/test/correct_test/core2.php";
@@ -45,14 +47,14 @@ public class UploadEjson {
                     fos.write(inByte);
                 is.close();
                 fos.close();
-                UploadEjson.fimUpload(dir, bancoDados);
+                UploadEjson.fimUpload(dir, dataBaseKariti);
             } catch (Exception e) {
                 AnimationCorrectionActivity.encerra("erro");
             }
         });
         thread.start();
     }
-    public static void fimUpload(File dir, BancoDados bancoDados){
+    public static void fimUpload(File dir, DataBaseKariti dataBaseKariti){
         try {
             String situacao = Environment.getExternalStorageState();
             if (situacao.equals(Environment.MEDIA_MOUNTED)) {
@@ -89,14 +91,14 @@ public class UploadEjson {
                             questAnterior = questao;
                             respostaAnterior = respostaDada;
                         }
-                    }else if(!bancoDados.verificaExisteCorrecaoAluno(id_prova, id_aluno)){
+                    }else if(!dataBaseKariti.verificaExisteCorrecaoAluno(id_prova, id_aluno)){
                         respostasProva.put(-1, -1);
                     }else{
                         continue;
                     }
                     provas.add(new Object[]{id_prova, id_aluno, respostasProva});
                 }
-                if (bancoDados.cadastrarCorrecao(provas)){
+                if (dataBaseKariti.cadastrarCorrecao(provas)){
                     Log.e("kariti","passei 1");
                     AnimationCorrectionActivity.encerra("sucesso");
                 }else{

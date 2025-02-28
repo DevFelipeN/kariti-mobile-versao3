@@ -25,7 +25,7 @@ import java.util.Locale;
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.entity.Prova;
 
-public class GenerateCardDefaultActivity extends AppCompatActivity {
+public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
 
     EditText qtdQuest, qtdAlter, provaName, className, teacherName;
     Calendar calendar;

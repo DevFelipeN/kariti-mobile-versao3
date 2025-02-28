@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import online.padev.kariti.entity.Gabarito;
 import online.padev.kariti.entity.Prova;
 
-public class ProvaFastActivity extends AppCompatActivity {
+public class ProvaFastDefaultActivity extends AppCompatActivity {
 
     ImageButton back, iconHelp;
     Button btnNewCard, btnCorrect;
@@ -23,7 +23,7 @@ public class ProvaFastActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prova_fast);
+        setContentView(R.layout.activity_prova_fast_default);
 
         back = findViewById(R.id.imgBtnVoltaDescola);
         iconHelp = findViewById(R.id.iconHelp);
@@ -48,7 +48,7 @@ public class ProvaFastActivity extends AppCompatActivity {
 
     }
     private void startNewCard(){
-        Intent intent = new Intent(this, GenerateCardDefaultActivity.class);
+        Intent intent = new Intent(this, ProvaGenerateCardDefaultActivity.class);
         startActivity(intent);
     }
     public void startCorrection(){

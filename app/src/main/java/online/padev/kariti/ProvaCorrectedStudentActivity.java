@@ -18,49 +18,49 @@ import java.util.Objects;
 
 import online.padev.kariti.database.DataBaseKariti;
 
-public class DetalheCorrecao extends AppCompatActivity {
+public class ProvaCorrectedStudentActivity extends AppCompatActivity {
 
-    ImageButton voltar;
-    String nomeAluno, status;
-    Integer id_aluno, id_prova, qtdQuestoes;
+    ImageButton back;
+    String StudentName, status;
+    Integer id_student, id_prova, numQuestions;
     DataBaseKariti dataBaseKariti;
-    TextView alunoDetalhe, notaTotal;
-    List<String> respostasDadas, gabarito;
+    TextView textViewStudent, textViewNote;
+    List<String> responseStudent, gabarito;
     List<Float> peso;
-    TextView titulo;
-    float nota = 0;
+    TextView title;
+    float note = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhe_correcao);
+        setContentView(R.layout.activity_prova_corrected_student);
 
-        voltar = findViewById(R.id.imgBtnVoltar);
-        alunoDetalhe  = findViewById(R.id.textViewDetalheAluno);
-        notaTotal = findViewById(R.id.textViewNotaTotalDetalhe);
-        titulo = findViewById(R.id.toolbar_title);
+        back = findViewById(R.id.imgBtnVoltar);
+        textViewStudent = findViewById(R.id.textViewDetalheAluno);
+        textViewNote = findViewById(R.id.textViewNotaTotalDetalhe);
+        title = findViewById(R.id.toolbar_title);
 
         dataBaseKariti = new DataBaseKariti(this);
 
-        titulo.setText(String.format("%s","Detalhes"));
+        title.setText(String.format("%s","Detalhes"));
 
-        id_aluno = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
+        id_student = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         id_prova = getIntent().getExtras().getInt("id_prova");
-        nomeAluno = dataBaseKariti.pegaNomeAluno(id_aluno);
-        qtdQuestoes = dataBaseKariti.pegarQtdQuestoes(id_prova.toString());
+        StudentName = dataBaseKariti.pegaNomeAluno(id_student);
+        numQuestions = dataBaseKariti.pegarQtdQuestoes(id_prova.toString());
 
-        if (nomeAluno == null || qtdQuestoes == null){ //vericação caso ocorra exceções no Banco
+        if (StudentName == null || numQuestions == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        alunoDetalhe.setText(String.format("%s","Aluno: "+nomeAluno));
+        textViewStudent.setText(String.format("%s","Aluno: "+ StudentName));
         //Carrega todas as respostas ordenadas por questao
-        respostasDadas = dataBaseKariti.listarRespostasDadas(id_prova, id_aluno); // lista as respostas dos alunos em formato de letras
+        responseStudent = dataBaseKariti.listarRespostasDadas(id_prova, id_student); // lista as respostas dos alunos em formato de letras
         gabarito = dataBaseKariti.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
         peso = dataBaseKariti.listarNotasPorQuestao(id_prova);
 
-        if (respostasDadas == null || gabarito == null || peso == null){ //vericação caso ocorra exceções no Banco
+        if (responseStudent == null || gabarito == null || peso == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -70,16 +70,16 @@ public class DetalheCorrecao extends AppCompatActivity {
         border.getPaint().setStrokeWidth(1); // Largura da borda
         border.getPaint().setStyle(Paint.Style.STROKE);
 
-        int numRespostas = respostasDadas.size(); //Quantidade de respostas cadastradas no BD
-        if (numRespostas < qtdQuestoes){ //Caso quantidade de respostas dadas menor q de questões
-            for (int a = numRespostas; a < qtdQuestoes; a++){
-                respostasDadas.add(a, "-"); //Aumenta o tamanho da lista até o tamanho da questões
+        int numResponseStudent = responseStudent.size(); //Quantidade de respostas cadastradas no BD
+        if (numResponseStudent < numQuestions){ //Caso quantidade de respostas dadas menor q de questões
+            for (int a = numResponseStudent; a < numQuestions; a++){
+                responseStudent.add(a, "-"); //Aumenta o tamanho da lista até o tamanho da questões
             }
         }
 
-        for(int x = 1; x <= qtdQuestoes; x++) {
-            if(gabarito.get(x-1).equals(respostasDadas.get(x-1))){
-                nota += peso.get(x-1);
+        for(int x = 1; x <= numQuestions; x++) {
+            if(gabarito.get(x-1).equals(responseStudent.get(x-1))){
+                note += peso.get(x-1);
                 status = "CERTA";
             }else {status = "ERRADA";}
 
@@ -98,7 +98,7 @@ public class DetalheCorrecao extends AppCompatActivity {
 
             // Cria outra célula para a nova linha para armazenar a resposta marcada pelo aluno
             TextView cell2 = new TextView(this);
-            cell2.setText(respostasDadas.get(x-1));
+            cell2.setText(responseStudent.get(x-1));
             cell2.setGravity(Gravity.CENTER);
             cell2.setTextSize(16);
             row.addView(cell2);
@@ -127,11 +127,10 @@ public class DetalheCorrecao extends AppCompatActivity {
             // Adiciona a nova linha à tabela
             tableLayout.addView(row);
         }
-        notaTotal.setText(String.format("Nota total obtida: %.2f pontos", nota));
+        textViewNote.setText(String.format("Nota total obtida: %.2f pontos", note));
 
 
-        voltar.setOnClickListener(view -> {
-            getOnBackPressedDispatcher();
+        back.setOnClickListener(view -> {
             finish();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -140,7 +139,5 @@ public class DetalheCorrecao extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 }

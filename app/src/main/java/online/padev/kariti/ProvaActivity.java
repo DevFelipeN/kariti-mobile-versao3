@@ -64,47 +64,53 @@ import online.padev.kariti.database.DataBaseKariti;
 
 public class ProvaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 100;
-    ImageButton voltar, iconeAjuda;
-    Button btnCadastrarProva, btnGerarCartao, btnCorrigirProva, btnViewProvas, editarProva;
+    ImageButton back, iconHelp;
+    Button btnRegistrationProva, btnGenerateCard, btnToCorrectProva, btnViewProvas, btnEditProva;
     DataBaseKariti dataBaseKariti;
-    TextView textViewTitulo;
+    TextView textViewTitle;
     Integer id_provaCaptured;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova);
 
-        voltar = findViewById(R.id.imgBtnVoltaDescola);
-        iconeAjuda = findViewById(R.id.iconHelp);
-        btnCadastrarProva = findViewById(R.id.buttonCadProva);
-        btnGerarCartao = findViewById(R.id.buttonGerarCatao);
-        btnCorrigirProva = findViewById(R.id.buttonCorrigirProva);
+        back = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelp = findViewById(R.id.iconHelp);
+        btnRegistrationProva = findViewById(R.id.buttonCadProva);
+        btnGenerateCard = findViewById(R.id.buttonGerarCatao);
+        btnToCorrectProva = findViewById(R.id.buttonCorrigirProva);
         btnViewProvas = findViewById(R.id.buttonVisuProva);
-        editarProva = findViewById(R.id.buttonEdicaoProva);
-        textViewTitulo = findViewById(R.id.toolbar_title);
+        btnEditProva = findViewById(R.id.buttonEdicaoProva);
+        textViewTitle = findViewById(R.id.toolbar_title);
 
         dataBaseKariti = new DataBaseKariti(this);
 
-        textViewTitulo.setText(String.format("%s","Prova"));
+        textViewTitle.setText(String.format("%s","Prova"));
 
-        iconeAjuda.setOnClickListener(v -> ajuda());
-        btnCadastrarProva.setOnClickListener(v -> carregarCadastroProva());
-        btnGerarCartao.setOnClickListener(v -> carregarTelaGerarCartao());
+        iconHelp.setOnClickListener(v -> dialogHelp());
+        btnRegistrationProva.setOnClickListener(v -> startRegistrationProva());
+        btnGenerateCard.setOnClickListener(v -> startGenerateCard());
         btnViewProvas.setOnClickListener(v -> startViewProvas());
-        btnCorrigirProva.setOnClickListener(v -> {
-            Boolean verificaProva = dataBaseKariti.verificaExisteProvaCadastrada();
-            if (verificaProva == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(verificaProva){
-                //carregaEtapaCorrecao();//Versao 1
-                carregaEtapaCorrecao2();//Versao 2
-            }else{
-                aviso("provas cadastradas");
+        btnToCorrectProva.setOnClickListener(v -> {
+            btnToCorrectProva.setEnabled(false);
+            try {
+                Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaCadastrada();
+                if (checkExistsProva == null) {
+                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (checkExistsProva) {
+                    displayOptionsToCorrect();
+                } else {
+                    notice("provas cadastradas");
+                }
+            } catch (Exception e){
+                Log.e("kariti", e.toString());
+            } finally {
+                btnToCorrectProva.setEnabled(true);
             }
         });
-        voltar.setOnClickListener(v -> finish());
+        back.setOnClickListener(v -> finish());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -112,48 +118,69 @@ public class ProvaActivity extends AppCompatActivity {
             }
         });
     }
-    private void carregarCadastroProva(){
-        Boolean verificaTurma = dataBaseKariti.verificaExisteTurmas();
-        if (verificaTurma == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            return;
+    private void startRegistrationProva(){
+        btnRegistrationProva.setEnabled(false);
+        try {
+            Boolean checkExistsClass = dataBaseKariti.verificaExisteTurmas();
+            if (checkExistsClass == null) {
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (checkExistsClass) {
+                Intent intent = new Intent(this, ProvaRegistrationActivity.class);
+                startActivity(intent);
+            } else notice("turmas cadastradas");
+        } catch (Exception e) {
+            Log.e("kariti", e.toString());
+        } finally {
+            btnRegistrationProva.setEnabled(true);
         }
-        if(verificaTurma){
-            Intent intent = new Intent(this, CadProvaActivity.class);
-            startActivity(intent);
-        }else aviso("turmas cadastradas");
     }
-    private void carregarTelaGerarCartao(){
-        Boolean verificaProvaCad = dataBaseKariti.verificaExisteProvaCadastrada();
-        if (verificaProvaCad == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (verificaProvaCad) {
-            Intent intent = new Intent(this, GenerateCardsActivity.class);
-            intent.putExtra("endereco", 2);
-            startActivity(intent);
-        }else{
-            aviso("provas cadastradas");
+    private void startGenerateCard(){
+        btnGenerateCard.setEnabled(false);
+        try {
+            Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaCadastrada();
+            if (checkExistsProva == null) {
+                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (checkExistsProva) {
+                Intent intent = new Intent(this, ProvaGenerateCardRegisteredActivity.class);
+                intent.putExtra("endereco", 2);
+                startActivity(intent);
+            } else {
+                notice("provas cadastradas");
+            }
+        } catch (Exception e){
+            Log.e("kariti", e.toString());
+        } finally {
+            btnGenerateCard.setEnabled(true);
         }
     }
     private void startViewProvas(){
-        Boolean existsProva = dataBaseKariti.verificaExisteProvaCadastrada();
-        if(existsProva){
-            Intent intent = new Intent(this, VisualProvaActivity2.class);
-            startActivity(intent);
-        }else{
-            aviso("provas cadastradas");
+        btnViewProvas.setEnabled(false);
+        try {
+            Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaCadastrada();
+            if (checkExistsProva) {
+                Intent intent = new Intent(this, ProvaViewActivity.class);
+                startActivity(intent);
+            } else {
+                notice("provas cadastradas");
+            }
+        } catch (Exception e){
+            Log.e("kariti", e.toString());
+        } finally {
+            btnViewProvas.setEnabled(true);
         }
     }
-    private void aviso(String descricao){
+    private void notice(String descricao){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Atenção!");
         builder.setMessage("Não encontramos "+descricao+" para essa escola. Para ter acesso a essa opção é necessário ter "+descricao+".");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    private void ajuda() {
+    private void dialogHelp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
         builder.setMessage("Tela principal de prova.\n\n" +
@@ -164,7 +191,7 @@ public class ProvaActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    private void carregaEtapaCorrecao2() {
+    private void displayOptionsToCorrect() {
         // Inflar o layout customizado
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.correction_with_opencv, null);
@@ -183,21 +210,19 @@ public class ProvaActivity extends AppCompatActivity {
         dialog.show();
 
         buttonCameraOpenCV.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), CameraxAndOpencv.class);
+            Intent intent = new Intent(this, CameraxAndOpencv.class);
             startActivity(intent);
             dialog.dismiss();
         });
 
         buttonFileDevice.setOnClickListener(v -> {
-            abrirArquivos();
+            openFiles();
             dialog.dismiss();});
 
-        closedCorrect.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        closedCorrect.setOnClickListener(v -> dialog.dismiss());
     }
 
-    private void abrirArquivos(){
+    private void openFiles(){
         try {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.setType("*/*");
@@ -223,14 +248,14 @@ public class ProvaActivity extends AppCompatActivity {
             public void run() {
                 super.run();
                 //mensagem(handler, "Correção em andamento...");
-                processarArquivos(requestCode, resultCode, data, handler);
+                processFiles(requestCode, resultCode, data, handler);
             }
         }.start();
         if(data != null){
-            iniciaAnimacaoCorrecao();
+            startAnimationCorrect();
         }
     }
-    private void processarArquivos(int requestCode, int resultCode, @Nullable Intent data, Handler handler){
+    private void processFiles(int requestCode, int resultCode, @Nullable Intent data, Handler handler){
         try {
             if (requestCode == REQUEST_CODE_OPEN_DOCUMENT && resultCode == RESULT_OK) {
                 if (data != null) {
@@ -239,13 +264,13 @@ public class ProvaActivity extends AppCompatActivity {
                         int count = data.getClipData().getItemCount();
                         for (int i = 0; i < count; i++) {
                             Uri uri = data.getClipData().getItemAt(i).getUri();
-                            analisesFileType(uri);
+                            analysisFileType(uri);
                         }
                     }
                     //Caso somente um arquivo seja selecionado
                     if (data.getData() != null) {
                         Uri uri = data.getData();
-                        analisesFileType(uri);
+                        analysisFileType(uri);
                     }
                 }else{
                     return;
@@ -253,39 +278,14 @@ public class ProvaActivity extends AppCompatActivity {
             }else{
                 return;
             }
-            /*
-            if (!Compactador.listCartoes.isEmpty()) {
-                try {
-                    File fileZip = creatDirectoreZip();
-                    File directoreImgs = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-                    if(Compactador.compactador(directoreImgs, fileZip.getAbsolutePath())){
-                        listCartoes.clear();
-                        try {
-                            File dir = getCacheDir();
-                            File fileJson = getOutputJson(dir);
-                            UploadEjson.enviarArquivosP(fileZip, new FileOutputStream(fileJson), dir, bancoDados);
-                        } catch (Exception e){
-                            Log.e("Kariti", "(Erro ao tentar enviar arquivo zip para correção ou baixar Json) "+e.getMessage());
-                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }else Toast.makeText(this, "Erro de Compactação", Toast.LENGTH_SHORT).show();
-                }catch (Exception e){
-                    Log.e("kariti",e.getMessage());
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-             */
             AnimationCorrectionActivity.encerra("Correcao finalizada");
-            mensagem(handler, "Correção finalizada!!");
+            notifyFinallyCorrection(handler);
         }catch (Exception e){
-            Log.e("ERRO", "ERRO AQUI44!!: "+e.toString());
+            Log.e("ERRO", "ERRO AQUI44!!: "+e);
         }
     }
-    private void mensagem(Handler handler, String msg){
+    private void notifyFinallyCorrection(Handler handler){
         if (!isFinishing() && !isDestroyed()) {
-            Log.e("tempo", "Fim");
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -312,12 +312,12 @@ public class ProvaActivity extends AppCompatActivity {
                     buttonYes.setOnClickListener(v -> {
                         String[] x = dataBaseKariti.pegarDadosProva(id_provaCaptured);
                         String nameProva = x[0];
-                        String id_turma = x[1];
-                        String nameTurma = dataBaseKariti.pegarNomeTurma(id_turma);
-                        Intent intent = new Intent(getApplicationContext(), VisualProvaCorrigidaActivity.class);
+                        String id_class = x[1];
+                        String nameClass = dataBaseKariti.pegarNomeTurma(id_class);
+                        Intent intent = new Intent(getApplicationContext(), ProvaCorrectedActivity.class);
                         intent.putExtra("id_prova", id_provaCaptured);
                         intent.putExtra("prova", nameProva);
-                        intent.putExtra("turma", nameTurma);
+                        intent.putExtra("turma", nameClass);
                         startActivity(intent);
                         dialog.dismiss();
                     });
@@ -330,7 +330,7 @@ public class ProvaActivity extends AppCompatActivity {
         }
     }
 
-    public void processesImage(Bitmap bitmap){
+    public void processImage(Bitmap bitmap){
         try {
             //Converte para Mat
             Mat mat = new Mat();
@@ -619,7 +619,7 @@ public class ProvaActivity extends AppCompatActivity {
 
     }
 
-    public void iniciaAnimacaoCorrecao(){
+    private void startAnimationCorrect(){
         Intent intent = new Intent(getApplicationContext(), AnimationCorrectionActivity.class);
         startActivity(intent);
     }
@@ -674,7 +674,7 @@ public class ProvaActivity extends AppCompatActivity {
         if (inputStream != null) {
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             if (bitmap != null) {
-                processesImage(bitmap);
+                processImage(bitmap);
             }
         }
     }
@@ -702,7 +702,7 @@ public class ProvaActivity extends AppCompatActivity {
                     Log.e("ERRO", "ERRO AQUI!!99999: "+e.toString());
                     continue;
                 }
-                processesImage(bitmap);
+                processImage(bitmap);
                 // Fechar a página
                 page.close();
             }
@@ -736,7 +736,7 @@ public class ProvaActivity extends AppCompatActivity {
                         byte[] imageData = outputStream.toByteArray();
                         Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
                         if (bitmap != null) {
-                            processesImage(bitmap);
+                            processImage(bitmap);
                         }
                         outputStream.close();
                     } else {
@@ -755,7 +755,7 @@ public class ProvaActivity extends AppCompatActivity {
         }
     }
 
-    private void analisesFileType(Uri uri){
+    private void analysisFileType(Uri uri){
         String mimeType = getContentResolver().getType(uri);
         //Caso o arquivo selecionado seja uma IMAGEM
         if (mimeType != null && mimeType.startsWith("image/")){

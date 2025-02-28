@@ -37,12 +37,12 @@ import java.util.Arrays;
 import java.util.List;
 
 //faz download das folhas de respostas a serem preenchidas
-public class DownloadCartoes {
+public class DownloadCartao {
     File arquivoCsv;
     Context context;
     String filePdf;
 
-    public DownloadCartoes(File arquivoCsv, Context context, String filePdf) {
+    public DownloadCartao(File arquivoCsv, Context context, String filePdf) {
         this.context = context;
         this.arquivoCsv = arquivoCsv;
         this.filePdf = filePdf;

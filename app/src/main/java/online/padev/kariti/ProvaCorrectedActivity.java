@@ -33,7 +33,7 @@ import online.padev.kariti.entity.Prova;
 import online.padev.kariti.entity.Student;
 import online.padev.kariti.database.DataBaseKariti;
 
-public class CorrectionReportActivity extends AppCompatActivity {
+public class ProvaCorrectedActivity extends AppCompatActivity {
     ImageButton toGoBack;
     Button btnGenerateCorrectionReport;
     List<String> answersGiven;
@@ -48,7 +48,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visual_prova_corrigida);
+        setContentView(R.layout.activity_prova_corrected);
 
         toGoBack = findViewById(R.id.imgBtnVoltar);
         btnGenerateCorrectionReport = findViewById(R.id.buttonBaixarResultado);
@@ -159,7 +159,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
                     return;
                 }
                 if(!checkStatusCorrection2){
-                    Intent intent = new Intent(this, DetalheCorrecao.class);
+                    Intent intent = new Intent(this, ProvaCorrectedStudentActivity.class);
                     intent.putExtra("id_aluno", v.getId());
                     intent.putExtra("id_prova", prova.getId_prova());
                     startActivity(intent);
@@ -226,7 +226,7 @@ public class CorrectionReportActivity extends AppCompatActivity {
         }
     }
     public void PopMenu(View v){
-        v.setOnClickListener(view -> Toast.makeText(CorrectionReportActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
+        v.setOnClickListener(view -> Toast.makeText(ProvaCorrectedActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
     }
 
 

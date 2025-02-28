@@ -293,7 +293,7 @@ public class GabaritoActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private void generatCards() {
-        Intent intent = new Intent(this, GenerateCardsActivity.class);
+        Intent intent = new Intent(this, ProvaGenerateCardRegisteredActivity.class);
         intent.putExtra("prova", dadosProva.getNameProva());
         intent.putExtra("id_turma", dadosProva.getId_class());
         intent.putExtra("endereco", 1);

@@ -72,7 +72,7 @@ public class WelcomeActivity extends AppCompatActivity {
      * Este método carrega a opção de prova rápida
      */
     private void startProvaDefault(){
-        Intent intent = new Intent(this, ProvaFastActivity.class);
+        Intent intent = new Intent(this, ProvaFastDefaultActivity.class);
         startActivity(intent);
     }
 }

@@ -34,7 +34,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.emails.EnviarCodigo;
+import online.padev.kariti.emails.SendCodeValidation;
 import online.padev.kariti.utils.GenerateCodeValidation;
 import online.padev.kariti.utils.CheckConnectionInternet;
 
@@ -46,7 +46,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private ImageButton hidePassword2;
     private String name, email, password, confirmPassword, code;
     private DataBaseKariti dataBase;
-    private EnviarCodigo sendCode;
+    private SendCodeValidation sendCode;
     private GenerateCodeValidation generateCode;
     TextView textViewBackup;
 
@@ -67,7 +67,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
         //cria uma instancia de outras classes
         dataBase = new DataBaseKariti(this);
-        sendCode = new EnviarCodigo();
+        sendCode = new SendCodeValidation();
         generateCode = new GenerateCodeValidation();
 
         btnRegistration.setOnClickListener(v ->{

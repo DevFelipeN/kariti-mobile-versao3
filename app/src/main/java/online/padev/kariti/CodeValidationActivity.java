@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.emails.EnviarCodigo;
+import online.padev.kariti.emails.SendCodeValidation;
 import online.padev.kariti.utils.GenerateCodeValidation;
 
 public class CodeValidationActivity extends AppCompatActivity {
@@ -24,7 +24,7 @@ public class CodeValidationActivity extends AppCompatActivity {
     private TextView textViewTime, textViewResendCode;
     private String v1, v2, v3, v4, nameUser, password, email, code;
     private GenerateCodeValidation generateCode;
-    private EnviarCodigo sendCode;
+    private SendCodeValidation sendCode;
     private static final long WAITING_TIME = 60000;
     DataBaseKariti dataBase;
 
@@ -42,7 +42,7 @@ public class CodeValidationActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
         generateCode = new GenerateCodeValidation();
-        sendCode = new EnviarCodigo();
+        sendCode = new SendCodeValidation();
 
         //pega os dados mandados por intent de outra activity
         int identifier = getIntent().getExtras().getInt("identificador");

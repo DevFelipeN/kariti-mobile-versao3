@@ -1,8 +1,6 @@
 package online.padev.kariti.emails;
 
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.io.File;
@@ -22,7 +20,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-public class EnviarBackup {
+public class SendBackup {
 
     /**
      * Este método é responsável por enviar um e-mail ao usuário

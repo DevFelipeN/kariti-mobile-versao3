@@ -35,7 +35,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.emails.EnviarBackup;
+import online.padev.kariti.emails.SendBackup;
 import online.padev.kariti.utils.CheckConnectionInternet;
 
 public class SchoolActivity extends AppCompatActivity {
@@ -335,8 +335,8 @@ public class SchoolActivity extends AppCompatActivity {
             return false;
         }
 
-        EnviarBackup enviarBackup = new EnviarBackup();
-        return enviarBackup.enviaBackup(email, fileZip);
+        SendBackup sendBackup = new SendBackup();
+        return sendBackup.enviaBackup(email, fileZip);
     }
 
     /**

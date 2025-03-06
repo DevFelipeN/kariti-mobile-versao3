@@ -13,7 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class EnviarCodigo {
+public class SendCodeValidation {
 
     public Boolean enviaCodigo(String email, String codigo) {
         Properties prop = System.getProperties();

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.emails.EnviarCodigo;
+import online.padev.kariti.emails.SendCodeValidation;
 import online.padev.kariti.utils.GenerateCodeValidation;
 import online.padev.kariti.utils.CheckConnectionInternet;
 
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     ImageButton btnHidePassword;
     DataBaseKariti dataBase;
     CodeValidationActivity validationCodeActivity;
-    EnviarCodigo sendCode;
+    SendCodeValidation sendCode;
     GenerateCodeValidation generateCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         btnHidePassword = findViewById(R.id.senhaoculta);
 
         dataBase = new DataBaseKariti(this);
-        sendCode = new EnviarCodigo();
+        sendCode = new SendCodeValidation();
         generateCode = new GenerateCodeValidation();
         validationCodeActivity = new CodeValidationActivity();
 

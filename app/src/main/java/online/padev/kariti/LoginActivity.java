@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarCodigo;
+import online.padev.kariti.utils.GenerateCodeValidation;
+import online.padev.kariti.utils.CheckConnectionInternet;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     DataBaseKariti dataBase;
     CodeValidationActivity validationCodeActivity;
     EnviarCodigo sendCode;
-    GerarCodigoValidacao generateCode;
+    GenerateCodeValidation generateCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
         sendCode = new EnviarCodigo();
-        generateCode = new GerarCodigoValidacao();
+        generateCode = new GenerateCodeValidation();
         validationCodeActivity = new CodeValidationActivity();
 
         btnAccess.setOnClickListener(v -> {
@@ -78,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         forgetPassword.setOnClickListener(v -> {
             forgetPassword.setEnabled(false);
             try {
-                if (!VerificaConexaoInternet.verificaConexao(this)) {
+                if (!CheckConnectionInternet.verificaConexao(this)) {
                     Toast.makeText(this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
                     return;
                 }

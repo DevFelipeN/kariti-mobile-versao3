@@ -1,10 +1,10 @@
-package online.padev.kariti;
+package online.padev.kariti.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 
-public class VerificaConexaoInternet{
+public class CheckConnectionInternet {
 
     public static boolean verificaConexao(Context context) {
 

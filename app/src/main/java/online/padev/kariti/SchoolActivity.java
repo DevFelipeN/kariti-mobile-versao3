@@ -36,6 +36,7 @@ import java.util.zip.ZipOutputStream;
 
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarBackup;
+import online.padev.kariti.utils.CheckConnectionInternet;
 
 public class SchoolActivity extends AppCompatActivity {
     ImageButton iconExit, iconHelp;
@@ -264,7 +265,7 @@ public class SchoolActivity extends AppCompatActivity {
         dialog.show();
 
         buttonYes.setOnClickListener(v -> {
-            if (!VerificaConexaoInternet.verificaConexao(this)) {
+            if (!CheckConnectionInternet.verificaConexao(this)) {
                 Toast.makeText(this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }

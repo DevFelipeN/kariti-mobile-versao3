@@ -35,6 +35,8 @@ import java.util.zip.ZipInputStream;
 
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.EnviarCodigo;
+import online.padev.kariti.utils.GenerateCodeValidation;
+import online.padev.kariti.utils.CheckConnectionInternet;
 
 public class UserRegistrationActivity extends AppCompatActivity {
 
@@ -45,7 +47,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private String name, email, password, confirmPassword, code;
     private DataBaseKariti dataBase;
     private EnviarCodigo sendCode;
-    private GerarCodigoValidacao generateCode;
+    private GenerateCodeValidation generateCode;
     TextView textViewBackup;
 
     @Override
@@ -66,12 +68,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
         //cria uma instancia de outras classes
         dataBase = new DataBaseKariti(this);
         sendCode = new EnviarCodigo();
-        generateCode = new GerarCodigoValidacao();
+        generateCode = new GenerateCodeValidation();
 
         btnRegistration.setOnClickListener(v ->{
             btnRegistration.setEnabled(false);
             try {
-                if (!VerificaConexaoInternet.verificaConexao(this)) {
+                if (!CheckConnectionInternet.verificaConexao(this)) {
                     Toast.makeText(UserRegistrationActivity.this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
                     return;
                 }

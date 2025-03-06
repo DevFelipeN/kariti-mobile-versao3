@@ -1,8 +1,8 @@
-package online.padev.kariti;
+package online.padev.kariti.utils;
 
 import java.util.Random;
 
-public class GerarCodigoValidacao {
+public class GenerateCodeValidation {
     /**
      * Este método gera um cogigo aleatório de 4 digitos para validação de cadastro de usuário
      * @return retorna uma string de 4 digítos numéricos

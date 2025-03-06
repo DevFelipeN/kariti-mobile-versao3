@@ -58,6 +58,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import online.padev.kariti.correction.BitmapLuminanceSource;
+import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
 import online.padev.kariti.entity.Prova;
 import online.padev.kariti.database.DataBaseKariti;
@@ -210,7 +212,7 @@ public class ProvaActivity extends AppCompatActivity {
         dialog.show();
 
         buttonCameraOpenCV.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CameraxAndOpencv.class);
+            Intent intent = new Intent(this, CameraxAndOpencvActivity.class);
             startActivity(intent);
             dialog.dismiss();
         });
@@ -497,6 +499,7 @@ public class ProvaActivity extends AppCompatActivity {
 
         return enhancedImage;
     }
+    /*
     class Circle {
         double x, y, radius, xR, yR, wR, hR, perimeter;
         MatOfPoint contour;
@@ -513,6 +516,8 @@ public class ProvaActivity extends AppCompatActivity {
             this.perimeter = perimeter;
         }
     }
+
+     */
     public static boolean isInside(Circle circExt, Circle circInt) {
         double xInt = circInt.x, yInt = circInt.y;
         double xExtI = circExt.xR, yExtI = circExt.yR;

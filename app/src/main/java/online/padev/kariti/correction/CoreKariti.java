@@ -366,8 +366,7 @@ public class CoreKariti {
      */
     private boolean compareSquaresAndCircles(){
         try {
-            double thresholdY = height * limit;
-            double thresholdX = width * limit;
+            double threshold = height * limit;
 
             // ================ Intera sob todos os quadrados das questões =======================================================
             for (int i = 0; i < squaresQuestions.size(); i++) {
@@ -375,7 +374,7 @@ public class CoreKariti {
                 Point questionY = squaresQuestions.get(i);
                 for (int j = 0; j < markedCircles.size(); j++) {
                     Circle circleY = markedCircles.get(j);
-                    if (getProportion(questionY.y, circleY.y, thresholdY)) { // Se o quadrado e circulo atual estiverem na mesma linha aproximada em y
+                    if (getProportion(questionY.y, circleY.y, threshold)) { // Se o quadrado e circulo atual estiverem na mesma linha aproximada em y
                         box_rows.add(new Point(circleY.x, circleY.y)); // Adiciona o centro de massa do circulo atual na lista
                     }
                 }
@@ -386,13 +385,17 @@ public class CoreKariti {
                 squaresCircles.add(sc);
             }
 
+            Log.e("correction", "A"+ String.valueOf(squaresCircles.size()));
+
             int[] letters = new int[8];
             for (int l = 0; l < 8; l++) {
                 letters[l] = l + 1;
             }
+
             for (int i = 0; i < squaresCircles.size(); i++) {
                 SquaresCircles item = squaresCircles.get(i);
                 List<Point> listCirc = item.listCircles;
+                Log.e("correction", listCirc.toString());
                 if (listCirc.size() > 1) {
                     String markings = "";
                     boolean[] uniqueAlt = new boolean[squaresAltenatives.size()]; // controla a repetição de alternativas para uma mesma questão
@@ -400,7 +403,7 @@ public class CoreKariti {
                         Point circ = listCirc.get(j);
                         for (int a = 0; a < squaresAltenatives.size(); a++) {
                             Point alt = squaresAltenatives.get(a);
-                            if (getProportion(alt.x, circ.x, thresholdX)) { // verifica se o circulo atual pertence a alternativa atual
+                            if (getProportion(alt.x, circ.x, threshold)) { // verifica se o circulo atual pertence a alternativa atual
                                 if (!uniqueAlt[a]) { // Evita de repetir a mesma alternativa para a mesma questão
                                     markings = markings + String.valueOf(letters[a]);
                                     paintCircle(circ, letters[a], i);
@@ -410,28 +413,32 @@ public class CoreKariti {
                             }
                         }
                     }
-                    //Log.e("correcao", "q: "+listCirc.size());
-                    //Log.e("correcao","markings: "+markings);
+                    if (markings.isEmpty()){ // Evita de dar erro caso nenhuma marcação seja associada a nenhuma alternativa
+                        markings = "0";
+                    }
                     gabaritoResult.put(i + 1, Integer.valueOf(markings));
                 } else {
                     Point circ = listCirc.get(0);
                     if (circ.x != 0) {
+                        int resp = 0;
                         for (int j = 0; j < squaresAltenatives.size(); j++) {
                             Point alt = squaresAltenatives.get(j);
-                            if (getProportion(alt.x, circ.x, thresholdX)) {
-                                gabaritoResult.put(i + 1, letters[j]);
+                            if (getProportion(alt.x, circ.x, threshold)) {
+                                resp = letters[j];
                                 paintCircle(circ, letters[j], i);
                                 break;
                             }
                         }
+                        gabaritoResult.put(i + 1, resp);
                     } else {
                         gabaritoResult.put(i + 1, 0);
                     }
                 }
             }
+            Log.e("correction", "B"+String.valueOf(gabaritoResult.size()));
             return true;
         }catch (Exception e){
-            Log.e("correcao", "E7: "+e.toString());
+            Log.e("correcao", "E7: "+e);
             return false;
         }
     }

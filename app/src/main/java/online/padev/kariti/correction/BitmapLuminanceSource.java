@@ -1,4 +1,4 @@
-package online.padev.kariti;
+package online.padev.kariti.correction;
 
 import android.graphics.Bitmap;
 import com.google.zxing.LuminanceSource;

@@ -119,11 +119,6 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
             solicitaPermissaoNotificacao();
             btnGenerateCard.setEnabled(false);
             try {
-                if (provaName.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 if (qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")) {
                     Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
                     return;

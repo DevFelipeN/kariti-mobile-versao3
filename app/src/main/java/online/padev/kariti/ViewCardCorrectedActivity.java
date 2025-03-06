@@ -115,57 +115,69 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
     }
 
     private void startCamera(){
-        Intent intent = new Intent(this, CameraxAndOpencv.class);
+        Intent intent = new Intent(this, CameraxAndOpencvActivity.class);
         startActivity(intent);
         finish();
     }
 
     private void resultCorrectedBD(){
-        List<Gabarito> listGabarito = dataBase.listarDadosGabarito(id_prova);
-        List<String> responseStudent = dataBase.listarRespostasDadas(id_prova, id_student);
+        try {
+            List<Gabarito> listGabarito = dataBase.listarDadosGabarito(id_prova);
+            List<String> responseStudent = dataBase.listarRespostasDadas(id_prova, id_student);
 
-        for (int i = 0; i < listGabarito.size(); i++){
-            Gabarito g = listGabarito.get(i); // g contém questao, resposta e nota, respectivamente
-            char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResponse())) - 1);
-            if (responseStudent.get(i).equals(String.valueOf(r))){
-                noteStudent += g.getNote();
-                numCorrect += 1;
-            }else{
-                numIncorrect += 1;
+            for (int i = 0; i < listGabarito.size(); i++) {
+                Gabarito g = listGabarito.get(i); // g contém questao, resposta e nota, respectivamente
+                char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResponse())) - 1);
+                if (responseStudent.get(i).equals(String.valueOf(r))) {
+                    noteStudent += g.getNote();
+                    numCorrect += 1;
+                } else {
+                    numIncorrect += 1;
+                }
             }
+        } catch (Exception  e){
+            Log.e("kariti", e.toString());
         }
     }
 
     private void resultCorrectedDefault(){
-        HashMap<Integer, Integer> gabaritoResult = (HashMap<Integer, java.lang.Integer>) getIntent().getSerializableExtra("resultGabarito");
-        String gabarito = getIntent().getExtras().getString("gabarito");
+        try {
+            HashMap<Integer, Integer> gabaritoResult = (HashMap<Integer, java.lang.Integer>) getIntent().getSerializableExtra("resultGabarito");
+            String gabarito = getIntent().getExtras().getString("gabarito");
 
-        for (Map.Entry<Integer, Integer> entry : gabaritoResult.entrySet()){
-            int responseStudent = entry.getValue();
-            int responseGabarito = gabarito.charAt(entry.getKey() - 1) - '0';
-            if (responseStudent == responseGabarito){
-                noteStudent += 1;
-                numCorrect += 1;
-            }else{
-                numIncorrect += 1;
+            for (Map.Entry<Integer, Integer> entry : gabaritoResult.entrySet()) {
+                int responseStudent = entry.getValue();
+                int responseGabarito = gabarito.charAt(entry.getKey() - 1) - '0';
+                if (responseStudent == responseGabarito) {
+                    noteStudent += 1;
+                    numCorrect += 1;
+                } else {
+                    numIncorrect += 1;
+                }
             }
+        } catch (Exception e){
+            Log.e("kariti", e.toString());
         }
     }
     private void deleteAllImages() {
-        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
+        try {
+            File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
 
-        if (externalDir.exists() && externalDir.isDirectory()) {
-            File[] files = externalDir.listFiles(); // Lista todos os arquivos no diretório
+            if (externalDir.exists() && externalDir.isDirectory()) {
+                File[] files = externalDir.listFiles(); // Lista todos os arquivos no diretório
 
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile() && file.delete()) {
-                        Log.e("kariti", "Diretório limpo: " + file.getName());
-                    } else {
-                        Log.e("kariti", "Erro ao tentar limpar diretório: " + file.getName());
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isFile() && file.delete()) {
+                            Log.e("kariti", "Diretório limpo: " + file.getName());
+                        } else {
+                            Log.e("kariti", "Erro ao tentar limpar diretório: " + file.getName());
+                        }
                     }
                 }
             }
+        } catch (Exception e){
+            Log.e("kariti", e.toString());
         }
     }
 }

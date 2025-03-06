@@ -35,7 +35,7 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
 
         btnNewCard.setOnClickListener(v -> startNewCard());
         btnCorrect.setOnClickListener(v -> startCorrection());
-        iconHelp.setOnClickListener(v -> Toast.makeText(this, "Implement Information", Toast.LENGTH_SHORT).show());
+        iconHelp.setOnClickListener(v -> help());
         
 
         back.setOnClickListener(v -> outputController());
@@ -51,8 +51,8 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProvaGenerateCardDefaultActivity.class);
         startActivity(intent);
     }
-    public void startCorrection(){
-        Intent intent = new Intent(getApplicationContext(), CameraxAndOpencv.class);
+    private void startCorrection(){
+        Intent intent = new Intent(getApplicationContext(), CameraxAndOpencvActivity.class);
         startActivity(intent);
     }
 
@@ -72,5 +72,16 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }else finish();
+    }
+
+    private void help() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Bem vindo(a) ao menu inicial de prova rápida. \n Aqui você pode gerar cartões respostas e corrigir seus cartões de maneira fácil e prática! \n\n" +
+                "• Na primeira opção você pode gerar um cartão, informando a quantidade de questões e alternativas da sua prova, em seguida imprimir a quantidade necessária para os alunos.\n\n" +
+                "• Na segunda opção você pode realizar a correção do cartão gerado na opção anterior, apenas apontando a câmera do Kariti para o cartão que por sua vez realiza a correção e exibe o resultado na sua tela.\n\n" +
+                "• Ao início de cada seção de correção será solicitado o preenchimento do gabarito da sua prova, com ele preenchido todos os cartões referentes a ele podem ser corrigidos sequencialmente. ");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

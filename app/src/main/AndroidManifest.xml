@@ -41,7 +41,7 @@
             android:name=".ViewCardCorrectedActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraxAndOpencv"
+            android:name=".CameraxAndOpencvActivity"
             android:exported="false" />
         <activity
             android:name=".AnimationCorrectionActivity"

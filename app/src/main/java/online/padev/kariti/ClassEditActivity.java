@@ -38,7 +38,7 @@ public class ClassEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_class);
+        setContentView(R.layout.activity_class_edit);
 
         listViewStudents = findViewById(R.id.listViewEditarTurma);
         editTxtClass = findViewById(R.id.editTextEditTurma);

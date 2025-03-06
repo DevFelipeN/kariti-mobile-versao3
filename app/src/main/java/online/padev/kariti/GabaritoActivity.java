@@ -375,7 +375,7 @@ public class GabaritoActivity extends AppCompatActivity {
         builder.show();
     }
     private void startCamera(){
-        Intent intent = new Intent(this, CameraxAndOpencv.class);
+        Intent intent = new Intent(this, CameraxAndOpencvActivity.class);
         startActivity(intent);
         finish();
     }

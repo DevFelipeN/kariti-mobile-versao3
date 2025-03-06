@@ -60,13 +60,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import online.padev.kariti.correction.BitmapLuminanceSource;
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
 import online.padev.kariti.entity.Gabarito;
 import online.padev.kariti.entity.Prova;
 import online.padev.kariti.database.DataBaseKariti;
 
-public class CameraxAndOpencv extends AppCompatActivity {
+public class CameraxAndOpencvActivity extends AppCompatActivity {
 
     private PreviewView camera;
     private ExecutorService cameraExecutor;

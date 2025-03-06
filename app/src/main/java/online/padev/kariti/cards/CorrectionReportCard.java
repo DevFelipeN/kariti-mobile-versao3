@@ -81,7 +81,7 @@ public class CorrectionReportCard {
 
             int pageWidth = 1754;
             int pageHeight = 1240;
-            int limitPage = 20;
+            int limitPage = 20; // limite de alunos por páginas
 
             if (prova.getNumQuestions() <= 10) {
                 pageWidth = 1240;
@@ -102,7 +102,7 @@ public class CorrectionReportCard {
             Bitmap icon_resized_incorrect = Bitmap.createScaledBitmap(bitmap_iconIncorrect, 20, 20, false);
 
             for (int i = 0; i < numPages; i++) {
-                int controllerPage = 0; // Controla o fluxo de cada página (garante a inserção do resultado de 20 alunos por página)
+                int controllerPage = 0; // Controla o fluxo de cada página (garante a inserção do resultado de limitPage alunos por página)
 
                 // ============== Inicia uma nova página ==============================================
                 PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
@@ -161,10 +161,7 @@ public class CorrectionReportCard {
                 // =================== Desenha resultado de correção por aluno ===================================
                 startX = 80;
                 startY = 260;
-                char[] alts = {'A', 'B', 'C', 'D', 'E', 'F'};
-                Random random = new Random();
 
-                //for (int al = 1; al <= 20; al++){
                 if (studentO == 0) {
                     for (int al = studentI; al < students.size(); al++) {
                         studentI += 1;
@@ -174,8 +171,12 @@ public class CorrectionReportCard {
                             studentsNotCorrect.add(students.get(al));
                             continue;
                         }
+
+                        //AQUII
+
+                        String studentName = students.get(al).getNameStudent();
                         canvas.drawLine(startX, startY, startX, startY + 40, paintLine); // desenha primeira linha na vestical
-                        canvas.drawText(students.get(al).getNameStudent(), startX + 10, startY + 30, paintText);
+                        canvas.drawText(formatNameStudent(studentName), startX + 10, startY + 30, paintText);
                         canvas.drawLine(380, startY, 380, startY + 40, paintLine); // desenha segunda linha na vestical
                         canvas.drawLine(480, startY, 480, startY + 40, paintLine);
                         List<String> studentResponses = dataBase.listarRespostasDadas(prova.getId_prova(), students.get(al).getId_student());
@@ -373,5 +374,13 @@ public class CorrectionReportCard {
         Gabarito g = gabarito.get(position);
         char respCorrect = (char) ('A' + g.getResponse() -1);
         return resp.equals(String.valueOf(respCorrect));
+    }
+
+    private String formatNameStudent(String name){
+        int nameLength = name.length();
+        if (nameLength > 30){
+            name = name.substring(0 , 27) + "...";
+        }
+        return name;
     }
 }

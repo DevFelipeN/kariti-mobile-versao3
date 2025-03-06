@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
+import online.padev.kariti.cards.CorrectionReportCard;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
         dataBase = new DataBaseKariti(this);
 
         //bancoDados.deletarCorrecao(61);
-        //bancoDados.deletarCorrecao(1);
+        //dataBase.deletarCorrecao(1);
         //bancoDados.deletarCorrecao(3);
 
 
@@ -49,7 +50,7 @@ public class WelcomeActivity extends AppCompatActivity {
           //t.insertCorrectionFiction(62, n);
         //}
 
-        //CorrectionReportCard createReport = new CorrectionReportCard(this, bancoDados, 62);
+        //CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, 62);
         //createReport.generateCorrectionReport(0);
     }
 

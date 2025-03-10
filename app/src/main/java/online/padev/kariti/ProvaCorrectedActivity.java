@@ -176,7 +176,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
                     requestPermissionStorage();
                 }else {
-                    generateCorrectionReport();
+                    dialogGenerateReport();
                 }
 
             }catch (Exception e) {
@@ -187,8 +187,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
 
         });
         toGoBack.setOnClickListener(view -> {
-            getOnBackPressedDispatcher();
-            finish();
+           finish();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -197,10 +196,26 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
             }
         });
     }
+    private void dialogGenerateReport(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Deseja gerar o relatório de correção de:")
+                .setItems(new String[]{"Todos os alunos", "Somente de alunos com prova corrigida"}, (dialog, which) -> {
+                    if (which == 0){
+                       generateCorrectionReport(0);
+                    } else if (which == 1){
+                        generateCorrectionReport(1);
+                    }
 
-    private void generateCorrectionReport(){
+                });
+        builder.show();
+    }
+
+
+
+    private void generateCorrectionReport(int typeReport){
         CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, prova.getId_prova());
-        boolean requestStatus = createReport.generateCorrectionReport(1);
+        boolean requestStatus = createReport.generateCorrectionReport(typeReport);
         if (requestStatus){
             notifySucessDownload();
         } else {
@@ -247,7 +262,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permisão concedida com sucesso", Toast.LENGTH_SHORT).show();
                 Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE concedida.");
-                generateCorrectionReport();
+                dialogGenerateReport();
             } else {
                 // Permissão negada
                 Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE negada.");
@@ -290,7 +305,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }else{
-            generateCorrectionReport();
+            dialogGenerateReport();
         }
     }
     private void notifyFailureDownload(){

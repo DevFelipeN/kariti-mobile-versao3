@@ -386,15 +386,16 @@ public class GabaritoActivity extends AppCompatActivity {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setTitle("ATENÇÃO!")
-                .setMessage("Este cartão é diferente do modelo de gabarito que você tem criado!\n\n" +
-                        "Para corrigir este cartão, você deve criar outro gabarito referente a esse modelo de cartão.")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setMessage("Este cartão é diferente do modelo de gabarito que você tem criado!\n" +
+                        "Para corrigir este cartão, você deve criar outro gabarito referente a esse modelo de cartão.\n\n" +
+                        "Deseja manter ou alterar o gabarito?")
+                .setPositiveButton("Alterar", (dialog, which) -> {
                     overlayView.setVisibility(View.GONE);
                     btnCadastrarProva.setVisibility(View.VISIBLE);
                     dialog.dismiss();
                 })
 
-                .setNegativeButton("Cancelar", (dialog, which) -> startCamera());
+                .setNegativeButton("Manter", (dialog, which) -> startCamera());
         android.app.AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -431,10 +432,13 @@ public class GabaritoActivity extends AppCompatActivity {
             CoreKariti core = new CoreKariti(matWarp, dadosProva, gabaritoDefault);
             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
             if (correction != null && !correction.isEmpty()){
-                deleteAllImages();
+                //deleteAllImages();
                 Bitmap imgWarp = matToBitmap(matWarp);
-                String nameCartao = "first_"+dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives();
-                String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
+
+                File s = new File(filePath);
+                String nameCartao = s.getName().replaceAll(".png", "");
+                //String nameCartao = dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives();
+                String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada pintada
                 startViewImageDefault(correction, gabaritoDefault, filePathPaint);
             } else {
                 startCamera();
@@ -487,8 +491,8 @@ public class GabaritoActivity extends AppCompatActivity {
         if (!externalDir.exists()) {
             externalDir.mkdirs();
         }
-
         File imageFile = new File(externalDir, name+".png");
+
         try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             outputStream.flush();

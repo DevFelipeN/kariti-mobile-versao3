@@ -151,7 +151,7 @@
     <string name="txtProva1">Prova 1</string>
     <string name="btnEnviarParaAluno">Enviar Para Aluno</string>
     <string name="btnEnviarParaProf">Enviar Para Professor</string>
-    <string name="btnBaixarProva">Baixar Resultado</string>
+    <string name="btnBaixarProva">Gerar Relatório</string>
     <string name="btnCompartilhar">Compartilhar</string>
     <string name="txtAcertos">Acertos</string>
     <string name="txtErros">Erros</string>

@@ -1,4 +1,4 @@
-package online.padev.kariti.correction;
+package online.padev.kariti.utils;
 
 import java.util.HashMap;
 import java.util.Random;

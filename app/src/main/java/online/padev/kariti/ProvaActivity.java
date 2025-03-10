@@ -93,6 +93,7 @@ public class ProvaActivity extends AppCompatActivity {
         btnRegistrationProva.setOnClickListener(v -> startRegistrationProva());
         btnGenerateCard.setOnClickListener(v -> startGenerateCard());
         btnViewProvas.setOnClickListener(v -> startViewProvas());
+
         btnToCorrectProva.setOnClickListener(v -> {
             btnToCorrectProva.setEnabled(false);
             try {
@@ -212,8 +213,7 @@ public class ProvaActivity extends AppCompatActivity {
         dialog.show();
 
         buttonCameraOpenCV.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CameraxAndOpencvActivity.class);
-            startActivity(intent);
+            notifyCorrectionOrganization();
             dialog.dismiss();
         });
 
@@ -499,25 +499,7 @@ public class ProvaActivity extends AppCompatActivity {
 
         return enhancedImage;
     }
-    /*
-    class Circle {
-        double x, y, radius, xR, yR, wR, hR, perimeter;
-        MatOfPoint contour;
 
-        Circle(double x, double y, double radius, double xR, double yR, double wR, double hR, MatOfPoint contour, double perimeter) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.xR = xR;
-            this.yR = yR;
-            this.wR = wR;
-            this.hR = hR;
-            this.contour = contour;
-            this.perimeter = perimeter;
-        }
-    }
-
-     */
     public static boolean isInside(Circle circExt, Circle circInt) {
         double xInt = circInt.x, yInt = circInt.y;
         double xExtI = circExt.xR, yExtI = circExt.yR;
@@ -791,4 +773,16 @@ public class ProvaActivity extends AppCompatActivity {
         return false;
     }
 
+    private void notifyCorrectionOrganization(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("ATENÇÃO");
+        builder.setMessage("Capture a imagem do cartão de cima, sobre superfície plana e com boa luminosidade\n");
+        builder.setPositiveButton("OK", (dialog, which) -> startCamera());
+        builder.show();
+    }
+    private void startCamera(){
+        Intent intent = new Intent(this, CameraxAndOpencvActivity.class);
+        startActivity(intent);
+    }
 }

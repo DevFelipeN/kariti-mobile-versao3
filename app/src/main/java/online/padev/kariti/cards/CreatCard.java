@@ -90,7 +90,7 @@ public class CreatCard {
                 paint.setAntiAlias(true);
                 paint.setTypeface(Typeface.create("DejaVu Sans", Typeface.NORMAL));
                 paint.setColor(Color.BLACK);
-                paint.setTextSize(26);
+                paint.setTextSize(24);
 
                 // ================ Monta o Cabeçalho da Prova ====================================================================
                 canvas.drawText("Aluno(a): " + student.getValue(), 80, 85, paint);
@@ -129,7 +129,8 @@ public class CreatCard {
                 canvas.drawText("Gerado por: Kariti", 60, 1720, paint);
 
                 // ======================== Adiciona mensagens de atenção ========================================
-                canvas.drawText("ATENÇÃO: NÃO RASURE ESTE CARTÃO", 80, 550, paint);
+                canvas.drawText("ATENÇÃO: Não rasure este cartão", 80, 530, paint);
+                canvas.drawText("Preencha os circulos completamente desta forma -> ", 158, 550, paint);
 
                 // ===================== fonte dos retângulos ==================================================
                 Paint paintRectangle = new Paint();
@@ -168,9 +169,17 @@ public class CreatCard {
 
                 // ================= fonte dos circulos das alternativas =======================================
                 Paint paintCircle = new Paint();
+                paintCircle.setColor(Color.BLACK);
+                paintCircle.setStyle(Paint.Style.FILL); // Apenas contorno
+                paintCircle.setStrokeWidth(2); // Espessura da borda do círculo
+
+                // Desenha o círculo pintado de referencia
+                canvas.drawCircle(545, 543, circleRadius, paintCircle);
+
                 paintCircle.setColor(Color.LTGRAY);
                 paintCircle.setStyle(Paint.Style.STROKE); // Apenas contorno
-                paintCircle.setStrokeWidth(2); // Espessura da borda do círculo
+
+
 
                 int questsAtual = 0;
                 if (prova.getNumQuestions() > 20) {

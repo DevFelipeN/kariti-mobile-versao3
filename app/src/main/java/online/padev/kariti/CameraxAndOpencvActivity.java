@@ -327,16 +327,15 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                         if (DataBaseKariti.USER_ID != null) { // Isso garante que esse tipo de cartão seja corrigido apenas com o usuário logado
 
                             id_provaCaptured = Integer.parseInt(a[0]);
+                            id_studentBD = Integer.parseInt(a[1]);
 
-                            if (!dataBase.verificaExisteProvaPId(id_provaCaptured)) {
+                            if (!dataBase.verificaExisteProvaPId(id_provaCaptured) || !dataBase.checkExistsStudent(id_studentBD) ) {
                                 mat.release();
                                 typeMessage = 1;
                                 finish();
                             }
 
                             prova = new Prova(id_provaCaptured, dataBase);
-
-                            id_studentBD = Integer.parseInt(a[1]);
 
                             //Versão 3
                             CoreKariti core = new CoreKariti(matWarp, prova, dataBase, id_studentBD);
@@ -413,6 +412,7 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
             if(!isActivityFinishing && isCorrectSucess){
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
+                mat.release();
                 if (prova.getId_prova() == 0){
                     Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
                     intent.putExtra("filePath", filePath);

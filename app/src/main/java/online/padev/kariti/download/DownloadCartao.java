@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -42,7 +43,7 @@ public class DownloadCartao {
     Context context;
     String filePdf;
 
-    public DownloadCartao(File arquivoCsv, Context context, String filePdf) {
+    public DownloadCartao(File arquivoCsv, Context context, String filePdf, PdfDocument pdfDocument) {
         this.context = context;
         this.arquivoCsv = arquivoCsv;
         this.filePdf = filePdf;

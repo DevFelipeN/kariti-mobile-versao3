@@ -58,7 +58,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
                 return;
             }
             if (!nameStudentBD.equals(nameStudentCurrent)){
-                Boolean checkStudentExists = dataBase.verificaExisteAlunoPNome(nameStudentCurrent);
+                Boolean checkStudentExists = dataBase.checkExistsStudent(nameStudentCurrent);
                 if (checkStudentExists == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;

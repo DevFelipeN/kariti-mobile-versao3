@@ -81,7 +81,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
             nameStudent = dataBase.pegaNomeAluno(id_student);
 
             if (nameProva == null || nameStudent == null || nameProva.isEmpty() || nameStudent.isEmpty()){
-                Toast.makeText(this, "Algo deu errado por aqui!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Falha ao mostrar correção!", Toast.LENGTH_SHORT).show();
                 finish();
             }
             textViewNameProva.setText(String.format("%s", "Prova: "+ nameProva));

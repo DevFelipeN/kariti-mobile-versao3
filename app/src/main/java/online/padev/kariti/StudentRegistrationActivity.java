@@ -39,7 +39,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(StudentRegistrationActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Boolean checkStudent = dataBase.verificaExisteAlunoPNome(nameStudent);
+                Boolean checkStudent = dataBase.checkExistsStudent(nameStudent);
                 if (checkStudent == null) {
                     Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;

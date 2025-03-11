@@ -30,13 +30,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.download.DownloadPDF;
 import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Student;
 
 public class CreatCard {
     Context context;
@@ -44,7 +48,8 @@ public class CreatCard {
     Prova prova;
     private double note;
     private String className, teacher;
-    Map<Integer, String> students;
+    //Map<Integer, String> students;
+    List<Student> students;
 
     public CreatCard(Prova prova, DataBaseKariti dataBase, Context context){
         this.prova = prova;
@@ -61,8 +66,8 @@ public class CreatCard {
         this.context = context;
         this.className = className;
         this.teacher = teacher;
-        students = new HashMap<>();
-        students.put(prova.getNumAlternatives(), ""); // Alterando dado do QRcode
+        students = new ArrayList<>();
+        students.add(new Student(prova.getNumAlternatives(), "", null)); // Alterando dado do QRcode
         typeQr = 1; // Isso indica que o QRcode a ser montado terá o padrão (numQuestões e numAlternativas)
     }
 
@@ -73,9 +78,9 @@ public class CreatCard {
             //Criar documento PDF
             PdfDocument pdfDocument = new PdfDocument();
 
-            for (Map.Entry<Integer, String> student : students.entrySet()) {
+            for (Student student : students) {
 
-                Bitmap qrCode = LibQr.createQrCode(prova.getId_prova()+"."+student.getKey(), typeQr, context);
+                Bitmap qrCode = LibQr.createQrCode(prova.getId_prova()+"."+student.getId_student(), typeQr, context);
 
                 // ============ Cria uma página A4 (1240 x 1754px) ===========================================================
                 PageInfo pageInfo = new PageInfo.Builder(1240, 1754, 1).create();
@@ -93,7 +98,7 @@ public class CreatCard {
                 paint.setTextSize(24);
 
                 // ================ Monta o Cabeçalho da Prova ====================================================================
-                canvas.drawText("Aluno(a): " + student.getValue(), 80, 85, paint);
+                canvas.drawText("Aluno(a): " + student.getNameStudent(), 80, 85, paint);
                 canvas.drawText("Professor(a): " + teacher, 80, 115, paint);
                 canvas.drawText("Prova: " + prova.getNameProva(), 80, 145, paint);
                 canvas.drawText("Turma: " + className, 80, 175, paint);
@@ -296,6 +301,11 @@ public class CreatCard {
 
             String fileName = prova.getNameProva()+"_"+dataHoraAtual()+".pdf";
 
+            DownloadPDF downloadPDF = new DownloadPDF(context);
+            downloadPDF.newDownload(pdfDocument, fileName);
+
+            /*
+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 // Salvar arquivo
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
@@ -329,12 +339,14 @@ public class CreatCard {
                     return false;
                 }
             }
+           */
             return true;
         }catch (Exception e){
             Log.e("kariti", e.toString());
             return false;
         }
     }
+    /*
     private void notifyDownloadComplete(String fileName, Uri fileUri) {
         // Criar um canal de notificação (Android 8.0 e superior)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -377,10 +389,10 @@ public class CreatCard {
         }
         notificationManager.notify(1, builder.build());
     }
+     */
     private String dataHoraAtual(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
         Date date = new Date();
         return sdf.format(date);
     }
-
 }

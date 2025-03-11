@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,6 +25,7 @@ import java.util.Locale;
 
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.entity.Prova;
+import pl.droidsonroids.gif.GifImageView;
 
 public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
 
@@ -33,11 +35,13 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
     ImageButton btnVoltar, questMenos, questMais, altMais, altMenos;
     TextView textViewTitle;
     Prova prova;
+    GifImageView gifLoading;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_card);
+        setContentView(R.layout.activity_prova_generate_card_default);
 
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         provaName = findViewById(R.id.editTextNameProva);
@@ -52,6 +56,7 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
         qtdAlter = findViewById(R.id.editTextQtdAlterNewCard);
         btnGenerateCard = findViewById(R.id.btnNewCard);
         textViewTitle = findViewById(R.id.toolbar_title);
+        gifLoading = findViewById(R.id.loadingId);
 
         textViewTitle.setText(String.format("%s", "KARITI"));
 
@@ -141,29 +146,44 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
                 } else {
                     generateCard();
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.e("kariti", e.toString());
-            }finally {
+            } finally {
                 btnGenerateCard.setEnabled(true);
+                //finish();
             }
-
         });
     }
     private void generateCard(){
-        prova = new Prova();
-        prova.setNameProva(provaName.getText().toString().trim());
-        prova.setId_prova(Integer.parseInt(qtdQuest.getText().toString()));
-        prova.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
-        prova.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
-        if (!datePickerButton.getText().toString().equals("Selecionar Data")){
-            prova.setDateProva(datePickerButton.getText().toString());
-        }
-        CreatCard creatCard = new CreatCard(prova, teacherName.getText().toString(), className.getText().toString(), this);
-        if (creatCard.creatPdfCard()){
-            infoDownloadCard();
-        } else {
-            notifyFailureDownload();
-        }
+        View overlayView = findViewById(R.id.overlayView);
+        overlayView.setVisibility(View.VISIBLE);
+        gifLoading.setVisibility(View.VISIBLE);
+        new Thread(() -> {
+            try {
+                prova = new Prova();
+                prova.setNameProva(provaName.getText().toString().trim());
+                prova.setId_prova(Integer.parseInt(qtdQuest.getText().toString()));
+                prova.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
+                prova.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
+                if (!datePickerButton.getText().toString().equals("Selecionar Data")) {
+                    prova.setDateProva(datePickerButton.getText().toString());
+                }
+                CreatCard creatCard = new CreatCard(prova, teacherName.getText().toString(), className.getText().toString(), this);
+                boolean generateSituation = creatCard.creatPdfCard();
+                if (generateSituation) {
+                    runOnUiThread(this::infoDownloadCard);
+                } else {
+                    runOnUiThread(this::notifyFailureDownload);
+                }
+            } catch (Exception e){
+                Log.e("kariti", e.toString());
+            } finally {
+                runOnUiThread(() -> {
+                    gifLoading.setVisibility(View.GONE);
+                    overlayView.setVisibility(View.GONE);
+                });
+            }
+        }).start();
     }
 
     private String formatDateToDisplay(Calendar calendar) {

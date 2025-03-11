@@ -337,7 +337,7 @@ public class GabaritoActivity extends AppCompatActivity {
     private void dialogHelpDetalhes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ajuda");
-        builder.setMessage("olá, agora é hora de preencher o gabarito da sua prova.\n" +
+        builder.setMessage("Olá, agora é hora de preencher o gabarito da sua prova.\n" +
                 "• Marque as respostas correspondentes as questões da prova\n" +
                 "• Informe o peso de cada questão nos campos sugeridos \n\n" +
                 "• Antes de finalizar o cadastro confira todos os dados! ");

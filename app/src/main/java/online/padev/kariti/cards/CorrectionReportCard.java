@@ -39,6 +39,7 @@ import java.util.Random;
 
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.R;
+import online.padev.kariti.download.DownloadPDF;
 import online.padev.kariti.entity.Gabarito;
 import online.padev.kariti.entity.Prova;
 import online.padev.kariti.entity.Student;
@@ -263,6 +264,11 @@ public class CorrectionReportCard {
 
             String fileName = "Relatorio_"+prova.getNameProva()+"_"+dataHoraAtual()+".pdf";
 
+            DownloadPDF downloadPDF = new DownloadPDF(context);
+            downloadPDF.newDownload(pdfDocument, fileName);
+
+            /*
+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 // Salvar arquivo
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
@@ -296,12 +302,15 @@ public class CorrectionReportCard {
                     return false;
                 }
             }
+
+             */
             return true;
         } catch (Exception e){
             Log.e("kariti", e.toString());
             return false;
         }
     }
+    /*
     private void notifyDownloadComplete(String fileName, Uri fileUri) {
         // Criar um canal de notificação (Android 8.0 e superior)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -344,6 +353,8 @@ public class CorrectionReportCard {
         }
         notificationManager.notify(1, builder.build());
     }
+
+     */
     private String dataHoraAtual(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
         Date date = new Date();

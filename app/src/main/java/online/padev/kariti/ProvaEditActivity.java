@@ -41,7 +41,7 @@ public class ProvaEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prova_registration_card_default);
+        setContentView(R.layout.activity_prova_registration);
 
         back = findViewById(R.id.imgBtnVoltar);
         btnDate = findViewById(R.id.datePickerButton);

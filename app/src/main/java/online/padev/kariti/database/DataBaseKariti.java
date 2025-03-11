@@ -15,7 +15,6 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -1112,7 +1111,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteAlunoPNome(String nome){
+    public Boolean checkExistsStudent(String nome){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
@@ -1131,6 +1130,26 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
+    public Boolean checkExistsStudent(Integer id_student){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno = ? AND id_escola = ?", new String[]{id_student.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            return cursor != null && cursor.moveToFirst();
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+    }
+
     public Boolean verificaExisteAlunosPorEscola(){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
@@ -1992,13 +2011,14 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
         return ids_alunos;
     }
+    /*
     public Map<Integer, String> listarAlunosPorTurma(Integer id_turma) {
         Map<Integer, String>  alunos = new HashMap<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)", new String[]{id_turma.toString()});
+            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{id_turma.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Integer id_aluno = cursor.getInt(0);
@@ -2019,6 +2039,38 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
         return alunos;
     }
+
+     */
+
+    public List<Student> listarAlunosPorTurma(Integer id_turma) {
+        List<Student>  students = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{id_turma.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_student = cursor.getInt(0);
+                    String nameStudent = cursor.getString(1);
+                    Student student = new Student(id_student, nameStudent, null);
+                    students.add(student);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return students;
+    }
+
     public List<Student> listStudentsClassFull(Integer id_class) {
         List<Student> students = new ArrayList<>();
         SQLiteDatabase base_dados = null;

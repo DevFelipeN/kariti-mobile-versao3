@@ -26,6 +26,7 @@ import java.util.Objects;
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.entity.Prova;
 import online.padev.kariti.database.DataBaseKariti;
+import pl.droidsonroids.gif.GifImageView;
 
 public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
     ImageButton toGoBack;
@@ -155,7 +156,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
         btnGenerateCard.setOnClickListener(v -> {
             btnGenerateCard.setEnabled(false);
             try {
-                solicitaPermissaoNotificacao();
+                requestsPermissionNotify();
                 if(spinnerProva.getSelectedItem() != null) {
                     nameProva = spinnerProva.getSelectedItem().toString();
                     //String aluno = spinnerAluno.getSelectedItem().toString();
@@ -170,8 +171,6 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.e("kariti",e.getMessage());
                 Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente.", Toast.LENGTH_SHORT).show();
-            }finally {
-                btnGenerateCard.setEnabled(true);
             }
 
         });
@@ -185,16 +184,32 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
     }
 
     private void generateCard(){
-        prova = new Prova(id_provaBD, dataBaseKariti);
-        CreatCard creatCard = new CreatCard(prova, dataBaseKariti, this);
-        if (creatCard.creatPdfCard()){
-            infoDownloadCard();
-        } else {
-            notifyFailureDownload();
-        }
+        View overlayView = findViewById(R.id.overlayView);
+        GifImageView gifLoading = findViewById(R.id.loadingId);
+        overlayView.setVisibility(View.VISIBLE);
+        gifLoading.setVisibility(View.VISIBLE);
+        new Thread(() -> {
+            try {
+                prova = new Prova(id_provaBD, dataBaseKariti);
+                CreatCard creatCard = new CreatCard(prova, dataBaseKariti, this);
+                if (creatCard.creatPdfCard()) {
+                    runOnUiThread(this::infoDownloadCard);
+                } else {
+                    runOnUiThread(this::notifyFailureDownload);
+                }
+            } catch (Exception e) {
+                Log.e("kariti", e.toString());
+            } finally {
+                runOnUiThread(() -> {
+                    btnGenerateCard.setEnabled(true);
+                    gifLoading.setVisibility(View.GONE);
+                    overlayView.setVisibility(View.GONE);
+                });
+            }
+        }).start();
     }
 
-    private void solicitaPermissaoNotificacao(){
+    private void requestsPermissionNotify(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101); // Código de solicitação

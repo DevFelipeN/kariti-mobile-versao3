@@ -1,6 +1,7 @@
 package online.padev.kariti;
 
 import static online.padev.kariti.correction.CoreKariti.listCartoes;
+import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
@@ -291,42 +292,11 @@ public class ProvaActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //Toast.makeText(ProvaActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    // Inflar o layout customizado
-                    LayoutInflater inflater = getLayoutInflater();
-                    View dialogView = inflater.inflate(R.layout.open_correction_details, null);
-
-                    // Inicializar os elementos do layout
-                    TextView inform = dialogView.findViewById(R.id.tituloInform);
-                    Button buttonYes = dialogView.findViewById(R.id.buttonYesOpen);
-                    Button buttonNot = dialogView.findViewById(R.id.buttonNotOpen);
-
-                    inform.setText("Prova(s) corrigida(s).\n  Deseja visualizar correção?");
-
-                    // Criar o AlertDialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProvaActivity.this);
-                    builder.setCancelable(false);
-                    builder.setView(dialogView);
-                    // Mostrar o diálogo
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                    buttonYes.setOnClickListener(v -> {
-                        String[] x = dataBaseKariti.pegarDadosProva(id_provaCaptured);
-                        String nameProva = x[0];
-                        String id_class = x[1];
-                        String nameClass = dataBaseKariti.pegarNomeTurma(id_class);
-                        Intent intent = new Intent(getApplicationContext(), ProvaCorrectedActivity.class);
-                        intent.putExtra("id_prova", id_provaCaptured);
-                        intent.putExtra("prova", nameProva);
-                        intent.putExtra("turma", nameClass);
-                        startActivity(intent);
-                        dialog.dismiss();
-                    });
-
-                    buttonNot.setOnClickListener(v -> {
-                        dialog.dismiss();
-                    });
+                    builder.setTitle("Correção Finalizada");
+                    builder.setMessage("O Resultado da correção pode ser visualizado na opção 'Visualizar Provas'");
+                    builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+                    builder.show();
                 }
             });
         }
@@ -441,7 +411,7 @@ public class ProvaActivity extends AppCompatActivity {
                 List<Point> listOrganized = organize(circlesInterest);
                 //Bitmap imgToQrCode = matToBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(bitmap);
-                if(textQrCode != null){
+                if(textQrCode != null && String.valueOf(textQrCode.charAt(0)).equals("#")){
                     Mat matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
@@ -477,27 +447,6 @@ public class ProvaActivity extends AppCompatActivity {
             Log.e("ERRO", "ERRO AQUI55!!: "+e);
         }
 
-    }
-
-    private static Mat enhanceImage(Mat matImage) {
-        if (matImage.empty()) {
-            System.out.println("Erro ao carregar a imagem.");
-            return null;
-        }
-        // Aumentar o brilho
-        Mat brighterImage = new Mat();
-        Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
-
-        // Aumentar o contraste
-        Mat enhancedImage = new Mat();
-        brighterImage.convertTo(enhancedImage, -1, 1.2, 0); // 1.2 é o fator de contraste
-
-        // Converter de RGB para BGR (se necessário)
-        if (enhancedImage.channels() == 3) {
-            Imgproc.cvtColor(enhancedImage, enhancedImage, Imgproc.COLOR_RGB2BGR);
-        }
-
-        return enhancedImage;
     }
 
     public static boolean isInside(Circle circExt, Circle circInt) {
@@ -579,7 +528,7 @@ public class ProvaActivity extends AppCompatActivity {
     }
 
     private String processeQrCode(String qrCode){
-        String qrCodeConteudo = qrCode.replaceAll("#", "");
+        String qrCodeConteudo = qrCode.replaceAll("[#$]", "");
         String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
         String id_prova = partes[0];
         String id_aluno = partes[1];

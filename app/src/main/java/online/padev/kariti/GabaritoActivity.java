@@ -1,5 +1,8 @@
 package online.padev.kariti;
 
+import static online.padev.kariti.utils.ImageDirectory.saveBitmapAndGetPath;
+import static online.padev.kariti.utils.MatToBitmap.toBitmap;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +32,6 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -433,12 +434,12 @@ public class GabaritoActivity extends AppCompatActivity {
             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
             if (correction != null && !correction.isEmpty()){
                 //deleteAllImages();
-                Bitmap imgWarp = matToBitmap(matWarp);
+                Bitmap imgWarp = toBitmap(matWarp);
 
                 File s = new File(filePath);
                 String nameCartao = s.getName().replaceAll(".png", "");
                 //String nameCartao = dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives();
-                String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada pintada
+                String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao, this); //Salva a imagem cortada pintada
                 startViewImageDefault(correction, gabaritoDefault, filePathPaint);
             } else {
                 startCamera();
@@ -479,29 +480,4 @@ public class GabaritoActivity extends AppCompatActivity {
             }
         }
     }
-    private Bitmap matToBitmap(Mat mat) {
-        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
-        org.opencv.android.Utils.matToBitmap(mat, bitmap);
-        return bitmap;
-    }
-    public String saveBitmapAndGetPath(Bitmap bitmap, String name) {
-        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-
-        // Cria o diretório se não existir
-        if (!externalDir.exists()) {
-            externalDir.mkdirs();
-        }
-        File imageFile = new File(externalDir, name+".png");
-
-        try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            outputStream.flush();
-            return imageFile.getAbsolutePath();
-        } catch (IOException e) {
-            Log.e("kariti", e.toString());
-            return null;
-        }
-
-    }
-
 }

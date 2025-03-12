@@ -2,13 +2,16 @@ package online.padev.kariti;
 
 import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
 
+import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
+import static online.padev.kariti.utils.ImageDirectory.saveBitmapAndGetPath;
+import static online.padev.kariti.utils.MatToBitmap.toBitmap;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -45,8 +48,6 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -143,7 +144,7 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                         //.setTargetAspectRatio(AspectRatio.RATIO_16_9)
 
                         .build();
-                ImageCapture imageCapture = new ImageCapture.Builder()
+                new ImageCapture.Builder()
                         .setCaptureMode(CAPTURE_MODE_MAXIMIZE_QUALITY)
                         .build();
 
@@ -246,12 +247,9 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 circulos.sort((a, b) -> Double.compare(b.radius, a.radius));
             }else{
-                Collections.sort(circulos, new Comparator<Circle>() {
-                    @Override
-                    public int compare(Circle o1, Circle o2) {
-                        //return (int) (o2.radius - o1.radius);
-                        return Double.compare(o2.radius, o1.radius);
-                    }
+                Collections.sort(circulos, (o1, o2) -> {
+                    //return (int) (o2.radius - o1.radius);
+                    return Double.compare(o2.radius, o1.radius);
                 });
             }
 
@@ -310,15 +308,17 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
             }
 
             //Converte imagem para ser mostrada na tela
-            Bitmap imgBitmap = matToBitmap(matAux);
+            Bitmap imgBitmap = toBitmap(matAux);
             HashMap<Integer, Integer> correction = new HashMap<>();
             String gabaritoDefault = "";
 
             if (circ == 4){
-                Bitmap imgToQrCode = matToBitmap(mat);
+                Bitmap imgToQrCode = toBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
+                Mat imgWarpOrig = new Mat();
                 if(textQrCode != null){
                     matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
+                    imgWarpOrig = matWarp.clone();
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
 
@@ -364,14 +364,14 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                                 }else {
                                     //mat.release();
                                     typeMessage = 4;
-                                    Bitmap imgWarp = matToBitmap(matWarp);
+                                    Bitmap imgWarp = toBitmap(matWarp);
                                     String complement = dataHoraAtual();
                                     nameCartao = resultQrCode+"_"+complement;
-                                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao);
+                                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this);
 
                                     // Para testes
-                                    saveBitmapAndGetPath(imgWarp, "warp_"+nameCartao); //Salva a imagem cortada
-                                    saveBitmapAndGetPath(matToBitmap(mat), "orig_"+nameCartao); //Salva a imagem original
+                                    saveBitmapAndGetPath(imgWarp, "warp_"+nameCartao, this); //Salva a imagem cortada
+                                    saveBitmapAndGetPath(toBitmap(mat), "orig_"+nameCartao, this); //Salva a imagem original
 
                                     startGabaritoDefault(filePath);
                                 }
@@ -379,14 +379,14 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                             } else {
                                 //mat.release();
                                 typeMessage  = 5;
-                                Bitmap imgWarp = matToBitmap(matWarp);
+                                Bitmap imgWarp = toBitmap(matWarp);
                                 String complement = dataHoraAtual();
                                 nameCartao = resultQrCode+"_"+complement;
-                                filePath = saveBitmapAndGetPath(imgWarp, nameCartao);
+                                filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this);
 
                                 // Para testes
-                                saveBitmapAndGetPath(imgWarp, "warp_"+nameCartao); //Salva a imagem cortada
-                                saveBitmapAndGetPath(matToBitmap(mat), "orig_"+nameCartao); //Salva a imagem original
+                                saveBitmapAndGetPath(imgWarp, "warp_"+nameCartao, this); //Salva a imagem cortada
+                                saveBitmapAndGetPath(toBitmap(mat), "orig_"+nameCartao, this); //Salva a imagem original
 
                                 startGabaritoDefault(filePath);
                             }
@@ -398,14 +398,15 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                     }
                 }
                 if(correction != null && !correction.isEmpty()){
-                    Bitmap imgWarp = matToBitmap(matWarp);
+                    Bitmap imgWarp = toBitmap(matWarp);
                     String complement = dataHoraAtual();
                     nameCartao = resultQrCode+"_"+complement;
-                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
+                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this); //Salva a imagem cortada
 
                     // Para testes
-                    saveBitmapAndGetPath(matToBitmap(matWarp), "warp_"+resultQrCode+"_"+complement); //Salva a imagem cortada
-                    saveBitmapAndGetPath(matToBitmap(mat), "orig_"+resultQrCode+"_"+complement); //Salva a imagem original
+                    saveBitmapAndGetPath(toBitmap(imgWarpOrig), "warp_"+resultQrCode+"_"+complement, this); //Salva a imagem cortada
+                    imgWarpOrig.release();
+                    saveBitmapAndGetPath(toBitmap(mat), "orig_"+resultQrCode+"_"+complement, this); //Salva a imagem original
                     isCorrectSucess = true;
                 }
             }
@@ -516,12 +517,6 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
         return id_prova+"_"+id_aluno;
     }
 
-    private Bitmap matToBitmap(Mat mat) {
-        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
-        org.opencv.android.Utils.matToBitmap(mat, bitmap);
-        return bitmap;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -536,38 +531,6 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
         } else {
             startCamera();
         }
-    }
-    private String saveBitmapAndGetPath(Bitmap bitmap, String name) {
-        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-
-        // Cria o diretório se não existir
-        if (!externalDir.exists()) {
-            externalDir.mkdirs();
-        }
-
-        File imageFile = new File(externalDir, name+".png");
-
-        try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            outputStream.flush();
-            return imageFile.getAbsolutePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    public static String leitor(String path) throws IOException {
-        BufferedReader buffRead = new BufferedReader(new FileReader(path));
-        String linha = "", texto = "";
-        while (linha != null) {
-            texto += linha;
-            linha = buffRead.readLine();
-        }
-        buffRead.close();
-        //texto = "{}";
-        return texto;
     }
     private void shutdownExecutorService() {
         // Chama shutdown para não aceitar novas tarefas
@@ -655,27 +618,6 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
             return null;
         }
         return qrCodeResult;
-    }
-
-    private static Mat enhanceImage(Mat matImage) {
-        if (matImage.empty()) {
-            System.out.println("Erro ao carregar a imagem.");
-            return null;
-        }
-        // Aumentar o brilho
-        Mat brighterImage = new Mat();
-        org.opencv.core.Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
-
-        // Aumentar o contraste
-        Mat enhancedImage = new Mat();
-        brighterImage.convertTo(enhancedImage, -1, 1.2, 0); // 1.2 é o fator de contraste
-
-        // Converter de RGB para BGR (se necessário)
-        if (enhancedImage.channels() == 3) {
-            Imgproc.cvtColor(enhancedImage, enhancedImage, Imgproc.COLOR_RGB2BGR);
-        }
-
-        return enhancedImage;
     }
     private void startGabaritoDefault(String filePath){
         if (!isActivityFinishing) {

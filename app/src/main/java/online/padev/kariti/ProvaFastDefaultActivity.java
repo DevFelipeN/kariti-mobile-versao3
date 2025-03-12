@@ -3,6 +3,7 @@ package online.padev.kariti;
 import static online.padev.kariti.utils.CompactImage.controllerImageOrig;
 import static online.padev.kariti.utils.CompactImage.controllerImageWarp;
 import static online.padev.kariti.utils.CompactImage.controllerImageWarpPaint;
+import static online.padev.kariti.utils.ZIpDirectory.createDirectoryZip;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -149,7 +150,7 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
             try {
                 if (!controllerImageOrig.isEmpty()) {
                     String nameFileZip = "Prova"+Prova.numQuestsDefault + "_" + Prova.numAlternativesDefault + dataHoraAtual();
-                    File fileZip = createDirectoreZip(nameFileZip);
+                    File fileZip = createDirectoryZip(nameFileZip, this);
                     File fileImages = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
                     boolean isCompact = CompactImage.compact(fileImages, fileZip.getAbsolutePath());
                     if (isCompact){
@@ -184,28 +185,6 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
         }).start();
     }
 
-    private File createDirectoreZip(String nameFile) {
-        try {
-            File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-            File fileZip = new File(externalDir, nameFile+".zip");
-            if (!fileZip.exists()) {
-                try {
-                    // Tenta criar o arquivo
-                    if (fileZip.createNewFile()) {
-                        Log.e("kariti","Diretorio criado");
-                    } else {
-                        Log.i("kariti", "Arquivo já existe.");
-                    }
-                } catch (IOException e) {
-                    Log.e("kariti", "Erro ao criar diretorio!");
-                }
-            }
-            return fileZip;
-        }catch (Exception e){
-            Log.e("circles", e.toString());
-            return null;
-        }
-    }
     private String dataHoraAtual(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault());
         Date date = new Date();

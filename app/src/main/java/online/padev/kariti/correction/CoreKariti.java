@@ -1,5 +1,7 @@
 package online.padev.kariti.correction;
 
+import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
+
 import android.os.Build;
 import android.util.Log;
 
@@ -185,31 +187,6 @@ public class CoreKariti {
             return false;
         }
     }
-    private Mat enhanceImage(Mat matImage) {
-        try {
-            if (matImage.empty()) {
-                System.out.println("Erro ao carregar a imagem.");
-                return null;
-            }
-            // Aumentar o brilho
-            Mat brighterImage = new Mat();
-            org.opencv.core.Core.add(matImage, new Scalar(50, 50, 50), brighterImage); // Aumenta o brilho
-
-            // Aumentar o contraste
-            Mat enhancedImage = new Mat();
-            brighterImage.convertTo(enhancedImage, -1, 1.2, 0); // 1.2 é o fator de contraste
-
-            // Converter de RGB para BGR (se necessário)
-            if (enhancedImage.channels() == 3) {
-                Imgproc.cvtColor(enhancedImage, enhancedImage, Imgproc.COLOR_RGB2BGR);
-            }
-
-            return enhancedImage;
-        }catch (Exception e){
-            Log.e("correcao", "E2: "+e.toString());
-            return null;
-        }
-    }
     private boolean analysisQuestions(int height, int width){
         try {
             boolean situation = true;
@@ -365,7 +342,7 @@ public class CoreKariti {
                         Rect boundingRect = Imgproc.boundingRect(contour);
                         Circle circle = new Circle(center.x, center.y, radius[0], boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height, contour, Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true));
                         markedCircles.add(circle);
-
+                        Log.e("test", "X: "+center.x+" Y: "+center.y);
                     }
                 }
             }

@@ -21,7 +21,7 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendImageTester {
 
-    public static boolean sendInZip(File fileZip, String nameZip){
+    public static boolean sendInZip(File fileZip){
 
         Properties prop = System.getProperties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -49,7 +49,7 @@ public class SendImageTester {
             MimeBodyPart attachmentPart = new MimeBodyPart();
             FileDataSource fileSource = new FileDataSource(fileZip);
             attachmentPart.setDataHandler(new DataHandler(fileSource));
-            attachmentPart.setFileName(nameZip); // Nome do arquivo no e-mail
+            attachmentPart.setFileName(fileZip.getName()); // Nome do arquivo no e-mail
 
             // Monta o corpo do e-mail
             Multipart multipart = new MimeMultipart();
@@ -58,6 +58,12 @@ public class SendImageTester {
 
             message.setContent(multipart);
 
+            try {
+                Transport.send(message);
+            } catch (MessagingException e) {
+                Log.e("kariti", e.getMessage());
+            }
+            /*
             // Envio do e-mail em uma thread separada
             Thread t = new Thread(() -> {
                 try {
@@ -67,7 +73,7 @@ public class SendImageTester {
                 }
             });
             t.start();
-
+            */
         } catch (Exception e) {
             Log.e("kariti", "Erro ao enviar backup: " + e.getMessage());
             return false;

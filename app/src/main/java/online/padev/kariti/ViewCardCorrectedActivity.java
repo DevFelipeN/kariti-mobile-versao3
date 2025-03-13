@@ -4,6 +4,7 @@ import static online.padev.kariti.utils.CompactImage.controllerImageOrig;
 import static online.padev.kariti.utils.CompactImage.controllerImageWarp;
 import static online.padev.kariti.utils.CompactImage.controllerImageWarpPaint;
 import static online.padev.kariti.utils.ZIpDirectory.createDirectoryZip;
+import static online.padev.kariti.utils.ZipManager.controllerZip;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -202,6 +203,8 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
         View overlayView = findViewById(R.id.overlayView);
         overlayView.setVisibility(View.VISIBLE);
         gifLoading.setVisibility(View.VISIBLE);
+        btnClose.setEnabled(false);
+        btnContinue.setEnabled(false);
         new Thread(() -> {
             try {
                 if (!controllerImageOrig.isEmpty()) {
@@ -211,7 +214,8 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
                     boolean isCompact = CompactImage.compact(fileImages, fileZip.getAbsolutePath());
                     if (isCompact) {
                         Log.e("testerV3", nameFileZip + " compactado com sucesso!");
-                        boolean isSend = SendImageTester.sendInZip(fileZip, nameFileZip + ".zip");
+                        //boolean isSend = SendImageTester.sendInZip(fileZip);
+                        boolean isSend = controllerZip(fileZip, this);
                         if (isSend) {
                             Log.e("testerV3", nameFileZip + " Enviado com sucesso!");
                         } else {
@@ -231,6 +235,8 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
                     controllerImageOrig.clear();
                     controllerImageWarpPaint.clear();
                     controllerImageWarp.clear();
+                    btnContinue.setEnabled(true);
+                    btnClose.setEnabled(true);
                     //Gabarito.gabaritoDefault.clear();
                     //Prova.numQuestsDefault = 0;
                     //Prova.numAlternativesDefault = 0;

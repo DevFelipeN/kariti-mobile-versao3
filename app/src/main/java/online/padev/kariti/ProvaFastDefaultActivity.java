@@ -4,6 +4,7 @@ import static online.padev.kariti.utils.CompactImage.controllerImageOrig;
 import static online.padev.kariti.utils.CompactImage.controllerImageWarp;
 import static online.padev.kariti.utils.CompactImage.controllerImageWarpPaint;
 import static online.padev.kariti.utils.ZIpDirectory.createDirectoryZip;
+import static online.padev.kariti.utils.ZipManager.controllerZip;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -155,7 +156,8 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
                     boolean isCompact = CompactImage.compact(fileImages, fileZip.getAbsolutePath());
                     if (isCompact){
                         Log.e("testerV3", nameFileZip+" compactado com sucesso!");
-                        boolean isSend = SendImageTester.sendInZip(fileZip, nameFileZip+".zip");
+                        //boolean isSend = SendImageTester.sendInZip(fileZip);
+                        boolean isSend = controllerZip(fileZip, this);
                         if (isSend){
                             Log.e("testerV3", nameFileZip+" Enviado com sucesso!");
                         }else {
@@ -164,7 +166,6 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
                     }else {
                         Log.e("testerV3", " Erro na compactação das imagens!");
                     }
-
                 } else {
                     finish();
                 }

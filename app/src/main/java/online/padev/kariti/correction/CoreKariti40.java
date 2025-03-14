@@ -25,21 +25,24 @@ import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.entity.Prova;
 
 
-public class CoreKariti {
+public class CoreKariti40 {
     public static List<String> listCartoes = new ArrayList<>(); // Controla os cartoes selecionados do armaazenamento do dispositivo para correção
-    List<Point> squaresQuestions = new ArrayList<>(); // Para armazenar apenas os quadrados da questões
-    List<Point> squaresAlternatives = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas
+    List<Point> squaresQuestionsLeft = new ArrayList<>(); // Para armazenar apenas os quadrados da questões da esquerda
+    List<Point> squaresQuestionsRight = new ArrayList<>(); // Para armazenar apenas os quadrados da questões da direita se houver
+    List<Point> squaresAlternativesLeft = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas da esquerda
+    List<Point> squaresAlternativesRight = new ArrayList<>(); // Para armazenar apenas os quadrados das alternativas da direita
     List<MatOfPoint> contours = new ArrayList<>(); // Para armazenar os contornos encontrados na imagem
     HashMap<Integer, Integer> gabaritoResult = new HashMap<>(); // Para armazenar a questão (Key) e a resposta associada a questão
     List<SquaresCircles> squaresCircles = new ArrayList<>(); // Para armazenar a questão e os circulos associados a essa questão
-    List<Circle> markedCircles = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem
+    List<Circle> markedCirclesLeft = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem, lado esquerdo
+    List<Circle> markedCirclesRight = new ArrayList<>(); // Para armazenar os circulos (Marcações dos alunos) encontrados na imagem, lado direito
     Integer id_studentBD;
     Mat mat; // Faz referência a imagem cortada
     DataBaseKariti dataBase;
     Prova prova;
     int height, width;
-    private final String gabarito;
-    private final int typeProva;
+    private String gabarito;
+    private int typeProva;
     private final double limit = 0.01;
 
     /**
@@ -50,7 +53,7 @@ public class CoreKariti {
      * @param dataBase instância do banco para cadastro da correção
      * @param id_studentBD id do aluno associado ao prova a ser corrigida
      */
-    public CoreKariti(Mat mat, Prova prova, DataBaseKariti dataBase, Integer id_studentBD){
+    public CoreKariti40(Mat mat, Prova prova, DataBaseKariti dataBase, Integer id_studentBD){
         this.mat = mat;
         this.id_studentBD = id_studentBD;
         this.prova = prova;
@@ -65,7 +68,7 @@ public class CoreKariti {
      * @param mat imagem cortada do cartão resposta
      * @param prova dados da prova a ser corrigida
      */
-    public CoreKariti(Mat mat, Prova prova, String gabarito){
+    public CoreKariti40(Mat mat, Prova prova, String gabarito){
         this.mat = mat;
         this.prova = prova;
         this.gabarito = gabarito;
@@ -78,8 +81,11 @@ public class CoreKariti {
      * @return retorna um HashMap contendo o resultado da correção caso correção bem sucedida e null caso contrário
      */
     public HashMap<Integer, Integer> correctCard() {
+        height = mat.rows();
+        width = mat.cols();
         if (squares()){
             if (getAnswers()){
+                Log.e("core40", "Passei aqui 40");
                 return gabaritoResult;
             } else return null;
         }else {
@@ -94,18 +100,34 @@ public class CoreKariti {
      */
     private boolean getAnswers(){
         // Seleciona apenas os contornos dentro do limite definido
-        if(!circlesOfInterest()){
+
+        if(circlesOfInterest(squaresQuestionsLeft, squaresAlternativesLeft, markedCirclesLeft)){
             return false;
         }
 
         // Ordena a lista de circulos em ordem crescente em y
-        if(!sortCirclesOrder()){
+        if(sortCirclesOrder(markedCirclesLeft)){
             return false;
         }
+
         // Associa os circulos a sua respectiva questão e alternativa
-        if(!compareSquaresAndCircles()){
+        if(compareSquaresAndCircles(squaresQuestionsLeft, squaresAlternativesLeft, markedCirclesLeft, 0)){
             return false;
         }
+
+        // ======== ENTRA AQUI SOMENTE SE A PROVA APRESENTAR MAIS QUE 20 QUESTÕES
+        if (prova.getNumQuestions() > 20) {
+            if(circlesOfInterest(squaresQuestionsRight, squaresAlternativesRight, markedCirclesRight)){
+                return false;
+            }
+            if(sortCirclesOrder(markedCirclesRight)){
+                return false;
+            }
+            if(compareSquaresAndCircles(squaresQuestionsRight, squaresAlternativesRight, markedCirclesRight, 20)){
+                return false;
+            }
+        }
+
         if (typeProva == 0){
             // Insere as respostas encontradas para essa prova no banco
             boolean insertCorrectBD = dataBase.cadastrarCorrecao(gabaritoResult, prova.getId_prova(), id_studentBD);
@@ -118,7 +140,10 @@ public class CoreKariti {
         //Desenha um quadrado nos quatro cantos da imagem
         paintCantos();
         //Numera os quedrados das questões
-        enumerateQuestions();
+        enumerateQuestions(squaresQuestionsLeft, 1);
+        if (prova.getNumQuestions() > 20){
+            enumerateQuestions(squaresQuestionsRight, 21);
+        }
         return true;
     }
     private boolean squares(){
@@ -126,10 +151,11 @@ public class CoreKariti {
             //Mat imgAux = mat.clone();
             Mat imgAux = mat;
 
-            height = imgAux.rows();
-            width = imgAux.cols();
+            double limitAlterLeft = width - width * 0.09;
 
-
+            if (prova.getNumQuestions() > 20){
+                limitAlterLeft = (double) width / 2;
+            }
 
             Mat matEnhanced = enhanceImage(imgAux);
             if(matEnhanced == null){
@@ -166,35 +192,51 @@ public class CoreKariti {
                 double x = moments.m10 / moments.m00;
                 double y = moments.m01 / moments.m00;
 
-                if (x < width * 0.09){
-                    squaresQuestions.add(new Point(x,y));
-                    //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(255, 0, 0), 2);
-                }
-                if (y < height * 0.06){
-                    squaresAlternatives.add(new Point(x,y));
-                    //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(0, 0, 255), 2);
+                if (!isContoursInvalid(x, y)) { // Aqui são eliminados os contornos dos cantos
+                    if (x < width * 0.09) {
+                        squaresQuestionsLeft.add(new Point(x, y));
+                        //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(255, 0, 0), 2);
+                    } else if (y < height * 0.06 && x < limitAlterLeft) {
+                        squaresAlternativesLeft.add(new Point(x, y));
+                        //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(0, 0, 255), 2);
+                    } else if (prova.getNumQuestions() > 20) {
+                        if (x > limitAlterLeft && x < limitAlterLeft + width * 0.09) {
+                            squaresQuestionsRight.add(new Point(x, y));
+                        } else if (y < height * 0.06 && x > limitAlterLeft) {
+                            squaresAlternativesRight.add(new Point(x, y));
+                        }
+                    }
                 }
             }
 
+            if (analysisQuestions(squaresQuestionsLeft)) return false;
+            if (analysisAlternatives(squaresAlternativesLeft)) return false;
 
-            boolean quest = analysisQuestions(height, width);
-            boolean alt = analysisAlternatives(height, width);
+            if (prova.getNumQuestions() > 20) {
+                if (analysisQuestions(squaresQuestionsRight)) return false;
+                if (analysisAlternatives(squaresAlternativesRight)) return false;
+            }
 
-            return quest && alt;
+            int numQuestionsCurrent = squaresQuestionsLeft.size() + squaresQuestionsRight.size();
+
+            Log.e("core40", "Q: "+numQuestionsCurrent);
+
+
+            return numQuestionsCurrent == prova.getNumQuestions() && squaresAlternativesLeft.size() == prova.getNumAlternatives() && squaresAlternativesRight.size() == prova.getNumAlternatives();
 
         }catch (Exception e){
             Log.e("correcao", "E1: "+e);
             return false;
         }
     }
-    private boolean analysisQuestions(int height, int width){
+    private boolean analysisQuestions(List<Point> list){
         try {
             boolean situation = true;
             // Ordenar quadrados pela distancia em y e em ordem crescente
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                squaresQuestions.sort((a, b) -> Double.compare(a.y, b.y));
+                list.sort((a, b) -> Double.compare(a.y, b.y));
             } else {
-                Collections.sort(squaresQuestions, new Comparator<Point>() {
+                Collections.sort(list, new Comparator<Point>() {
                     @Override
                     public int compare(Point o1, Point o2) {
                         return (int) (o1.y - o2.y);
@@ -202,21 +244,19 @@ public class CoreKariti {
                 });
             }
 
-            eliminateContourQuests();
-
-            for (int p = squaresQuestions.size() - 1; p > 0; p--) {
-                Point point1 = squaresQuestions.get(p);
-                Point point2 = squaresQuestions.get(p - 1);
-                boolean analysis = analysisDistanceY(point1, point2, height, width);
+            for (int p = list.size() - 1; p > 0; p--) {
+                Point point1 = list.get(p);
+                Point point2 = list.get(p - 1);
+                boolean analysis = analysisDistanceY(point1, point2);
                 if (analysis) {
-                    squaresQuestions.remove(p);
+                    list.remove(p);
                 }
             }
 
-            double threshold = height * 0.01;
+            double threshold = height * limit;
 
-            for (Point quest1 : squaresQuestions) {
-                for (Point quest2 : squaresQuestions) {
+            for (Point quest1 : list) {
+                for (Point quest2 : list) {
                     boolean isSameDirection = getProportion(quest1.x, quest2.x, threshold);
                     if (!isSameDirection) {
                         situation = false;
@@ -224,24 +264,20 @@ public class CoreKariti {
                     }
                 }
             }
-            if (squaresQuestions.size() != prova.getNumQuestions()){
-                situation = false;
-            }
-
-            return situation;
+            return !situation;
         }catch (Exception e){
-            Log.e("correcao", "E3: "+e.toString());
-            return false;
+            Log.e("correcao", "E3: "+e);
+            return true;
         }
     }
-    private boolean analysisAlternatives(int height, int width){
+    private boolean analysisAlternatives(List<Point> list){
         try {
             boolean situation = true;
             // Ordenar círculos por tamanho do raio em ordem crescente
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                squaresAlternatives.sort((a, b) -> Double.compare(a.x, b.x));
+                list.sort((a, b) -> Double.compare(a.x, b.x));
             } else {
-                Collections.sort(squaresAlternatives, new Comparator<Point>() {
+                Collections.sort(list, new Comparator<Point>() {
                     @Override
                     public int compare(Point o1, Point o2) {
                         return (int) (o1.x - o2.x);
@@ -249,21 +285,23 @@ public class CoreKariti {
                 });
             }
 
-            eliminateAlternatives();
+            /*
 
-            for (int p = squaresAlternatives.size() - 1; p > 0; p--) {
-                Point point1 = squaresAlternatives.get(p);
-                Point point2 = squaresAlternatives.get(p - 1);
-                boolean analysis = analysisDistanceX(point1, point2, height, width);
+            for (int p = list.size() - 1; p > 0; p--) {
+                Point point1 = list.get(p);
+                Point point2 = list.get(p - 1);
+                boolean analysis = analysisDistanceX(point1, point2);
                 if (analysis) {
-                    squaresAlternatives.remove(p);
+                    list.remove(p);
                 }
             }
 
-            double threshold = height * 0.01;
+             */
 
-            for (Point alt1 : squaresAlternatives) {
-                for (Point alt2 : squaresAlternatives) {
+            double threshold = height * limit;
+
+            for (Point alt1 : list) {
+                for (Point alt2 : list) {
                     boolean isSameDirection = getProportion(alt1.y, alt2.y, threshold);
                     if (!isSameDirection) {
                         situation = false;
@@ -271,20 +309,17 @@ public class CoreKariti {
                     }
                 }
             }
-            if (squaresAlternatives.size() != prova.getNumAlternatives()) {
-                situation = false;
-            }
 
-            return situation;
+            return !situation;
         }catch (Exception e){
-            Log.e("correcao", "E4: "+e.toString());
-            return false;
+            Log.e("correcao", "E4: "+e);
+            return true;
         }
     }
-    private boolean analysisDistanceY(Point p1, Point p2, int height, int width){
+    private boolean analysisDistanceY(Point p1, Point p2){
         return (p1.y - p2.y > height * 0.048 || p1.y - p2.y < height * 0.027 || Math.abs(p1.x - p2.x) > width * 0.01);
     }
-    private boolean analysisDistanceX(Point p1, Point p2, int height, int width){
+    private boolean analysisDistanceX(Point p1, Point p2){
         return (p1.x - p2.x > width * 0.116 || p1.x - p2.x < width * 0.095 || Math.abs(p1.y - p2.y) > height * 0.01);
     }
 
@@ -298,18 +333,22 @@ public class CoreKariti {
         Log.e("porcentagem", "tot: "+totPixels+" black: "+blackPixels);
         Log.e("porcentagem", "%: "+ (blackPixels / (double) totPixels) * 100);
 
-        return ((blackPixels / (double) totPixels) * 100 <= 3.0);
+        double limitBlack = 3.0;
+
+        if (prova.getNumQuestions() > 20) limitBlack = 4.0;
+
+        return ((blackPixels / (double) totPixels) * 100 <= limitBlack);
     }
 
     /**
      * Este método seleciona todos os contornos contidos numa determinada área de interesse e adiciona suas coordenadas em "markedCircles".
      * @return
      */
-    private boolean circlesOfInterest(){
+    private boolean circlesOfInterest(List<Point> listQuests, List<Point> listAlters, List<Circle> listCircle){
         try {
-            Point p1 = squaresQuestions.get(squaresQuestions.size() - 1); // Point da ultima questão
-            Point p2 = squaresAlternatives.get(0); // Point da primeira alternativa
-            Point p3 = squaresAlternatives.get(squaresAlternatives.size() - 1); // Point da ultima alternativa
+            Point p1 = listQuests.get(listQuests.size() - 1); // Point da ultima questão
+            Point p2 = listAlters.get(0); // Point da primeira alternativa
+            Point p3 = listAlters.get(listAlters.size() - 1); // Point da ultima alternativa
 
             double yP1 = p1.y + height * limit;
             double xP2 = p2.x - width * limit;
@@ -341,26 +380,26 @@ public class CoreKariti {
                     if (radius[0] < width * 0.02 && center.y < yP1 && center.y > yP2 && center.x > xP2 && center.x < xP3) {
                         Rect boundingRect = Imgproc.boundingRect(contour);
                         Circle circle = new Circle(center.x, center.y, radius[0], boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height, contour, Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true));
-                        markedCircles.add(circle);
+                        listCircle.add(circle);
                         Log.e("test", "X: "+center.x+" Y: "+center.y);
                     }
                 }
             }
-            Log.e("test", "Tot: " + markedCircles.size());
-            return true;
-        }catch (Exception e){
-            Log.e("correcao", "E5: "+e.toString());
+            Log.e("test", "Tot: " + listCircle.size());
             return false;
+        }catch (Exception e){
+            Log.e("correcao", "E5: "+e);
+            return true;
         }
     }
 
-    private boolean sortCirclesOrder(){
+    private boolean sortCirclesOrder(List<Circle> listCircles){
         try {
             // Ordenar círculos por tamanho do raio em ordem decrescente
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                markedCircles.sort((a, b) -> Double.compare(a.y, b.y));
+                listCircles.sort((a, b) -> Double.compare(a.y, b.y));
             } else {
-                Collections.sort(markedCircles, new Comparator<Circle>() {
+                Collections.sort(listCircles, new Comparator<Circle>() {
                     @Override
                     public int compare(Circle o1, Circle o2) {
                         //return (int) (o2.radius - o1.radius);
@@ -368,10 +407,10 @@ public class CoreKariti {
                     }
                 });
             }
-            return true;
+            return false;
         }catch (Exception e){
             Log.e("correcao", "E6: "+e.toString());
-            return false;
+            return true;
         }
     }
 
@@ -380,16 +419,16 @@ public class CoreKariti {
      * em gabarito: [questao, resposta(s)
      * @return retorna um valor booleano true para execussão bem sucedida e false caso contrário.
      */
-    private boolean compareSquaresAndCircles(){
+    private boolean compareSquaresAndCircles(List<Point> listQuests, List<Point> listAlters, List<Circle> listMarking, int controllerIndex){
         try {
             double threshold = height * limit;
 
             // ================ Intera sob todos os quadrados das questões =======================================================
-            for (int i = 0; i < squaresQuestions.size(); i++) {
+            for (int i = 0; i < listQuests.size(); i++) {
                 List<Point> box_rows = new ArrayList<>();  // Lista para armazenar temporariamente os contornos (circulos) associados a questão atual
-                Point questionY = squaresQuestions.get(i);
-                for (int j = 0; j < markedCircles.size(); j++) {
-                    Circle circleY = markedCircles.get(j);
+                Point questionY = listQuests.get(i);
+                for (int j = 0; j < listMarking.size(); j++) {
+                    Circle circleY = listMarking.get(j);
                     if (getProportion(questionY.y, circleY.y, threshold)) { // Se o quadrado e circulo atual estiverem na mesma linha aproximada em y
                         box_rows.add(new Point(circleY.x, circleY.y)); // Adiciona o centro de massa do circulo atual na lista
                     }
@@ -397,7 +436,7 @@ public class CoreKariti {
                 if (box_rows.isEmpty()) { // Caso nenhum circulo encontrado para a questao atual
                     box_rows.add(new Point(0, 0)); // Adiciona 0 para a questão
                 }
-                SquaresCircles sc = new SquaresCircles(squaresQuestions.get(i), box_rows);
+                SquaresCircles sc = new SquaresCircles(listQuests.get(i), box_rows);
                 squaresCircles.add(sc);
             }
 
@@ -412,11 +451,11 @@ public class CoreKariti {
                 Log.e("correction", listCirc.toString());
                 if (listCirc.size() > 1) {
                     String markings = "";
-                    boolean[] uniqueAlt = new boolean[squaresAlternatives.size()]; // controla a repetição de alternativas para uma mesma questão
+                    boolean[] uniqueAlt = new boolean[listAlters.size()]; // controla a repetição de alternativas para uma mesma questão
                     for (int j = 0; j < listCirc.size(); j++) {
                         Point circ = listCirc.get(j);
-                        for (int a = 0; a < squaresAlternatives.size(); a++) {
-                            Point alt = squaresAlternatives.get(a);
+                        for (int a = 0; a < listAlters.size(); a++) {
+                            Point alt = listAlters.get(a);
                             if (getProportion(alt.x, circ.x, threshold)) { // verifica se o circulo atual pertence a alternativa atual
                                 if (!uniqueAlt[a]) { // Evita de repetir a mesma alternativa para a mesma questão
                                     markings = markings + String.valueOf(letters[a]);
@@ -430,30 +469,30 @@ public class CoreKariti {
                     if (markings.isEmpty()){ // Evita de dar erro caso nenhuma marcação seja associada a nenhuma alternativa
                         markings = "0";
                     }
-                    gabaritoResult.put(i + 1, Integer.valueOf(markings));
+                    gabaritoResult.put(i + 1 + controllerIndex, Integer.valueOf(markings));
                 } else {
                     Point circ = listCirc.get(0);
                     if (circ.x != 0) {
                         int resp = 0;
-                        for (int j = 0; j < squaresAlternatives.size(); j++) {
-                            Point alt = squaresAlternatives.get(j);
+                        for (int j = 0; j < listAlters.size(); j++) {
+                            Point alt = listAlters.get(j);
                             if (getProportion(alt.x, circ.x, threshold)) {
                                 resp = letters[j];
                                 paintCircle(circ, letters[j], i);
                                 break;
                             }
                         }
-                        gabaritoResult.put(i + 1, resp);
+                        gabaritoResult.put(i + 1 + controllerIndex, resp);
                     } else {
-                        gabaritoResult.put(i + 1, 0);
+                        gabaritoResult.put(i + 1 + controllerIndex, 0);
                     }
                 }
             }
-            Log.e("correction", "B"+String.valueOf(gabaritoResult.size()));
-            return true;
+            Log.e("correction", "B: "+String.valueOf(gabaritoResult.size()));
+            return false;
         }catch (Exception e){
             Log.e("correcao", "E7: "+e);
-            return false;
+            return true;
         }
     }
 
@@ -483,41 +522,14 @@ public class CoreKariti {
         }
     }
 
-    private void eliminateContourQuests(){
-        try {
-            Point p1 = new Point(width * 0.09, height * 0.06); // Canto superior esquerdo
-            Point p3 = new Point(0, height - height * 0.05); // Inferior
-            for (int i = squaresQuestions.size() - 1 ; i >= 0; i--){
-                Point p = squaresQuestions.get(i);
-                if (p.y < p1.y && p.x < p1.x){
-                    squaresQuestions.remove(i);
-                }
-                if (p.y > p3.y){
-                    squaresQuestions.remove(i);
-                }
-            }
-        }catch (Exception e){
-            Log.e("correcao", "E10: "+e.toString());
-        }
+    private boolean isContoursInvalid(double x, double y){
+        double limitContours = width * 0.04;
+        return ((x < limitContours && y < limitContours)
+                || (x > width - limitContours && y < limitContours)
+                || (x < limitContours && y > height - limitContours)
+                || (x > width - limitContours && y > height - limitContours));
     }
 
-    private void eliminateAlternatives(){
-        try {
-            Point p1 = new Point(width * 0.09, height * 0.06); // Canto superior esquerdo
-            Point p2 = new Point(width - width * 0.09, 0); // Lado direito
-            for (int i = squaresAlternatives.size() - 1; i >= 0; i--){
-                Point p = squaresAlternatives.get(i);
-                if (p.y < p1.y && p.x < p1.x){
-                    squaresAlternatives.remove(i);
-                }
-                if (p.x > p2.x){
-                    squaresAlternatives.remove(i);
-                }
-            }
-        }catch (Exception e){
-            Log.e("correcao", "E10: "+e.toString());
-        }
-    }
     private void paintCantos(){
         try {
             double limit2 = 0.05;
@@ -529,9 +541,9 @@ public class CoreKariti {
             Log.e("correcao", "E9: "+e.toString());
         }
     }
-    private void enumerateQuestions(){
-        int i = 1;
-        for (Point q : squaresQuestions){
+    private void enumerateQuestions(List<Point> listQuests, int controllerIndex){
+        int i = controllerIndex;
+        for (Point q : listQuests){
             double x = q.x + (width * 0.02);
             double y = q.y + (height * 0.01);
             Imgproc.putText(mat, String.valueOf(i), new Point(x,y), Imgproc.FONT_HERSHEY_SIMPLEX, width * 0.0008, new Scalar(0, 0, 0), 2);

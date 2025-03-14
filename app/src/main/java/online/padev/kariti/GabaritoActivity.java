@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import online.padev.kariti.correction.CoreKariti;
+import online.padev.kariti.correction.CoreKariti40;
 import online.padev.kariti.entity.Gabarito;
 import online.padev.kariti.entity.Prova;
 import online.padev.kariti.database.DataBaseKariti;

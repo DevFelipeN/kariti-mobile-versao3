@@ -41,8 +41,8 @@ public class CoreKariti40 {
     DataBaseKariti dataBase;
     Prova prova;
     int height, width;
-    private String gabarito;
-    private int typeProva;
+    private final String gabarito;
+    private final int typeProva;
     private final double limit = 0.01;
 
     /**
@@ -285,8 +285,6 @@ public class CoreKariti40 {
                 });
             }
 
-            /*
-
             for (int p = list.size() - 1; p > 0; p--) {
                 Point point1 = list.get(p);
                 Point point2 = list.get(p - 1);
@@ -295,8 +293,6 @@ public class CoreKariti40 {
                     list.remove(p);
                 }
             }
-
-             */
 
             double threshold = height * limit;
 
@@ -320,7 +316,11 @@ public class CoreKariti40 {
         return (p1.y - p2.y > height * 0.048 || p1.y - p2.y < height * 0.027 || Math.abs(p1.x - p2.x) > width * 0.01);
     }
     private boolean analysisDistanceX(Point p1, Point p2){
-        return (p1.x - p2.x > width * 0.116 || p1.x - p2.x < width * 0.095 || Math.abs(p1.y - p2.y) > height * 0.01);
+        if (prova.getNumQuestions() <= 20){
+            return (p1.x - p2.x > width * 0.116 || p1.x - p2.x < width * 0.095 || Math.abs(p1.y - p2.y) > height * 0.01);
+        }else{
+            return false;
+        }
     }
 
     private boolean analysisImage(Mat matWarpOtsu){
@@ -459,7 +459,7 @@ public class CoreKariti40 {
                             if (getProportion(alt.x, circ.x, threshold)) { // verifica se o circulo atual pertence a alternativa atual
                                 if (!uniqueAlt[a]) { // Evita de repetir a mesma alternativa para a mesma questão
                                     markings = markings + String.valueOf(letters[a]);
-                                    paintCircle(circ, letters[a], i);
+                                    paintCircle(circ, letters[a], i + controllerIndex);
                                     uniqueAlt[a] = true;
                                 }
                                 break;
@@ -478,7 +478,7 @@ public class CoreKariti40 {
                             Point alt = listAlters.get(j);
                             if (getProportion(alt.x, circ.x, threshold)) {
                                 resp = letters[j];
-                                paintCircle(circ, letters[j], i);
+                                paintCircle(circ, letters[j], i + controllerIndex);
                                 break;
                             }
                         }

@@ -165,15 +165,13 @@ public class CorrectionReportCard {
 
                 if (studentO == 0) {
                     for (int al = studentI; al < students.size(); al++) {
-                        studentI += 1;
                         if (controllerPage == limitPage) break;
+                        studentI += 1;
                         boolean checkIsCorrect = dataBase.verificaExisteCorrecaoAluno(prova.getId_prova(), students.get(al).getId_student());
                         if (!checkIsCorrect) {
                             studentsNotCorrect.add(students.get(al));
                             continue;
                         }
-
-                        //AQUII
 
                         String studentName = students.get(al).getNameStudent();
                         canvas.drawLine(startX, startY, startX, startY + 40, paintLine); // desenha primeira linha na vestical

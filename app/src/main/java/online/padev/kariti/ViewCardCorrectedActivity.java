@@ -1,18 +1,11 @@
 package online.padev.kariti;
 
-import static online.padev.kariti.utils.CompactImage.controllerImageOrig;
-import static online.padev.kariti.utils.CompactImage.controllerImageWarp;
-import static online.padev.kariti.utils.CompactImage.controllerImageWarpPaint;
-import static online.padev.kariti.utils.ZIpDirectory.createDirectoryZip;
-import static online.padev.kariti.utils.ZipManager.controllerZip;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,22 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-
-import online.padev.kariti.emails.SendImageTester;
 import online.padev.kariti.entity.Gabarito;
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.entity.Prova;
-import online.padev.kariti.utils.CompactImage;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ViewCardCorrectedActivity extends AppCompatActivity {
@@ -94,15 +79,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
             resultCorrectedDefault();
         }
 
-
         String filePath = getIntent().getStringExtra("filePath");
-        File file = new File(filePath);
-        if (file.exists()){
-            Log.e("kariti", "diretório existe!!");
-        }else {
-            Log.e("kariti", "diretório NÃO existe!!");
-        }
-        Log.e("kariti", "FilePath: "+filePath);
         if (filePath != null){
             Bitmap bitmap = BitmapFactory.decodeFile(filePath);
             imageViewCorrected.setImageBitmap(bitmap);
@@ -113,37 +90,16 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
             startCamera();
         }
 
-        try {
-            String nameCard = file.getName();
-            if (!controllerImageWarpPaint.contains(nameCard)) {
-                controllerImageWarpPaint.add(nameCard);
-                controllerImageWarp.add("warp_"+nameCard);
-                controllerImageOrig.add("orig_"+nameCard);
-            }
-        } catch (Exception e){
-            Log.e("kariti", e.toString());
-        }
-
         btnContinue.setOnClickListener(v -> startCamera());
-        btnClose.setOnClickListener(v -> saveImagesTester());
+        btnClose.setOnClickListener(v -> finish());
         back.setOnClickListener(v -> {
-            //finish();
-            if (status == 0) {
-               saveImagesTester();
-            }else{
-                finish();
-            }
+            finish();
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                //finish();
-                if (status == 0) {
-                    saveImagesTester();
-                }else{
-                    finish();
-                }
+                finish();
             }
         });
     }
@@ -151,7 +107,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        //deleteAllImages();
+        deleteAllImages();
     }
 
     private void startCamera(){
@@ -199,68 +155,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
             Log.e("kariti", e.toString());
         }
     }
-    private void saveImagesTester() {
-        View overlayView = findViewById(R.id.overlayView);
-        overlayView.setVisibility(View.VISIBLE);
-        gifLoading.setVisibility(View.VISIBLE);
-        btnClose.setEnabled(false);
-        btnContinue.setEnabled(false);
-        new Thread(() -> {
-            try {
-                if (!controllerImageOrig.isEmpty()) {
-                    String nameFileZip = "Prova" + Prova.numQuestsDefault + "_" + Prova.numAlternativesDefault + dataHoraAtual();
-                    File fileZip = createDirectoryZip(nameFileZip, this);
-                    File fileImages = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-                    boolean isCompact = CompactImage.compact(fileImages, fileZip.getAbsolutePath());
-                    if (isCompact) {
-                        Log.e("testerV3", nameFileZip + " compactado com sucesso!");
-                        //boolean isSend = SendImageTester.sendInZip(fileZip);
-                        boolean isSend = controllerZip(fileZip, this);
-                        if (isSend) {
-                            Log.e("testerV3", nameFileZip + " Enviado com sucesso!");
-                        } else {
-                            Log.e("testerV3", " Erro no envio das imagens!");
-                        }
-                    } else {
-                        Log.e("testerV3", " Erro na compactação das imagens!");
-                    }
 
-                } else {
-                    finish();
-                }
-            } catch (Exception e) {
-                Log.e("testerV3", " Erro (Exception) na compactação ou envio das imagens!");
-            } finally {
-                runOnUiThread(() -> { // Atualiza a UI na Main Thread
-                    controllerImageOrig.clear();
-                    controllerImageWarpPaint.clear();
-                    controllerImageWarp.clear();
-                    btnContinue.setEnabled(true);
-                    btnClose.setEnabled(true);
-                    //Gabarito.gabaritoDefault.clear();
-                    //Prova.numQuestsDefault = 0;
-                    //Prova.numAlternativesDefault = 0;
-                    gifLoading.setVisibility(View.GONE); // Esconde o GIF quando o processo termina
-                    dialogFinallyTester();
-                });
-            }
-        }).start();
-    }
-    private String dataHoraAtual(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault());
-        Date date = new Date();
-        return sdf.format(date);
-    }
-
-    private void dialogFinallyTester() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Teste Ativo!");
-        builder.setMessage("As imagens desse teste foram salvas e enviadas ao seu e-mail.\n\n" +
-                "Por favor verifique se recebeu!! ");
-        builder.setPositiveButton("OK", (dialog, which) -> finish());
-        builder.show();
-    }
     private void deleteAllImages() {
         try {
             File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");

@@ -266,24 +266,42 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
     }
 
     private void infoDownloadCard(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Cartão gerado com sucesso");
-        builder.setMessage("O cartão resposta foi gerado e está disponível na pasta de downloads do seu dispositvo.\n\n" +
-                "Você pode realizar impressão da quantidade de cartões necessários a partir do cartão que acabou de ser gerado!");
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            dialog.dismiss();
-            finish();
-        });
-        builder.show();
+        if(!isFinishing() && !isDestroyed()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setTitle("Cartão gerado com sucesso");
+            builder.setMessage("O cartão resposta foi gerado e está disponível na pasta de downloads do seu dispositvo.\n\n" +
+                    "Você pode realizar impressão da quantidade de cartões necessários a partir do cartão que acabou de ser gerado!");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                dialog.dismiss();
+                orientation();
+            });
+            builder.show();
+        }
     }
     private void notifyFailureDownload(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI");
-        builder.setMessage("Ocorreu uma falha ao tentar gerar o cartão resposta, se a falha persistir: \n" +
-                "1 - Verifique se possui armazenamento diponível para realização de downloads" +
-                "2 - Reinicie o Kariti!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-        builder.show();
+        if(!isFinishing() && !isDestroyed()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("KARITI");
+            builder.setMessage("Ocorreu uma falha ao tentar gerar o cartão resposta, se a falha persistir: \n" +
+                    "1 - Verifique se possui armazenamento diponível para realização de downloads" +
+                    "2 - Reinicie o Kariti!");
+            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+            builder.show();
+        }
+    }
+    private void orientation(){
+        if(!isFinishing() && !isDestroyed()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setTitle("ORIENTAÇÃO!");
+            builder.setMessage("O preenchimento dos cartões-respostas deve ser feito com caneta de cor escura, preferencialmente de cor preta.");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                dialog.dismiss();
+                finish();
+            });
+
+            builder.show();
+        }
     }
 }

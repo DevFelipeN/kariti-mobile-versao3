@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,6 +48,7 @@ public class CreatCard {
     private int typeQr;
     Prova prova;
     private double note;
+    private String versionName;
     private String className, teacher;
     //Map<Integer, String> students;
     List<Student> students;
@@ -74,6 +76,9 @@ public class CreatCard {
     public boolean creatPdfCard(){
 
         try {
+
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            versionName = pInfo.versionName; // Ex: "2.1.3"
 
             //Criar documento PDF
             PdfDocument pdfDocument = new PdfDocument();
@@ -131,7 +136,7 @@ public class CreatCard {
                 canvas.drawText("Nome do Aluno", 80, 300, paint);
 
                 // ========================= Adiciona texto no final da pagina ==================================
-                canvas.drawText("Gerado por: Kariti", 60, 1720, paint);
+                canvas.drawText("Gerado por: Kariti "+"v."+versionName, 60, 1720, paint);
 
                 // ======================== Adiciona mensagens de atenção ========================================
                 canvas.drawText("ATENÇÃO: Não rasure este cartão", 80, 530, paint);

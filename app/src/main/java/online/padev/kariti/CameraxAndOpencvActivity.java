@@ -313,10 +313,8 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
             if (circ == 4){
                 Bitmap imgToQrCode = toBitmap(mat);
                 String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
-                Mat imgWarpOrig = new Mat();
                 if(textQrCode != null){
                     matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
-                    imgWarpOrig = matWarp.clone();
                     resultQrCode = processeQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
 
@@ -363,29 +361,16 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                                     //mat.release();
                                     typeMessage = 4;
                                     Bitmap imgWarp = toBitmap(matWarp);
-                                    String complement = dataHoraAtual();
-                                    nameCartao = resultQrCode+"_"+complement;
+                                    nameCartao = resultQrCode+"_"+dataHoraAtual();
                                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this);
-
-                                    // Para testes
-                                    saveBitmapAndGetPath(imgWarp, "warp_"+nameCartao, this); //Salva a imagem cortada
-                                    saveBitmapAndGetPath(toBitmap(mat), "orig_"+nameCartao, this); //Salva a imagem original
-
                                     startGabaritoDefault(filePath);
                                 }
-
                             } else {
                                 //mat.release();
                                 typeMessage  = 5;
                                 Bitmap imgWarp = toBitmap(matWarp);
-                                String complement = dataHoraAtual();
-                                nameCartao = resultQrCode+"_"+complement;
+                                nameCartao = resultQrCode+"_"+dataHoraAtual();
                                 filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this);
-
-                                // Para testes
-                                saveBitmapAndGetPath(imgWarp, "warp_"+nameCartao, this); //Salva a imagem cortada
-                                saveBitmapAndGetPath(toBitmap(mat), "orig_"+nameCartao, this); //Salva a imagem original
-
                                 startGabaritoDefault(filePath);
                             }
                         }else {
@@ -400,11 +385,6 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                     String complement = dataHoraAtual();
                     nameCartao = resultQrCode+"_"+complement;
                     filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this); //Salva a imagem cortada
-
-                    // Para testes
-                    saveBitmapAndGetPath(toBitmap(imgWarpOrig), "warp_"+resultQrCode+"_"+complement, this); //Salva a imagem cortada
-                    imgWarpOrig.release();
-                    saveBitmapAndGetPath(toBitmap(mat), "orig_"+resultQrCode+"_"+complement, this); //Salva a imagem original
                     isCorrectSucess = true;
                 }
             }
@@ -439,7 +419,6 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
         }
 
     }
-
 
     private boolean isInside(Circle circExt, Circle circInt) {
         double xInt = circInt.x, yInt = circInt.y;

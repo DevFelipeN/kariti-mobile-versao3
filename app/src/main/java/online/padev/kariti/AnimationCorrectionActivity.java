@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AnimationCorrectionActivity extends AppCompatActivity {
     TextView titleActivity, informativo;
-        static AnimationCorrectionActivity instanciaEncerra;
+    static AnimationCorrectionActivity instanciaEncerra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

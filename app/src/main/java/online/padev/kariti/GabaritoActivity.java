@@ -32,9 +32,12 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import online.padev.kariti.correction.CoreKariti;
@@ -434,12 +437,8 @@ public class GabaritoActivity extends AppCompatActivity {
             CoreKariti core = new CoreKariti(matWarp, dadosProva, gabaritoDefault);
             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
             if (correction != null && !correction.isEmpty()){
-                //deleteAllImages();
                 Bitmap imgWarp = toBitmap(matWarp);
-
-                File s = new File(filePath);
-                String nameCartao = s.getName().replaceAll(".png", "");
-                //String nameCartao = dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives();
+                String nameCartao = dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives()+"_"+dataHoraAtual();
                 String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao, this); //Salva a imagem cortada pintada
                 startViewImageDefault(correction, gabaritoDefault, filePathPaint);
             } else {
@@ -464,21 +463,9 @@ public class GabaritoActivity extends AppCompatActivity {
             startCamera();
         }
     }
-    private void deleteAllImages() {
-        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-
-        if (externalDir.exists() && externalDir.isDirectory()) {
-            File[] files = externalDir.listFiles(); // Lista todos os arquivos no diretório
-
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile() && file.delete()) {
-                        Log.e("kariti", "Diretório limpo: " + file.getName());
-                    } else {
-                        Log.e("kariti", "Erro ao tentar limpar diretório: " + file.getName());
-                    }
-                }
-            }
-        }
+    private String dataHoraAtual(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault());
+        Date date = new Date();
+        return sdf.format(date);
     }
 }

@@ -423,11 +423,6 @@ public class ProvaActivity extends AppCompatActivity {
 
                     Prova prova = new Prova(id_provaCaptured, dataBaseKariti);
 
-                    //Bitmap imgWarp = matToBitmap(matWarp);
-                    //nameCartao = resultQrCode+"_"+prova.getNumQuestoes()+"_"+prova.getNumAlternativas();
-                    //saveBitmapAndGetPath(imgWarp, nameCartao); //Salva a imagem cortada
-                    //saveBitmapAndGetPath(matToBitmap(mat), "Original_"+resultQrCode+"_"+questionsBD+"_"+alternativesBD); //Salva a imagem original
-
                     //Versão 3
                     CoreKariti core = new CoreKariti(matWarp, prova, dataBaseKariti, Integer.parseInt(a[1]));
                     HashMap<Integer, Integer> isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile

@@ -30,13 +30,7 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.e("opencv","Erro ao tentar executar openCV");
         }
 
-
         dataBase = new DataBaseKariti(this);
-
-        //bancoDados.deletarCorrecao(61);
-        //dataBase.deletarCorrecao(1);
-        //bancoDados.deletarCorrecao(3);
-
 
         if(dataBase.verificaExisteEmail("karitimobile@gmail.com") == null) {
             dataBase.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
@@ -44,14 +38,6 @@ public class WelcomeActivity extends AppCompatActivity {
         btnRegistration.setOnClickListener(v -> startRegistrationUser());
         btnLogin.setOnClickListener(v -> startLogin());
         btnDefaultPassword.setOnClickListener(v -> startProvaDefault());
-
-        //TesterSimulation t = new TesterSimulation(bancoDados);
-        //for(int n = 190; n < 195; n++) {
-          //t.insertCorrectionFiction(62, n);
-        //}
-
-        //CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, 62);
-        //createReport.generateCorrectionReport(0);
     }
 
     /**

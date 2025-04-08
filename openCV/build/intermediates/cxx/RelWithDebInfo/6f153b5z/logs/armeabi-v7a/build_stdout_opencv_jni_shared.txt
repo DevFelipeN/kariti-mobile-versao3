@@ -1,0 +1,2 @@
+ninja: Entering directory `C:\Users\Felipe\sistema-kariti\openCV\.cxx\RelWithDebInfo\6f153b5z\armeabi-v7a'
+ninja: no work to do.

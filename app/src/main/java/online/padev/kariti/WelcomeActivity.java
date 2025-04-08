@@ -49,7 +49,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Este método carrega a tela de Login
+     * Este método carrega a tela de Login..
      */
     private void startLogin(){
         Intent intent = new Intent(this, LoginActivity.class);

@@ -1,7 +1,11 @@
 package online.padev.kariti.correction;
 
+import static org.opencv.android.Utils.matToBitmap;
 import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
+import static online.padev.kariti.utils.ImageDirectory.saveBitmapAndGetPath;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 
@@ -87,6 +91,17 @@ public class CoreKariti {
         }
     }
 
+    Context context;
+    public HashMap<Integer, Integer> correctCard_2(Context context) {
+        if (squares()){
+            if (getAnswers()){
+                return gabaritoResult;
+            } else return null;
+        }else {
+            return null;
+        }
+    }
+
     /**
      * Este méto é chamado após validação da imagem, procura as marcações referentes as respostas
      * e associa as suas respectivas questões e alternativas.
@@ -151,10 +166,6 @@ public class CoreKariti {
                 Log.e("correct", "W1.1");
                 return false;
             }
-
-            //Bitmap img = matToBitmap(binaryImage);
-            //saveBitmapAndGetPath(img, "binaryTeste");
-
             // Encontrar contornos
             Mat hierarchy = new Mat();
             Imgproc.findContours(binaryImage, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);

@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,9 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.correction.CoreKariti40;
-import online.padev.kariti.entity.Gabarito;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class GabaritoActivity extends AppCompatActivity {
@@ -55,10 +52,10 @@ public class GabaritoActivity extends AppCompatActivity {
     private List<Float> notas = new ArrayList<>();
     private List<RadioGroup> listRadioGroups;
     private Map<Integer, Integer> alternativasEscolhidas;
-    private List<Gabarito> gabarito = new ArrayList<>();
+    private List<Answer_key> answerkey = new ArrayList<>();
 
     private DataBaseKariti dataBaseKariti;
-    private Prova dadosProva;
+    private Exam dadosExam;
     private String direcion;
 
     private int statusEdition, typeMessage;
@@ -80,25 +77,25 @@ public class GabaritoActivity extends AppCompatActivity {
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
 
         dataBaseKariti = new DataBaseKariti(this);
-        dadosProva = new Prova();
+        dadosExam = new Exam();
         listRadioGroups = new ArrayList<>();
         alternativasEscolhidas = new HashMap<>();
 
         titulo.setText(String.format("%s","Gabarito"));
 
-        dadosProva = (Prova) getIntent().getSerializableExtra("prova");
+        dadosExam = (Exam) getIntent().getSerializableExtra("prova");
         direcion = getIntent().getExtras().getString("direcao");
 
 
-        if(dadosProva.getId_prova() != null && !dadosProva.getId_prova().equals(0)){
+        if(dadosExam.getExam_id() != null && !dadosExam.getExam_id().equals(0)){
             statusEdition = getIntent().getExtras().getInt("status");
             btnCadastrarProva.setText(String.format("%s","Salvar"));
         }
 
         if (!direcion.equals("cardDefault")) {
-            txtViewProva.setText(String.format("Prova: %s", dadosProva.getNameProva()));
-            txtViewTurma.setText(String.format("Turma: %s", dataBaseKariti.pegarNomeTurma(dadosProva.getId_class().toString())));
-            txtViewData.setText(String.format("Data: %s", dadosProva.dateToDisplay()));
+            txtViewProva.setText(String.format("Prova: %s", dadosExam.getNameExam()));
+            txtViewTurma.setText(String.format("Turma: %s", dataBaseKariti.getClassName(dadosExam.getClass_id().toString())));
+            txtViewData.setText(String.format("Data: %s", dadosExam.dateToDisplay()));
         } else {
             txtViewProva.setVisibility(View.GONE);
             txtViewData.setVisibility(View.GONE);
@@ -147,30 +144,30 @@ public class GabaritoActivity extends AppCompatActivity {
                         return;
                     }
                     if (!notas.isEmpty()) {
-                        for (int i = 1; i <= dadosProva.getNumQuestions(); i++) {
+                        for (int i = 1; i <= dadosExam.getNumQuestions(); i++) {
                             Integer resp = alternativasEscolhidas.get(i - 1);
                             float notaQuestaoI = notas.get(i - 1);
                             Log.e("notas", "n1: " + notaQuestaoI);
-                            Gabarito g = new Gabarito(i, resp + 1, notaQuestaoI);
-                            gabarito.add(g);
+                            Answer_key g = new Answer_key(i, resp + 1, notaQuestaoI);
+                            answerkey.add(g);
                         }
 
-                        if (dadosProva.getId_prova() == null) {
-                            if (dataBaseKariti.cadastrarProva(dadosProva, gabarito)) {
+                        if (dadosExam.getExam_id() == null) {
+                            if (dataBaseKariti.insertExam(dadosExam, answerkey)) {
                                 dialogProvaSucess("cadastrada");
                             } else {
                                 avisoErroDeCadastro("no cadastro");
                             }
-                        } else if (!dadosProva.getId_prova().equals(0)) {
-                            if (dataBaseKariti.alterarDadosProva(dadosProva, gabarito, statusEdition)) {
+                        } else if (!dadosExam.getExam_id().equals(0)) {
+                            if (dataBaseKariti.upadateExamData(dadosExam, answerkey, statusEdition)) {
                                 dialogProvaSucess("alterada");
                             } else {
                                 avisoErroDeCadastro("na alteração");
                             }
                         } else { // Entra nessa estrutura quando o gabarito pertencer a uma prova rápida
-                            Gabarito.gabaritoDefault = gabarito;
-                            Prova.numQuestsDefault = dadosProva.getNumQuestions();
-                            Prova.numAlternativesDefault = dadosProva.getNumAlternatives();
+                            Answer_key.answerkeyDefault = answerkey;
+                            Exam.numQuestsDefault = dadosExam.getNumQuestions();
+                            Exam.numAlternativesDefault = dadosExam.getNumAlternatives();
                             dialogHelpCorrectDefault();
                         }
                     } else {
@@ -185,8 +182,8 @@ public class GabaritoActivity extends AppCompatActivity {
             }
        });
 
-        int quantidadeQuestoes = dadosProva.getNumQuestions();
-        int quantidadeAlternativas = dadosProva.getNumAlternatives();
+        int quantidadeQuestoes = dadosExam.getNumQuestions();
+        int quantidadeAlternativas = dadosExam.getNumAlternatives();
         txtViewNotaProva.setText(String.format("%s","Nota total da prova " + quantidadeQuestoes + " pontos."));
 
         String[] letras = new String[quantidadeAlternativas];
@@ -299,8 +296,8 @@ public class GabaritoActivity extends AppCompatActivity {
     }
     private void generatCards() {
         Intent intent = new Intent(this, ProvaGenerateCardRegisteredActivity.class);
-        intent.putExtra("prova", dadosProva.getNameProva());
-        intent.putExtra("id_turma", dadosProva.getId_class());
+        intent.putExtra("prova", dadosExam.getNameExam());
+        intent.putExtra("id_turma", dadosExam.getClass_id());
         intent.putExtra("endereco", 1);
         startActivity(intent);
         finish();
@@ -360,7 +357,7 @@ public class GabaritoActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         } else {
-            if (Gabarito.gabaritoDefault != null && !Gabarito.gabaritoDefault.isEmpty()){
+            if (Answer_key.answerkeyDefault != null && !Answer_key.answerkeyDefault.isEmpty()){
                 Toast.makeText(this, "Seu gabarito anterior ainda foi mantido!", Toast.LENGTH_LONG).show();
                 finish();
             } else {
@@ -419,7 +416,7 @@ public class GabaritoActivity extends AppCompatActivity {
     private void correctFirstDefault(){
         try {
             String gabaritoDefault = "";
-            for (Gabarito g : Gabarito.gabaritoDefault) {
+            for (Answer_key g : Answer_key.answerkeyDefault) {
                 gabaritoDefault += g.getResponse();
             }
             String filePath = getIntent().getExtras().getString("filePath");
@@ -434,11 +431,11 @@ public class GabaritoActivity extends AppCompatActivity {
             }
             //Versão 3
             HashMap<Integer, Integer> correction;
-            CoreKariti core = new CoreKariti(matWarp, dadosProva, gabaritoDefault);
+            CoreKariti core = new CoreKariti(matWarp, dadosExam, gabaritoDefault);
             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
             if (correction != null && !correction.isEmpty()){
                 Bitmap imgWarp = toBitmap(matWarp);
-                String nameCartao = dadosProva.getNumQuestions()+"_"+dadosProva.getNumAlternatives()+"_"+dataHoraAtual();
+                String nameCartao = dadosExam.getNumQuestions()+"_"+ dadosExam.getNumAlternatives()+"_"+dataHoraAtual();
                 String filePathPaint = saveBitmapAndGetPath(imgWarp, nameCartao, this); //Salva a imagem cortada pintada
                 startViewImageDefault(correction, gabaritoDefault, filePathPaint);
             } else {

@@ -42,7 +42,7 @@ public class ClassActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
 
-        listClass = dataBase.listarNomesTurmas();
+        listClass = dataBase.listClassNames();
         if (listClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
             finish();
@@ -54,7 +54,7 @@ public class ClassActivity extends AppCompatActivity {
         listViewClass.setAdapter(adapterClass);
 
         listViewClass.setOnItemClickListener((parent, view, position, id) -> {
-            id_class = dataBase.pegarIdTurma(adapterClass.getItem(position));
+            id_class = dataBase.getClassId(adapterClass.getItem(position));
             if (id_class == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
                 return;
@@ -68,14 +68,14 @@ public class ClassActivity extends AppCompatActivity {
             builder.setTitle("Atenção!")
                     .setMessage("Deseja excluir essa turma?")
                     .setPositiveButton("SIM", (dialog, which) -> {
-                        id_class = dataBase.pegarIdTurma(listClass.get(position));
-                        Boolean checkClassInProva = dataBase.verificaExisteTurmaEmProva(id_class);
+                        id_class = dataBase.getClassId(listClass.get(position));
+                        Boolean checkClassInProva = dataBase.checkIfClassInExam(id_class);
                         if (id_class == null || checkClassInProva == null){
                             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if(!checkClassInProva) {
-                            Boolean deleteClass = dataBase.deletarTurma(id_class);
+                            Boolean deleteClass = dataBase.deleteClass(id_class);
                             if (deleteClass) {
                                 listClass.remove(position);
                                 adapterClass.notifyDataSetChanged();

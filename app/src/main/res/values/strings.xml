@@ -37,7 +37,7 @@
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
     <string name="buttonCameraOpenCV">Capturar Agora</string>
     <string name="cadEscola">Cadastrar Escola</string>
-    <string name="CorrectOpenCv">Como deseja corrigir sua prova?</string>
+    <string name="CorrectOpenCv">Como deseja corrigir sua exam?</string>
     <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>
     <string name="btnBackupBD">Mudar de dispositivo</string>
     <string name="txtBackupNovo">Mudança de dipositivo? </string>
@@ -101,7 +101,7 @@
     <string name="buttonEditar">Editar </string>
     <string name="buttonProximo">Proximo >> </string>
     <string name="buttonApagar">Apagar </string>
-    <string name="textInstrucao">Aqui você pode editar ou apagar uma prova!</string>
+    <string name="textInstrucao">Aqui você pode editar ou apagar uma exam!</string>
     <string name="buttonCadAluno">Cadastrar Aluno</string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
@@ -126,8 +126,8 @@
     <string name="buttonVisuProva">Visualizar Provas</string>
     <string name="buttonVisualizar">Visualizar</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
-    <string name="editTextNomeProva">Digite o nome  da prova*</string>
-    <string name="editTextNomeProvaDefault">Nome  da prova</string>
+    <string name="editTextNomeProva">Digite o nome  da exam*</string>
+    <string name="editTextNomeProvaDefault">Nome  da exam</string>
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNameTeacher">Nome do professor</string>
     <string name="textViewDataProva">Data da Prova</string>
@@ -142,7 +142,7 @@
     <string name="txtViewProva">Prova:</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="txtViewData">Data:</string>
-    <string name="txtViewNotaT">Nota total da prova X pontos.</string>
+    <string name="txtViewNotaT">Nota total da exam X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="btnEnvCartao">Enviar Cartão</string>

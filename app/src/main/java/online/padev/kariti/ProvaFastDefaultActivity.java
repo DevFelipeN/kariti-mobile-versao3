@@ -9,8 +9,9 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import online.padev.kariti.entity.Gabarito;
-import online.padev.kariti.entity.Prova;
+
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ProvaFastDefaultActivity extends AppCompatActivity {
@@ -58,7 +59,7 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
     }
 
     private void controllerCorrection(){
-        if (Gabarito.gabaritoDefault.isEmpty()){
+        if (Answer_key.answerkeyDefault.isEmpty()){
             notifyCorrectionOrganization();
         }else {
             notifyGabaritoSave();
@@ -66,16 +67,16 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
     }
 
     private void outputController(){
-        if (Gabarito.gabaritoDefault != null && !Gabarito.gabaritoDefault.isEmpty()){
+        if (Answer_key.answerkeyDefault != null && !Answer_key.answerkeyDefault.isEmpty()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("ATENÇÃO!")
                     .setMessage("Você possui um gabarito criado, ao confirmar essa ação o gabarito será perdido!\n\n" +
                             "Deseja realmente sair?")
                     .setPositiveButton("SIM", (dialog, which) -> {
                         dialog.dismiss();
-                        Gabarito.gabaritoDefault.clear();
-                        Prova.numQuestsDefault = 0;
-                        Prova.numAlternativesDefault = 0;
+                        Answer_key.answerkeyDefault.clear();
+                        Exam.numQuestsDefault = 0;
+                        Exam.numAlternativesDefault = 0;
                         finish();
                     })
                     .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
@@ -110,9 +111,9 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Você pussui um gabarito cadastrado. Deseja manter ou alterar o gabarito?");
         builder.setPositiveButton("Alterar", (dialog, which) -> {
-            Gabarito.gabaritoDefault.clear();
-            Prova.numQuestsDefault = 0;
-            Prova.numAlternativesDefault = 0;
+            Answer_key.answerkeyDefault.clear();
+            Exam.numQuestsDefault = 0;
+            Exam.numAlternativesDefault = 0;
             Toast.makeText(this, "Capture o novo cartão!", Toast.LENGTH_SHORT).show();
             startCorrection();
         });

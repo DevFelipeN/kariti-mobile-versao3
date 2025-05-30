@@ -59,7 +59,7 @@ public class UpdatePasswordActivity extends AppCompatActivity{
                     Toast.makeText(this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (dataBase.alterarSenha(newPassword, id_user)) {
+                if (dataBase.updatePassword(newPassword, id_user)) {
                     startLoginActivity();
                 } else {
                     Toast.makeText(this, "Erro de comunicação!\n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();

@@ -17,6 +17,6 @@ public class TesterSimulation {
             int resp = new Random().nextInt(5);
             result.put(i+1, resp);
         }
-        dataBaseKariti.cadastrarCorrecao(result, id_prova, id_aluno);
+        dataBaseKariti.insertCorrected(result, id_prova, id_aluno);
     }
 }

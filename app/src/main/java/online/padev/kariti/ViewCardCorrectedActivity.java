@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import online.padev.kariti.entity.Gabarito;
+import online.padev.kariti.entity.Answer_key;
 import online.padev.kariti.database.DataBaseKariti;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -63,8 +63,8 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
             id_prova = getIntent().getExtras().getInt("id_prova");
             id_student = getIntent().getExtras().getInt("id_aluno");
 
-            nameProva = dataBase.pegarNomeProva(id_prova);
-            nameStudent = dataBase.pegaNomeAluno(id_student);
+            nameProva = dataBase.getExamName(id_prova);
+            nameStudent = dataBase.getStudentName(id_student);
 
             if (nameProva == null || nameStudent == null || nameProva.isEmpty() || nameStudent.isEmpty()){
                 Toast.makeText(this, "Falha ao mostrar correção!", Toast.LENGTH_SHORT).show();
@@ -118,11 +118,11 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
 
     private void resultCorrectedBD(){
         try {
-            List<Gabarito> listGabarito = dataBase.listarDadosGabarito(id_prova);
-            List<String> responseStudent = dataBase.listarRespostasDadas(id_prova, id_student);
+            List<Answer_key> listAnswerkey = dataBase.listAnswerKeyData(id_prova);
+            List<String> responseStudent = dataBase.listAnswerGivenString(id_prova, id_student);
 
-            for (int i = 0; i < listGabarito.size(); i++) {
-                Gabarito g = listGabarito.get(i); // g contém questao, resposta e nota, respectivamente
+            for (int i = 0; i < listAnswerkey.size(); i++) {
+                Answer_key g = listAnswerkey.get(i); // g contém questao, resposta e nota, respectivamente
                 char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResponse())) - 1);
                 if (responseStudent.get(i).equals(String.valueOf(r))) {
                     noteStudent += g.getNote();

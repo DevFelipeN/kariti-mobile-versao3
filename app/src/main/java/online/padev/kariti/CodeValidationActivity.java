@@ -90,7 +90,7 @@ public class CodeValidationActivity extends AppCompatActivity {
                 String codeInformed = v1 + v2 + v3 + v4;
                 if (code.equals(codeInformed)) {
                     if (identifier == 0) {
-                        Boolean insertUserBD = dataBase.cadastrarUsuario(nameUser, password, email);
+                        Boolean insertUserBD = dataBase.insertUser(nameUser, password, email);
                         if (insertUserBD == null) {
                             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
@@ -155,7 +155,7 @@ public class CodeValidationActivity extends AppCompatActivity {
      */
     private void startUpdatePassword(){
         Integer id_user = getIntent().getExtras().getInt("id_usuario");
-        String nameUserBD = dataBase.pegarNomeUsuario(id_user);
+        String nameUserBD = dataBase.getUserName(id_user);
         Intent intent = new Intent(this, UpdatePasswordActivity.class);
         intent.putExtra("id_usuario", id_user);
         intent.putExtra("nome", nameUserBD);

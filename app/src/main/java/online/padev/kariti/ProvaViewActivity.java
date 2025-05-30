@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class ProvaViewActivity extends AppCompatActivity {
@@ -44,7 +44,7 @@ public class ProvaViewActivity extends AppCompatActivity {
 
         dataBaseKariti = new DataBaseKariti(this);
 
-        listClass = dataBaseKariti.listarTurmasPorProva();
+        listClass = dataBaseKariti.listClassByExam();
         if (listClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();
@@ -55,13 +55,13 @@ public class ProvaViewActivity extends AppCompatActivity {
         spinnerClass.setAdapter(adapterSpinnerClass);
         spinnerClass.setSelection(0);
         className = spinnerClass.getSelectedItem().toString();
-        id_class = dataBaseKariti.pegarIdTurma(className);
+        id_class = dataBaseKariti.getClassId(className);
         if (id_class == null){
             Toast.makeText(ProvaViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        listProva = dataBaseKariti.listarNomesProvasPorTurma(id_class.toString());
+        listProva = dataBaseKariti.listExamNames(id_class.toString());
         if (listProva == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
             finish();
@@ -74,9 +74,9 @@ public class ProvaViewActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 className = spinnerClass.getSelectedItem().toString();
-                id_class = dataBaseKariti.pegarIdTurma(className);
+                id_class = dataBaseKariti.getClassId(className);
                 listProva.clear();
-                listProva = dataBaseKariti.listarNomesProvasPorTurma(id_class.toString());
+                listProva = dataBaseKariti.listExamNames(id_class.toString());
                 if (listProva == null){
                     Toast.makeText(ProvaViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
                     finish();
@@ -104,7 +104,7 @@ public class ProvaViewActivity extends AppCompatActivity {
     }
     public void onItemClick(int position) {
         nameProva = listProva.get(position);
-        id_prova = dataBaseKariti.pegarIdProvaPorTurma(nameProva, id_class);
+        id_prova = dataBaseKariti.getExamId(nameProva, id_class);
         if (id_prova == null){
             Toast.makeText(ProvaViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
             return;
@@ -113,19 +113,19 @@ public class ProvaViewActivity extends AppCompatActivity {
     }
     public void onItemLongClick(int position) {
         nameProva = listProva.get(position);
-        id_prova = dataBaseKariti.pegarIdProvaPorTurma(nameProva, id_class);
+        id_prova = dataBaseKariti.getExamId(nameProva, id_class);
         displayEditOrDelete(position);
     }
     private void startCorrectionProva(){
-        Boolean checkIsCorrected = dataBaseKariti.verificaExisteCorrecao(id_prova.toString());
+        Boolean checkIsCorrected = dataBaseKariti.checkIfExamCorrected(id_prova.toString());
         if (checkIsCorrected == null){
             Toast.makeText(ProvaViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 6", Toast.LENGTH_SHORT).show();
             return;
         }
         if(checkIsCorrected){
-            Prova prova = new Prova(id_prova, dataBaseKariti);
+            Exam exam = new Exam(id_prova, dataBaseKariti);
             Intent intent = new Intent(this, ProvaCorrectedActivity.class);
-            intent.putExtra("prova", prova);
+            intent.putExtra("prova", exam);
             startActivity(intent);
         }else {
             Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();
@@ -141,7 +141,7 @@ public class ProvaViewActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private void editProva(){
-        if(dataBaseKariti.verificaExisteCorrecao(id_prova.toString())){
+        if(dataBaseKariti.checkIfExamCorrected(id_prova.toString())){
             noticeImpossibleEdit();
         }else {
             Intent intent = new Intent(this, ProvaEditActivity.class);
@@ -169,7 +169,7 @@ public class ProvaViewActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private void deleteProva(int position){
-        if (dataBaseKariti.deletarProva(id_prova)){
+        if (dataBaseKariti.deleteExamData(id_prova)){
             listProva.remove(nameProva);
             notifyProvaDeleted(position);
         }else{

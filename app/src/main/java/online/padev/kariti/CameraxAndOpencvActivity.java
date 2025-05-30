@@ -61,12 +61,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import online.padev.kariti.correction.CoreKariti40;
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.utils.BitmapLuminanceSource;
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.entity.Gabarito;
-import online.padev.kariti.entity.Prova;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class CameraxAndOpencvActivity extends AppCompatActivity {
@@ -77,7 +76,7 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
     private ImageView edgeImageView;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     DataBaseKariti dataBase;
-    Prova prova;
+    Exam exam;
     ImageAnalysis imageAnalysis;
     Integer id_provaCaptured, id_studentBD;
     private boolean isActivityFinishing = false; // Garante que não seja realizada mais de uma chamada a proxima activity que exibe a imagem com a correção
@@ -325,16 +324,16 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                             id_provaCaptured = Integer.parseInt(a[0]);
                             id_studentBD = Integer.parseInt(a[1]);
 
-                            if (!dataBase.verificaExisteProvaPId(id_provaCaptured) || !dataBase.checkExistsStudent(id_studentBD) ) {
+                            if (!dataBase.checkIfExistExam(id_provaCaptured) || !dataBase.checkExistStudent(id_studentBD) ) {
                                 mat.release();
                                 typeMessage = 1;
                                 finish();
                             }
 
-                            prova = new Prova(id_provaCaptured, dataBase);
+                            exam = new Exam(id_provaCaptured, dataBase);
 
                             //Versão 3
-                            CoreKariti core = new CoreKariti(matWarp, prova, dataBase, id_studentBD);
+                            CoreKariti core = new CoreKariti(matWarp, exam, dataBase, id_studentBD);
                             correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                         } else {
                             mat.release();
@@ -343,19 +342,19 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                         }
                     } else { // Entra aqui se a prova capturada não esta cadastrada
                         if (DataBaseKariti.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
-                                prova = new Prova();
-                                prova.setId_prova(0);
-                                prova.setNumQuestions(Integer.parseInt(a[0]));
-                                prova.setNumAlternatives(Integer.parseInt(a[1]));
-                            if (Gabarito.gabaritoDefault != null && !Gabarito.gabaritoDefault.isEmpty()) {
-                                if (prova.getNumQuestions() == Prova.numQuestsDefault && prova.getNumAlternatives() == Prova.numAlternativesDefault) {
+                                exam = new Exam();
+                                exam.setExam_id(0);
+                                exam.setNumQuestions(Integer.parseInt(a[0]));
+                                exam.setNumAlternatives(Integer.parseInt(a[1]));
+                            if (Answer_key.answerkeyDefault != null && !Answer_key.answerkeyDefault.isEmpty()) {
+                                if (exam.getNumQuestions() == Exam.numQuestsDefault && exam.getNumAlternatives() == Exam.numAlternativesDefault) {
 
-                                    for (Gabarito g : Gabarito.gabaritoDefault){
+                                    for (Answer_key g : Answer_key.answerkeyDefault){
                                         gabaritoDefault += g.getResponse();
                                     }
 
                                     //Versão 3
-                                    CoreKariti core = new CoreKariti(matWarp, prova, gabaritoDefault);
+                                    CoreKariti core = new CoreKariti(matWarp, exam, gabaritoDefault);
                                     correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
                                 }else {
                                     //mat.release();
@@ -392,7 +391,7 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                 isActivityFinishing = true;
                 cameraExecutor.shutdown();
                 mat.release();
-                if (prova.getId_prova() == 0){
+                if (exam.getExam_id() == 0){
                     Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
                     intent.putExtra("filePath", filePath);
                     intent.putExtra("status", 1);
@@ -403,7 +402,7 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
                 }else{
                     Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
                     intent.putExtra("filePath", filePath);
-                    intent.putExtra("id_prova", prova.getId_prova());
+                    intent.putExtra("id_prova", exam.getExam_id());
                     intent.putExtra("status", 0);
                     intent.putExtra("id_aluno", id_studentBD);
                     startActivity(intent);
@@ -603,7 +602,7 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
             intent.putExtra("direcao", "cardDefault");
             intent.putExtra("typeMessage", typeMessage);
             intent.putExtra("filePath", filePath);
-            intent.putExtra("prova", prova);
+            intent.putExtra("prova", exam);
             startActivity(intent);
             finish();
         }

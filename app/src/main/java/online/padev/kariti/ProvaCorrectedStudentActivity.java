@@ -46,8 +46,8 @@ public class ProvaCorrectedStudentActivity extends AppCompatActivity {
 
         id_student = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
         id_prova = getIntent().getExtras().getInt("id_prova");
-        StudentName = dataBaseKariti.pegaNomeAluno(id_student);
-        numQuestions = dataBaseKariti.pegarQtdQuestoes(id_prova.toString());
+        StudentName = dataBaseKariti.getStudentName(id_student);
+        numQuestions = dataBaseKariti.getNumberQuestions(id_prova.toString());
 
         if (StudentName == null || numQuestions == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
@@ -56,9 +56,9 @@ public class ProvaCorrectedStudentActivity extends AppCompatActivity {
 
         textViewStudent.setText(String.format("%s","Aluno: "+ StudentName));
         //Carrega todas as respostas ordenadas por questao
-        responseStudent = dataBaseKariti.listarRespostasDadas(id_prova, id_student); // lista as respostas dos alunos em formato de letras
-        gabarito = dataBaseKariti.listarRespostasGabarito(id_prova); // lista as respostas do gabarito em formato de letras
-        peso = dataBaseKariti.listarNotasPorQuestao(id_prova);
+        responseStudent = dataBaseKariti.listAnswerGivenString(id_prova, id_student); // lista as respostas dos alunos em formato de letras
+        gabarito = dataBaseKariti.listAnswerKeyString(id_prova); // lista as respostas do gabarito em formato de letras
+        peso = dataBaseKariti.listGradeByQuestion(id_prova);
 
         if (responseStudent == null || gabarito == null || peso == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();

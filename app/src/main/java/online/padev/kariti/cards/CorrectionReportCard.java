@@ -1,13 +1,6 @@
 package online.padev.kariti.cards;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,58 +8,46 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.R;
 import online.padev.kariti.download.DownloadPDF;
-import online.padev.kariti.entity.Gabarito;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.entity.Student;
 
 public class CorrectionReportCard {
 
     Context context;
     DataBaseKariti dataBase;
-    List<Gabarito> gabarito;
+    List<Answer_key> answerkey;
     List<Student> students;
-    Prova prova;
+    Exam exam;
 
     public CorrectionReportCard(Context context, DataBaseKariti dataBase, Integer id_provaBD) {
         this.context = context;
         this.dataBase = dataBase;
-        prova = new Prova(id_provaBD, dataBase);
-        gabarito = dataBase.listarDadosGabarito(id_provaBD);
+        exam = new Exam(id_provaBD, dataBase);
+        answerkey = dataBase.listAnswerKeyData(id_provaBD);
     }
 
     public boolean generateCorrectionReport(int typeReport){
         try {
             if (typeReport == 0) {
                 // ========== Lista todos os aluno pertencentes a turma (independente se prova corrigida ou não) ==========================
-                students = dataBase.listStudentsClassFull(prova.getId_class());
+                students = dataBase.listStudentsData(exam.getClass_id());
             } else {
                 // ========== Lista apenas alunos com a prova corrigida pertencentes a turma ==============================
-                students = dataBase.listStudentExamCorrect(prova.getId_class());
+                students = dataBase.listStudentExamCorrected(exam.getClass_id());
             }
 
             // =========== Lista auxiliar para armazenar alunos com provas não corrigidas ===================================
@@ -84,7 +65,7 @@ public class CorrectionReportCard {
             int pageHeight = 1240;
             int limitPage = 20; // limite de alunos por páginas
 
-            if (prova.getNumQuestions() <= 10) {
+            if (exam.getNumQuestions() <= 10) {
                 pageWidth = 1240;
                 pageHeight = 1754;
                 limitPage = 30;
@@ -120,9 +101,9 @@ public class CorrectionReportCard {
                 if (i == 0) { // Garante que o cabeçalho seja desenhado apenas na primeira página
 
                     // ================ Monta o Cabeçalho da Prova ====================================================================
-                    canvas.drawText("Prova(a): " + prova.getNameProva(), 80, 85, paintText);
-                    canvas.drawText("Turma: " + dataBase.pegarNomeTurma(prova.getId_class().toString()), 80, 115, paintText);
-                    canvas.drawText("Professor(a): " + dataBase.pegarNomeUsuario(), 80, 145, paintText);
+                    canvas.drawText("Prova(a): " + exam.getNameExam(), 80, 85, paintText);
+                    canvas.drawText("Turma: " + dataBase.getClassName(exam.getClass_id().toString()), 80, 115, paintText);
+                    canvas.drawText("Professor(a): " + dataBase.getUserName(), 80, 145, paintText);
                 }
 
                 // ================== Fonte das linhas da tabela =============================================
@@ -133,7 +114,7 @@ public class CorrectionReportCard {
                 // ======================== Iniciando cabeçalho da tabela ==========================================
                 int startX = 80;
                 int startY = 180;
-                int stopX = 480 + (prova.getNumQuestions() * 50);
+                int stopX = 480 + (exam.getNumQuestions() * 50);
 
                 // ======================= Desenhando campos do cabeçalho =========================
                 canvas.drawLine(startX, startY, stopX, startY, paintLine); // desenha primeira linha na horizontal
@@ -153,7 +134,7 @@ public class CorrectionReportCard {
                 paintText.setTextSize(20);
                 startX = 480;
                 startY = 220;
-                for (int q = 1; q <= prova.getNumQuestions(); q++) {
+                for (int q = 1; q <= exam.getNumQuestions(); q++) {
                     canvas.drawText("Q" + q, startX + 7, startY + 25, paintText);
                     startX += 50;
                     canvas.drawLine(startX, startY, startX, startY + 40, paintLine);
@@ -167,7 +148,7 @@ public class CorrectionReportCard {
                     for (int al = studentI; al < students.size(); al++) {
                         if (controllerPage == limitPage) break;
                         studentI += 1;
-                        boolean checkIsCorrect = dataBase.verificaExisteCorrecaoAluno(prova.getId_prova(), students.get(al).getId_student());
+                        boolean checkIsCorrect = dataBase.checkIfExamStudentCorrected(exam.getExam_id(), students.get(al).getId_student());
                         if (!checkIsCorrect) {
                             studentsNotCorrect.add(students.get(al));
                             continue;
@@ -178,16 +159,16 @@ public class CorrectionReportCard {
                         canvas.drawText(formatNameStudent(studentName), startX + 10, startY + 30, paintText);
                         canvas.drawLine(380, startY, 380, startY + 40, paintLine); // desenha segunda linha na vestical
                         canvas.drawLine(480, startY, 480, startY + 40, paintLine);
-                        List<String> studentResponses = dataBase.listarRespostasDadas(prova.getId_prova(), students.get(al).getId_student());
+                        List<String> studentResponses = dataBase.listAnswerGivenString(exam.getExam_id(), students.get(al).getId_student());
                         int startAnswersX = 480;
                         float note = 0;
-                        for (int r = 0; r < prova.getNumQuestions(); r++) {
+                        for (int r = 0; r < exam.getNumQuestions(); r++) {
                             String resp = formatResponse(studentResponses.get(r));
                             canvas.drawText(resp, startAnswersX + 5, startY + 30, paintText);
                             boolean isCorrect = isCorrectResponse(resp, r);
                             if (isCorrect) {
                                 canvas.drawBitmap(icon_resized_correct, startAnswersX + 30, startY, null);
-                                note += gabarito.get(r).getNote();
+                                note += answerkey.get(r).getNote();
                             } else {
                                 canvas.drawBitmap(icon_resized_incorrect, startAnswersX + 30, startY, null);
                             }
@@ -211,7 +192,7 @@ public class CorrectionReportCard {
                         canvas.drawText(" - ", 420, startY + 30, paintText);
                         canvas.drawLine(480, startY, 480, startY + 40, paintLine);
                         int startAnswersX = 480;
-                        for (int r = 0; r < prova.getNumQuestions(); r++) {
+                        for (int r = 0; r < exam.getNumQuestions(); r++) {
                             canvas.drawText("-", startAnswersX + 20, startY + 28, paintText);
                             startAnswersX += 50;
                             canvas.drawLine(startAnswersX, startY, startAnswersX, startY + 40, paintLine);
@@ -242,7 +223,7 @@ public class CorrectionReportCard {
                 Paint paintQuest = new Paint();
                 paintQuest.setTextSize(14);
 
-                for (Gabarito g : gabarito) {
+                for (Answer_key g : answerkey) {
                     char resp = (char) ('A' + g.getResponse() - 1);
                     float n = g.getNote();
                     canvas.drawText(String.valueOf(resp), startX + 5, startY + 30, paintText);
@@ -260,7 +241,7 @@ public class CorrectionReportCard {
                 pdfDocument.finishPage(page);
             }
 
-            String fileName = "Relatorio_"+prova.getNameProva()+"_"+dataHoraAtual()+".pdf";
+            String fileName = "Relatorio_"+ exam.getNameExam()+"_"+dataHoraAtual()+".pdf";
 
             DownloadPDF downloadPDF = new DownloadPDF(context);
             downloadPDF.newDownload(pdfDocument, fileName);
@@ -380,7 +361,7 @@ public class CorrectionReportCard {
     }
 
     private boolean isCorrectResponse(String resp, int position){
-        Gabarito g = gabarito.get(position);
+        Answer_key g = answerkey.get(position);
         char respCorrect = (char) ('A' + g.getResponse() -1);
         return resp.equals(String.valueOf(respCorrect));
     }

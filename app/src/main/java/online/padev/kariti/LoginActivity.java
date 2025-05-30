@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                id_user = dataBase.verificaAutenticacao(emailInformed, passwordInformed);
+                id_user = dataBase.checkAuthentication(emailInformed, passwordInformed);
                 if (id_user == null || id_user == -1) {
                     Toast.makeText(this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
                     return;
@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                id_user = dataBase.verificaExisteEmail(emailInformed);
+                id_user = dataBase.checkUserEmail(emailInformed);
                 if (id_user == null || id_user == -1) {
                     Toast.makeText(this, "E-mail não encontrado!", Toast.LENGTH_SHORT).show();
                     return;

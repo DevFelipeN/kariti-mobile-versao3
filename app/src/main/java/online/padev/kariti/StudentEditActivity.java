@@ -37,8 +37,8 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
         noticeEdit();
 
         id_student = getIntent().getExtras().getInt("id_aluno");
-        nameStudentBD = dataBase.pegaNomeAlunoPStatus(id_student, 1);
-        emailBD = dataBase.pegarEmailAluno(id_student);
+        nameStudentBD = dataBase.getStudentName(id_student, 1);
+        emailBD = dataBase.getStudentEmail(id_student);
         if (nameStudentBD == null || emailBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
@@ -58,7 +58,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
                 return;
             }
             if (!nameStudentBD.equals(nameStudentCurrent)){
-                Boolean checkStudentExists = dataBase.checkExistsStudent(nameStudentCurrent);
+                Boolean checkStudentExists = dataBase.checkExistStudent(nameStudentCurrent);
                 if (checkStudentExists == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
@@ -74,7 +74,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
                     return;
                 }
             }
-            Boolean updateStudentBD = dataBase.alterarDadosAluno(nameStudentCurrent, emailCurrent, id_student);
+            Boolean updateStudentBD = dataBase.updateStudentData(nameStudentCurrent, emailCurrent, id_student);
             if (updateStudentBD == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -83,7 +83,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
                 Toast.makeText(StudentEditActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
                 restartStudentActivity();
             } else {
-                Toast.makeText(StudentEditActivity.this, "Erro: alteração nao realizada!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentEditActivity.this, "Erro: alteração não realizada!", Toast.LENGTH_SHORT).show();
             }
         });
         back.setOnClickListener(view -> restartStudentActivity());
@@ -95,7 +95,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
         });
     }
     private void restartStudentActivity(){
-        if(dataBase.verificaExisteAlunosPorEscola()){
+        if(dataBase.checkExistStudent()){
             setResult(RESULT_OK);
             finish();
         }else{
@@ -118,7 +118,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
             builder.setTitle("Atenção!")
                     .setMessage("Deseja realmente excluir o aluno?")
                     .setPositiveButton("Sim", (dialog, which) -> {
-                        Boolean deletarAluno = dataBase.deletarAluno(id_student);
+                        Boolean deletarAluno = dataBase.deleteStudent(id_student);
                         if (deletarAluno) {
                             Toast.makeText(this, "Aluno excluido com sucesso", Toast.LENGTH_SHORT).show();
                             restartStudentActivity();

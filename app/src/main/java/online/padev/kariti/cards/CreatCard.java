@@ -1,14 +1,7 @@
 package online.padev.kariti.cards;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,60 +9,46 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfDocument.PageInfo;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.download.DownloadPDF;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.entity.Student;
 
 public class CreatCard {
     Context context;
     private int typeQr;
-    Prova prova;
+    Exam exam;
     private double note;
     private String versionName;
     private String className, teacher;
     //Map<Integer, String> students;
     List<Student> students;
 
-    public CreatCard(Prova prova, DataBaseKariti dataBase, Context context){
-        this.prova = prova;
-        this.className = dataBase.pegarNomeTurma(prova.getId_class().toString());
-        this.teacher = dataBase.pegarNomeUsuario(DataBaseKariti.USER_ID);
-        students = dataBase.listarAlunosPorTurma(prova.getId_class());
-        note = dataBase.pegarNotaProva(prova.getId_prova().toString());
+    public CreatCard(Exam exam, DataBaseKariti dataBase, Context context){
+        this.exam = exam;
+        this.className = dataBase.getClassName(exam.getClass_id().toString());
+        this.teacher = dataBase.getUserName(DataBaseKariti.USER_ID);
+        students = dataBase.listStudentsData(exam.getClass_id());
+        note = dataBase.getExamGrade(exam.getExam_id().toString());
         this.context = context;
         typeQr = 0; // Isso indica que o QRcode a ser montado terá o padrão (id_prova e id_aluno)
     }
 
-    public CreatCard(Prova prova, String teacher, String className, Context context){
-        this.prova = prova;
+    public CreatCard(Exam exam, String teacher, String className, Context context){
+        this.exam = exam;
         this.context = context;
         this.className = className;
         this.teacher = teacher;
         students = new ArrayList<>();
-        students.add(new Student(prova.getNumAlternatives(), "", null)); // Alterando dado do QRcode
+        students.add(new Student(exam.getNumAlternatives(), "", null)); // Alterando dado do QRcode
         typeQr = 1; // Isso indica que o QRcode a ser montado terá o padrão (numQuestões e numAlternativas)
     }
 
@@ -85,7 +64,7 @@ public class CreatCard {
 
             for (Student student : students) {
 
-                Bitmap qrCode = LibQr.createQrCode(prova.getId_prova()+"."+student.getId_student(), typeQr, context);
+                Bitmap qrCode = LibQr.createQrCode(exam.getExam_id()+"."+student.getId_student(), typeQr, context);
 
                 // ============ Cria uma página A4 (1240 x 1754px) ===========================================================
                 PageInfo pageInfo = new PageInfo.Builder(1240, 1754, 1).create();
@@ -105,10 +84,10 @@ public class CreatCard {
                 // ================ Monta o Cabeçalho da Prova ====================================================================
                 canvas.drawText("Aluno(a): " + student.getNameStudent(), 80, 85, paint);
                 canvas.drawText("Professor(a): " + teacher, 80, 115, paint);
-                canvas.drawText("Prova: " + prova.getNameProva(), 80, 145, paint);
+                canvas.drawText("Prova: " + exam.getNameExam(), 80, 145, paint);
                 canvas.drawText("Turma: " + className, 80, 175, paint);
-                if(prova.getDateProva() != null) {
-                    canvas.drawText("Data: " + prova.dateToDisplay(), 80, 205, paint);
+                if(exam.getDateExam() != null) {
+                    canvas.drawText("Data: " + exam.dateToDisplay(), 80, 205, paint);
                 } else {
                     canvas.drawText("Data: ", 80, 205, paint);
                 }
@@ -192,17 +171,17 @@ public class CreatCard {
 
 
                 int questsAtual = 0;
-                if (prova.getNumQuestions() > 20) {
+                if (exam.getNumQuestions() > 20) {
                     questsAtual = 20;
                     alternativeSpacing = 60;
                     startQueresAltX = 242;
                     startOptionX = 244;
                 } else {
-                    questsAtual = prova.getNumQuestions();
+                    questsAtual = exam.getNumQuestions();
                 }
 
                 // ===================== Adiciona os quadrados das alternativas ====================================
-                for (int alt = 1; alt <= prova.getNumAlternatives(); alt++) {
+                for (int alt = 1; alt <= exam.getNumAlternatives(); alt++) {
                     canvas.drawRect(startQueresAltX, 653, startQueresAltX + 20, 673, paint);
                     startQueresAltX += alternativeSpacing;
                 }
@@ -217,7 +196,7 @@ public class CreatCard {
                     canvas.drawText(i + "", 170, startQuestY, paintLetters); // Número da questão
 
                     int optionX = startOptionX;
-                    for (int a = 0; a < prova.getNumAlternatives(); a++) {
+                    for (int a = 0; a < exam.getNumAlternatives(); a++) {
                         canvas.drawText(letters[a] + "", optionX, startQuestY, paintLetters); // Alternativas
 
                         // Ajusta a posição do círculo para centralizar a letra
@@ -234,25 +213,25 @@ public class CreatCard {
                 }
 
                 // =========== Caso o número de questões seja maior que 20 questões =========================================
-                if (prova.getNumQuestions() > 20) {
+                if (exam.getNumQuestions() > 20) {
 
                     startQueresAltX = 753;
 
                     // ===================== Adiciona os quadrados das alternativas na direita da página  ====================================
-                    for (int alt = 1; alt <= prova.getNumAlternatives(); alt++) {
+                    for (int alt = 1; alt <= exam.getNumAlternatives(); alt++) {
                         canvas.drawRect(startQueresAltX, 653, startQueresAltX + 20, 673, paint);
                         startQueresAltX += alternativeSpacing;
                     }
 
                     // ===================== Adiciona os quadrados das questões, numeros e alternativas na direita da página ========================
                     startQuestY = 720; // Onde começa as questões em Y
-                    for (int i = 21; i <= prova.getNumQuestions(); i++) {
+                    for (int i = 21; i <= exam.getNumQuestions(); i++) {
                         canvas.drawRect(651, startQuestY - 20, 671, startQuestY, paint);
 
                         canvas.drawText(i + "", 681, startQuestY, paintLetters); // Número da questão
 
                         startOptionX = 756;
-                        for (int a = 0; a < prova.getNumAlternatives(); a++) {
+                        for (int a = 0; a < exam.getNumAlternatives(); a++) {
                             canvas.drawText(letters[a] + "", startOptionX, startQuestY, paintLetters); // Alternativas
 
                             // Ajusta a posição do círculo para centralizar a letra
@@ -304,7 +283,7 @@ public class CreatCard {
                 pdfDocument.finishPage(page);
             }
 
-            String fileName = prova.getNameProva()+"_"+dataHoraAtual()+".pdf";
+            String fileName = exam.getNameExam()+"_"+dataHoraAtual()+".pdf";
 
             DownloadPDF downloadPDF = new DownloadPDF(context);
             downloadPDF.newDownload(pdfDocument, fileName);

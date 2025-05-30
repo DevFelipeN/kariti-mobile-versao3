@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class ProvaRegistrationActivity extends AppCompatActivity {
@@ -28,7 +28,7 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
     Button btnRegistrationProva;
     Spinner spinnerClass;
     DataBaseKariti dataBaseKariti;
-    Prova prova;
+    Exam exam;
     List<String> listClass;
     ImageButton back, lessQuestions, moreQuestions, moreAlternatives, lessAlternatives;
     private String dateFormatting;
@@ -52,11 +52,11 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
         title = findViewById(R.id.toolbar_title);
 
         dataBaseKariti = new DataBaseKariti(this);
-        prova = new Prova();
+        exam = new Exam();
 
         title.setText(String.format("%s","Nova Prova"));
 
-        listClass = dataBaseKariti.listarNomesTurmas(); //Obtem a lista das turmas delimitadas pertecentes a escola atual
+        listClass = dataBaseKariti.listClassNames(); //Obtem a lista das turmas delimitadas pertecentes a escola atual
         if(listClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
@@ -104,9 +104,9 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
         btnRegistrationProva.setOnClickListener(v -> {
             btnRegistrationProva.setEnabled(false);
             try {
-                prova.setNameProva(editTextNameProva.getText().toString());
+                exam.setNameExam(editTextNameProva.getText().toString());
 
-                if (prova.getNameProva().trim().isEmpty()) {
+                if (exam.getNameExam().trim().isEmpty()) {
                     Toast.makeText(ProvaRegistrationActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -115,13 +115,13 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
                     return;
                 }
                 String nameClass = spinnerClass.getSelectedItem().toString();
-                prova.setId_class(dataBaseKariti.pegarIdTurma(nameClass));
+                exam.setClass_id(dataBaseKariti.getClassId(nameClass));
 
                 if (datePickerButton.getText().toString().equals("Selecionar Data")) {
                     Toast.makeText(ProvaRegistrationActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                prova.setDateProva(datePickerButton.getText().toString());
+                exam.setDateExam(datePickerButton.getText().toString());
 
                 if (editTextNumQuestion.getText().toString().trim().isEmpty() || editTextNumQuestion.getText().toString().equals("0")) {
                     Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
@@ -141,21 +141,21 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
                     return;
                 }
 
-                prova.setNumQuestions(Integer.parseInt(editTextNumQuestion.getText().toString()));
-                prova.setNumAlternatives(Integer.parseInt(editTextNumAlternative.getText().toString()));
+                exam.setNumQuestions(Integer.parseInt(editTextNumQuestion.getText().toString()));
+                exam.setNumAlternatives(Integer.parseInt(editTextNumAlternative.getText().toString()));
 
-                if (prova.getId_class() == null) {
+                if (exam.getClass_id() == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaPNome(prova.getNameProva(), prova.getId_class().toString());
+                Boolean checkExistsProva = dataBaseKariti.checkIfExistExam(exam.getNameExam(), exam.getClass_id().toString());
                 if (checkExistsProva == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (checkExistsProva) {
-                    Toast.makeText(ProvaRegistrationActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, " + prova.getNameProva(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProvaRegistrationActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, " + exam.getNameExam(), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startGenerateGabarito();
@@ -207,7 +207,7 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
     }
     private void startGenerateGabarito(){
         Intent intent = new Intent(this, GabaritoActivity.class);
-        intent.putExtra("prova", prova);
+        intent.putExtra("prova", exam);
         intent.putExtra("direcao", "novaProva");
         startActivity(intent);
         finish();

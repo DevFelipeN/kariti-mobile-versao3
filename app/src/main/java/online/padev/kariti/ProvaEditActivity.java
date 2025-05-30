@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class ProvaEditActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class ProvaEditActivity extends AppCompatActivity {
     private Integer id_provaBD;
     TextView title;
     DataBaseKariti dataBaseKariti;
-    Prova provaBD, provaCurrent;
+    Exam examBD, examCurrent;
     private int status;
     private List<String> listClass;
 
@@ -63,16 +63,16 @@ public class ProvaEditActivity extends AppCompatActivity {
 
         id_provaBD = Objects.requireNonNull(getIntent().getExtras()).getInt("id_prova");
 
-        provaBD = new Prova(id_provaBD, dataBaseKariti);
-        provaCurrent = new Prova();
+        examBD = new Exam(id_provaBD, dataBaseKariti);
+        examCurrent = new Exam();
 
-        editTextNameProva.setText(String.format("%s", provaBD.getNameProva()));
-        editTextNumQuestions.setText(String.format("%s", provaBD.getNumQuestions()));
-        editTextNumAlternatives.setText(String.format("%s", provaBD.getNumAlternatives()));
-        btnDate.setText(provaBD.dateToDisplay());
+        editTextNameProva.setText(String.format("%s", examBD.getNameExam()));
+        editTextNumQuestions.setText(String.format("%s", examBD.getNumQuestions()));
+        editTextNumAlternatives.setText(String.format("%s", examBD.getNumAlternatives()));
+        btnDate.setText(examBD.dateToDisplay());
 
-        listClass = dataBaseKariti.listarNomesTurmas(); // Lista todas as turmas da escola atual
-        int position = listClass.indexOf(dataBaseKariti.pegarNomeTurma(provaBD.getId_class().toString()));
+        listClass = dataBaseKariti.listClassNames(); // Lista todas as turmas da escola atual
+        int position = listClass.indexOf(dataBaseKariti.getClassName(examBD.getClass_id().toString()));
         AdapterSpinner adapter = new AdapterSpinner(this, listClass);
         spinnerClass.setAdapter(adapter);
         spinnerClass.setSelection(position);
@@ -138,12 +138,12 @@ public class ProvaEditActivity extends AppCompatActivity {
 
             try {
                 classNameCurrent = spinnerClass.getSelectedItem().toString(); // nome da turma não tem como ser vazio!
-                provaCurrent.setId_prova(id_provaBD);
-                provaCurrent.setNameProva(editTextNameProva.getText().toString());
-                provaCurrent.setDateProva(btnDate.getText().toString());
-                provaCurrent.setId_class(dataBaseKariti.pegarIdTurma(classNameCurrent));
+                examCurrent.setExam_id(id_provaBD);
+                examCurrent.setNameExam(editTextNameProva.getText().toString());
+                examCurrent.setDateExam(btnDate.getText().toString());
+                examCurrent.setClass_id(dataBaseKariti.getClassId(classNameCurrent));
 
-                if (provaCurrent.getNameProva().trim().isEmpty()) { //verifica se o campo prova esta vazio
+                if (examCurrent.getNameExam().trim().isEmpty()) { //verifica se o campo prova esta vazio
                     Toast.makeText(ProvaEditActivity.this, "Informe o nome da Prova!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -164,18 +164,18 @@ public class ProvaEditActivity extends AppCompatActivity {
                     dialogLimitMaxAlter();
                     return;
                 }
-                provaCurrent.setNumQuestions(Integer.parseInt(editTextNumQuestions.getText().toString()));
-                provaCurrent.setNumAlternatives(Integer.parseInt(editTextNumAlternatives.getText().toString()));
+                examCurrent.setNumQuestions(Integer.parseInt(editTextNumQuestions.getText().toString()));
+                examCurrent.setNumAlternatives(Integer.parseInt(editTextNumAlternatives.getText().toString()));
 
-                if (provaCurrent.isDifferent(provaBD)) { //Verifica se os dados da prova foram alterados
-                    if (!provaCurrent.getNameProva().equals(provaBD.getNameProva()) || !provaCurrent.getId_class().equals(provaBD.getId_class())) {
-                        Boolean verificaProva = dataBaseKariti.verificaExisteProvaPNome(provaCurrent.getNameProva(), provaCurrent.getId_class().toString());
+                if (examCurrent.isDifferent(examBD)) { //Verifica se os dados da prova foram alterados
+                    if (!examCurrent.getNameExam().equals(examBD.getNameExam()) || !examCurrent.getClass_id().equals(examBD.getClass_id())) {
+                        Boolean verificaProva = dataBaseKariti.checkIfExistExam(examCurrent.getNameExam(), examCurrent.getClass_id().toString());
                         if (verificaProva == null) {
                             Toast.makeText(ProvaEditActivity.this, "Erro na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (verificaProva) {
-                            Toast.makeText(ProvaEditActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, " + provaCurrent.getNameProva(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProvaEditActivity.this, "Esta turma já pussui uma prova cadastrada com esse nome, " + examCurrent.getNameExam(), Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
@@ -224,9 +224,9 @@ public class ProvaEditActivity extends AppCompatActivity {
         Log.e("kariti", "status: "+status);
         Intent intent = new Intent(getApplicationContext(), GabaritoActivity.class);
         if (status == 0){
-            intent.putExtra("prova", provaBD);
+            intent.putExtra("prova", examBD);
         }else{
-            intent.putExtra("prova", provaCurrent);
+            intent.putExtra("prova", examCurrent);
         }
         intent.putExtra("direcao", "edicao");
         intent.putExtra("status", status);

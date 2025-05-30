@@ -3,13 +3,13 @@ package online.padev.kariti.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gabarito {
+public class Answer_key {
     private Integer question;
     private Integer response;
     private float note;
-    public static List<Gabarito> gabaritoDefault = new ArrayList<>(); // Guarda o gabarito de provas rapidas
+    public static List<Answer_key> answerkeyDefault = new ArrayList<>(); // Guarda o gabarito de provas rapidas
 
-    public Gabarito(Integer question, Integer response, float note) {
+    public Answer_key(Integer question, Integer response, float note) {
         this.question = question;
         this.response = response;
         this.note = note;

@@ -68,13 +68,13 @@ public class SchoolActivity extends AppCompatActivity {
 
         titleActivity.setText(String.format("%s","Acessar com:"));
 
-        listSchoolsBD = dataBase.listarEscolas(1); //carrega todas as escolas ativadas para o usuario logado
+        listSchoolsBD = dataBase.listSchoolNames(1); //carrega todas as escolas ativadas para o usuario logado
         if(listSchoolsBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
         if(listSchoolsBD.isEmpty()){
-            if(!dataBase.listarEscolas(0).isEmpty()){
+            if(!dataBase.listSchoolNames(0).isEmpty()){
                 startSchoolsDisabled();
             }else{
                 registrationNewSchool();
@@ -84,8 +84,8 @@ public class SchoolActivity extends AppCompatActivity {
         listViewSchools.setAdapter(adapterSchool);
 
         listViewSchools.setOnItemClickListener((parent, view, position, id) -> {
-            DataBaseKariti.ID_ESCOLA = dataBase.pegarIdEscola(adapterSchool.getItem(position));
-            if (DataBaseKariti.ID_ESCOLA == null || DataBaseKariti.ID_ESCOLA == -1){
+            DataBaseKariti.ID_ESCOLA = dataBase.getSchoolId(adapterSchool.getItem(position));
+            if (DataBaseKariti.ID_ESCOLA == null) {
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -97,12 +97,12 @@ public class SchoolActivity extends AppCompatActivity {
             builder.setTitle("Atenção!")
                     .setMessage("Deseja desativar essa escola?")
                     .setPositiveButton("SIM", (dialog, which) -> {
-                        id_school = dataBase.pegarIdEscola(adapterSchool.getItem(position));
-                        if (id_school == null || id_school == -1){
+                        id_school = dataBase.getSchoolId(adapterSchool.getItem(position));
+                        if (id_school == null){
                             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if(dataBase.alterarStatusEscola(id_school,0)){
+                        if(dataBase.updateSchool(id_school,0)){
                             listSchoolsBD.remove(position);
                             adapterSchool.notifyDataSetChanged();
                             if(listSchoolsBD.isEmpty()) {
@@ -176,7 +176,7 @@ public class SchoolActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void startSchoolsDisabled() {
-        if(!dataBase.listarEscolas(0).isEmpty()) {
+        if(!dataBase.listSchoolNames(0).isEmpty()) {
             Intent intent = new Intent(this, SchoolDisabledActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
         }else{
@@ -204,13 +204,13 @@ public class SchoolActivity extends AppCompatActivity {
         btnRegistrationSchool.setOnClickListener(v -> {
             String nameSchool = editTextSchool.getText().toString().trim();
             if (!nameSchool.isEmpty()){
-                Boolean checkExistsSchool = dataBase.verificaExisteEscola(nameSchool);
+                Boolean checkExistsSchool = dataBase.checkSchool(nameSchool);
                 if(checkExistsSchool == null){
                     Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!checkExistsSchool){
-                    if (dataBase.cadastrarEscola(nameSchool, 1)) {
+                    if (dataBase.insertSchool(nameSchool)) {
                         listSchoolsBD.add(nameSchool);
                         Collections.sort(listSchoolsBD);
                         adapterSchool.notifyDataSetChanged();
@@ -291,7 +291,7 @@ public class SchoolActivity extends AppCompatActivity {
      */
     private boolean startBackup(){
         File dbFile = getDatabasePath("base_dados.db");
-        String email = dataBase.pegarEmailUsuario(DataBaseKariti.USER_ID);
+        String email = dataBase.getUserEmail(DataBaseKariti.USER_ID);
         if (email == null){
             return false;
         }

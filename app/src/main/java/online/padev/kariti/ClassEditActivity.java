@@ -60,7 +60,7 @@ public class ClassEditActivity extends AppCompatActivity {
         id_Class = Objects.requireNonNull(getIntent().getExtras()).getString("id_turma");
 
         //Lista todos os alunos no Spinner
-        studentsSchool = dataBase.listarNomesAlunos(1);
+        studentsSchool = dataBase.listStudentNames(1);
         if (studentsSchool == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 1", Toast.LENGTH_SHORT).show();
             finish();
@@ -77,8 +77,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
         //Mostra a turma a ser editada
 
-        nameClassBD = dataBase.pegarNomeTurma(id_Class);
-        numAnonymousBD = dataBase.pegarQtdAlunosPorStatus(id_Class, 0);
+        nameClassBD = dataBase.getClassName(id_Class);
+        numAnonymousBD = dataBase.getStudentNumber(id_Class, 0);
 
         if (nameClassBD == null || numAnonymousBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 2", Toast.LENGTH_SHORT).show();
@@ -91,7 +91,7 @@ public class ClassEditActivity extends AppCompatActivity {
         notifyAnonymous(numAnonymousBD);
 
         //Lista os aluno cadastrados nesta turma.
-        studentsRegisteredClass = dataBase.listarAlunosTurmaPorStatus(id_Class, 1);
+        studentsRegisteredClass = dataBase.listStudentNames(id_Class, 1);
         if (studentsRegisteredClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
             finish();
@@ -172,7 +172,7 @@ public class ClassEditActivity extends AppCompatActivity {
                     return;
                 }
                 if (!nameClassCurrent.equals(nameClassBD)) {
-                    Boolean checkClassExists = dataBase.verificaExisteTurmaPorNome(nameClassCurrent);
+                    Boolean checkClassExists = dataBase.checkExistClass(nameClassCurrent);
                     if (checkClassExists == null) {
                         Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
                         return;
@@ -181,24 +181,24 @@ public class ClassEditActivity extends AppCompatActivity {
                         Toast.makeText(this, "Turma já cadastrada! ", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (!dataBase.alterarDadosTurma(nameClassCurrent, Integer.valueOf(id_Class))) {
+                    if (!dataBase.updateClassData(nameClassCurrent, Integer.valueOf(id_Class))) {
                         Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
-                if (!dataBase.deletarAnonimos(Integer.valueOf(id_Class))) {  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
+                if (!dataBase.deleteAnonymous(Integer.valueOf(id_Class))) {  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!dataBase.deletarAlunoDeTurma(Integer.valueOf(id_Class))) {  //Deleta todos os alunos pertecentes a essa turma
+                if (!dataBase.deleteStudentsFromClass(Integer.valueOf(id_Class))) {  //Deleta todos os alunos pertecentes a essa turma
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!studentsRegisteredClass.isEmpty()) {
                     for (String student : studentsRegisteredClass) {
-                        id_student = dataBase.pegarIdAluno(student);
+                        id_student = dataBase.getStudentId(student);
                         if (id_student != null && id_student != -1) {
-                            if (!dataBase.cadastrarAlunoNaTurma(Integer.valueOf(id_Class), id_student)) {
+                            if (!dataBase.linkStudentToClass(Integer.valueOf(id_Class), id_student)) {
                                 Log.e("kariti", "Erro ao tentar vincular o aluno " + student + " a turma com id: " + id_Class);
                             }
                         }
@@ -212,9 +212,9 @@ public class ClassEditActivity extends AppCompatActivity {
                     int t = numAnonymousCurrent.length();
                     for (int x = 1; x <= anonymousCurrent; x++) {
                         String nameAnonymous = "Aluno " + String.format("%0" + t + "d", x);
-                        Integer id_anonymous = dataBase.cadastrarAluno(nameAnonymous, null, 0);
+                        Integer id_anonymous = dataBase.insertStudent(nameAnonymous, null, 0);
                         if (id_anonymous != -1) {
-                            if (!dataBase.cadastrarAlunoNaTurma(Integer.valueOf(id_Class), id_anonymous)) {
+                            if (!dataBase.linkStudentToClass(Integer.valueOf(id_Class), id_anonymous)) {
                                 Log.e("kariti", "Erro ao tentar vincular o aluno anonimo " + nameAnonymous + " a turma com id: " + id_Class);
                             }
                         }

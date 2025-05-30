@@ -39,7 +39,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
 
         iconHelp.setOnClickListener(v -> ajuda());
 
-        listDisabledBD = dataBase.listarEscolas(0);
+        listDisabledBD = dataBase.listSchoolNames(0);
         if (listDisabledBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
@@ -50,8 +50,8 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
 
         listViewDisabled.setOnItemLongClickListener((parent, view, position, id) -> {
             // Exibir a caixa de diálogo
-            id_school = dataBase.pegarIdEscola(adapterDisabled.getItem(position));
-            if (id_school == null || id_school == -1){
+            id_school = dataBase.getSchoolId(adapterDisabled.getItem(position));
+            if (id_school == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -59,7 +59,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
             builder.setTitle("Atenção!")
                     .setMessage("Qual operação deseja realizar com essa escola? ")
                     .setPositiveButton("Ativar", (dialog, which) -> {
-                        if(dataBase.alterarStatusEscola(id_school, 1)){
+                        if(dataBase.updateSchool(id_school, 1)){
                             listDisabledBD.remove(position);
                             adapterDisabled.notifyDataSetChanged();
                             Toast.makeText(SchoolDisabledActivity.this, "Escola reativada com sucesso!", Toast.LENGTH_SHORT).show();
@@ -112,7 +112,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
         builder.setTitle("Deseja realmente excluir essa escola?");
         builder.setMessage("Caso confirme essa ação, todos os dados pertencentes a essa escola, serão perdidos!");
         builder.setPositiveButton("SIM", (dialog, which) -> {
-            Boolean deletaEscola = dataBase.deletarEscola(id_school);
+            boolean deletaEscola = dataBase.deleteSchool(id_school);
             if (deletaEscola){
                 listDisabledBD.remove(position);
                 adapterDisabled.notifyDataSetChanged();

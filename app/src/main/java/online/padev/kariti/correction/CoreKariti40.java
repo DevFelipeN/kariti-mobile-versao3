@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 
 
 public class CoreKariti40 {
@@ -39,7 +39,7 @@ public class CoreKariti40 {
     Integer id_studentBD;
     Mat mat; // Faz referência a imagem cortada
     DataBaseKariti dataBase;
-    Prova prova;
+    Exam exam;
     int height, width;
     private final String gabarito;
     private final int typeProva;
@@ -49,16 +49,16 @@ public class CoreKariti40 {
      * Este construtor deve ser invocado quando a prova que se deseja corrigir,
      * está cadastrada no banco de dados do aplicativo
      * @param mat imagem cortada do cartão resposta
-     * @param prova dados da prova a ser corrigida
+     * @param exam dados da prova a ser corrigida
      * @param dataBase instância do banco para cadastro da correção
      * @param id_studentBD id do aluno associado ao prova a ser corrigida
      */
-    public CoreKariti40(Mat mat, Prova prova, DataBaseKariti dataBase, Integer id_studentBD){
+    public CoreKariti40(Mat mat, Exam exam, DataBaseKariti dataBase, Integer id_studentBD){
         this.mat = mat;
         this.id_studentBD = id_studentBD;
-        this.prova = prova;
+        this.exam = exam;
         this.dataBase = dataBase;
-        gabarito = dataBase.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
+        gabarito = dataBase.listAnswerKeyInt(exam.getExam_id().toString());
         typeProva = 0; //Isso indica que a correção a ser realizada será salva em banco
     }
 
@@ -66,11 +66,11 @@ public class CoreKariti40 {
      * Este construtor deve ser invocado quando a prova a ser corrigida,
      * não esta cadastrada no banco de dados
      * @param mat imagem cortada do cartão resposta
-     * @param prova dados da prova a ser corrigida
+     * @param exam dados da prova a ser corrigida
      */
-    public CoreKariti40(Mat mat, Prova prova, String gabarito){
+    public CoreKariti40(Mat mat, Exam exam, String gabarito){
         this.mat = mat;
-        this.prova = prova;
+        this.exam = exam;
         this.gabarito = gabarito;
         typeProva = 1; //Isso indica que a correção a ser realizada NÃO será salva em banco
     }
@@ -116,7 +116,7 @@ public class CoreKariti40 {
         }
 
         // ======== ENTRA AQUI SOMENTE SE A PROVA APRESENTAR MAIS QUE 20 QUESTÕES
-        if (prova.getNumQuestions() > 20) {
+        if (exam.getNumQuestions() > 20) {
             if(circlesOfInterest(squaresQuestionsRight, squaresAlternativesRight, markedCirclesRight)){
                 return false;
             }
@@ -130,7 +130,7 @@ public class CoreKariti40 {
 
         if (typeProva == 0){
             // Insere as respostas encontradas para essa prova no banco
-            boolean insertCorrectBD = dataBase.cadastrarCorrecao(gabaritoResult, prova.getId_prova(), id_studentBD);
+            boolean insertCorrectBD = dataBase.insertCorrected(gabaritoResult, exam.getExam_id(), id_studentBD);
             if(!insertCorrectBD){
                 Log.e("correct", "W5");
                 return false;
@@ -141,7 +141,7 @@ public class CoreKariti40 {
         paintCantos();
         //Numera os quedrados das questões
         enumerateQuestions(squaresQuestionsLeft, 1);
-        if (prova.getNumQuestions() > 20){
+        if (exam.getNumQuestions() > 20){
             enumerateQuestions(squaresQuestionsRight, 21);
         }
         return true;
@@ -153,7 +153,7 @@ public class CoreKariti40 {
 
             double limitAlterLeft = width - width * 0.09;
 
-            if (prova.getNumQuestions() > 20){
+            if (exam.getNumQuestions() > 20){
                 limitAlterLeft = (double) width / 2;
             }
 
@@ -199,7 +199,7 @@ public class CoreKariti40 {
                     } else if (y < height * 0.06 && x < limitAlterLeft) {
                         squaresAlternativesLeft.add(new Point(x, y));
                         //Imgproc.drawContours(imgAux, List.of(cnt), -1, new Scalar(0, 0, 255), 2);
-                    } else if (prova.getNumQuestions() > 20) {
+                    } else if (exam.getNumQuestions() > 20) {
                         if (x > limitAlterLeft && x < limitAlterLeft + width * 0.09) {
                             squaresQuestionsRight.add(new Point(x, y));
                         } else if (y < height * 0.06 && x > limitAlterLeft) {
@@ -212,7 +212,7 @@ public class CoreKariti40 {
             if (analysisQuestions(squaresQuestionsLeft)) return false;
             if (analysisAlternatives(squaresAlternativesLeft)) return false;
 
-            if (prova.getNumQuestions() > 20) {
+            if (exam.getNumQuestions() > 20) {
                 if (analysisQuestions(squaresQuestionsRight)) return false;
                 if (analysisAlternatives(squaresAlternativesRight)) return false;
             }
@@ -222,7 +222,7 @@ public class CoreKariti40 {
             Log.e("core40", "Q: "+numQuestionsCurrent);
 
 
-            return numQuestionsCurrent == prova.getNumQuestions() && squaresAlternativesLeft.size() == prova.getNumAlternatives() && squaresAlternativesRight.size() == prova.getNumAlternatives();
+            return numQuestionsCurrent == exam.getNumQuestions() && squaresAlternativesLeft.size() == exam.getNumAlternatives() && squaresAlternativesRight.size() == exam.getNumAlternatives();
 
         }catch (Exception e){
             Log.e("correcao", "E1: "+e);
@@ -316,7 +316,7 @@ public class CoreKariti40 {
         return (p1.y - p2.y > height * 0.048 || p1.y - p2.y < height * 0.027 || Math.abs(p1.x - p2.x) > width * 0.01);
     }
     private boolean analysisDistanceX(Point p1, Point p2){
-        if (prova.getNumQuestions() <= 20){
+        if (exam.getNumQuestions() <= 20){
             return (p1.x - p2.x > width * 0.116 || p1.x - p2.x < width * 0.095 || Math.abs(p1.y - p2.y) > height * 0.01);
         }else{
             return false;
@@ -335,7 +335,7 @@ public class CoreKariti40 {
 
         double limitBlack = 3.0;
 
-        if (prova.getNumQuestions() > 20) limitBlack = 4.0;
+        if (exam.getNumQuestions() > 20) limitBlack = 4.0;
 
         return ((blackPixels / (double) totPixels) * 100 <= limitBlack);
     }

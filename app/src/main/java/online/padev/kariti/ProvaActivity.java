@@ -60,7 +60,7 @@ import java.util.zip.ZipInputStream;
 import online.padev.kariti.utils.BitmapLuminanceSource;
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class ProvaActivity extends AppCompatActivity {
@@ -96,7 +96,7 @@ public class ProvaActivity extends AppCompatActivity {
         btnToCorrectProva.setOnClickListener(v -> {
             btnToCorrectProva.setEnabled(false);
             try {
-                Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaCadastrada();
+                Boolean checkExistsProva = dataBaseKariti.checkIfExistExams();
                 if (checkExistsProva == null) {
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
@@ -123,7 +123,7 @@ public class ProvaActivity extends AppCompatActivity {
     private void startRegistrationProva(){
         btnRegistrationProva.setEnabled(false);
         try {
-            Boolean checkExistsClass = dataBaseKariti.verificaExisteTurmas();
+            Boolean checkExistsClass = dataBaseKariti.checkExistClass();
             if (checkExistsClass == null) {
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -141,7 +141,7 @@ public class ProvaActivity extends AppCompatActivity {
     private void startGenerateCard(){
         btnGenerateCard.setEnabled(false);
         try {
-            Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaCadastrada();
+            Boolean checkExistsProva = dataBaseKariti.checkIfExistExams();
             if (checkExistsProva == null) {
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -162,7 +162,7 @@ public class ProvaActivity extends AppCompatActivity {
     private void startViewProvas(){
         btnViewProvas.setEnabled(false);
         try {
-            Boolean checkExistsProva = dataBaseKariti.verificaExisteProvaCadastrada();
+            Boolean checkExistsProva = dataBaseKariti.checkIfExistExams();
             if (checkExistsProva) {
                 Intent intent = new Intent(this, ProvaViewActivity.class);
                 startActivity(intent);
@@ -415,20 +415,20 @@ public class ProvaActivity extends AppCompatActivity {
                     String[] a = resultQrCode.split("_");
                     id_provaCaptured = Integer.parseInt(a[0]);
 
-                    if(!dataBaseKariti.verificaExisteProvaPId(id_provaCaptured)){
+                    if(!dataBaseKariti.checkIfExistExam(id_provaCaptured)){
                         //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
                         Log.e("kariti","Prova não cadastrada!!");
                         return;
                     }
 
-                    Prova prova = new Prova(id_provaCaptured, dataBaseKariti);
+                    Exam exam = new Exam(id_provaCaptured, dataBaseKariti);
 
                     //Versão 3
-                    CoreKariti core = new CoreKariti(matWarp, prova, dataBaseKariti, Integer.parseInt(a[1]));
+                    CoreKariti core = new CoreKariti(matWarp, exam, dataBaseKariti, Integer.parseInt(a[1]));
                     HashMap<Integer, Integer> isCorrect = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
 
                     if (isCorrect != null) {
-                        nameCartao = resultQrCode + "_" + prova.getNumQuestions() + "_" + prova.getNumAlternatives();
+                        nameCartao = resultQrCode + "_" + exam.getNumQuestions() + "_" + exam.getNumAlternatives();
                         String n = nameCartao + ".png";
                         if (!listCartoes.contains(n)) {
                             listCartoes.add(n);

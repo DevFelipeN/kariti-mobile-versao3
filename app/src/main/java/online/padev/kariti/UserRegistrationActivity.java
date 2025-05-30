@@ -93,7 +93,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(UserRegistrationActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Integer checkEmailExistsBD = dataBase.verificaExisteEmail(email); //verifica se existe este usuario no banco
+                Integer checkEmailExistsBD = dataBase.checkUserEmail(email); //verifica se existe este usuario no banco
                 if (checkEmailExistsBD == null) {
                     code = generateCode.gerarVerificador();
                     if (sendCode.enviaCodigo(email, code)) {

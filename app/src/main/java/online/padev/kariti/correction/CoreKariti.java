@@ -2,10 +2,8 @@ package online.padev.kariti.correction;
 
 import static org.opencv.android.Utils.matToBitmap;
 import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
-import static online.padev.kariti.utils.ImageDirectory.saveBitmapAndGetPath;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 
@@ -26,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import online.padev.kariti.database.DataBaseKariti;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 
 
 public class CoreKariti {
@@ -40,7 +38,7 @@ public class CoreKariti {
     Integer id_studentBD;
     Mat mat; // Faz referência a imagem cortada
     DataBaseKariti dataBase;
-    Prova prova;
+    Exam exam;
     int height, width;
     private final String gabarito;
     private final int typeProva;
@@ -50,16 +48,16 @@ public class CoreKariti {
      * Este construtor deve ser invocado quando a prova que se deseja corrigir,
      * está cadastrada no banco de dados do aplicativo
      * @param mat imagem cortada do cartão resposta
-     * @param prova dados da prova a ser corrigida
+     * @param exam dados da prova a ser corrigida
      * @param dataBase instância do banco para cadastro da correção
      * @param id_studentBD id do aluno associado ao prova a ser corrigida
      */
-    public CoreKariti(Mat mat, Prova prova, DataBaseKariti dataBase, Integer id_studentBD){
+    public CoreKariti(Mat mat, Exam exam, DataBaseKariti dataBase, Integer id_studentBD){
         this.mat = mat;
         this.id_studentBD = id_studentBD;
-        this.prova = prova;
+        this.exam = exam;
         this.dataBase = dataBase;
-        gabarito = dataBase.listarRespostasGabaritoNumerico(prova.getId_prova().toString());
+        gabarito = dataBase.listAnswerKeyInt(exam.getExam_id().toString());
         typeProva = 0; //Isso indica que a correção a ser realizada será salva em banco
     }
 
@@ -67,11 +65,11 @@ public class CoreKariti {
      * Este construtor deve ser invocado quando a prova a ser corrigida,
      * não esta cadastrada no banco de dados
      * @param mat imagem cortada do cartão resposta
-     * @param prova dados da prova a ser corrigida
+     * @param exam dados da prova a ser corrigida
      */
-    public CoreKariti(Mat mat, Prova prova, String gabarito){
+    public CoreKariti(Mat mat, Exam exam, String gabarito){
         this.mat = mat;
-        this.prova = prova;
+        this.exam = exam;
         this.gabarito = gabarito;
         typeProva = 1; //Isso indica que a correção a ser realizada NÃO será salva em banco
     }
@@ -123,7 +121,7 @@ public class CoreKariti {
         }
         if (typeProva == 0){
             // Insere as respostas encontradas para essa prova no banco
-            boolean insertCorrectBD = dataBase.cadastrarCorrecao(gabaritoResult, prova.getId_prova(), id_studentBD);
+            boolean insertCorrectBD = dataBase.insertCorrected(gabaritoResult, exam.getExam_id(), id_studentBD);
             if(!insertCorrectBD){
                 Log.e("correct", "W5");
                 return false;
@@ -235,7 +233,7 @@ public class CoreKariti {
                     }
                 }
             }
-            if (squaresQuestions.size() != prova.getNumQuestions()){
+            if (squaresQuestions.size() != exam.getNumQuestions()){
                 situation = false;
             }
 
@@ -282,7 +280,7 @@ public class CoreKariti {
                     }
                 }
             }
-            if (squaresAlternatives.size() != prova.getNumAlternatives()) {
+            if (squaresAlternatives.size() != exam.getNumAlternatives()) {
                 situation = false;
             }
 

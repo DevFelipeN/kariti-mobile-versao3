@@ -63,7 +63,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
 
         dataBase = new DataBaseKariti(this);
 
-        listStudentsSpinner = dataBase.listarNomesAlunos(1);
+        listStudentsSpinner = dataBase.listStudentNames(1);
         if (!listStudentsSpinner.isEmpty()){
             listStudentsSpinner.add(0, "Selecionar Alunos");
             listStudentsSpinner.add(1, "Todos");
@@ -83,7 +83,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 if (position != 0) {
                     studentSelected = spinnerStudent.getSelectedItem().toString();
                     if(studentSelected.equals("Todos")){
-                        listStudentSelected = dataBase.listarNomesAlunos(1);
+                        listStudentSelected = dataBase.listStudentNames(1);
                         if(listStudentSelected == null){
                             Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
@@ -161,7 +161,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                     notice();
                     return;
                 }
-                Boolean checkClassExists = dataBase.verificaExisteTurmaPorNome(className);
+                Boolean checkClassExists = dataBase.checkExistClass(className);
                 if (checkClassExists == null){
                     Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
@@ -170,16 +170,16 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                     Toast.makeText(ClassRegistrationActivity.this, "Turma já cadastrada! ", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                id_class = dataBase.cadastrarTurma(className);
+                id_class = dataBase.insertClass(className);
                 if (id_class == null || id_class == -1) {
                     Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!listStudentSelected.isEmpty()){
                     for (String student : listStudentSelected) {
-                        Integer id_student = dataBase.pegarIdAluno(student);
+                        Integer id_student = dataBase.getStudentId(student);
                         if (id_student != null && id_student != -1){
-                            if(dataBase.cadastrarAlunoNaTurma(id_class, id_student)){
+                            if(dataBase.linkStudentToClass(id_class, id_student)){
                                 Log.e("kariti","Aluno cadastrado na turma: "+ id_class);
                             }
                         }else Log.e("kariti","Erro ao tentar cadastrar na turma o aluno: "+student);
@@ -193,9 +193,9 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                     int t = numAnonymous.length();
                     for (int x = 1; x <= totAnonymous; x++) {
                         String nameAnonymous = "Aluno "+ String.format("%0"+t+"d",x);
-                        Integer id_anonymous = dataBase.cadastrarAluno(nameAnonymous, null, 0);
+                        Integer id_anonymous = dataBase.insertStudent(nameAnonymous, null, 0);
                         if(id_anonymous != -1){
-                            if(dataBase.cadastrarAlunoNaTurma(id_class, id_anonymous)){
+                            if(dataBase.linkStudentToClass(id_class, id_anonymous)){
                                 Log.e("kariti","Aluno anônimo cadastrado na turma: "+ id_class);
                             }
                         }else  Log.e("kariti","Erro ao tentar cadastrar anônimo: "+x);
@@ -222,7 +222,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
         });
     }
     public void restartVisualClass(){
-        if(dataBase.verificaExisteTurmas()){
+        if(dataBase.checkExistClass()){
             setResult(RESULT_OK);
             finish();
         }else{

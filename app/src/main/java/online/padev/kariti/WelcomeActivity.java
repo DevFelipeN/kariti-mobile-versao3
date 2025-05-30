@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import org.opencv.android.OpenCVLoader;
 
-import online.padev.kariti.cards.CorrectionReportCard;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -32,8 +31,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
 
-        if(dataBase.verificaExisteEmail("karitimobile@gmail.com") == null) {
-            dataBase.cadastrarUsuario("Master user", "user1", "karitimobile@gmail.com");
+        if(dataBase.checkUserEmail("karitimobile@gmail.com") == null) {
+            dataBase.insertUser("Master user", "user1", "karitimobile@gmail.com");
         }
         btnRegistration.setOnClickListener(v -> startRegistrationUser());
         btnLogin.setOnClickListener(v -> startLogin());

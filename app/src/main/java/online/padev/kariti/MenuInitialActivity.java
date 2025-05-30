@@ -35,7 +35,7 @@ public class MenuInitialActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
 
-        nameSchool = dataBase.pegarNomeEscola();
+        nameSchool = dataBase.getSchoolName();
         if (nameSchool == null){ //vericação caso ocorra exceções no Banco
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();

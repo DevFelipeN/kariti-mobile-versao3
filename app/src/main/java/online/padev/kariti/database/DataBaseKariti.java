@@ -10,6 +10,8 @@ import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
+import org.apache.commons.logging.LogFactory;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -18,52 +20,83 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import online.padev.kariti.entity.Gabarito;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.entity.Student;
 
 public class DataBaseKariti extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
     private static final int DATABASE_VERSION = 27;
+    private static final org.apache.commons.logging.Log log = LogFactory.getLog(DataBaseKariti.class);
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public DataBaseKariti(Context context) {
         super(context, DBNAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase base_dados) {
         try {
             base_dados.execSQL("PRAGMA foreign_keys=ON;");
-            base_dados.execSQL("create Table usuario(id_usuario INTEGER primary Key AUTOINCREMENT, nomeUsuario TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
-            base_dados.execSQL("create Table validacao_usuario(id_validacao INTEGER primary Key AUTOINCREMENT, id_usuario INTEGER NOT NULL references usuario(id_usuario), codigo TEXT, data_expiracao TEXT)");
-            base_dados.execSQL("create Table escola(id_escola INTEGER PRIMARY KEY AUTOINCREMENT, nomeEscola TEXT, id_usuario INTEGER NOT NULL references usuario(id_usuario), status INTEGER not null check(status = 0 or status = 1))");
-            base_dados.execSQL("create Table aluno(id_aluno Integer PRIMARY KEY AUTOINCREMENT, nomeAluno TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), id_escola INTEGER not null references escola(id_escola))");
-            base_dados.execSQL("create Table turma(id_turma Integer PRIMARY KEY AUTOINCREMENT, id_escola INTEGER not null references escola(id_escola), nomeTurma TEXT not null)");
-            base_dados.execSQL("create Table alunosTurma(id_turma Integer not null references turma(id_turma), id_aluno Integer not null references aluno(id_aluno), primary key (id_turma, id_aluno))");
-            base_dados.execSQL("create Table prova(id_prova Integer PRIMARY KEY AUTOINCREMENT, nomeProva TEXT not null, dataProva TEXT not null, qtdQuestoes Integer not null, qtdAlternativas Integer not null, id_turma Integer not null references turma(id_turma))");
-            base_dados.execSQL("create Table gabarito(id_gabarito Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer not null references prova(id_prova), questao Integer not null, resposta Integer not null, nota Real not null)");
-            base_dados.execSQL("create Table resultadoCorrecao(id_resultado Integer PRIMARY KEY AUTOINCREMENT, id_prova Integer not null references prova(id_prova), id_aluno Integer not null references aluno(id_aluno), questao Integer, respostaDada Integer)");
+
+            base_dados.execSQL("CREATE TABLE user(user_id INTEGER primary Key AUTOINCREMENT, name TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
+            base_dados.execSQL("CREATE TABLE school(school_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, user_id INTEGER NOT NULL references user(user_id), status INTEGER not null check(status = 0 or status = 1))");
+            base_dados.execSQL("CREATE TABLE student(student_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), school_id INTEGER not null references school(school_id))");
+            base_dados.execSQL("CREATE TABLE class(class_id Integer PRIMARY KEY AUTOINCREMENT, school_id INTEGER not null references school(school_id), name TEXT not null)");
+            base_dados.execSQL("CREATE TABLE student_class(class_id Integer not null references class(class_id), student_id Integer not null references student(student_id), primary key (class_id, student_id))");
+            base_dados.execSQL("CREATE TABLE exam(exam_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, date TEXT not null, number_questions Integer not null, number_alternatives Integer not null, class_id Integer not null references class(class_id))");
+            base_dados.execSQL("CREATE TABLE answer_key(answer_key_id Integer PRIMARY KEY AUTOINCREMENT, exam_id Integer not null references exam(exam_id), question Integer not null, answer Integer not null, grade Real not null)");
+            base_dados.execSQL("CREATE TABLE result(result_id Integer PRIMARY KEY AUTOINCREMENT, exam_id Integer not null references exam(exam_id), student_id Integer not null references student(student_id), question Integer, answer_given Integer)");
         }catch(Exception e){
             Log.e("Error base_dados: ",e.getMessage());
         }
     }
     @Override
     public void onUpgrade(SQLiteDatabase base_dados, int oldVersion, int newVersion) {
-        try {
-            base_dados.execSQL("drop Table if exists usuario");
-            base_dados.execSQL("drop Table if exists validacao_usuario");
-            base_dados.execSQL("drop Table if exists escola");
-            base_dados.execSQL("drop Table if exists aluno");
-            base_dados.execSQL("drop Table if exists turma");
-            base_dados.execSQL("drop Table if exists prova");
-            base_dados.execSQL("drop Table if exists gabarito");
-            base_dados.execSQL("drop Table if exists alunosTurma");
-            base_dados.execSQL("drop Table if exists resultadoCorrecao");
-            onCreate(base_dados);
-        }catch(Exception e){
-            Log.e("Error base_dados: ",e.getMessage());
-        }
+        if (oldVersion < 28){
+            try {
+                base_dados.beginTransaction();
 
+                base_dados.execSQL("CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL)");
+                base_dados.execSQL("CREATE TABLE school(school_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, user_id INTEGER NOT NULL REFERENCES user(user_id), status INTEGER NOT NULL CHECK(status = 0 OR status = 1))");
+                base_dados.execSQL("CREATE TABLE student(student_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT, status INTEGER NOT NULL CHECK(status = 0 OR status = 1), school_id INTEGER NOT NULL REFERENCES school(school_id))");
+                base_dados.execSQL("CREATE TABLE class(class_id INTEGER PRIMARY KEY AUTOINCREMENT, school_id INTEGER NOT NULL REFERENCES school(school_id), name TEXT NOT NULL)");
+                base_dados.execSQL("CREATE TABLE student_class(class_id INTEGER NOT NULL REFERENCES class(class_id), student_id INTEGER NOT NULL REFERENCES student(student_id), PRIMARY KEY(class_id, student_id))");
+                base_dados.execSQL("CREATE TABLE exam(exam_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date TEXT NOT NULL, number_questions INTEGER NOT NULL, number_alternatives INTEGER NOT NULL, class_id INTEGER NOT NULL REFERENCES class(class_id))");
+                base_dados.execSQL("CREATE TABLE answer_key(answer_key_id INTEGER PRIMARY KEY AUTOINCREMENT, exam_id INTEGER NOT NULL REFERENCES exam(exam_id), question INTEGER NOT NULL, answer INTEGER NOT NULL, grade REAL NOT NULL)");
+                base_dados.execSQL("CREATE TABLE result(result_id INTEGER PRIMARY KEY AUTOINCREMENT, exam_id INTEGER NOT NULL REFERENCES exam(exam_id), student_id INTEGER NOT NULL REFERENCES student(student_id), question INTEGER, answer_given INTEGER)");
+
+                base_dados.execSQL("INSERT INTO user(user_id, name, email, password) SELECT id_usuario, nomeUsuario, email, password FROM usuario");
+                base_dados.execSQL("INSERT INTO school(school_id, name, user_id, status) SELECT id_escola, nomeEscola, id_usuario, status FROM escola");
+                base_dados.execSQL("INSERT INTO student(student_id, name, email, status, school_id) SELECT id_aluno, nomeAluno, email, status, id_escola FROM aluno");
+                base_dados.execSQL("INSERT INTO class(class_id, school_id, name) SELECT id_turma, id_escola, nomeTurma FROM turma");
+                base_dados.execSQL("INSERT INTO student_class(class_id, student_id) SELECT id_turma, id_aluno FROM alunosTurma");
+                base_dados.execSQL("INSERT INTO exam(exam_id, name, date, number_questions, number_alternatives, class_id) SELECT prova_id, nomeProva, dataProva, qtdQuestoes, qtdAlternativas, id_turma FROM prova");
+                base_dados.execSQL("INSERT INTO answer_key(answer_key_id, exam_id, question, answer, grade) SELECT id_gabarito, id_prova, questao, resposta, nota FROM gabarito");
+                base_dados.execSQL("INSERT INTO result(result_id, exam_id, student_id, question, answer_given) SELECT id_resultado, id_prova, id_aluno, questao, respostaDada FROM resultadoCorrecao");
+
+                base_dados.execSQL("DROP TABLE IF EXISTS usuario");
+                base_dados.execSQL("DROP TABLE IF EXISTS validacao_usuario");
+                base_dados.execSQL("DROP TABLE IF EXISTS escola");
+                base_dados.execSQL("DROP TABLE IF EXISTS aluno");
+                base_dados.execSQL("DROP TABLE IF EXISTS turma");
+                base_dados.execSQL("DROP TABLE IF EXISTS prova");
+                base_dados.execSQL("DROP TABLE IF EXISTS gabarito");
+                base_dados.execSQL("DROP TABLE IF EXISTS alunosTurma");
+                base_dados.execSQL("DROP TABLE IF EXISTS resultadoCorrecao");
+
+                base_dados.setTransactionSuccessful();
+
+            } catch (Exception e){
+                Log.e("kariti", e.getMessage());
+            }finally {
+                if (base_dados != null && base_dados.isOpen()) {
+                    if (base_dados.inTransaction()) {
+                        base_dados.endTransaction();
+                    }
+                }
+            }
+        }
     }
     public int getDatabaseVersion() {
         return DATABASE_VERSION;
@@ -71,21 +104,21 @@ public class DataBaseKariti extends SQLiteOpenHelper {
 
     /**
      * Este metodo cadastra novos usuários na tabela usuário.
-     * @param nome nome do novo usuário que se deseja cadastrar
+     * @param nameUser nome do usuário que se deseja cadastrar
      * @param password senha do novo usuário que se deseja cadastrar
      * @param email email do novo usuário que se deseja cadastrar
-     * @return retorna verdadeiro de cadastrado com sucesso falso, caso contrario
+     * @return retorna verdadeiro se cadastrado com sucesso falso, caso contrário.
      */
-    public Boolean cadastrarUsuario(String nome, String password, String email) {
+    public Boolean insertUser(String nameUser, String password, String email) {
         SQLiteDatabase base_dados = null;
         try {
             base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeUsuario", nome);
+            contentValues.put("name", nameUser);
             contentValues.put("password", to256(password));
             contentValues.put("email", email);
-            long inserir = base_dados.insert("usuario", null, contentValues);
-            return inserir != -1;
+            long insert = base_dados.insert("user", null, contentValues);
+            return insert != -1;
         } catch (Exception e) {
             Log.e("kariti", e.getMessage());
             return null;
@@ -98,20 +131,19 @@ public class DataBaseKariti extends SQLiteOpenHelper {
 
     /**
      * Este método insere uma nova escola no banco
-     * @param nomeEscola parametro esperado como nome da escola a ser cadastrada
-     * @param status paramentro indicativo que a escola sera ativa
+     * @param nameSchool parametro esperado como nome da escola a ser cadastrada
      * @return retorna true se a inserção for bem sucedida ou falso, caso contrario
      */
-    public Boolean cadastrarEscola(String nomeEscola, Integer status){
+    public Boolean insertSchool(String nameSchool){
         SQLiteDatabase base_dados = null;
         try {
             base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeEscola", nomeEscola);
-            contentValues.put("status", status);
-            contentValues.put("id_usuario", DataBaseKariti.USER_ID);
-            long inserir = base_dados.insert("escola", null, contentValues);
-            return inserir != -1;
+            contentValues.put("name", nameSchool);
+            contentValues.put("status", 1);
+            contentValues.put("user_id", DataBaseKariti.USER_ID);
+            long insert = base_dados.insert("school", null, contentValues);
+            return insert != -1;
         } catch (Exception e){
             Log.e("kariti", e.getMessage());
             return false;
@@ -122,17 +154,42 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
 
     }
-    public Integer cadastrarTurma(String nomeTurma){
+
+    public Integer insertStudent(String nameStudent, String email, Integer status){
         SQLiteDatabase base_dados = null;
-        Integer id_turma = null;
         try {
             base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeTurma", nomeTurma);
-            contentValues.put("id_escola", DataBaseKariti.ID_ESCOLA);
-            long inserir = base_dados.insert("turma", null, contentValues);
-            id_turma = Math.toIntExact(inserir);
-            Log.e("kariti","Id_turma Atual: "+id_turma);
+            contentValues.put("name", nameStudent);
+            contentValues.put("email", email);
+            contentValues.put("status", status);
+            contentValues.put("school_id", DataBaseKariti.ID_ESCOLA);
+            long insert = base_dados.insert("student", null, contentValues);
+            if(insert != -1){
+                return Math.toIntExact(insert);
+            }else{
+                return -1;
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro: aluno nao cadastrado!"+e.getMessage());
+            return -1;
+        }finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+        }
+    }
+
+    public Integer insertClass(String nameClass){
+        SQLiteDatabase base_dados = null;
+        Integer class_id = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("name", nameClass);
+            contentValues.put("school_id", DataBaseKariti.ID_ESCOLA);
+            long insert = base_dados.insert("class", null, contentValues);
+            class_id = Math.toIntExact(insert);
         } catch (Exception e){
             Log.e("kariti", e.getMessage());
             return null;
@@ -141,163 +198,32 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 base_dados.close();
             }
         }
-        return id_turma;
-    }
-    public Boolean cadastrarAlunoNaTurma(Integer id_turma, Integer id_aluno){
-        SQLiteDatabase base_dados = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("id_turma", id_turma);
-            contentValues.put("id_aluno", id_aluno);
-            long inserir = base_dados.insert("alunosTurma", null, contentValues);
-            return inserir != -1;
-        }catch (Exception e){
-            Log.e("kariti", e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-        }
-    }
-    @SuppressWarnings("unchecked")
-    public Boolean cadastrarCorrecao(List<Object[]> dadosProva){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            base_dados.beginTransaction();
-
-            for(Object[] prova : dadosProva){
-                Integer id_prova = (Integer) prova[0];
-                Integer id_aluno = (Integer) prova[1];
-
-                cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
-                if (cursor != null && cursor.moveToFirst()) {
-                    String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
-                    stmt = base_dados.compileStatement(deleta);
-                    stmt.bindLong(1, id_prova);
-                    stmt.bindLong(2, id_aluno);
-                    stmt.executeUpdateDelete();
-                }
-
-                Map<Integer, Integer> respostas;
-
-                respostas = (Map<Integer, Integer>) prova[2];
-                for (Integer questao : respostas.keySet()){
-                    Integer respostaDada = respostas.get(questao);
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("id_prova", id_prova);
-                    contentValues.put("id_aluno", id_aluno);
-                    contentValues.put("questao", questao);
-                    contentValues.put("respostaDada", respostaDada);
-                    long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
-                    if(resultado != -1){
-                        Log.e("kariti", "Resultado de correção cadastrado com sucesso");
-                    }else{
-                        Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
-                        throw new Exception();
-                    }
-                }
-            }
-            base_dados.setTransactionSuccessful();
-            return true;
-        }catch (Exception e){
-            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()) {
-                if (base_dados.inTransaction()) {
-                    base_dados.endTransaction();
-                }
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-            if(stmt != null){
-                stmt.close();
-            }
-        }
-    }
-    public Boolean cadastrarCorrecao(Map<Integer, Integer> gabarito, Integer id_prova, Integer id_aluno){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            base_dados.beginTransaction();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
-                stmt = base_dados.compileStatement(deleta);
-                stmt.bindLong(1, id_prova);
-                stmt.bindLong(2, id_aluno);
-                stmt.executeUpdateDelete();
-            }
-
-            for (Integer questao : gabarito.keySet()){
-                Integer respostaDada = gabarito.get(questao);
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("id_prova", id_prova);
-                contentValues.put("id_aluno", id_aluno);
-                contentValues.put("questao", questao);
-                contentValues.put("respostaDada", respostaDada);
-                long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
-                if(resultado != -1){
-                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
-                }else{
-                    Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
-                    throw new Exception();
-                }
-            }
-            base_dados.setTransactionSuccessful();
-            return true;
-        }catch (Exception e){
-            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()) {
-                if (base_dados.inTransaction()) {
-                    base_dados.endTransaction();
-                }
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-            if(stmt != null){
-                stmt.close();
-            }
-        }
+        return class_id;
     }
 
-    public boolean cadastrarProva(Prova dadosProva, List<Gabarito> gabarito){
+    public boolean insertExam(Exam examData, List<Answer_key> answer_key){
         SQLiteDatabase base_dados = null;
         try {
             base_dados = this.getWritableDatabase();
             base_dados.beginTransaction();
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeProva", dadosProva.getNameProva());
-            contentValues.put("dataProva", dadosProva.getDateProva());
-            contentValues.put("qtdQuestoes", dadosProva.getNumQuestions());
-            contentValues.put("qtdAlternativas", dadosProva.getNumAlternatives());
-            contentValues.put("id_turma", dadosProva.getId_class());
-            Integer inserirProva = Math.toIntExact(base_dados.insert("prova", null, contentValues));
+            contentValues.put("name", examData.getNameExam());
+            contentValues.put("date", examData.getDateExam());
+            contentValues.put("number_questions", examData.getNumQuestions());
+            contentValues.put("number_alternatives", examData.getNumAlternatives());
+            contentValues.put("class_id", examData.getClass_id());
+            Integer insertExam = Math.toIntExact(base_dados.insert("exam", null, contentValues));
 
-            if (!inserirProva.equals(-1)){
-                for (Gabarito g : gabarito){
-                    Log.e("respostasGabarito", "Q: "+g.getQuestion()+" R: "+g.getResponse()+ "nota: "+g.getNote());
+            if (!insertExam.equals(-1)){
+                for (Answer_key g : answer_key){
                     ContentValues contentValues2 = new ContentValues();
-                    contentValues2.put("id_prova", inserirProva);
-                    contentValues2.put("questao", g.getQuestion());
-                    contentValues2.put("resposta", g.getResponse());
-                    contentValues2.put("nota", g.getNote());
-                    Integer inserirGabarito = Math.toIntExact(base_dados.insert("gabarito", null, contentValues2));
-                    if(!inserirGabarito.equals(-1)){
+                    contentValues2.put("exam_id", insertExam);
+                    contentValues2.put("question", g.getQuestion());
+                    contentValues2.put("answer", g.getResponse());
+                    contentValues2.put("grade", g.getNote());
+                    Integer insert = Math.toIntExact(base_dados.insert("answer_key", null, contentValues2));
+                    if(!insert.equals(-1)){
                         Log.e("kariti", "Resultado de correção cadastrado com sucesso");
                     }else{
                         Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
@@ -323,51 +249,32 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean cadastrarGabarito(Integer id_prova, Integer questao, Integer resposta, Float nota){
-        SQLiteDatabase base_dados = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("id_prova", id_prova);
-            contentValues.put("questao", questao);
-            contentValues.put("resposta", resposta);
-            contentValues.put("nota", nota);
-            long inserir = base_dados.insert("gabarito", null, contentValues);
-            return inserir != -1;
-        }catch (Exception e){
-            Log.e("kariti", e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-        }
-    }
-    public Boolean upadateProva(Prova prova, Map<Integer, Integer> gabarito){
+    public Boolean insertCorrected(Map<Integer, Integer> answer_key, Integer exam_id, Integer student_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         Cursor cursor = null;
         try {
             base_dados = this.getWritableDatabase();
             base_dados.beginTransaction();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{prova.getId_prova().toString(), prova.getId_prova().toString()});
+            
+            cursor = base_dados.rawQuery("SELECT exam_id FROM result WHERE exam_id = ? AND student_id = ?", new String[]{exam_id.toString(), student_id.toString()});
             if (cursor != null && cursor.moveToFirst()) {
-                String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?";
-                stmt = base_dados.compileStatement(deleta);
-                stmt.bindLong(1, prova.getId_prova());
-                stmt.bindLong(2, prova.getId_prova());
+                String delete = "DELETE FROM result WHERE exam_id = ? AND student_id = ?";
+                stmt = base_dados.compileStatement(delete);
+                stmt.bindLong(1, exam_id);
+                stmt.bindLong(2, student_id);
                 stmt.executeUpdateDelete();
             }
 
-            for (Integer questao : gabarito.keySet()){
-                Integer respostaDada = gabarito.get(questao);
+            for (Integer question : answer_key.keySet()){
+                Integer answer_given = answer_key.get(question);
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("id_prova", prova.getId_prova());
-                contentValues.put("id_aluno", prova.getId_prova());
-                contentValues.put("questao", questao);
-                contentValues.put("respostaDada", respostaDada);
-                long resultado = base_dados.insert("resultadoCorrecao", null, contentValues);
-                if(resultado != -1){
+                contentValues.put("exam_id", exam_id);
+                contentValues.put("student_id", student_id);
+                contentValues.put("question", question);
+                contentValues.put("answer_given", answer_given);
+                long resultInsertion = base_dados.insert("result", null, contentValues);
+                if(resultInsertion != -1){
                     Log.e("kariti", "Resultado de correção cadastrado com sucesso");
                 }else{
                     Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
@@ -394,43 +301,39 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Integer cadastrarAluno(String nomeAluno, String email, Integer status){
+    
+    public Boolean linkStudentToClass(Integer class_id, Integer student_id){
         SQLiteDatabase base_dados = null;
         try {
             base_dados = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put("nomeAluno", nomeAluno);
-            contentValues.put("email", email);
-            contentValues.put("status", status);
-            contentValues.put("id_escola", DataBaseKariti.ID_ESCOLA);
-            long inserir = base_dados.insert("aluno", null, contentValues);
-            if(inserir != -1){
-                return Math.toIntExact(inserir);
-            }else{
-                return -1;
-            }
+            contentValues.put("class_id", class_id);
+            contentValues.put("student_id", student_id);
+            long insert = base_dados.insert("student_class", null, contentValues);
+            return insert != -1;
         }catch (Exception e){
-            Log.e("kariti","Erro: aluno nao cadastrado!"+e.getMessage());
-            return -1;
+            Log.e("kariti", e.getMessage());
+            return false;
         }finally {
-            if(base_dados != null && base_dados.isOpen()){
+            if (base_dados != null && base_dados.isOpen()){
                 base_dados.close();
             }
         }
     }
+
     /**
      * Este método deleta uma escola do banco
-     * @param id_escola parametro contendo o id da prova que se deseja deletar
+     * @param school_id parametro contendo o id da prova que se deseja deletar
      * @return retorna o resultado da execução
      */
-    public Boolean deletarEscola(Integer id_escola){
+    public boolean deleteSchool(Integer school_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         try {
             base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM escola WHERE id_escola = ?";
-            stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_escola);
+            String delete = "DELETE FROM school WHERE school_id = ?";
+            stmt = base_dados.compileStatement(delete);
+            stmt.bindLong(1, school_id);
             stmt.executeUpdateDelete();
             return true;
         }catch (Exception e){
@@ -445,14 +348,14 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean deletarAluno(Integer id_aluno){
+    public boolean deleteStudent(Integer student_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         try {
             base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM aluno WHERE id_aluno = ?";
+            String deleta = "DELETE FROM student WHERE student_id = ?";
             stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_aluno);
+            stmt.bindLong(1, student_id);
             stmt.executeUpdateDelete();
             return true;
         }catch (Exception e){
@@ -467,62 +370,15 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean deletarTurma(Integer id_turma){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmtAlunoAnonimo = null;
-        SQLiteStatement stmtAluno = null;
-        SQLiteStatement stmtTurma = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            base_dados.beginTransaction();
 
-            String deletaAnonimos = "DELETE FROM aluno WHERE status = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)";
-            stmtAlunoAnonimo = base_dados.compileStatement(deletaAnonimos);
-            stmtAlunoAnonimo.bindLong(1, 0);
-            stmtAlunoAnonimo.bindLong(2, id_turma);
-            stmtAlunoAnonimo.executeUpdateDelete();
-
-            String deletaAlunos = "DELETE FROM alunosTurma WHERE id_turma = ?";
-            stmtAluno = base_dados.compileStatement(deletaAlunos);
-            stmtAluno.bindLong(1, id_turma);
-            stmtAluno.executeUpdateDelete();
-
-            String deletaTurma = "DELETE FROM turma WHERE id_turma = ?";
-            stmtTurma = base_dados.compileStatement(deletaTurma);
-            stmtTurma.bindLong(1, id_turma);
-            stmtTurma.executeUpdateDelete();
-
-            base_dados.setTransactionSuccessful();
-            return true;
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar deletar turma! "+e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()){
-                if (base_dados.inTransaction()) {
-                    base_dados.endTransaction();
-                }
-                base_dados.close();
-            }
-            if (stmtAlunoAnonimo != null){
-                stmtAlunoAnonimo.close();
-            }
-            if (stmtAluno != null){
-                stmtAluno.close();
-            }
-            if (stmtTurma != null){
-                stmtTurma.close();
-            }
-        }
-    }
-    public Boolean deletarAlunoDeTurma(Integer id_turma){
+    public boolean deleteStudentsFromClass(Integer class_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         try {
             base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM alunosTurma WHERE id_turma = ?";
-            stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_turma);
+            String delete = "DELETE FROM student_class WHERE class_id = ?";
+            stmt = base_dados.compileStatement(delete);
+            stmt.bindLong(1, class_id);
             stmt.executeUpdateDelete();
             return true;
         }catch (Exception e){
@@ -537,77 +393,82 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean deletarGabarito(Integer id_prova){
+
+    public boolean deleteClass(Integer class_id){
         SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
+        SQLiteStatement stmtStudentAnonymous = null;
+        SQLiteStatement stmtStudent = null;
+        SQLiteStatement stmtClass = null;
         try {
             base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM gabarito WHERE id_prova = ?";
-            stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_prova);
-            stmt.executeUpdateDelete();
+            base_dados.beginTransaction();
+
+            String deleteAnonymous = "DELETE FROM student WHERE status = ? AND student_id IN (SELECT student_id FROM student_class WHERE class_id = ?)";
+            stmtStudentAnonymous = base_dados.compileStatement(deleteAnonymous);
+            stmtStudentAnonymous.bindLong(1, 0);
+            stmtStudentAnonymous.bindLong(2, class_id);
+            stmtStudentAnonymous.executeUpdateDelete();
+
+            String deletaAlunos = "DELETE FROM alunosTurma WHERE id_turma = ?";
+            stmtStudent = base_dados.compileStatement(deletaAlunos);
+            stmtStudent.bindLong(1, class_id);
+            stmtStudent.executeUpdateDelete();
+
+            String deleteClass = "DELETE FROM class WHERE class_id = ?";
+            stmtClass = base_dados.compileStatement(deleteClass);
+            stmtClass.bindLong(1, class_id);
+            stmtClass.executeUpdateDelete();
+
+            base_dados.setTransactionSuccessful();
             return true;
         }catch (Exception e){
-            Log.e("kariti","Erro ao tentar deletar gabarito! "+e.getMessage());
+            Log.e("kariti","Erro ao tentar deletar turma! "+e.getMessage());
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()){
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
-            if (stmt != null){
-                stmt.close();
+            if (stmtStudentAnonymous != null){
+                stmtStudentAnonymous.close();
+            }
+            if (stmtStudent != null){
+                stmtStudent.close();
+            }
+            if (stmtClass != null){
+                stmtClass.close();
             }
         }
     }
 
-    public Boolean deletarCorrecao(Integer id_prova){
+    public boolean deleteExamData(Integer exam_id){
         SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
-            stmt = base_dados.compileStatement(deleta);
-            stmt.bindLong(1, id_prova);
-            stmt.executeUpdateDelete();
-            return true;
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar deletar correção! "+e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (stmt != null){
-                stmt.close();
-            }
-        }
-    }
-    public Boolean deletarProva(Integer id_prova){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmtCorrecao = null;
-        SQLiteStatement stmtGabarito = null;
-        SQLiteStatement stmtProva = null;
+        SQLiteStatement stmtCorrection = null;
+        SQLiteStatement stmtAnswer_key = null;
+        SQLiteStatement stmtExam = null;
         Cursor cursor = null;
         try {
             base_dados = this.getWritableDatabase();
             base_dados.beginTransaction();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova.toString()});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM result WHERE exam_id = ?", new String[]{exam_id.toString()});
             if (cursor != null && cursor.moveToFirst()) {
-                String deletaCorrecao = "DELETE FROM resultadoCorrecao WHERE id_prova = ?";
-                stmtCorrecao = base_dados.compileStatement(deletaCorrecao);
-                stmtCorrecao.bindLong(1, id_prova);
-                stmtCorrecao.executeUpdateDelete();
+                String deleteCorrection = "DELETE FROM result WHERE exam_id = ?";
+                stmtCorrection = base_dados.compileStatement(deleteCorrection);
+                stmtCorrection.bindLong(1, exam_id);
+                stmtCorrection.executeUpdateDelete();
             }
 
-            String deletaGabarito = "DELETE FROM gabarito WHERE id_prova = ?";
-            stmtGabarito = base_dados.compileStatement(deletaGabarito);
-            stmtGabarito.bindLong(1, id_prova);
-            stmtGabarito.executeUpdateDelete();
+            String deleteAnswer_key = "DELETE FROM answer_key WHERE exam_id = ?";
+            stmtAnswer_key = base_dados.compileStatement(deleteAnswer_key);
+            stmtAnswer_key.bindLong(1, exam_id);
+            stmtAnswer_key.executeUpdateDelete();
 
-            String deletaProva = "DELETE FROM prova WHERE id_prova = ?";
-            stmtProva = base_dados.compileStatement(deletaProva);
-            stmtProva.bindLong(1, id_prova);
-            stmtProva.executeUpdateDelete();
+            String deleteExam = "DELETE FROM exam WHERE exam_id = ?";
+            stmtExam = base_dados.compileStatement(deleteExam);
+            stmtExam.bindLong(1, exam_id);
+            stmtExam.executeUpdateDelete();
 
             base_dados.setTransactionSuccessful();
             return true;
@@ -624,42 +485,27 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             if (cursor != null){
                 cursor.close();
             }
-            if(stmtCorrecao != null){
-                stmtCorrecao.close();
+            if(stmtCorrection != null){
+                stmtCorrection.close();
             }
-            if(stmtGabarito != null){
-                stmtGabarito.close();
+            if(stmtAnswer_key != null){
+                stmtAnswer_key.close();
             }
-            if(stmtProva != null){
-                stmtProva.close();
-            }
-        }
-    }
-    public Boolean deletarCorrecaoPorAluno(Integer id_prova, Integer id_aluno) {
-        SQLiteDatabase base_dados = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            base_dados.delete("resultadoCorrecao", "id_prova = ? AND id_aluno = ?", new String[]{String.valueOf(id_prova), String.valueOf(id_aluno)});
-            return true;
-        } catch (Exception e){
-            Log.e("kariti", "Erro ao tentar deletar correção do aluno");
-            return false;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()) {
-                base_dados.close();
+            if(stmtExam != null){
+                stmtExam.close();
             }
         }
     }
 
-    public Boolean deletarAnonimos(Integer id_turma){
+    public boolean deleteAnonymous(Integer class_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         try {
             base_dados = this.getWritableDatabase();
-            String deleta = "DELETE FROM aluno WHERE status = ? and id_aluno in (select id_aluno FROM alunosTurma WHERE id_turma = ?)";
-            stmt = base_dados.compileStatement(deleta);
+            String delete = "DELETE FROM student WHERE status = ? and student_id in (select student_id FROM student_class WHERE class_id = ?)";
+            stmt = base_dados.compileStatement(delete);
             stmt.bindLong(1, 0);
-            stmt.bindLong(2, id_turma);
+            stmt.bindLong(2, class_id);
             stmt.executeUpdateDelete();
             return true;
         }catch (Exception e){
@@ -677,18 +523,18 @@ public class DataBaseKariti extends SQLiteOpenHelper {
     /**
      * Este método altera a senha do usuario no banco
      * @param password parâmetro esperado para substituir a senha antiga
-     * @param id_usuario parâmetro esperado para determinar de qual usuário se deseja alterar a senha
+     * @param user_id parâmetro esperado para determinar de qual usuário se deseja alterar a senha
      * @return retorna true em caso de sucesso e false caso contrário
      */
-    public Boolean alterarSenha(String password, Integer id_usuario){
+    public boolean updatePassword(String password, Integer user_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         try {
             base_dados = this.getWritableDatabase();
-            String altera = "UPDATE usuario SET password = ? WHERE id_usuario = ?";
-            stmt = base_dados.compileStatement(altera);
+            String alter = "UPDATE user SET password = ? WHERE user_id = ?";
+            stmt = base_dados.compileStatement(alter);
             stmt.bindString(1, to256(password));
-            stmt.bindLong(2, id_usuario);
+            stmt.bindLong(2, user_id);
             stmt.executeUpdateDelete();
             return true;
         }catch (Exception e){
@@ -703,15 +549,71 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean alterarDadosTurma(String turma, Integer id_turma){
+
+    /**
+     * Este método altera o status da escola para ativa ou desativada.
+     * @param school_id parametro usado para determinar qual escola sera realizada a ação
+     * @param status parametro de identificação que determina se a escola será ativada(1) ou desativada(0).
+     * @return retorna true se execução bem sucedida e false caso contrário
+     */
+    public Boolean updateSchool(Integer school_id, Integer status){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
         try {
             base_dados = this.getWritableDatabase();
-            String altera = "UPDATE turma SET nomeTurma=? WHERE id_turma=?";
-            stmt = base_dados.compileStatement(altera);
-            stmt.bindString(1, turma);
-            stmt.bindLong(2, id_turma);
+            String alter = "UPDATE school SET status = ? WHERE school_id = ?";
+            stmt = base_dados.compileStatement(alter);
+            stmt.bindLong(1, status);
+            stmt.bindLong(2, school_id);
+            stmt.executeUpdateDelete();
+            return true;
+        }catch (Exception e){
+            Log.e("Kariti", "Erro ao tentar alterar o status da escola com id: "+school_id);
+            return false;
+        }finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(stmt != null){
+                stmt.close();
+            }
+        }
+    }
+
+    public Boolean updateStudentData(String nameStudent, String email, Integer student_id){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            String alter = "UPDATE student SET name = ?, email = ? WHERE student_id = ?";
+            stmt = base_dados.compileStatement(alter);
+            stmt.bindString(1, nameStudent);
+            stmt.bindString(2, email);
+            stmt.bindLong(3, student_id);
+            stmt.executeUpdateDelete();
+            return true;
+        }catch (Exception e){
+            Log.e("Kariti", "Erro ao tentar alterar dados do aluno com id: "+student_id);
+            return null;
+        }finally {
+            if(base_dados != null){
+                base_dados.close();
+            }
+            if(stmt != null){
+                stmt.close();
+            }
+        }
+    }
+
+    public boolean updateClassData(String nameClass, Integer class_id){
+        SQLiteDatabase base_dados = null;
+        SQLiteStatement stmt = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            String alter = "UPDATE class SET name = ? WHERE class_id = ?";
+            stmt = base_dados.compileStatement(alter);
+            stmt.bindString(1, nameClass);
+            stmt.bindLong(2, class_id);
             stmt.executeUpdateDelete();
             return true;
         }catch (Exception e){
@@ -726,49 +628,46 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public boolean alterarDadosProva(Prova prova, List<Gabarito> gabarito, int status){
+
+    public boolean upadateExamData(Exam exam, List<Answer_key> answer_key, int status){
         SQLiteDatabase base_dado = null;
-        SQLiteStatement stmtUpProva = null;
-        SQLiteStatement stmtDelGabarito = null;
+        SQLiteStatement stmtUpdateExam = null;
+        SQLiteStatement stmtDeleteAnswer_key = null;
         try {
             base_dado = this.getWritableDatabase();
             base_dado.beginTransaction();
 
             if (status == 1) {
 
-                String altera = "UPDATE prova SET nomeProva = ?, dataProva = ?, qtdQuestoes = ?, qtdAlternativas = ?, id_turma = ?  WHERE id_prova = ?";
-                stmtUpProva = base_dado.compileStatement(altera);
-                stmtUpProva.bindString(1, prova.getNameProva());
-                stmtUpProva.bindString(2, prova.getDateProva());
-                stmtUpProva.bindLong(3, prova.getNumQuestions());
-                stmtUpProva.bindLong(4, prova.getNumAlternatives());
-                stmtUpProva.bindLong(5, prova.getId_class());
-                stmtUpProva.bindLong(6, prova.getId_prova());
-                int result = stmtUpProva.executeUpdateDelete();
+                String alter = "UPDATE exam SET name = ?, date = ?, number_questions = ?, number_alternatives = ?, class_id = ?  WHERE exam_id = ?";
+                stmtUpdateExam = base_dado.compileStatement(alter);
+                stmtUpdateExam.bindString(1, exam.getNameExam());
+                stmtUpdateExam.bindString(2, exam.getDateExam());
+                stmtUpdateExam.bindLong(3, exam.getNumQuestions());
+                stmtUpdateExam.bindLong(4, exam.getNumAlternatives());
+                stmtUpdateExam.bindLong(5, exam.getClass_id());
+                stmtUpdateExam.bindLong(6, exam.getExam_id());
+                int result = stmtUpdateExam.executeUpdateDelete();
                 if (result == 0) {
                     throw new Exception();
                 }
-                Log.e("kariti", "Prova alterada 1");
             }
-
-            String deletaGabarito = "DELETE FROM gabarito WHERE id_prova = ?";
-            stmtDelGabarito = base_dado.compileStatement(deletaGabarito);
-            stmtDelGabarito.bindLong(1, prova.getId_prova());
-            int resultDel = stmtDelGabarito.executeUpdateDelete();
+            String deleteAnswer_key = "DELETE FROM answer_key WHERE exam_id = ?";
+            stmtDeleteAnswer_key = base_dado.compileStatement(deleteAnswer_key);
+            stmtDeleteAnswer_key.bindLong(1, exam.getExam_id());
+            int resultDel = stmtDeleteAnswer_key.executeUpdateDelete();
             if (resultDel == 0) {
                 throw new Exception();
             }
-            Log.e("kariti", "Gabrito deletado 1");
 
-            for (Gabarito g : gabarito){
-                Log.e("respostasGabarito", "Q: "+g.getQuestion()+" R: "+g.getResponse()+ " nota: "+g.getNote());
+            for (Answer_key g : answer_key){
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("id_prova", prova.getId_prova());
-                contentValues.put("questao", g.getQuestion());
-                contentValues.put("resposta", g.getResponse());
-                contentValues.put("nota", g.getNote());
-                Integer inserirGabarito = Math.toIntExact(base_dado.insert("gabarito", null, contentValues));
-                if(!inserirGabarito.equals(-1)){
+                contentValues.put("exam_id", exam.getExam_id());
+                contentValues.put("question", g.getQuestion());
+                contentValues.put("answer", g.getResponse());
+                contentValues.put("grade", g.getNote());
+                Integer insertAnswer_key = Math.toIntExact(base_dado.insert("answer_key", null, contentValues));
+                if(!insertAnswer_key.equals(-1)){
                     Log.e("kariti", "Resultado de correção cadastrado com sucesso");
                 }else{
                     Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
@@ -776,13 +675,11 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 }
             }
 
-            Log.e("kariti", "Novo Gabarito cadastrado 1");
-
             base_dado.setTransactionSuccessful();
             return true;
 
         }catch (Exception e){
-            Log.e("Kariti","Erro ao tentar alterar dados da prova com id; "+prova.getId_prova());
+            Log.e("Kariti","Erro ao tentar alterar dados da prova com id; "+ exam.getExam_id());
             return false;
         }finally {
             if (base_dado != null && base_dado.isOpen()) {
@@ -791,82 +688,29 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 }
                 base_dado.close();
             }
-            if (stmtUpProva != null) {
-                stmtUpProva.close();
+            if (stmtUpdateExam != null) {
+                stmtUpdateExam.close();
             }
-            if (stmtDelGabarito != null) {
-                stmtDelGabarito.close();
-            }
-        }
-    }
-    public Boolean alterarDadosAluno(String nomeAluno, String email, Integer id_aluno){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            String altera = "UPDATE aluno SET nomeAluno=?, email=? WHERE id_aluno=?";
-            stmt = base_dados.compileStatement(altera);
-            stmt.bindString(1, nomeAluno);
-            stmt.bindString(2, email);
-            stmt.bindLong(3, id_aluno);
-            stmt.executeUpdateDelete();
-            return true;
-        }catch (Exception e){
-            Log.e("Kariti", "Erro ao tentar alterar dados do aluno com id: "+id_aluno);
-            return null;
-        }finally {
-            if(base_dados != null){
-                base_dados.close();
-            }
-            if(stmt != null){
-                stmt.close();
+            if (stmtDeleteAnswer_key != null) {
+                stmtDeleteAnswer_key.close();
             }
         }
     }
 
     /**
-     * Este método altera o status da escola para ativa ou desativada.
-     * @param id_escola parametro usado para determinar qual escola sera realizada a ação
-     * @param status parametro de identificação que determina se a escola será ativada(1) ou desativada(0).
-     * @return retorna true se execução bem sucedida e false caso contrário
-     */
-    public Boolean alterarStatusEscola(Integer id_escola, Integer status){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            String altera = "UPDATE escola SET status = ? WHERE id_escola = ?";
-            stmt = base_dados.compileStatement(altera);
-            stmt.bindLong(1, status);
-            stmt.bindLong(2, id_escola);
-            stmt.executeUpdateDelete();
-            return true;
-        }catch (Exception e){
-            Log.e("Kariti", "Erro ao tentar alterar o status da escola com id: "+id_escola);
-            return false;
-        }finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(stmt != null){
-                stmt.close();
-            }
-        }
-    }
-    /**
-     * Este método verifica se determinado email está cadstrado no banco de dados
+     * Este método verifica se determinado email está cadastrado no banco de dados
      * @param email parâmetro usado para verificar se existe o email no banco
      * @return retorna o id do usuario, caso exista o email e null caso contrário
      */
-    public Integer verificaExisteEmail(String email) {
+    public Integer checkUserEmail(String email) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
-        Integer id_usuario = null;
+        Integer user_id  = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_usuario FROM usuario WHERE email = ?", new String[]{email});
+            cursor = base_dados.rawQuery("SELECT user_id FROM user WHERE email = ?", new String[]{email});
             if (cursor != null && cursor.moveToFirst()) {
-                id_usuario = cursor.getInt(0);
+                user_id = cursor.getInt(0);
             }
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar realizar consulta de e-mail! "+e.getMessage());
@@ -879,14 +723,15 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return id_usuario;
+        return user_id;
     }
-    public Boolean verificaExisteEmailAluno(String email) {
+
+    public Boolean checkStudentEmail(String email) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE email = ? AND id_escola = ?", new String[]{email, DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT email FROM student WHERE email = ? AND school_id = ?", new String[]{email, DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro na vericação do email na tabela aluno: "+e.getMessage());
@@ -901,12 +746,13 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
 
     }
-    public Boolean verificaExisteCorrecao(String id_prova){
+    
+    public Boolean checkIfExamCorrected(String exam_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ?", new String[]{id_prova});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM result WHERE exam_id = ?", new String[]{exam_id});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de prova no banco! "+e.getMessage());
@@ -920,12 +766,13 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean verificaExisteCorrecaoAluno(Integer id_prova, Integer id_aluno) {
+
+    public Boolean checkIfExamStudentCorrected(Integer exam_id, Integer student_id) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try{
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ?", new String[]{id_prova.toString(), id_aluno.toString()});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM result WHERE exam_id = ? AND student_id = ?", new String[]{exam_id.toString(), student_id.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar consultar se a prova do aluno esta corrigida! "+e.getMessage());
@@ -945,15 +792,15 @@ public class DataBaseKariti extends SQLiteOpenHelper {
      * @param password parametro usado para analisa se pertence ao email informado
      * @return retorna o id do usuario caso os dados de autenticação sejam validos ou null caso contrário
      */
-    public Integer verificaAutenticacao(String email, String password){
+    public Integer checkAuthentication(String email, String password){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
-        Integer id_usuario = null;
+        Integer user_id = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_usuario FROM usuario WHERE email = ? AND password = ?", new String[] {email, to256(password)});
+            cursor = base_dados.rawQuery("SELECT user_id FROM user WHERE email = ? AND password = ?", new String[] {email, to256(password)});
             if (cursor != null && cursor.moveToFirst()) {
-                id_usuario = cursor.getInt(0);
+                user_id = cursor.getInt(0);
             }
         }catch (Exception e){
             Log.e("kariti","Erro de verificação de autenticação! "+e.getMessage());
@@ -966,20 +813,20 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return id_usuario;
+        return user_id;
     }
 
     /**
      * Este método verifica se existe um determinada escola cadastrada no banco
-     * @param nomeEscola parametro usado para saber qual escola esta sendo pesquisada
+     * @param nameSchool parametro usado para saber qual escola esta sendo pesquisada
      * @return restorna true se a escola já estiver cadastrada ou false caso contrario
      */
-    public Boolean verificaExisteEscola(String nomeEscola){
+    public Boolean checkSchool(String nameSchool){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, DataBaseKariti.USER_ID.toString()});
+            cursor = base_dados.rawQuery("SELECT name FROM school WHERE name = ? AND user_id = ?", new String[]{nameSchool, DataBaseKariti.USER_ID.toString()});
             return cursor != null && cursor.moveToFirst();
         } catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de escola no banco! "+e.getMessage());
@@ -994,12 +841,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteProvaPNome(String nomeProva, String id_turma) {
+    public Boolean checkIfExistExam(String nameExam, String class_id) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeProva FROM prova WHERE nomeProva = ? and id_turma = ?", new String[]{nomeProva, id_turma});
+            cursor = base_dados.rawQuery("SELECT name FROM exam WHERE name = ? and class_id = ?", new String[]{nameExam, class_id});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de prova no banco! "+e.getMessage());
@@ -1014,12 +861,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteProvaPId(Integer id_prova){
+    public Boolean checkIfExistExam(Integer exam_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM exam WHERE exam_id = ?", new String[]{exam_id.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de prova por id no banco! "+e.getMessage());
@@ -1034,34 +881,15 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
 
     }
-    public Boolean verificaExisteProvaCadastrada(){
+    public Boolean checkIfExistExams(){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova, turma WHERE prova.id_turma = turma.id_turma AND turma.id_escola = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM exam, class WHERE exam.class_id = class.class_id AND class.school_id = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de provas cadastradas no banco! "+e.getMessage());
-            return false;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-    }
-    public Boolean verificaExisteProvaCorrigida(){
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova, turma WHERE prova.id_turma = turma.id_turma AND turma.id_escola = ? AND id_prova IN (SELECT id_prova FROM resultadoCorrecao)", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
-            return cursor != null && cursor.moveToFirst();
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar verificar existencia de provas corrigidas! "+e.getMessage());
             return null;
         } finally {
             if(base_dados != null && base_dados.isOpen()){
@@ -1072,12 +900,13 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean verificaExisteCorrecaoPorTurma(String id_turma) {
+
+    public Boolean checkCorrectedByClass(String class_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova WHERE id_turma = ? AND id_prova IN (SELECT id_prova FROM resultadoCorrecao)", new String[]{id_turma});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM exam WHERE class_id = ? AND exam_id IN (SELECT exam_id FROM result)", new String[]{class_id});
             return cursor != null && cursor.moveToFirst();
         } catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar se existe provas corrigidas para essa turma! "+e.getMessage());
@@ -1091,12 +920,13 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean verificaSituacaoCorrecao(Integer id_prova, Integer id_aluno, Integer estado){
+
+    public Boolean checkSituationCorrected(Integer exam_id, Integer student_id, Integer state){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT questao FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ? AND questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), estado.toString()});
+            cursor = base_dados.rawQuery("SELECT question FROM result WHERE exam_id = ? AND student_id = ? AND question = ?", new String[]{exam_id.toString(), student_id.toString(), state.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar situaçao de correção por aluno! "+e.getMessage());
@@ -1111,31 +941,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean checkExistsStudent(String nome){
+    public Boolean checkExistStudent(String name){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE nomeAluno = ? AND id_escola = ?", new String[]{nome, DataBaseKariti.ID_ESCOLA.toString()});
-            return cursor != null && cursor.moveToFirst();
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-    }
-    public Boolean checkExistsStudent(Integer id_student){
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno = ? AND id_escola = ?", new String[]{id_student.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT name FROM student WHERE name = ? AND school_id = ?", new String[]{name, DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
@@ -1150,12 +961,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteAlunosPorEscola(){
+    public Boolean checkExistStudent(Integer student_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE id_escola = ? AND status = 1", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT student_id FROM student WHERE student_id = ? AND school_id = ?", new String[]{student_id.toString(), DataBaseKariti.ID_ESCOLA.toString()});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
@@ -1169,12 +980,33 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public Boolean verificaExisteTurmas(){
+
+    public Boolean checkExistStudent(){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE id_escola = ?", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT student_id FROM student WHERE school_id = ? AND status = 1", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
+            return cursor != null && cursor.moveToFirst();
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar verificar existencia de aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+    }
+
+    public Boolean checkExistClass(){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT class_id FROM class WHERE school_id = ?", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de turma! "+e.getMessage());
@@ -1189,12 +1021,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteTurmaPorNome(String turma){
+    public Boolean checkExistClass(String nameClass){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE nomeTurma = ? and id_escola = ?", new String[]{turma, String.valueOf(DataBaseKariti.ID_ESCOLA)});
+            cursor = base_dados.rawQuery("SELECT name FROM class WHERE name = ? and school_id = ?", new String[]{nameClass, String.valueOf(DataBaseKariti.ID_ESCOLA)});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de turma! "+e.getMessage());
@@ -1209,12 +1041,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean verificaExisteTurmaEmProva(Integer id_turma){
+    public Boolean checkIfClassInExam(Integer class_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_turma FROM prova WHERE id_turma = ?", new String[]{String.valueOf(id_turma)});
+            cursor = base_dados.rawQuery("SELECT class_id FROM exam WHERE class_id = ?", new String[]{String.valueOf(class_id)});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de turma em prova! "+e.getMessage());
@@ -1229,12 +1061,13 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
 
     }
-    public Boolean verificaExisteAlunoEmTurma(Integer id_aluno){
+
+    public Boolean checkIfStudentInClass(Integer student_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM alunosTurma WHERE id_aluno = ?", new String[]{String.valueOf(id_aluno)});
+            cursor = base_dados.rawQuery("SELECT student_id FROM student_class WHERE student_id = ?", new String[]{String.valueOf(student_id)});
             return cursor != null && cursor.moveToFirst();
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar existencia de aluno em turma! "+e.getMessage());
@@ -1248,568 +1081,16 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    public String pegarNomeUsuario(Integer id_usuario) {
+
+    public String getUserName() {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
-        String nomeUsuario = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{id_usuario.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeUsuario = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nome de usuario! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomeUsuario;
-    }
-    public Integer pegarRespostaDadaQuestao(Integer id_prova, Integer id_aluno, Integer questao) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer respostaDada = null;
+        String userName = null;
         try {
             base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ? AND questao = ?", new String[]{id_prova.toString(), id_aluno.toString(), questao.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                respostaDada = cursor.getInt(0);
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar resposta dada da questao! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return respostaDada;
-    }
-
-    public Integer pegarRespostaQuestaoGabarito(Integer id_prova, Integer questao) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer respostaGabarito = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("Select resposta from gabarito where id_prova = ? and questao = ?", new String[]{id_prova.toString(), questao.toString()});
+            cursor = base_dados.rawQuery("SELECT name FROM user WHERE user_id = ?", new String[]{DataBaseKariti.USER_ID.toString()});
             if (cursor != null && cursor.moveToFirst()){
-                respostaGabarito = cursor.getInt(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar resposta do gabarito por questao! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return respostaGabarito;
-
-    }
-    public Float pegarNotaQuestao(Integer id_prova, Integer questao) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Float notaQuestao = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? AND questao = ?", new String[]{id_prova.toString(), questao.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                notaQuestao = cursor.getFloat(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nota da questao! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return notaQuestao;
-    }
-    public String pegarNomeTurma(String id_turma){
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String nomeTurma = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_turma = ? AND id_escola = ?", new String[]{id_turma, DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeTurma = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nome da turma! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomeTurma;
-
-    }
-    public String pegaNomeAlunoPStatus(Integer id_aluno, Integer status) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String nomeAluno = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ? AND status = ?", new String[]{id_aluno.toString(), DataBaseKariti.ID_ESCOLA.toString(), status.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeAluno = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nome do aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomeAluno;
-
-    }
-    public String pegaNomeAluno(Integer id_aluno) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String nomeAluno = "";
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_aluno = ? AND id_escola = ?", new String[]{id_aluno.toString(), DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeAluno = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nome do aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomeAluno;
-    }
-    
-    public String pegarDataProva(String id_prova) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String dataProva = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT dataProva FROM prova WHERE id_prova = ?", new String[]{id_prova});
-            if (cursor != null && cursor.moveToFirst()){
-                dataProva = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar data da Prova! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return dataProva;
-    }
-
-    public String[] pegarDadosProva(Integer id_prova) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String[] x = new String[2];
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeProva, id_turma FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                x[0] = cursor.getString(0);
-                x[1] = cursor.getString(1);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar data da Prova! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return x;
-    }
-    public String[] pegarTodosDadosProva(Integer id_prova) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String[] x = new String[5];
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeProva, id_turma, dataProva, qtdQuestoes, qtdAlternativas FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                x[0] = cursor.getString(0);
-                x[1] = cursor.getString(1);
-                x[2] = cursor.getString(2);
-                x[3] = cursor.getString(3);
-                x[4] = cursor.getString(4);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar data da Prova! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return x;
-    }
-    public String pegarNomeProva(Integer id_prova) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String nomeProva = "";
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeProva FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeProva = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nome da Prova! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomeProva;
-    }
-    public Integer pegarIdAluno(String nomeAluno) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer id_aluno = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE nomeAluno = ? AND id_escola = ?", new String[]{nomeAluno, DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                id_aluno = cursor.getInt(0);
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar id do aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return id_aluno;        
-    }
-    public Integer pegarIdAlunoPorTurma(String nomeAluno, Integer id_turma) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer id_aluno = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM aluno WHERE nomeAluno = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)", new String[]{nomeAluno, id_turma.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                id_aluno = cursor.getInt(0);
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar id do aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return id_aluno;
-    }
-
-    /**
-     * Este método pega id de uma determinda escola
-     * @param nomeEscola parâmetro usado para identificar o id de qual escola esta sendo solicitado.
-     * @return retorna o id da escola do tipo inteiro
-     */
-    public Integer pegarIdEscola(String nomeEscola) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer id_escola = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_escola FROM escola WHERE nomeEscola = ? AND id_usuario = ?", new String[]{nomeEscola, DataBaseKariti.USER_ID.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                id_escola = cursor.getInt(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar id da escola! "+e.getMessage());
-            return -1;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return id_escola;
-    }
-    public Integer pegarIdProvaPorTurma(String nomeProva, Integer id_turma) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer id_prova = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova FROM prova WHERE nomeProva = ? AND id_turma = ?", new String[]{nomeProva, id_turma.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                id_prova = cursor.getInt(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar id da escola! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return id_prova;
-
-    }
-    public Integer[] pegarIdProva(String nomeProva) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer[] id_prova = new Integer[2];
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_prova, id_turma FROM prova WHERE nomeProva = ? AND id_turma IN (SELECT id_turma FROM turma WHERE id_escola = ?)", new String[]{nomeProva, DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                id_prova[0] = cursor.getInt(0);
-                id_prova[1] = cursor.getInt(1);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar id da escola! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return id_prova;
-
-    }
-    public Integer pegarIdTurma(String nomeTurma) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer id_turma = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_turma FROM turma WHERE nomeTurma = ? AND id_escola = ?", new String[]{nomeTurma, DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                id_turma = cursor.getInt(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar id da turma! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return id_turma;
-    }
-
-    public Integer pegarQtdQuestoes(String id_prova){
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer qtdQuestoes = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT qtdQuestoes FROM prova WHERE id_prova = ?", new String[]{id_prova});
-            if (cursor != null && cursor.moveToFirst()){
-                qtdQuestoes = cursor.getInt(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar quantidade de questões! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return qtdQuestoes;
-    }
-
-    public Integer[] pegarQuestsAndAlts(Integer id_prova){
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer[] questAlt = new Integer[2];
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT qtdQuestoes, qtdAlternativas FROM prova WHERE id_prova = ?", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                questAlt[0] = cursor.getInt(0);
-                questAlt[1] = cursor.getInt(1);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar quantidade de questões e alternativas! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return questAlt;
-    }
-    public Integer pegarQtdAlternativas(String id_prova) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        Integer qtdAlternativas = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT qtdAlternativas FROM prova WHERE id_prova = ?", new String[]{id_prova});
-            if (cursor != null && cursor.moveToFirst()){
-                qtdAlternativas = cursor.getInt(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar quantidade de alternativas! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return qtdAlternativas;
-
-    }
-    public String pegarEmailAluno(Integer id_aluno) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String emailAluno = "";
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT email FROM aluno WHERE id_aluno = ? AND status = ? AND id_escola = ?", new String[]{id_aluno.toString(), "1", DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                emailAluno = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar email do aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return emailAluno;
-    }
-    public String pegarEmailUsuario(Integer id_usuario) {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String emailAluno = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT email FROM usuario WHERE id_usuario = ?", new String[]{id_usuario.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                emailAluno = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar email do aluno! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return emailAluno;
-    }
-    public String pegarNomeEscola() {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String nomeEscola = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_escola = ? AND id_usuario = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString(), DataBaseKariti.USER_ID.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeEscola = cursor.getString(0);
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar nome da escola! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomeEscola;
-    }
-    public String pegarNomeUsuario() {
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        String nomeUsuario = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeUsuario FROM usuario WHERE id_usuario = ?", new String[]{DataBaseKariti.USER_ID.toString()});
-            if (cursor != null && cursor.moveToFirst()){
-                nomeUsuario = cursor.getString(0);
+                userName = cursor.getString(0);
             }
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar pegar nome do usuario! "+e.getMessage());
@@ -1822,19 +1103,364 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return nomeUsuario;
+        return userName;
     }
-    public Float pegarNotaProva(String id_prova) {
-        float notaProva = 0;
+
+    public String getUserName(Integer user_id) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String userName = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM user WHERE user_id = ?", new String[]{user_id.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                userName = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome de usuario! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return userName;
+    }
+
+    public String getUserEmail(Integer user_id) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String userEmail = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT email FROM user WHERE user_id = ?", new String[]{user_id.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                userEmail = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar email do usuario! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return userEmail;
+    }
+
+    public String getSchoolName() {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String schoolName = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM school WHERE school_id = ? AND user_id = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString(), DataBaseKariti.USER_ID.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                schoolName = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome da escola! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return schoolName;
+    }
+
+    /**
+     * Este método pega id de uma determinda escola
+     * @param SchoolName parâmetro usado para identificar o id de qual escola esta sendo solicitada.
+     * @return retorna o id da escola do tipo inteiro
+     */
+    public Integer getSchoolId(String SchoolName) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer school_id = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT school_id FROM school WHERE name = ? AND user_id = ?", new String[]{SchoolName, DataBaseKariti.USER_ID.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                school_id = cursor.getInt(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar id da escola! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return school_id;
+    }
+
+    public Integer getStudentId(String studentName) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer student_id = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT student_id FROM student WHERE name = ? AND school_id = ?", new String[]{studentName, DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                student_id = cursor.getInt(0);
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar id do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return student_id;
+    }
+
+    public String getStudentName(Integer student_id, int status) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String studentName = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM student WHERE student_id = ? AND school_id = ? AND status = ?", new String[]{student_id.toString(), DataBaseKariti.ID_ESCOLA.toString(), String.valueOf(status)});
+            if (cursor != null && cursor.moveToFirst()){
+                studentName = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return studentName;
+
+    }
+
+    public String getStudentName(Integer student_id) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String studentName = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM student WHERE student_id = ? AND school_id = ?", new String[]{student_id.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                studentName = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return studentName;
+    }
+
+    public String getStudentEmail(Integer student_id) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String studentEmail = "";
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT email FROM student WHERE student_id = ? AND status = ? AND school_id = ?", new String[]{student_id.toString(), "1", DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                studentEmail = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar email do aluno! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return studentEmail;
+    }
+
+    public Integer getStudentNumber(String class_id, Integer status) {
+        int studentNumber = 0;
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados  = this.getReadableDatabase();
+            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT student_id) FROM student WHERE student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) AND status = ? AND school_id = ?", new String[]{class_id, status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                studentNumber  = cursor.getInt(0);
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar quantidade de alunos por status! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return studentNumber;
+    }
+
+    public String getClassName(String class_id){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String className = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM class WHERE class_id = ? AND school_id = ?", new String[]{class_id, DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                className = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome da turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return className;
+
+    }
+
+    public Integer getClassId(String className) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer class_id = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT class_id FROM class WHERE name = ? AND school_id = ?", new String[]{className, DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                class_id = cursor.getInt(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar id da turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return class_id;
+    }
+
+    public String getExamName(Integer exam_id) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        String examName = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM exam WHERE exam_id = ?", new String[]{exam_id.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                examName = cursor.getString(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome da Prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return examName;
+    }
+
+    public Integer getExamId(String examName, Integer class_id) {
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer exam_id = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT exam_id FROM exam WHERE name = ? AND class_id = ?", new String[]{examName, class_id.toString()});
+            if (cursor != null && cursor.moveToFirst()){
+                exam_id = cursor.getInt(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar id da prova! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return exam_id;
+
+    }
+
+    public Integer getNumberQuestions(String exam_id){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer qtdQuestions = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT number_questions FROM exam WHERE exam_id = ?", new String[]{exam_id});
+            if (cursor != null && cursor.moveToFirst()){
+                qtdQuestions = cursor.getInt(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar quantidade de questões! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return qtdQuestions;
+    }
+
+    public Double getExamGrade(String exam_id) {
+        double examGrade = 0;
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ?", new String[]{id_prova});
+            cursor = base_dados.rawQuery("SELECT grade FROM answer_key WHERE exam_id = ?", new String[]{exam_id});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    float nota = cursor.getFloat(0);
-                    notaProva = notaProva + nota;
+                    double gradeI = cursor.getDouble(0);
+                    examGrade = examGrade + gradeI;
                 } while (cursor.moveToNext());
             }
         } catch (Exception e){
@@ -1849,42 +1475,48 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
 
-        return notaProva;
+        return examGrade;
     }
-    public Integer pegarQtdAlunosPorStatus(String id_turma, Integer status) {
-        int qtdAnonimos = 0;
+
+    public String[] getExamData(Integer exam_id) {
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
+        String[] x = new String[5];
         try {
-            base_dados  = this.getReadableDatabase();
-            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT id_aluno) FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) AND status = ? AND id_escola = ?", new String[]{id_turma, status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name, class_id, date, number_questions, number_alternatives FROM exam WHERE exam_id = ?", new String[]{exam_id.toString()});
             if (cursor != null && cursor.moveToFirst()) {
-                qtdAnonimos  = cursor.getInt(0);
+                x[0] = cursor.getString(0);
+                x[1] = cursor.getString(1);
+                x[2] = cursor.getString(2);
+                x[3] = cursor.getString(3);
+                x[4] = cursor.getString(4);
             }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar pegar quantidade de alunos por status! "+e.getMessage());
+        } catch (Exception e) {
+            Log.e("kariti", "Erro ao tentar pegar dados da Prova! " + e.getMessage());
             return null;
         } finally {
-            if(base_dados != null && base_dados.isOpen()){
+            if (base_dados != null && base_dados.isOpen()) {
                 base_dados.close();
             }
-            if(cursor != null){
+            if (cursor != null) {
                 cursor.close();
             }
         }
-        return qtdAnonimos;
+        return x;
     }
-    public List<String> listarNomesAlunos(Integer status) {
-        List<String> nomesAlunos = new ArrayList<>();
+
+    public List<String> listStudentNames(int status) {
+        List<String> studentNames = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE status = ? AND id_escola = ? ORDER BY nomeAluno ASC", new String[]{status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT name FROM student WHERE status = ? AND school_id = ? ORDER BY name ASC", new String[]{String.valueOf(status), DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    String nomeAluno = cursor.getString(0);
-                    nomesAlunos.add(nomeAluno);
+                    String studentName = cursor.getString(0);
+                    studentNames.add(studentName);
                 } while (cursor.moveToNext());
             }
         }catch (Exception e){
@@ -1898,51 +1530,21 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return nomesAlunos;
+        return studentNames;
     }
-    public void testandoTransacoes(List<String[]> nomes){
-        SQLiteDatabase db = null;
 
-        try {
-            db = getWritableDatabase(); // Obter instância do banco de dados
-            db.beginTransaction(); // Iniciar transação
 
-            for(String[] dadosAluno: nomes){
-                ContentValues values = new ContentValues();
-                values.put("nomeAluno", dadosAluno[0]);
-                values.put("status", dadosAluno[1]);
-                values.put("id_escola", dadosAluno[2]);
-                if (db.insert("aluno", null, values) == -1){
-                    throw new Exception();
-                }
-                //db.execSQL("insert into aluno(nomeAluno, status, id_escola) values('" + dadosAluno[0] + "', " + dadosAluno[1] + ", cast('"+dadosAluno[2]+"' as integer))");
-            }
-
-            // Outras operações...
-
-            db.setTransactionSuccessful(); // Marcar a transação como bem-sucedida
-        } catch (Exception e) {
-            Log.e("kariti", e.toString());
-        } finally {
-            if (db != null) {
-                if (db.inTransaction()) {
-                    db.endTransaction();
-                }
-                db.close();
-            }
-        }
-    }
-    public List<String> listarAlunosPorTurma(String id_turma) {
-        List<String>  alunos = new ArrayList<>();
+    public List<String> listStudentNames(String class_id) {
+        List<String>  studentNames = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_escola = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), id_turma});
+            cursor = base_dados.rawQuery("SELECT name FROM student WHERE school_id = ? AND student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) ORDER BY name ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), class_id});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    String aluno = cursor.getString(0);
-                    alunos.add(aluno);
+                    String student = cursor.getString(0);
+                    studentNames.add(student);
                 } while (cursor.moveToNext());
             }
         }catch (Exception e){
@@ -1956,19 +1558,19 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return alunos;
+        return studentNames;
     }
-    public List<String> listarAlunosTurmaPorStatus(String id_turma, Integer status) {
-        List<String>  alunos = new ArrayList<>();
+    public List<String> listStudentNames(String class_id, Integer status) {
+        List<String>  studentNames = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeAluno FROM aluno WHERE id_escola = ? AND status = ? AND id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), status.toString(), id_turma});
+            cursor = base_dados.rawQuery("SELECT name FROM student WHERE school_id = ? AND status = ? AND student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) ORDER BY name ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), status.toString(), class_id});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    String aluno = cursor.getString(0);
-                    alunos.add(aluno);
+                    String student = cursor.getString(0);
+                    studentNames.add(student);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e){
@@ -1982,24 +1584,57 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return alunos;
+        return studentNames;
     }
 
-    public List<Integer> listarIdsAlunosPorTurma(String id_turma) {
-        List<Integer>  ids_alunos = new ArrayList<>();
+    public List<Student> listStudentExamCorrected(Integer class_id) {
+        List<Student> students = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno FROM alunosTurma WHERE id_turma = ?", new String[]{id_turma});
+            cursor = base_dados.rawQuery("SELECT student_id, name, email FROM student WHERE " +
+                    "student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) AND " +
+                    "student_id IN (SELECT student_id FROM result)", new String[]{class_id.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    Integer id = cursor.getInt(0);
-                    ids_alunos.add(id);
+                    Integer id_student = cursor.getInt(0);
+                    String nameStudent = cursor.getString(1);
+                    String email = cursor.getString(2);
+                    Student st = new Student(id_student, nameStudent, email);
+                    students.add(st);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return students;
+    }
+
+
+    public List<String> listClassNames() {
+        List<String> classNames = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM class WHERE school_id = ? ORDER BY class_id DESC", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String className = cursor.getString(0);
+                    classNames.add(className);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes das turma! "+e.getMessage());
             return null;
         } finally {
             if(base_dados != null && base_dados.isOpen()){
@@ -2009,25 +1644,25 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return ids_alunos;
+        return classNames;
     }
-    /*
-    public Map<Integer, String> listarAlunosPorTurma(Integer id_turma) {
-        Map<Integer, String>  alunos = new HashMap<>();
+
+
+    public List<String> listClassByExam() {
+        List<String>  classNames = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{id_turma.toString()});
+            cursor = base_dados.rawQuery("SELECT name FROM class WHERE school_id = ? AND class_id IN (SELECT class_id FROM exam) ORDER BY class_id DESC", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
             if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Integer id_aluno = cursor.getInt(0);
-                    String nomeAluno = cursor.getString(1);
-                    alunos.put(id_aluno, nomeAluno);
+                do{
+                    String className = cursor.getString(0);
+                    classNames.add(className);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            Log.e("kariti","Erro ao tentar listar turmas por prova! "+e.getMessage());
             return null;
         } finally {
             if(base_dados != null && base_dados.isOpen()){
@@ -2037,23 +1672,223 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return alunos;
+        return classNames;
     }
 
+    public List<String> listExamNames(String class_id) {
+        List<String>  examNames = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM exam WHERE class_id = ? ORDER BY date", new String[]{class_id});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String examName = cursor.getString(0);
+                    examNames.add(examName);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar nomes das provas por turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return examNames;
+    }
+
+    /**
+     * Este método obtém as notas de cada questão de uma prova.
+     * @param exam_id codigo da prova que se deseja saber as notas das questões.
+     * @return lista com as notas.
+     * */
+    public List<Float> listGradeByQuestion(Integer exam_id) {
+        List<Float> grades = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT grade FROM answer_key WHERE exam_id = ? ORDER BY question", new String[]{exam_id.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    float grade = cursor.getFloat(0);
+                    grades.add(grade);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar notas por questão! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return grades;
+    }
+
+
+    /**
+     * Este método lista todas as escolas do banco de dados pertecentes a um determinado usuário
+     * @param status parametro que determina se as escolas listadas serão as ativas ou as desativadas
+     * @return retorna uma lista de string contendo todas as escolas pertencentes ao usuario
+     * logado caso não tenha, retorna uma lista vazia.
      */
+    public List<String> listSchoolNames(Integer status) {
+        List<String> schoolNames = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT name FROM school WHERE user_id = ? AND status = ?  ORDER BY name ASC", new String[]{DataBaseKariti.USER_ID.toString(), status.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String school = cursor.getString(0);
+                    schoolNames.add(school);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar escolas! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return schoolNames;
+    }
 
-    public List<Student> listarAlunosPorTurma(Integer id_turma) {
+    public List<String> listAnswerKeyString(Integer exam_id) {
+        ArrayList<String> answerKeys = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT answer FROM answer_key WHERE exam_id = ? ORDER BY question ASC", new String[]{exam_id.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String answer = cursor.getString(0);
+                    char r = (char) (Integer.parseInt(answer)-1+'A');
+                    answerKeys.add(String.valueOf(r));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar gabarito! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return answerKeys;
+    }
+
+    public List<String> listAnswerGivenString(Integer exam_id, Integer student_id) {
+        List<String> answer_givens = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT answer_given FROM result WHERE exam_id = ? AND student_id = ? ORDER BY question ASC", new String[]{exam_id.toString(), student_id.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String aux = "";
+                    String answer = cursor.getString(0);
+                    if(!answer.equals("-1")){
+                        if (answer.equals("0")) {
+                            aux = "-";
+                        } else {
+                            List<String> resp = new ArrayList<>();
+                            for (int i = 0; i < answer.length(); i++) {
+                                if (!String.valueOf(answer.charAt(i)).equals("0")){
+                                    String dupli = String.valueOf((char) (Integer.parseInt(String.valueOf(answer.charAt(i))) - 1 + 'A'));
+                                    resp.add(dupli);
+                                }
+                            }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                resp.sort((a, b) -> a.compareTo(b));
+                            }else{
+                                Collections.sort(resp, new Comparator<String>() {
+                                    @Override
+                                    public int compare(String o1, String o2) {
+                                        return o1.compareTo(o2);
+                                    }
+                                });
+                            }
+                            aux = String.join("",resp);
+                        }
+                        answer_givens.add(aux);
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas dadas! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return answer_givens;
+    }
+
+    public String listAnswerKeyInt(String exam_id) {
+        String answerKeys = "";
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT answer FROM answer_key WHERE exam_id = ? ORDER BY question ASC", new String[]{exam_id});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String answer = cursor.getString(0);
+                    answerKeys += answer;
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return answerKeys;
+    }
+
+    public List<Student> listStudentsData(Integer class_id) {
         List<Student>  students = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) ORDER BY nomeAluno ASC", new String[]{id_turma.toString()});
+            cursor = base_dados.rawQuery("SELECT student_id, name, email FROM student WHERE " +
+                    "student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) ORDER BY name ASC", new String[]{class_id.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Integer id_student = cursor.getInt(0);
                     String nameStudent = cursor.getString(1);
-                    Student student = new Student(id_student, nameStudent, null);
+                    String email = cursor.getString(2);
+                    Student student = new Student(id_student, nameStudent, email);
                     students.add(student);
                 } while (cursor.moveToNext());
             }
@@ -2071,20 +1906,20 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         return students;
     }
 
-    public List<Student> listStudentsClassFull(Integer id_class) {
-        List<Student> students = new ArrayList<>();
+    public List<Answer_key> listAnswerKeyData(Integer exam_id) {
+        List<Answer_key> answerKeys = new ArrayList<>();
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno, email FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?)", new String[]{id_class.toString()});
+            cursor = base_dados.rawQuery("SELECT question, answer, grade FROM answer_key WHERE exam_id = ? ORDER BY question ASC", new String[]{exam_id.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    Integer id_student = cursor.getInt(0);
-                    String nameStudent = cursor.getString(1);
-                    String email = cursor.getString(2);
-                    Student st = new Student(id_student, nameStudent, email);
-                    students.add(st);
+                    int question = cursor.getInt(0);
+                    int answer = cursor.getInt(1);
+                    float grade = cursor.getFloat(2);
+                    Answer_key g = new Answer_key(question,answer, grade);
+                    answerKeys.add(g);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e){
@@ -2098,405 +1933,9 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return students;
+        return answerKeys;
     }
 
-    public List<Student> listStudentExamCorrect(Integer id_class) {
-        List<Student> students = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT id_aluno, nomeAluno, email FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM alunosTurma WHERE id_turma = ?) AND id_aluno IN (SELECT id_aluno FROM resultadoCorrecao)", new String[]{id_class.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Integer id_student = cursor.getInt(0);
-                    String nameStudent = cursor.getString(1);
-                    String email = cursor.getString(2);
-                    Student st = new Student(id_student, nameStudent, email);
-                    students.add(st);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
-            return null;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-        }
-        return students;
-    }
-
-    public List<Integer> listarIdsAlunosPorProvaCorrigida(Integer id_prova){
-        List<Integer> ids_alunos = new ArrayList<>();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = this.getReadableDatabase();
-            cursor = db.rawQuery("SELECT id_aluno FROM aluno WHERE id_aluno IN (SELECT id_aluno FROM resultadoCorrecao where id_prova = ?) AND id_escola = ? ORDER BY nomeAluno", new String[]{id_prova.toString(), DataBaseKariti.ID_ESCOLA.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Integer id_aluno = cursor.getInt(0);
-                    ids_alunos.add(id_aluno);
-                } while (cursor.moveToNext());
-            }
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar id dos alunos por prova corrigida! "+e.getMessage());
-            return null;
-        }finally {
-            if (cursor != null){
-                cursor.close();
-            }
-            if (db != null && db.isOpen()) {
-                db.close();
-            }
-        }
-        return ids_alunos;
-    }
-    public List<String> listarNomesTurmas() {
-        List<String> nomesTurma = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? ORDER BY id_turma DESC", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String nomeTurma = cursor.getString(0);
-                    nomesTurma.add(nomeTurma);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar nomes das turma! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomesTurma;
-    }
-
-    public List<String> listarTurmasPorProva() {
-        List<String>  nomesTurma = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeTurma FROM turma WHERE id_escola = ? AND id_turma IN (SELECT id_turma FROM prova) ORDER BY id_turma DESC", new String[]{String.valueOf(DataBaseKariti.ID_ESCOLA)});
-            if (cursor != null && cursor.moveToFirst()) {
-                do{
-                    String nomeTurma = cursor.getString(0);
-                    nomesTurma.add(nomeTurma);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar turmas por prova! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomesTurma;
-    }
-    public List<String> listarNomesProvasPorTurma(String id_turma) {
-        List<String>  nomesProvas = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeProva FROM prova WHERE id_turma = ? ORDER BY dataProva", new String[]{id_turma});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String nomeProva = cursor.getString(0);
-                    nomesProvas.add(nomeProva);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar nomes das provas por turma! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return nomesProvas;
-    }
-
-    /**
-     * Este método obtém as notas de cada questão de uma prova.
-     * @param id_prova codigo da prova que se deseja saber as notas das questões.
-     * @return lista com as notas.
-     * */
-    public List<Float> listarNotasPorQuestao(Integer id_prova) {
-        List<Float> notas = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? ORDER BY questao", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    float nota = cursor.getFloat(0);
-                    notas.add(nota);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar notas por questão! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return notas;
-    }
-
-    /**
-     * Este método lista todas as escolas do banco de dados pertecentes a um determinado usuário
-     * @param status parametro que determina se as escolas listadas serão as ativas ou as desativadas
-     * @return retorna uma lista de string contendo todas as escolas pertencentes ao usuario
-     * logado caso não tenha, retorna uma lista vazia.
-     */
-    public List<String> listarEscolas(Integer status) {
-        List<String> escolas = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nomeEscola FROM escola WHERE id_usuario = ? AND status = ?  ORDER BY nomeEscola ASC", new String[]{DataBaseKariti.USER_ID.toString(), status.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String escola = cursor.getString(0);
-                    escolas.add(escola);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar escolas! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return escolas;
-    }
-
-    public List<String> listarRespostasGabarito(Integer id_prova) {
-        ArrayList<String> respostasGabarito = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String resposta = cursor.getString(0);
-                    char r = (char) (Integer.parseInt(resposta)-1+'A');
-                    respostasGabarito.add(String.valueOf(r));
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar gabarito! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return respostasGabarito;
-    }
-
-    public List<String> listarRespostasDadas(Integer id_prova, Integer id_aluno) {
-        List<String> respostasDadas = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? AND id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String aux = "";
-                    String resposta = cursor.getString(0);
-                    if(!resposta.equals("-1")){
-                        if (resposta.equals("0")) {
-                            aux = "-";
-                        } else {
-                            List<String> resp = new ArrayList<>();
-                            for (int i = 0; i < resposta.length(); i++) {
-                                if (!String.valueOf(resposta.charAt(i)).equals("0")){
-                                    String dupli = String.valueOf((char) (Integer.parseInt(String.valueOf(resposta.charAt(i))) - 1 + 'A'));
-                                    resp.add(dupli);
-                                }
-                            }
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                resp.sort((a, b) -> a.compareTo(b));
-                            }else{
-                                Collections.sort(resp, new Comparator<String>() {
-                                    @Override
-                                    public int compare(String o1, String o2) {
-                                        return o1.compareTo(o2);
-                                    }
-                                });
-                            }
-                            aux = String.join("",resp);
-                        }
-                        respostasDadas.add(aux);
-                    }
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar respostas dadas! "+e.getMessage());
-            return null;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-        }
-        return respostasDadas;
-    }
-    public String listarRespostasDadasNumero(Integer id_prova, Integer id_aluno) {
-        String respostasDadas = "";
-        String ultimaQuestao = "";
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT respostaDada, questao FROM resultadoCorrecao where id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String resposta = cursor.getString(0);
-                    String questao = cursor.getString(1);
-                    if(!respostasDadas.isEmpty() && !questao.equals(ultimaQuestao)){
-                        respostasDadas += ",";
-                    }
-                    respostasDadas += resposta;
-                    ultimaQuestao = questao;
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar respostas dadas! "+e.getMessage());
-            return null;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-        }
-        return respostasDadas;
-    }
-    public String listarRespostasGabaritoNumerico(String id_prova) {
-        String respostasGabarito = "";
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String resposta = cursor.getString(0);
-                    respostasGabarito += resposta;
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
-            return null;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-        }
-        return respostasGabarito;
-    }
-
-    public List<Gabarito> listarDadosGabarito(Integer id_prova) {
-        List<Gabarito> gabarito = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT questao, resposta, nota FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Integer questao= cursor.getInt(0);
-                    Integer resposta = cursor.getInt(1);
-                    float nota = cursor.getFloat(2);
-                    Gabarito g = new Gabarito(questao,resposta, nota);
-                    gabarito.add(g);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
-            return null;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-        }
-        return gabarito;
-    }
-
-    public String listarNotasProva(String id_prova) {
-        String notasQuestoes = "";
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT nota FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String nota = cursor.getString(0);
-                    notasQuestoes += nota;
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar notas de forma numérica! "+e.getMessage());
-            return null;
-        } finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (cursor != null){
-                cursor.close();
-            }
-        }
-
-        return notasQuestoes;
-    }
 
     @NonNull
     private static String bytesToHex(@NonNull byte[] hash) {
@@ -2520,37 +1959,5 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }catch(Exception e){
             return "ERROR";
         }
-    }
-
-    public String mostraGabarito(Integer id_prova) {
-        String gabarito = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT resposta FROM gabarito WHERE id_prova = ? ORDER BY questao ASC", new String[]{id_prova.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String resposta = cursor.getString(0);
-                char r = (char) (Integer.parseInt(resposta)-1+'A');
-                gabarito += r + "\n";
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return gabarito;
-    }
-
-    public String detalhePorAluno(Integer id_prova, Integer id_aluno) {
-        String detalhes = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT respostaDada FROM resultadoCorrecao WHERE id_prova = ? and id_aluno = ? ORDER BY questao ASC", new String[]{id_prova.toString(), id_aluno.toString()});
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String resposta = cursor.getString(0);
-                char r = (char) (Integer.parseInt(resposta)-1+'A');
-                detalhes += r + "\n";
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return detalhes;
     }
 }

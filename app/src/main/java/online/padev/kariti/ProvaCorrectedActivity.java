@@ -28,8 +28,8 @@ import androidx.core.content.ContextCompat;
 import java.util.List;
 
 import online.padev.kariti.cards.CorrectionReportCard;
-import online.padev.kariti.entity.Gabarito;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.entity.Student;
 import online.padev.kariti.database.DataBaseKariti;
 
@@ -39,9 +39,9 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
     List<String> answersGiven;
     String className, filePdf;
     TextView txtViewProva;
-    List<Gabarito> gabarito;
+    List<Answer_key> answerkey;
     List<Student> students;
-    Prova prova;
+    Exam exam;
     TextView title;
     DataBaseKariti dataBase;
 
@@ -59,16 +59,16 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
 
         title.setText(String.format("%s","Provas Corrigidas"));
 
-        prova = (Prova) getIntent().getSerializableExtra("prova");
+        exam = (Exam) getIntent().getSerializableExtra("prova");
 
-        className = dataBase.pegarNomeTurma(prova.getId_class().toString());
+        className = dataBase.getClassName(exam.getClass_id().toString());
 
-        txtViewProva.setText(String.format("%s","Prova: "+prova.getNameProva()));
+        txtViewProva.setText(String.format("%s","Prova: "+ exam.getNameExam()));
 
-        gabarito = dataBase.listarDadosGabarito(prova.getId_prova());
-        students = dataBase.listStudentExamCorrect(prova.getId_class());
+        answerkey = dataBase.listAnswerKeyData(exam.getExam_id());
+        students = dataBase.listStudentExamCorrected(exam.getClass_id());
 
-        if (gabarito == null || students == null){
+        if (answerkey == null || students == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -81,16 +81,16 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
         for(Student student : students) { // interage sob esses alunos
             float nota = 0;
             int acertos = 0;
-            Boolean checkStatusCorrection = dataBase.verificaSituacaoCorrecao(prova.getId_prova(), student.getId_student(), -1);
+            Boolean checkStatusCorrection = dataBase.checkSituationCorrected(exam.getExam_id(), student.getId_student(), -1);
             if(checkStatusCorrection == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            answersGiven = dataBase.listarRespostasDadas(prova.getId_prova(), student.getId_student()); // lista as respostas dos alunos em formato de letras
+            answersGiven = dataBase.listAnswerGivenString(exam.getExam_id(), student.getId_student()); // lista as respostas dos alunos em formato de letras
             incrementResponse(); //caso quantidade de respostadas dadas, menor que o esperado, incrementa!
             if(!checkStatusCorrection) {
-                for (int i = 0; i < prova.getNumQuestions(); i++) {
-                    Gabarito g = gabarito.get(i);
+                for (int i = 0; i < exam.getNumQuestions(); i++) {
+                    Answer_key g = answerkey.get(i);
                     char correctResponse = (char) ('A' + g.getResponse() - 1);
                     if (String.valueOf(correctResponse).equals(answersGiven.get(i))) {
                         nota += g.getNote();
@@ -153,7 +153,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
             tableLayout.addView(row);
 
             cell4.setOnClickListener(v -> {
-                Boolean checkStatusCorrection2 = dataBase.verificaSituacaoCorrecao(prova.getId_prova(), v.getId(), -1);
+                Boolean checkStatusCorrection2 = dataBase.checkSituationCorrected(exam.getExam_id(), v.getId(), -1);
                 if(checkStatusCorrection2 == null){
                     Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
                     return;
@@ -161,7 +161,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
                 if(!checkStatusCorrection2){
                     Intent intent = new Intent(this, ProvaCorrectedStudentActivity.class);
                     intent.putExtra("id_aluno", v.getId());
-                    intent.putExtra("id_prova", prova.getId_prova());
+                    intent.putExtra("id_prova", exam.getExam_id());
                     startActivity(intent);
                 }else{
                     notifyCorrectionNonExistent();
@@ -214,7 +214,7 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
 
 
     private void generateCorrectionReport(int typeReport){
-        CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, prova.getId_prova());
+        CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, exam.getExam_id());
         boolean requestStatus = createReport.generateCorrectionReport(typeReport);
         if (requestStatus){
             notifySucessDownload();
@@ -234,8 +234,8 @@ public class ProvaCorrectedActivity extends AppCompatActivity {
     }
     private void incrementResponse(){
         int numRespostas = answersGiven.size(); //Quantidade de respostas cadastradas no BD
-        if (numRespostas < prova.getNumQuestions()){ //Caso quantidade de respostas dadas menor q de questões
-            for (int a = numRespostas; a < prova.getNumQuestions(); a++){
+        if (numRespostas < exam.getNumQuestions()){ //Caso quantidade de respostas dadas menor q de questões
+            for (int a = numRespostas; a < exam.getNumQuestions(); a++){
                 answersGiven.add(a, "-"); //Aumenta o tamanho da lista até o tamanho da questões
             }
         }

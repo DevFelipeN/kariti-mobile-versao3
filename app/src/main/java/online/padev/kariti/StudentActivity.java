@@ -52,7 +52,7 @@ public class StudentActivity extends AppCompatActivity {
         titleActivity = findViewById(R.id.toolbar_title);
         titleActivity.setText(String.format("%s","Alunos"));
 
-        listStudents = dataBase.listarNomesAlunos(1);
+        listStudents = dataBase.listStudentNames(1);
         if (listStudents == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
@@ -103,7 +103,7 @@ public class StudentActivity extends AppCompatActivity {
         });
     }
     public void onItemClick(int position) {
-        id_student = dataBase.pegarIdAluno(listStudents.get(position));
+        id_student = dataBase.getStudentId(listStudents.get(position));
         if (id_student == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
@@ -117,18 +117,18 @@ public class StudentActivity extends AppCompatActivity {
         builder.setTitle("Atenção!")
                 .setMessage("Deseja realmente excluir esse aluno?")
                 .setPositiveButton("Sim", (dialog, which) -> {
-                    id_student = dataBase.pegarIdAluno(listStudents.get(position));
+                    id_student = dataBase.getStudentId(listStudents.get(position));
                     if (id_student == null){
                         Toast.makeText(StudentActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Boolean checkStudentExists = dataBase.verificaExisteAlunoEmTurma(id_student);
+                    Boolean checkStudentExists = dataBase.checkIfStudentInClass(id_student);
                     if(checkStudentExists == null){
                         Toast.makeText(StudentActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(!checkStudentExists){
-                        Boolean isDeleteStudent = dataBase.deletarAluno(id_student);
+                        Boolean isDeleteStudent = dataBase.deleteStudent(id_student);
                         if (isDeleteStudent) {
                             listStudents.remove(position);
                             adapterStudent.notifyItemRemoved(position);

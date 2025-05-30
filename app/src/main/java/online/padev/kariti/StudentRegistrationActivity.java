@@ -39,7 +39,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(StudentRegistrationActivity.this, "Informe o nome do aluno", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Boolean checkStudent = dataBase.checkExistsStudent(nameStudent);
+                Boolean checkStudent = dataBase.checkExistStudent(nameStudent);
                 if (checkStudent == null) {
                     Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
@@ -53,7 +53,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
                         Toast.makeText(StudentRegistrationActivity.this, "E-mail do aluno, inválido!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Boolean checkEmail = dataBase.verificaExisteEmailAluno(email);
+                    Boolean checkEmail = dataBase.checkStudentEmail(email);
                     if (checkEmail == null) {
                         Toast.makeText(this, "Erro de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
@@ -63,7 +63,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
                         return;
                     }
                 }
-                Integer insertStudent = dataBase.cadastrarAluno(nameStudent, email, 1);
+                Integer insertStudent = dataBase.insertStudent(nameStudent, email, 1);
                 if (insertStudent != -1) {
                     Toast.makeText(StudentRegistrationActivity.this, "Aluno cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
                     restartVisualStudents();
@@ -86,7 +86,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         });
     }
     public void restartVisualStudents(){
-        if(dataBase.verificaExisteAlunosPorEscola()){
+        if(dataBase.checkExistStudent()){
             setResult(RESULT_OK);
             finish();
         }else{

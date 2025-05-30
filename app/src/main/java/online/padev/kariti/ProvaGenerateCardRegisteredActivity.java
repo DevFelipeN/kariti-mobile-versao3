@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 import online.padev.kariti.cards.CreatCard;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -38,7 +38,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
     Spinner spinnerClass, spinnerProva, spinnerStudent;
     AdapterSpinner adapterClass, adapterProva, adapterStudent;
     TextView title;
-    Prova prova;
+    Exam exam;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +57,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
 
         address = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
 
-        listClass = dataBaseKariti.listarTurmasPorProva();
+        listClass = dataBaseKariti.listClassByExam();
         if(listClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
@@ -70,7 +70,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
 
         }else if(address.equals(1)) { //para quando a activity que chamou for Gabarito
             id_ClassBD = getIntent().getExtras().getInt("id_turma");
-            nameClass = dataBaseKariti.pegarNomeTurma(String.valueOf(id_ClassBD));
+            nameClass = dataBaseKariti.getClassName(String.valueOf(id_ClassBD));
             nameProva = getIntent().getExtras().getString("prova");
             if (nameClass == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
@@ -85,7 +85,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
             }
 
             //============ Lista todas provas pertecentes a turma selecionada =======================
-            listProva = dataBaseKariti.listarNomesProvasPorTurma(String.valueOf(id_ClassBD));
+            listProva = dataBaseKariti.listExamNames(String.valueOf(id_ClassBD));
             if (listProva == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -102,7 +102,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
 
 
             // ============ Lista todos os alunos pertencentes a turma selecionada =======================================
-            listStudent = dataBaseKariti.listarAlunosPorTurma(id_ClassBD.toString());
+            listStudent = dataBaseKariti.listStudentNames(id_ClassBD.toString());
             if (listStudent == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                 return;
@@ -118,12 +118,12 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
                 if(position!=0){
                     try {
                         nameClass = spinnerClass.getSelectedItem().toString();
-                        id_ClassBD = dataBaseKariti.pegarIdTurma(nameClass);
+                        id_ClassBD = dataBaseKariti.getClassId(nameClass);
                         if (id_ClassBD == null) {
                             Toast.makeText(ProvaGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        listProva = dataBaseKariti.listarNomesProvasPorTurma(String.valueOf(id_ClassBD));
+                        listProva = dataBaseKariti.listExamNames(String.valueOf(id_ClassBD));
                         if (listProva == null) {
                             Toast.makeText(ProvaGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
@@ -131,7 +131,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
                         adapterProva = new AdapterSpinner(ProvaGenerateCardRegisteredActivity.this, listProva);
                         spinnerProva.setAdapter(adapterProva);
 
-                        listStudent = dataBaseKariti.listarAlunosPorTurma(id_ClassBD.toString());
+                        listStudent = dataBaseKariti.listStudentNames(id_ClassBD.toString());
                         if (listStudent == null) {
                             Toast.makeText(ProvaGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                             return;
@@ -160,7 +160,7 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
                 if(spinnerProva.getSelectedItem() != null) {
                     nameProva = spinnerProva.getSelectedItem().toString();
                     //String aluno = spinnerAluno.getSelectedItem().toString();
-                    id_provaBD = dataBaseKariti.pegarIdProvaPorTurma(nameProva, id_ClassBD);
+                    id_provaBD = dataBaseKariti.getExamId(nameProva, id_ClassBD);
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
                         solicitaPermissao();
                     }else {
@@ -190,8 +190,8 @@ public class ProvaGenerateCardRegisteredActivity extends AppCompatActivity {
         gifLoading.setVisibility(View.VISIBLE);
         new Thread(() -> {
             try {
-                prova = new Prova(id_provaBD, dataBaseKariti);
-                CreatCard creatCard = new CreatCard(prova, dataBaseKariti, this);
+                exam = new Exam(id_provaBD, dataBaseKariti);
+                CreatCard creatCard = new CreatCard(exam, dataBaseKariti, this);
                 if (creatCard.creatPdfCard()) {
                     runOnUiThread(this::infoDownloadCard);
                 } else {

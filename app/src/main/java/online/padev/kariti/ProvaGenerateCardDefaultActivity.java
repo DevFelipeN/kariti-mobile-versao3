@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import online.padev.kariti.cards.CreatCard;
-import online.padev.kariti.entity.Prova;
+import online.padev.kariti.entity.Exam;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
     Button datePickerButton, btnGenerateCard;
     ImageButton btnVoltar, questMenos, questMais, altMais, altMenos;
     TextView textViewTitle;
-    Prova prova;
+    Exam exam;
     GifImageView gifLoading;
 
 
@@ -160,15 +160,15 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
         gifLoading.setVisibility(View.VISIBLE);
         new Thread(() -> {
             try {
-                prova = new Prova();
-                prova.setNameProva(provaName.getText().toString().trim());
-                prova.setId_prova(Integer.parseInt(qtdQuest.getText().toString()));
-                prova.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
-                prova.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
+                exam = new Exam();
+                exam.setNameExam(provaName.getText().toString().trim());
+                exam.setExam_id(Integer.parseInt(qtdQuest.getText().toString()));
+                exam.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
+                exam.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
                 if (!datePickerButton.getText().toString().equals("Selecionar Data")) {
-                    prova.setDateProva(datePickerButton.getText().toString());
+                    exam.setDateExam(datePickerButton.getText().toString());
                 }
-                CreatCard creatCard = new CreatCard(prova, teacherName.getText().toString(), className.getText().toString(), this);
+                CreatCard creatCard = new CreatCard(exam, teacherName.getText().toString(), className.getText().toString(), this);
                 boolean generateSituation = creatCard.creatPdfCard();
                 if (generateSituation) {
                     runOnUiThread(this::infoDownloadCard);

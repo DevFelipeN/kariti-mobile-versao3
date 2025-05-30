@@ -41,7 +41,7 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
         dataBase = new DataBaseKariti(this);
 
         id_class = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
-        String className = dataBase.pegarNomeTurma(id_class);
+        String className = dataBase.getClassName(id_class);
         if (className == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
@@ -49,12 +49,12 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
 
         textViewClassName.setText(String.format("Turma: %s", className));
 
-        listStudentsClass = dataBase.listarAlunosPorTurma(id_class);
+        listStudentsClass = dataBase.listStudentNames(id_class);
         if (listStudentsClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
-        numAnonymousBD = dataBase.pegarQtdAlunosPorStatus(id_class, 0);
+        numAnonymousBD = dataBase.getStudentNumber(id_class, 0);
         if (numAnonymousBD == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
@@ -90,7 +90,7 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
     }
 
     private void startEditClass(){
-        Boolean provasCorreciton = dataBase.verificaExisteCorrecaoPorTurma(id_class);
+        Boolean provasCorreciton = dataBase.checkCorrectedByClass(id_class);
         if (provasCorreciton == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;

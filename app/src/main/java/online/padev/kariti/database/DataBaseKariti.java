@@ -1874,6 +1874,39 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         return answerKeys;
     }
 
+
+    /**
+     * Método para listar os alunos pertencentes a escola selecionada
+      * @param status 1 para alunos identificados e 0 para anonimos
+     * @return uma lista de Student
+     */
+    public List<Student> listStudentsData(int status) {
+        List<Student> students = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT student_id, name, email FROM student WHERE school_id = ? AND status = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor.moveToFirst()) {
+                do {
+                    Student st = new Student(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                    students.add(st);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            return null;
+        } finally {
+            if (base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return students;
+    }
+
     public List<Student> listStudentsData(Integer class_id) {
         List<Student>  students = new ArrayList<>();
         SQLiteDatabase base_dados = null;

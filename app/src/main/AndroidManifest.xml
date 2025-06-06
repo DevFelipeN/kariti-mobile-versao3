@@ -32,7 +32,7 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
         <activity
-            android:name=".StudentSelected"
+            android:name=".StudentSelectedActivity"
             android:exported="false" />
         <activity
             android:name=".ProvaGenerateCardDefaultActivity"

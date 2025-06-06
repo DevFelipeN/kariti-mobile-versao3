@@ -27,7 +27,6 @@ import online.padev.kariti.entity.Student;
 public class DataBaseKariti extends SQLiteOpenHelper {
     public static final String DBNAME = "base_dados.db";
     private static final int DATABASE_VERSION = 27;
-    private static final org.apache.commons.logging.Log log = LogFactory.getLog(DataBaseKariti.class);
     public static Integer USER_ID;
     public static Integer ID_ESCOLA;
     public DataBaseKariti(Context context) {
@@ -41,7 +40,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
 
             base_dados.execSQL("CREATE TABLE user(user_id INTEGER primary Key AUTOINCREMENT, name TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
             base_dados.execSQL("CREATE TABLE school(school_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, user_id INTEGER NOT NULL references user(user_id), status INTEGER not null check(status = 0 or status = 1))");
-            base_dados.execSQL("CREATE TABLE student(student_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), school_id INTEGER not null references school(school_id))");
+                base_dados.execSQL("CREATE TABLE student(student_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), school_id INTEGER not null references school(school_id))");
             base_dados.execSQL("CREATE TABLE class(class_id Integer PRIMARY KEY AUTOINCREMENT, school_id INTEGER not null references school(school_id), name TEXT not null)");
             base_dados.execSQL("CREATE TABLE student_class(class_id Integer not null references class(class_id), student_id Integer not null references student(student_id), primary key (class_id, student_id))");
             base_dados.execSQL("CREATE TABLE exam(exam_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, date TEXT not null, number_questions Integer not null, number_alternatives Integer not null, class_id Integer not null references class(class_id))");

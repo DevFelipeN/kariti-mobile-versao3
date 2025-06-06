@@ -35,11 +35,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DownloadResultadoCorrecao {
+public class DownloadResult {
     File arquivoCsv;
     Context context;
     String filePdf;
-    public DownloadResultadoCorrecao(File arquivoCsv, Context context, String filePdf){
+    public DownloadResult(File arquivoCsv, Context context, String filePdf){
         this.context = context;
         this.arquivoCsv = arquivoCsv;
         this.filePdf = filePdf;

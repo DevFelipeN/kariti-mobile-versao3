@@ -32,6 +32,9 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
         <activity
+            android:name=".StudentSelected"
+            android:exported="false" />
+        <activity
             android:name=".ProvaGenerateCardDefaultActivity"
             android:exported="false" />
         <activity
@@ -63,7 +66,7 @@
         <activity
             android:name=".ProvaCorrectedActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ProvaViewActivity"
             android:exported="false"

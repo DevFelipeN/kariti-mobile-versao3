@@ -1,4 +1,4 @@
-package online.padev.kariti;
+package online.padev.kariti.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,18 +13,16 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class AdapterDisabledSchool extends ArrayAdapter<String> {
+public class AdapterClickableSchool extends ArrayAdapter<String> {
 
     private List<String> escolas, ids;
-
     private Context context;
 
-    public AdapterDisabledSchool(Context context, List<String> escolas, List<String> ids) {
-        super(context, R.layout.custom_escola_desativada, escolas);
+    public AdapterClickableSchool(Context context, List<String> escolas, List<String> ids) {
+        super(context, R.layout.list_escola, escolas);
         this.context = context;
         this.escolas = escolas;
         this.ids = ids;
-
     }
 
     @NonNull
@@ -33,10 +31,10 @@ public class AdapterDisabledSchool extends ArrayAdapter<String> {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.custom_escola_desativada, null);
+            view = inflater.inflate(R.layout.list_escola, null);
         }
 
-        TextView textViewNome = view.findViewById(R.id.textViewNome);
+        TextView textViewNome = view.findViewById(R.id.textViewNomeScol);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
 
         String nomeEscola = escolas.get(position);

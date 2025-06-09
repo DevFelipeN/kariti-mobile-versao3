@@ -29,14 +29,14 @@
         android:inputType="text"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerBuscAluno"
+        app:layout_constraintBottom_toTopOf="@+id/btnSelectaStudentClass"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
         tools:ignore="Autofill" />
 
-    <Spinner
+    <!--<Spinner
         android:id="@+id/spinnerBuscAluno"
         style="@style/BORDABOTOES"
         android:layout_width="320dp"
@@ -48,7 +48,21 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTurmaCad">
-    </Spinner>
+    </Spinner>-->
+
+    <Button
+        android:id="@+id/btnSelectaStudentClass"
+        style="@style/BUTTONSTYLE"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/btnSelectStudents"
+        app:layout_constraintBottom_toTopOf="@+id/listViewCadTurma"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTurmaCad">
+    </Button>
 
     <TextView
         android:id="@+id/textViewAlunos"
@@ -63,7 +77,7 @@
         app:layout_constraintEnd_toEndOf="@+id/listViewCadTurma"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/listViewCadTurma"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
+        app:layout_constraintTop_toBottomOf="@+id/btnSelectaStudentClass"
         app:layout_constraintVertical_bias="0.0" />
 
     <ListView
@@ -81,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAluno"
+        app:layout_constraintTop_toBottomOf="@+id/btnSelectaStudentClass"
         tools:visibility="invisible" />
 
     <LinearLayout

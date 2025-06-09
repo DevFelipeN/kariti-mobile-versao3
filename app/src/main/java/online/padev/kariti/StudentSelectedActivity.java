@@ -41,6 +41,7 @@ public class StudentSelectedActivity extends AppCompatActivity {
 
         List<Student> studentsBd = dbk.listStudentsData(1);
         List<Student> studentsClass = (List<Student>) getIntent().getSerializableExtra("students");
+
         List<Student> students = studentsStatus(studentsBd, studentsClass);
 
         StudentSelectedAdapter sta = new StudentSelectedAdapter(students);

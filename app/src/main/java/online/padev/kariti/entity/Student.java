@@ -15,7 +15,6 @@ public class Student implements Serializable {
         this.nameStudent = nameStudent;
         this.email = email;
         this.selected = false;
-
     }
 
     public Integer getId_student() {

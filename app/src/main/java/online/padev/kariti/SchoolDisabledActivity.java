@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import online.padev.kariti.adapters.AdapterDisabledSchool;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class SchoolDisabledActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{

@@ -1,13 +1,15 @@
 package online.padev.kariti;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,10 +19,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import online.padev.kariti.adapters.StudentOnDeleteAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.Student;
 
 public class ClassRegistrationActivity extends AppCompatActivity{
     ImageButton back, iconHelp;
@@ -28,14 +33,18 @@ public class ClassRegistrationActivity extends AppCompatActivity{
     EditText editTextNameClass, editTextStudentAnonymous;
     ImageView lessAnonymous, moreAnonymous;
     ListView listViewStudents;
-    Button btnRegistration;
+    Button btnRegistration, btnSelectStudents;
     DataBaseKariti dataBase;
     Spinner spinnerStudent;
     String studentSelected;
     Integer id_class = 0;
-    AdapterStudentOnDelete adapterStudents;
-    TextView titleActivity, titleAnonymous;
+    StudentOnDeleteAdapter adapterStudents;
+    TextView titleActivity, titleStudents;
     List<String> listStudentSelected = new ArrayList<>(), listStudentsSpinner;
+    List<Student> students;
+
+    private static final int REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,23 +56,49 @@ public class ClassRegistrationActivity extends AppCompatActivity{
         iconHelp = findViewById(R.id.iconHelp);
         listViewStudents = findViewById(R.id.listViewCadTurma);
         titleActivity = findViewById(R.id.toolbar_title);
-        titleAnonymous = findViewById(R.id.textViewAlunos);
+        titleStudents = findViewById(R.id.textViewAlunos);
 
         titleActivity.setText(String.format("%s","Nova Turma"));
 
         editTextNameClass = findViewById(R.id.editTextTurmaCad);
         btnRegistration = findViewById(R.id.buttonCadastrarTurma);
-        spinnerStudent = findViewById(R.id.spinnerBuscAluno);
+        //spinnerStudent = findViewById(R.id.spinnerBuscAluno);
+        btnSelectStudents = findViewById(R.id.btnSelectaStudentClass);
         editTextStudentAnonymous = findViewById(R.id.editTextAlunosAnonimos);
         lessAnonymous = findViewById(R.id.imageViewMenosAnonimos);
         moreAnonymous = findViewById(R.id.imageViewMaisAnonimos);
 
         listViewStudents.setVisibility(View.GONE);
-        titleAnonymous.setVisibility(View.GONE);
+        titleStudents.setVisibility(View.GONE);
 
         dataBase = new DataBaseKariti(this);
 
+        students = new ArrayList<>();
+
+        listViewStudents.setVisibility(View.GONE);
+
+        adapterStudents = new StudentOnDeleteAdapter(this, students);
+        listViewStudents.setAdapter(adapterStudents);
+
+        listViewStudents.setOnItemClickListener((adapterView, view, i, l) -> {
+            students.remove(i);
+            if(students.isEmpty()){
+                listViewStudents.setVisibility(View.GONE);
+            }
+            adapterStudents.notifyDataSetChanged();
+            Toast.makeText(this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
+        });
+
+        btnSelectStudents.setOnClickListener(v -> {
+            Intent intent_2 = new Intent(this, StudentSelectedActivity.class);
+            intent_2.putExtra("students", (Serializable) students);
+            startActivityForResult(intent_2, REQUEST_CODE);
+        });
+
+        /*
         listStudentsSpinner = dataBase.listStudentNames(1);
+
+
         if (!listStudentsSpinner.isEmpty()){
             listStudentsSpinner.add(0, "Selecionar Alunos");
             listStudentsSpinner.add(1, "Todos");
@@ -130,6 +165,8 @@ public class ClassRegistrationActivity extends AppCompatActivity{
             adapterStudents.notifyDataSetChanged();
             Toast.makeText(ClassRegistrationActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
         });
+        */
+
         lessAnonymous.setOnClickListener(view -> {
             int numAnonymous = 0;
             if (!editTextStudentAnonymous.getText().toString().trim().isEmpty()){
@@ -210,16 +247,31 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 btnRegistration.setEnabled(true);
             }
         });
-        back.setOnClickListener(view -> {
-            getOnBackPressedDispatcher();
-            restartVisualClass();
-        });
+        back.setOnClickListener(view -> restartVisualClass());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 restartVisualClass();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK){
+                students.clear();
+                students.addAll((List<Student>) data.getSerializableExtra("students"));
+                adapterStudents.notifyDataSetChanged();
+                if (!students.isEmpty()){
+                    listViewStudents.setVisibility(View.VISIBLE);
+                    titleStudents.setVisibility(View.VISIBLE);
+                }
+            }else{
+                restartVisualClass();
+            }
+        }
     }
     public void restartVisualClass(){
         if(dataBase.checkExistClass()){

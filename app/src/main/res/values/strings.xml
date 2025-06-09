@@ -92,6 +92,8 @@
     <string name="buscNameAluno">Pesquisar aluno</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
     <string name="textViewAluno"> Alunos</string>
+    <string name="btnSelectStudents"> Selecionar Alunos(A)  >>>> </string>
+
     <string name="textViewNomeAluno"> Aluno</string>
     <string name="textViewTurma">Turma</string>
     <string name="time">00:00:00</string>

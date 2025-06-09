@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import online.padev.kariti.adapters.AdapterSpinner;
+import online.padev.kariti.adapters.AdapterStudentOnDelete;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class ClassEditActivity extends AppCompatActivity {

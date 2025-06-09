@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import online.padev.kariti.adapters.AdapterClickableSchool;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.SendBackup;
 import online.padev.kariti.utils.CheckConnectionInternet;

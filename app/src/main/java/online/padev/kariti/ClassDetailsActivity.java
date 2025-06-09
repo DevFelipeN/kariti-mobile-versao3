@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Objects;
 
+import online.padev.kariti.adapters.AdapterDisabledSchool;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{

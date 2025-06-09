@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import online.padev.kariti.adapters.AdapterClickableList;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class StudentActivity extends AppCompatActivity {

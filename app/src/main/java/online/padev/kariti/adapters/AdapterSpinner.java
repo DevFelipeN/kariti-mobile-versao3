@@ -1,4 +1,4 @@
-package online.padev.kariti;
+package online.padev.kariti.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

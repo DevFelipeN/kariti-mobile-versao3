@@ -52,6 +52,9 @@ public class StudentSelectedAdapter extends RecyclerView.Adapter<StudentSelected
     public void onBindViewHolder(StudentSelectedAdapter.ViewHolder holder, int position) {
         Student student = students.get(position);
         holder.textNome.setText(student.getNameStudent());
+
+        holder.checkBox.setOnCheckedChangeListener(null);
+
         holder.checkBox.setChecked(student.isSelected());
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {

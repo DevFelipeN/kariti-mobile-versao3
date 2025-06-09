@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewNomeAluno"
+            android:id="@+id/textViewStudentOnDelete"
             style="@style/COLORTEXT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

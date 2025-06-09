@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import online.padev.kariti.adapters.AdapterClickableList;
+import online.padev.kariti.adapters.AdapterSpinner;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 

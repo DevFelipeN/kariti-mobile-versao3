@@ -40,7 +40,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
 
             base_dados.execSQL("CREATE TABLE user(user_id INTEGER primary Key AUTOINCREMENT, name TEXT not null, email TEXT UNIQUE not null, password varchar(256) not null)");
             base_dados.execSQL("CREATE TABLE school(school_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, user_id INTEGER NOT NULL references user(user_id), status INTEGER not null check(status = 0 or status = 1))");
-                base_dados.execSQL("CREATE TABLE student(student_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), school_id INTEGER not null references school(school_id))");
+            base_dados.execSQL("CREATE TABLE student(student_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, email TEXT, status Integer not null check(status = 0 or status = 1), school_id INTEGER not null references school(school_id))");
             base_dados.execSQL("CREATE TABLE class(class_id Integer PRIMARY KEY AUTOINCREMENT, school_id INTEGER not null references school(school_id), name TEXT not null)");
             base_dados.execSQL("CREATE TABLE student_class(class_id Integer not null references class(class_id), student_id Integer not null references student(student_id), primary key (class_id, student_id))");
             base_dados.execSQL("CREATE TABLE exam(exam_id Integer PRIMARY KEY AUTOINCREMENT, name TEXT not null, date TEXT not null, number_questions Integer not null, number_alternatives Integer not null, class_id Integer not null references class(class_id))");
@@ -1877,7 +1877,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
 
     /**
      * Método para listar os alunos pertencentes a escola selecionada
-      * @param status 1 para alunos identificados e 0 para anonimos
+      * @param status (1) para alunos identificados e (0) para anônimos
      * @return uma lista de Student
      */
     public List<Student> listStudentsData(int status) {
@@ -1886,7 +1886,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT student_id, name, email FROM student WHERE school_id = ? AND status = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados.rawQuery("SELECT student_id, name, email FROM student WHERE school_id = ? AND status = ?", new String[]{DataBaseKariti.ID_ESCOLA.toString(), String.valueOf(status)});
             if (cursor.moveToFirst()) {
                 do {
                     Student st = new Student(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
@@ -1894,7 +1894,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
         } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar respostas do gabarito de forma numérica! "+e.getMessage());
+            Log.e("kariti","Erro ao tentar listar alunos por escola e status! "+e.getMessage());
             return null;
         } finally {
             if (base_dados != null && base_dados.isOpen()){
@@ -1907,6 +1907,11 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         return students;
     }
 
+    /**
+     * Metodo para listar todos os alunos pertencentes a determinada turma
+     * @param class_id Parâmetro esperado para identificação da turma
+     * @return retorna uma lista de alunos, onde para cada item da lista students(student_id, name, email)
+     */
     public List<Student> listStudentsData(Integer class_id) {
         List<Student>  students = new ArrayList<>();
         SQLiteDatabase base_dados = null;

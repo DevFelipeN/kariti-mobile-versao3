@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import online.padev.kariti.adapters.AdapterSpinner;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
 

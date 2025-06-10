@@ -32,7 +32,7 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
     EditText qtdQuest, qtdAlter, provaName, className, teacherName;
     Calendar calendar;
     Button datePickerButton, btnGenerateCard;
-    ImageButton btnVoltar, questMenos, questMais, altMais, altMenos;
+    ImageButton btnVoltar, questMenos, questMais, altMais, altMenos, iconHelp;
     TextView textViewTitle;
     Exam exam;
     GifImageView gifLoading;
@@ -44,6 +44,7 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_prova_generate_card_default);
 
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
+        iconHelp = findViewById(R.id.iconHelp);
         provaName = findViewById(R.id.editTextNameProva);
         className = findViewById(R.id.editTextNameClass);
         teacherName = findViewById(R.id.editTextNameTeacher);
@@ -58,9 +59,10 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
         textViewTitle = findViewById(R.id.toolbar_title);
         gifLoading = findViewById(R.id.loadingId);
 
-        textViewTitle.setText(String.format("%s", "KARITI"));
+        textViewTitle.setText(String.format("%s", "Nova Prova"));
 
-        btnVoltar.setOnClickListener(v -> Toast.makeText(this, "Voltar clicado!", Toast.LENGTH_SHORT).show());
+        btnVoltar.setOnClickListener(v -> finish());
+        iconHelp.setOnClickListener(v -> help());
 
         questMais.setOnClickListener(v -> {
             int quest = 0;
@@ -303,5 +305,16 @@ public class ProvaGenerateCardDefaultActivity extends AppCompatActivity {
 
             builder.show();
         }
+    }
+
+    private void help() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajuda");
+        builder.setMessage("Nessa sessão você pode gerar cartões de resposta. \n\n" +
+                "• Para gerar um cartão de resposta basta informar a quantidade de questões e alternativas de sua prova.\n\n" +
+                "• Informações como nome da prova, nome da turma, nome do professor e data, são opcionais.\n\n" +
+                "• Após solicitada a ação de Gerar Cartão, o Kariti realiza o download do cartão de resposta na pasta de downlods do dispositivo.");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

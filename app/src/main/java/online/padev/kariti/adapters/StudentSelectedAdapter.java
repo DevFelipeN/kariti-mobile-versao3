@@ -111,5 +111,4 @@ public class StudentSelectedAdapter extends RecyclerView.Adapter<StudentSelected
             notifyDataSetChanged();
         }
     };
-
 }

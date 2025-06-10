@@ -19,17 +19,20 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import online.padev.kariti.adapters.AdapterClickableList;
+import online.padev.kariti.adapters.StudentsClickableAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.Student;
 
 public class StudentActivity extends AppCompatActivity {
     ImageButton back;
     EditText editTextSearch;
-    List<String> listStudents;
+    List<Student> students;
     FloatingActionButton btnRegistration;
-    AdapterClickableList adapterStudent;
+    StudentsClickableAdapter adapterStudent;
     TextView titleActivity, textViewNumStudents, descritionAddStudent;
     RecyclerView recyclerView;
     private static final int REQUEST_CODE = 1;
@@ -46,6 +49,7 @@ public class StudentActivity extends AppCompatActivity {
         btnRegistration = findViewById(R.id.iconaddaluno);
         editTextSearch = findViewById(R.id.editTextBuscar);
         recyclerView = findViewById(R.id.listSelecAluno);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         dataBase = new DataBaseKariti(this);
         textViewNumStudents = findViewById(R.id.totalAlunos);
         descritionAddStudent = findViewById(R.id.txtDescricaoAddAluno);
@@ -53,19 +57,18 @@ public class StudentActivity extends AppCompatActivity {
         titleActivity = findViewById(R.id.toolbar_title);
         titleActivity.setText(String.format("%s","Alunos"));
 
-        listStudents = dataBase.listStudentNames(1);
-        if (listStudents == null){
+        students = dataBase.listStudentsData(1);
+        if (students == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
-        if(listStudents.isEmpty()){
+        if(students.isEmpty()){
             startRegistrationStudent();
         }
 
-        textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ listStudents.size()));
+        textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ students.size()));
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterStudent = new AdapterClickableList(this, listStudents, this::onItemClick, this::onItemLongClick);
+        adapterStudent = new StudentsClickableAdapter(this, students, this::onItemClick, this::onItemLongClick);
         recyclerView.setAdapter(adapterStudent);
 
         editTextSearch.addTextChangedListener(new TextWatcher(){
@@ -93,7 +96,6 @@ public class StudentActivity extends AppCompatActivity {
             startRegistrationStudent();
         });
         back.setOnClickListener(view -> {
-            getOnBackPressedDispatcher();
             finish();
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -104,13 +106,8 @@ public class StudentActivity extends AppCompatActivity {
         });
     }
     public void onItemClick(int position) {
-        id_student = dataBase.getStudentId(listStudents.get(position));
-        if (id_student == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Intent intent = new Intent(getApplicationContext(), StudentEditActivity.class);
-        intent.putExtra("id_aluno", id_student);
+        Intent intent = new Intent(this, StudentEditActivity.class);
+        intent.putExtra("student", students.get(position));
         startActivityForResult(intent, REQUEST_CODE);
     }
     public void onItemLongClick(int position) {
@@ -118,24 +115,22 @@ public class StudentActivity extends AppCompatActivity {
         builder.setTitle("Atenção!")
                 .setMessage("Deseja realmente excluir esse aluno?")
                 .setPositiveButton("Sim", (dialog, which) -> {
-                    id_student = dataBase.getStudentId(listStudents.get(position));
-                    if (id_student == null){
-                        Toast.makeText(StudentActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                    id_student = students.get(position).getId_student();
                     Boolean checkStudentExists = dataBase.checkIfStudentInClass(id_student);
                     if(checkStudentExists == null){
                         Toast.makeText(StudentActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(!checkStudentExists){
-                        Boolean isDeleteStudent = dataBase.deleteStudent(id_student);
+                        boolean isDeleteStudent = dataBase.deleteStudent(id_student);
                         if (isDeleteStudent) {
-                            listStudents.remove(position);
+                            Student s = students.remove(position);
+                            adapterStudent.deleteStudent(s); // isso garante que o aluno não apareça quando uma nova pesquisa é realizada
                             adapterStudent.notifyItemRemoved(position);
-                            if(listStudents.isEmpty()){
+                            if(students.isEmpty()){
                                 finish();
                             }
+                            textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ students.size()));
                             Toast.makeText(StudentActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
                         }else
                             Toast.makeText(StudentActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
@@ -152,8 +147,9 @@ public class StudentActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if(resultCode == RESULT_OK){
-                finish();
-                startActivity(getIntent());
+                List<Student> studentsAux = dataBase.listStudentsData(1);
+                adapterStudent.updateData(studentsAux);
+                textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ students.size()));
             }else{
                 finish();
             }
@@ -172,5 +168,4 @@ public class StudentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StudentRegistrationActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
-
 }

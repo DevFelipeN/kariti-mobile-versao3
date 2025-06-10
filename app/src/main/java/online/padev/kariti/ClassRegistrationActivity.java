@@ -30,7 +30,6 @@ import online.padev.kariti.entity.Student;
 
 public class ClassRegistrationActivity extends AppCompatActivity{
     ImageButton back, iconHelp;
-    Toolbar toolbar;
     EditText editTextNameClass, editTextStudentAnonymous;
     ImageView lessAnonymous, moreAnonymous;
     ListView listViewStudents;
@@ -47,9 +46,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_registration);
 
-        toolbar = findViewById(R.id.myToolBarMenu);
-        setSupportActionBar(toolbar);
-        back = findViewById(R.id.imgBtnVoltaDescola);
+        back = findViewById(R.id.imgBtnVoltar);
         iconHelp = findViewById(R.id.iconHelp);
         listViewStudents = findViewById(R.id.listViewCadTurma);
         titleActivity = findViewById(R.id.toolbar_title);

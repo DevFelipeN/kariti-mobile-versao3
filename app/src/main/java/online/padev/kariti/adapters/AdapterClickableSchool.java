@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import online.padev.kariti.R;
+
 public class AdapterClickableSchool extends ArrayAdapter<String> {
 
     private List<String> escolas, ids;

@@ -10,8 +10,6 @@ import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
-import org.apache.commons.logging.LogFactory;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.ClassSchool;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.entity.Student;
 
@@ -300,21 +299,48 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
     }
-    
-    public Boolean linkStudentToClass(Integer class_id, Integer student_id){
+
+    public Boolean insertStudentsInClass_2(List<Student> students, Integer class_id){
         SQLiteDatabase base_dados = null;
         try {
             base_dados = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("class_id", class_id);
-            contentValues.put("student_id", student_id);
-            long insert = base_dados.insert("student_class", null, contentValues);
-            return insert != -1;
+            base_dados.beginTransaction();
+
+            for (Student student : students){
+                if (student.getId_student().equals(0)){
+                    ContentValues contentValuesAn = new ContentValues();
+                    contentValuesAn.put("name", student.getNameStudent());
+                    contentValuesAn.put("email", student.getEmail());
+                    contentValuesAn.put("status", 0);
+                    contentValuesAn.put("school_id", DataBaseKariti.ID_ESCOLA);
+                    long studentAn_id = base_dados.insert("student",null, contentValuesAn);
+                    if (studentAn_id != -1){
+                        student.setId_student(Math.toIntExact(studentAn_id));
+                    }else{
+                        throw new Exception("Erro ao inserir aluno " + student.getNameStudent());
+                    }
+                }
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("student_id", student.getId_student());
+                contentValues.put("class_id", class_id);
+                long resultInsertion = base_dados.insert("student_class", null, contentValues);
+                if(resultInsertion != -1){
+                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                }else{
+                    throw new Exception("Erro ao inserir aluno " + student.getNameStudent());
+                }
+            }
+            base_dados.setTransactionSuccessful();
+            return true;
         }catch (Exception e){
-            Log.e("kariti", e.getMessage());
+            Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco: "+e.getMessage());
             return false;
         }finally {
-            if (base_dados != null && base_dados.isOpen()){
+            if (base_dados != null && base_dados.isOpen()) {
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
         }
@@ -373,22 +399,39 @@ public class DataBaseKariti extends SQLiteOpenHelper {
     public boolean deleteStudentsFromClass(Integer class_id){
         SQLiteDatabase base_dados = null;
         SQLiteStatement stmt = null;
+        SQLiteStatement stmt_2 = null;
         try {
             base_dados = this.getWritableDatabase();
-            String delete = "DELETE FROM student_class WHERE class_id = ?";
-            stmt = base_dados.compileStatement(delete);
-            stmt.bindLong(1, class_id);
+            base_dados.beginTransaction();
+
+            String deleteAn = "DELETE FROM student WHERE status = ? and student_id in (select student_id FROM student_class WHERE class_id = ?)";
+            stmt = base_dados.compileStatement(deleteAn);
+            stmt.bindLong(1, 0);
+            stmt.bindLong(2, class_id);
             stmt.executeUpdateDelete();
+
+            String deleteAl = "DELETE FROM student_class WHERE class_id = ?";
+            stmt_2 = base_dados.compileStatement(deleteAl);
+            stmt_2.bindLong(1, class_id);
+            stmt_2.executeUpdateDelete();
+
+            base_dados.setTransactionSuccessful();
             return true;
         }catch (Exception e){
             Log.e("kariti","Erro ao tentar deletar aluno da turma! "+e.getMessage());
             return false;
         }finally {
             if (base_dados != null && base_dados.isOpen()){
+                if (base_dados.inTransaction()) {
+                    base_dados.endTransaction();
+                }
                 base_dados.close();
             }
             if (stmt != null){
                 stmt.close();
+            }
+            if (stmt_2 != null){
+                stmt_2.close();
             }
         }
     }
@@ -408,7 +451,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             stmtStudentAnonymous.bindLong(2, class_id);
             stmtStudentAnonymous.executeUpdateDelete();
 
-            String deletaAlunos = "DELETE FROM alunosTurma WHERE id_turma = ?";
+            String deletaAlunos = "DELETE FROM student_class WHERE class_id = ?";
             stmtStudent = base_dados.compileStatement(deletaAlunos);
             stmtStudent.bindLong(1, class_id);
             stmtStudent.executeUpdateDelete();
@@ -492,30 +535,6 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
             if(stmtExam != null){
                 stmtExam.close();
-            }
-        }
-    }
-
-    public boolean deleteAnonymous(Integer class_id){
-        SQLiteDatabase base_dados = null;
-        SQLiteStatement stmt = null;
-        try {
-            base_dados = this.getWritableDatabase();
-            String delete = "DELETE FROM student WHERE status = ? and student_id in (select student_id FROM student_class WHERE class_id = ?)";
-            stmt = base_dados.compileStatement(delete);
-            stmt.bindLong(1, 0);
-            stmt.bindLong(2, class_id);
-            stmt.executeUpdateDelete();
-            return true;
-        }catch (Exception e){
-            Log.e("kariti","Erro ao tentar deletar aluno anonimo! "+e.getMessage());
-            return false;
-        }finally {
-            if (base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if (stmt != null){
-                stmt.close();
             }
         }
     }
@@ -900,12 +919,12 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean checkCorrectedByClass(String class_id){
+    public Boolean checkCorrectedByClass(Integer class_id){
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT exam_id FROM exam WHERE class_id = ? AND exam_id IN (SELECT exam_id FROM result)", new String[]{class_id});
+            cursor = base_dados.rawQuery("SELECT exam_id FROM exam WHERE class_id = ? AND exam_id IN (SELECT exam_id FROM result)", new String[]{class_id.toString()});
             return cursor != null && cursor.moveToFirst();
         } catch (Exception e){
             Log.e("kariti","Erro ao tentar verificar se existe provas corrigidas para essa turma! "+e.getMessage());
@@ -1303,13 +1322,13 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         return studentEmail;
     }
 
-    public Integer getStudentNumber(String class_id, Integer status) {
+    public Integer getStudentNumber(Integer class_id, Integer status) {
         int studentNumber = 0;
         SQLiteDatabase base_dados = null;
         Cursor cursor = null;
         try {
             base_dados  = this.getReadableDatabase();
-            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT student_id) FROM student WHERE student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) AND status = ? AND school_id = ?", new String[]{class_id, status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
+            cursor = base_dados .rawQuery("SELECT COUNT (DISTINCT student_id) FROM student WHERE student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) AND status = ? AND school_id = ?", new String[]{class_id.toString(), status.toString(), DataBaseKariti.ID_ESCOLA.toString()});
             if (cursor != null && cursor.moveToFirst()) {
                 studentNumber  = cursor.getInt(0);
             }
@@ -1559,32 +1578,6 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
         return studentNames;
     }
-    public List<String> listStudentNames(String class_id, Integer status) {
-        List<String>  studentNames = new ArrayList<>();
-        SQLiteDatabase base_dados = null;
-        Cursor cursor = null;
-        try {
-            base_dados = this.getReadableDatabase();
-            cursor = base_dados.rawQuery("SELECT name FROM student WHERE school_id = ? AND status = ? AND student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) ORDER BY name ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString(), status.toString(), class_id});
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String student = cursor.getString(0);
-                    studentNames.add(student);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e){
-            Log.e("kariti","Erro ao tentar listar nomes dos alunos por status e turma! "+e.getMessage());
-            return null;
-        } finally {
-            if(base_dados != null && base_dados.isOpen()){
-                base_dados.close();
-            }
-            if(cursor != null){
-                cursor.close();
-            }
-        }
-        return studentNames;
-    }
 
     public List<Student> listStudentExamCorrected(Integer class_id) {
         List<Student> students = new ArrayList<>();
@@ -1818,14 +1811,9 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                                 }
                             }
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                resp.sort((a, b) -> a.compareTo(b));
+                                resp.sort(Comparator.naturalOrder());
                             }else{
-                                Collections.sort(resp, new Comparator<String>() {
-                                    @Override
-                                    public int compare(String o1, String o2) {
-                                        return o1.compareTo(o2);
-                                    }
-                                });
+                                Collections.sort(resp, String::compareTo);
                             }
                             aux = String.join("",resp);
                         }
@@ -1941,6 +1929,70 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
         return students;
+    }
+
+    /**
+     * Método para listar todos os alunos pertencentes a determinada turma determinados por status
+     * @param class_id Parâmetro esperado para identificação da turma
+     * @param status (1) para alunos identificados e (0) para alunos anônimos
+     * @return retorna uma lista de alunos, onde para cada item da lista students(student_id, name, email)
+     */
+    public List<Student> listStudentsData(Integer class_id, int status) {
+        List<Student>  students = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT student_id, name, email FROM student WHERE " +
+                    "student_id IN (SELECT student_id FROM student_class WHERE class_id = ?) and status = ? ORDER BY name ASC", new String[]{class_id.toString(), String.valueOf(status)});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id_student = cursor.getInt(0);
+                    String nameStudent = cursor.getString(1);
+                    String email = cursor.getString(2);
+                    Student student = new Student(id_student, nameStudent, email);
+                    students.add(student);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return students;
+    }
+
+    public List<ClassSchool> listClassSchoolData() {
+        List<ClassSchool>  classS = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT class_id, name FROM class WHERE school_id = ? ORDER BY name ASC", new String[]{DataBaseKariti.ID_ESCOLA.toString()});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    ClassSchool cs = new ClassSchool(cursor.getInt(0), cursor.getString(1));
+                    classS.add(cs);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar ids dos alunos por e turma! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return classS;
     }
 
     public List<Answer_key> listAnswerKeyData(Integer exam_id) {

@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,9 +44,9 @@ public class StudentSelectedActivity extends AppCompatActivity {
         List<Student> studentsBd = dbk.listStudentsData(1);
         List<Student> studentsClass = (List<Student>) getIntent().getSerializableExtra("students");
 
-        List<Student> students = studentsStatus(studentsBd, studentsClass);
+        List<Student> studentsChecked = studentsStatus(studentsBd, studentsClass);
 
-        StudentSelectedAdapter sta = new StudentSelectedAdapter(students);
+        StudentSelectedAdapter sta = new StudentSelectedAdapter(studentsChecked);
         recyclerView.setAdapter(sta);
 
         bFinish.setOnClickListener(v -> {
@@ -66,6 +68,13 @@ public class StudentSelectedActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+        back.setOnClickListener(v -> restartClassRegistration(sta.getStudentsSelected()));
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                restartClassRegistration(sta.getStudentsSelected());
             }
         });
     }

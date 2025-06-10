@@ -21,6 +21,10 @@ public class Student implements Serializable {
         return id_student;
     }
 
+    public void setId_student(Integer id_student){
+        this.id_student = id_student;
+    }
+
     public String getNameStudent() {
         return nameStudent;
     }

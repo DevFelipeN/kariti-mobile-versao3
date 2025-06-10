@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import online.padev.kariti.adapters.AdapterDisabledSchool;
+import online.padev.kariti.adapters.ListNotActionAdapter;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class SchoolDisabledActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
@@ -21,7 +21,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
     DataBaseKariti dataBase;
     List<String> listDisabledBD;
     TextView textViewTitle;
-    AdapterDisabledSchool adapterDisabled;
+    ListNotActionAdapter adapterDisabled;
     ListView listViewDisabled;
     private Integer id_school;
     @Override
@@ -46,7 +46,7 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
             finish();
         }
 
-        adapterDisabled = new AdapterDisabledSchool(this, listDisabledBD, listDisabledBD);
+        adapterDisabled = new ListNotActionAdapter(this, listDisabledBD, listDisabledBD);
         listViewDisabled.setAdapter(adapterDisabled);
 
         listViewDisabled.setOnItemLongClickListener((parent, view, position, id) -> {

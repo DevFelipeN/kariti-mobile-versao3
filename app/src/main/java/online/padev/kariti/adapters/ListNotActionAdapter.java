@@ -13,13 +13,15 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class AdapterDisabledSchool extends ArrayAdapter<String> {
+import online.padev.kariti.R;
+
+public class ListNotActionAdapter extends ArrayAdapter<String> {
 
     private List<String> escolas, ids;
 
     private Context context;
 
-    public AdapterDisabledSchool(Context context, List<String> escolas, List<String> ids) {
+    public ListNotActionAdapter(Context context, List<String> escolas, List<String> ids) {
         super(context, R.layout.custom_escola_desativada, escolas);
         this.context = context;
         this.escolas = escolas;

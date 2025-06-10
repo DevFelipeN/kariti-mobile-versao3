@@ -28,27 +28,27 @@
         android:inputType="text"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerBuscAlunoNovos"
+        app:layout_constraintBottom_toTopOf="@+id/buscAlunoNovos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
         tools:ignore="Autofill" />
 
-    <Spinner
-        android:id="@+id/spinnerBuscAlunoNovos"
-        style="@style/BORDABOTOES"
+    <Button
+        android:id="@+id/buscAlunoNovos"
+        style="@style/BUTTONSTYLE"
         android:layout_width="320dp"
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/style_spinner"
+        android:text="@string/btnSelectStudents"
         app:layout_constraintBottom_toTopOf="@+id/listViewEditarTurma"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEditTurma">
 
-    </Spinner>
+    </Button>
 
     <TextView
         android:id="@+id/txtVieAlunos"
@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="@+id/listViewEditarTurma"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/listViewEditarTurma"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAlunoNovos"
+        app:layout_constraintTop_toBottomOf="@+id/buscAlunoNovos"
         app:layout_constraintVertical_bias="0.0" />
 
     <ListView
@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerBuscAlunoNovos" />
+        app:layout_constraintTop_toBottomOf="@+id/buscAlunoNovos" />
 
     <LinearLayout
         android:id="@+id/layoutEditIncluirAlun"

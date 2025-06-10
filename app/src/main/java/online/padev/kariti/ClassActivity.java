@@ -14,20 +14,22 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.List;
 
-import online.padev.kariti.adapters.AdapterClickableSchool;
+import online.padev.kariti.adapters.ClassListAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.ClassSchool;
 
 public class ClassActivity extends AppCompatActivity {
     ImageButton back;
     FloatingActionButton btnNewClass;
     ListView listViewClass;
-    private List<String> listClass;
+    private List<ClassSchool> listClass;
     TextView title, descriptionNewTurma;
-    private Integer id_class;
     DataBaseKariti dataBase;
     private static final int REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +45,7 @@ public class ClassActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
 
-        listClass = dataBase.listClassNames();
+        listClass = dataBase.listClassSchoolData();
         if (listClass == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
             finish();
@@ -51,16 +53,17 @@ public class ClassActivity extends AppCompatActivity {
         if(listClass.isEmpty()){
             startNewClassActivity();
         }
-        AdapterClickableSchool adapterClass = new AdapterClickableSchool(this, listClass, listClass);
+
+        ClassListAdapter adapterClass = new ClassListAdapter(this, listClass);
         listViewClass.setAdapter(adapterClass);
 
         listViewClass.setOnItemClickListener((parent, view, position, id) -> {
-            id_class = dataBase.getClassId(adapterClass.getItem(position));
-            if (id_class == null){
+            ClassSchool classSchool = adapterClass.getItem(position);
+            if (classSchool == null){
                 Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
                 return;
             }
-            startClassDetails(id_class);
+            startClassDetails(classSchool);
         });
 
         listViewClass.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -69,14 +72,14 @@ public class ClassActivity extends AppCompatActivity {
             builder.setTitle("Atenção!")
                     .setMessage("Deseja excluir essa turma?")
                     .setPositiveButton("SIM", (dialog, which) -> {
-                        id_class = dataBase.getClassId(listClass.get(position));
-                        Boolean checkClassInProva = dataBase.checkIfClassInExam(id_class);
-                        if (id_class == null || checkClassInProva == null){
+                        ClassSchool classSchool = adapterClass.getItem(position);
+                        Boolean checkClassInProva = dataBase.checkIfClassInExam(classSchool.getClass_id());
+                        if (checkClassInProva == null){
                             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if(!checkClassInProva) {
-                            Boolean deleteClass = dataBase.deleteClass(id_class);
+                            boolean deleteClass = dataBase.deleteClass(classSchool.getClass_id());
                             if (deleteClass) {
                                 listClass.remove(position);
                                 adapterClass.notifyDataSetChanged();
@@ -107,9 +110,9 @@ public class ClassActivity extends AppCompatActivity {
             finish();
         });
     }
-    private void startClassDetails(Integer id_class) {
+    private void startClassDetails(ClassSchool cs) {
         Intent intent = new Intent(this, ClassDetailsActivity.class);
-        intent.putExtra("idTurma", id_class);
+        intent.putExtra("classSchool", cs);
         startActivityForResult(intent, REQUEST_CODE);
     }
     private void notifyImpossibleDelete(){

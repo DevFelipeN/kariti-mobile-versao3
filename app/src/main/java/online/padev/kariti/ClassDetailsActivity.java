@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -14,20 +15,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import online.padev.kariti.adapters.AdapterDisabledSchool;
+import online.padev.kariti.adapters.ListNotActionAdapter;
+import online.padev.kariti.adapters.ListStudentInClassAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.ClassSchool;
+import online.padev.kariti.entity.Student;
 
 public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton back;
-    TextView textViewClassName, txtViewNumAnonymous;
+    TextView textViewClassName, txtViewNumAnonymous, titleActivity;
     DataBaseKariti dataBase;
     ListView listViewStudents;
-    List<String> listStudentsClass;
-    String id_class;
-    Integer numAnonymousBD;
+    ClassSchool cs;
+    ListStudentInClassAdapter adapterStudents;
+    List<Student> studentsAnonymous, studentsIdentified;
+    List<Student> students = new ArrayList<>();
     private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,35 +45,32 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
         listViewStudents = findViewById(R.id.listViewDados);
         txtViewNumAnonymous = findViewById(R.id.textViewqtdAnonimos);
         textViewClassName = findViewById(R.id.textViewTurmaCad);
+        titleActivity = findViewById(R.id.toolbar_titlePopUp);
+
+        titleActivity.setText(String.format("%s","Turma"));
 
         dataBase = new DataBaseKariti(this);
 
-        id_class = String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getInt("idTurma"));
-        String className = dataBase.getClassName(id_class);
-        if (className == null){
+        cs = (ClassSchool) getIntent().getSerializableExtra("classSchool");
+
+        textViewClassName.setText(String.format("%s", cs.getName()));
+
+        studentsIdentified = dataBase.listStudentsData(cs.getClass_id(), 1);
+        studentsAnonymous = dataBase.listStudentsData(cs.getClass_id(), 0);
+
+        if (studentsIdentified == null || studentsAnonymous == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        textViewClassName.setText(String.format("Turma: %s", className));
+        students.addAll(studentsIdentified);
+        students.addAll(studentsAnonymous);
 
-        listStudentsClass = dataBase.listStudentNames(id_class);
-        if (listStudentsClass == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        numAnonymousBD = dataBase.getStudentNumber(id_class, 0);
-        if (numAnonymousBD == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        txtViewNumAnonymous.setText(String.format(" Alunos Anônimos: %s \n Total de alunos: %s", numAnonymousBD, listStudentsClass.size()));
-        AdapterDisabledSchool adapterStudents = new AdapterDisabledSchool(this, listStudentsClass, listStudentsClass);
+        txtViewNumAnonymous.setText(String.format(" Alunos Identificados: %s \n Alunos Anônimos: %s \n Total de alunos: %s", studentsIdentified.size(), studentsAnonymous.size(), students.size()));
+        adapterStudents = new ListStudentInClassAdapter(this, students);
         listViewStudents.setAdapter(adapterStudents);
 
-        back.setOnClickListener(view -> {
-            restartVisualClass();
-        });
+        back.setOnClickListener(view -> restartVisualClass());
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -91,14 +95,15 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
     }
 
     private void startEditClass(){
-        Boolean provasCorreciton = dataBase.checkCorrectedByClass(id_class);
-        if (provasCorreciton == null){
+        Boolean examCorrection = dataBase.checkCorrectedByClass(cs.getClass_id());
+        if (examCorrection == null){
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!provasCorreciton){
+        if(!examCorrection){
             Intent intent = new Intent(this, ClassEditActivity.class);
-            intent.putExtra("id_turma", id_class);
+            intent.putExtra("classSchool_id", cs);
+            intent.putExtra("students", (Serializable) studentsIdentified);
             startActivityForResult(intent, REQUEST_CODE);
         }else{
             notifyImpossibilityEdit();
@@ -115,8 +120,19 @@ public class ClassDetailsActivity extends AppCompatActivity implements PopupMenu
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
-            finish();
-            startActivity(getIntent());
+            if (resultCode == RESULT_OK) {
+                students.clear();
+                studentsIdentified.clear();
+                studentsAnonymous.clear();
+                studentsIdentified = dataBase.listStudentsData(cs.getClass_id(), 1);
+                studentsAnonymous = dataBase.listStudentsData(cs.getClass_id(), 0);
+                students.addAll(studentsIdentified);
+                students.addAll(studentsAnonymous);
+                adapterStudents.notifyDataSetChanged();
+                txtViewNumAnonymous.setText(String.format(" Alunos Identificados: %s \n Alunos Anônimos: %s \n Total de alunos: %s", studentsIdentified.size(), studentsAnonymous.size(), students.size()));
+            } else {
+                restartVisualClass();
+            }
         }
     }
     public void restartVisualClass(){

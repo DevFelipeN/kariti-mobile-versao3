@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import online.padev.kariti.R;
+
 public class AdapterSpinner extends ArrayAdapter<String> {
     private List<String> aluno;
     private Context context;

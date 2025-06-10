@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import online.padev.kariti.R;
+
 public class AdapterStudentOnDelete extends ArrayAdapter<String> {
 
     private List<String> alunos;
@@ -33,8 +35,9 @@ public class AdapterStudentOnDelete extends ArrayAdapter<String> {
             view = inflater.inflate(R.layout.list_alunos_delete, null);
         }
 
-        TextView textViewNome = view.findViewById(R.id.textViewNomeAluno);
+        TextView textViewNome = view.findViewById(R.id.textViewStudentOnDelete);
         ImageView imageViewIcon = view.findViewById(R.id.imageViewIcon);
+
         textViewNome.setText(alunos.get(position));
 
 

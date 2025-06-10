@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import online.padev.kariti.R;
+
 public class AdapterClickableList extends RecyclerView.Adapter<AdapterClickableList.ViewHolder> implements Filterable {
 
     private List<String> dataList;

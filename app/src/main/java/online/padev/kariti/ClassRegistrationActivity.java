@@ -25,6 +25,7 @@ import java.util.List;
 
 import online.padev.kariti.adapters.StudentOnDeleteAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.ClassSchool;
 import online.padev.kariti.entity.Student;
 
 public class ClassRegistrationActivity extends AppCompatActivity{
@@ -35,12 +36,8 @@ public class ClassRegistrationActivity extends AppCompatActivity{
     ListView listViewStudents;
     Button btnRegistration, btnSelectStudents;
     DataBaseKariti dataBase;
-    Spinner spinnerStudent;
-    String studentSelected;
-    Integer id_class = 0;
     StudentOnDeleteAdapter adapterStudents;
     TextView titleActivity, titleStudents;
-    List<String> listStudentSelected = new ArrayList<>(), listStudentsSpinner;
     List<Student> students;
 
     private static final int REQUEST_CODE = 1;
@@ -62,7 +59,6 @@ public class ClassRegistrationActivity extends AppCompatActivity{
 
         editTextNameClass = findViewById(R.id.editTextTurmaCad);
         btnRegistration = findViewById(R.id.buttonCadastrarTurma);
-        //spinnerStudent = findViewById(R.id.spinnerBuscAluno);
         btnSelectStudents = findViewById(R.id.btnSelectaStudentClass);
         editTextStudentAnonymous = findViewById(R.id.editTextAlunosAnonimos);
         lessAnonymous = findViewById(R.id.imageViewMenosAnonimos);
@@ -75,8 +71,6 @@ public class ClassRegistrationActivity extends AppCompatActivity{
 
         students = new ArrayList<>();
 
-        listViewStudents.setVisibility(View.GONE);
-
         adapterStudents = new StudentOnDeleteAdapter(this, students);
         listViewStudents.setAdapter(adapterStudents);
 
@@ -84,6 +78,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
             students.remove(i);
             if(students.isEmpty()){
                 listViewStudents.setVisibility(View.GONE);
+                titleStudents.setVisibility(View.GONE);
             }
             adapterStudents.notifyDataSetChanged();
             Toast.makeText(this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
@@ -94,78 +89,6 @@ public class ClassRegistrationActivity extends AppCompatActivity{
             intent_2.putExtra("students", (Serializable) students);
             startActivityForResult(intent_2, REQUEST_CODE);
         });
-
-        /*
-        listStudentsSpinner = dataBase.listStudentNames(1);
-
-
-        if (!listStudentsSpinner.isEmpty()){
-            listStudentsSpinner.add(0, "Selecionar Alunos");
-            listStudentsSpinner.add(1, "Todos");
-        }else {
-            spinnerStudent.setVisibility(View.GONE);
-            listViewStudents.setVisibility(View.GONE);
-        }
-
-        AdapterSpinner adapter = new AdapterSpinner(this, listStudentsSpinner);
-        spinnerStudent.setAdapter(adapter);
-        spinnerStudent.setSelection(0);
-
-        iconHelp.setOnClickListener(view -> dialogHelp());
-        spinnerStudent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    studentSelected = spinnerStudent.getSelectedItem().toString();
-                    if(studentSelected.equals("Todos")){
-                        listStudentSelected = dataBase.listStudentNames(1);
-                        if(listStudentSelected == null){
-                            Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        adapterStudents = new AdapterStudentOnDelete(ClassRegistrationActivity.this, listStudentSelected);
-                        listViewStudents.setAdapter(adapterStudents);
-                        listViewStudents.setVisibility(View.VISIBLE);
-                        titleAnonymous.setVisibility(View.VISIBLE);
-                        adapterStudents.notifyDataSetChanged();
-                        spinnerStudent.setSelection(1);
-                    }else {
-                        int i = 0;
-                        for (String a : listStudentSelected) {
-                            if (studentSelected.equals(a)) {
-                                i = 1;
-                                Toast.makeText(ClassRegistrationActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
-                                spinnerStudent.setSelection(0);
-                                break;
-                            }
-                        }
-                        if (i != 1) {
-                            listStudentSelected.add(studentSelected);
-                            adapterStudents = new AdapterStudentOnDelete(ClassRegistrationActivity.this, listStudentSelected);
-                            listViewStudents.setAdapter(adapterStudents);
-                            listViewStudents.setVisibility(View.VISIBLE);
-                            titleAnonymous.setVisibility(View.VISIBLE);
-                            adapterStudents.notifyDataSetChanged();
-                            spinnerStudent.setSelection(0);
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-        listViewStudents.setOnItemClickListener((adapterView, view, i, l) -> {
-            listStudentSelected.remove(i);
-            if(listStudentSelected.isEmpty()){
-                listViewStudents.setVisibility(View.GONE);
-                titleAnonymous.setVisibility(View.GONE);
-                spinnerStudent.setSelection(0);
-            }
-            adapterStudents.notifyDataSetChanged();
-            Toast.makeText(ClassRegistrationActivity.this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
-        });
-        */
 
         lessAnonymous.setOnClickListener(view -> {
             int numAnonymous = 0;
@@ -194,7 +117,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                     return;
                 }
                 String numAnonymous = editTextStudentAnonymous.getText().toString().trim();
-                if (listStudentSelected.isEmpty() && (numAnonymous.equals("0") || numAnonymous.isEmpty())) {
+                if (students.isEmpty() && (numAnonymous.equals("0") || numAnonymous.isEmpty())) {
                     notice();
                     return;
                 }
@@ -204,44 +127,42 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                     return;
                 }
                 if (checkClassExists) {
-                    Toast.makeText(ClassRegistrationActivity.this, "Turma já cadastrada! ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ClassRegistrationActivity.this, "Já existe uma turma cadastrada com esse nome associado a essa escola. " +
+                            "Informe um nome diferente para essa turma! ", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                id_class = dataBase.insertClass(className);
-                if (id_class == null || id_class == -1) {
+                Integer class_id = dataBase.insertClass(className);
+                if (class_id == null || class_id == -1) {
                     Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!listStudentSelected.isEmpty()){
-                    for (String student : listStudentSelected) {
-                        Integer id_student = dataBase.getStudentId(student);
-                        if (id_student != null && id_student != -1){
-                            if(dataBase.linkStudentToClass(id_class, id_student)){
-                                Log.e("kariti","Aluno cadastrado na turma: "+ id_class);
-                            }
-                        }else Log.e("kariti","Erro ao tentar cadastrar na turma o aluno: "+student);
-                    }
-                }
+
                 int totAnonymous = 0;
                 if (!numAnonymous.isEmpty()) {
                     totAnonymous = Integer.parseInt(numAnonymous);
                 }
                 if (totAnonymous != 0){
                     int t = numAnonymous.length();
+                    List<Student> studentsAnonymous = new ArrayList<>();
                     for (int x = 1; x <= totAnonymous; x++) {
                         String nameAnonymous = "Aluno "+ String.format("%0"+t+"d",x);
-                        Integer id_anonymous = dataBase.insertStudent(nameAnonymous, null, 0);
-                        if(id_anonymous != -1){
-                            if(dataBase.linkStudentToClass(id_class, id_anonymous)){
-                                Log.e("kariti","Aluno anônimo cadastrado na turma: "+ id_class);
-                            }
-                        }else  Log.e("kariti","Erro ao tentar cadastrar anônimo: "+x);
+                        Student studentA = new Student(0, nameAnonymous, null);
+                        studentsAnonymous.add(studentA);
+                    }
+                    students.addAll(studentsAnonymous);
+                }
+
+                if (!students.isEmpty()){
+                    boolean isInsertion = dataBase.insertStudentsInClass_2(students, class_id);
+                    if(isInsertion) {
+                        Toast.makeText(this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                        restartVisualClass();
+                    } else {
+                        Toast.makeText(this, "Falha no cadastro da turma \n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                Toast.makeText(this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
-                restartVisualClass();
             }catch (Exception e){
-                Toast.makeText(this, "Erro: turma não cadastrada corretamente!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Falha no cadastro da turma \n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                 restartVisualClass();
             } finally {
                 btnRegistration.setEnabled(true);
@@ -264,9 +185,15 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 students.clear();
                 students.addAll((List<Student>) data.getSerializableExtra("students"));
                 adapterStudents.notifyDataSetChanged();
+                Log.e("Testess", String.valueOf(students.size()));
                 if (!students.isEmpty()){
                     listViewStudents.setVisibility(View.VISIBLE);
                     titleStudents.setVisibility(View.VISIBLE);
+                }else {
+                    if (listViewStudents.getVisibility() == View.VISIBLE){
+                        listViewStudents.setVisibility(View.GONE);
+                        titleStudents.setVisibility(View.GONE);
+                    }
                 }
             }else{
                 restartVisualClass();

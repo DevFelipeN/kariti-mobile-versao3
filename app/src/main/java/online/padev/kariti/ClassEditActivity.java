@@ -1,41 +1,48 @@
 package online.padev.kariti;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import online.padev.kariti.adapters.AdapterSpinner;
-import online.padev.kariti.adapters.AdapterStudentOnDelete;
+import online.padev.kariti.adapters.StudentOnDeleteAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.entity.ClassSchool;
+import online.padev.kariti.entity.Student;
 
 public class ClassEditActivity extends AppCompatActivity {
     ImageButton back, iconHelp;
     ImageView moreAnonymous, lessAnonymous;
     ListView listViewStudents;
     EditText editTxtClass, editTxtAnonymous;
-    List<String> studentsRegisteredClass, studentsSchool;
-    private String id_Class, nameClassBD, nameClassCurrent, studentSelected;
+    ClassSchool cs;
+    List<Student> students;
+    List<String> studentsRegisteredClass;
+    private String nameClassCurrent, studentSelected;
     DataBaseKariti dataBase;
-    AdapterStudentOnDelete adapterStudentsRegistered;
-    Spinner spinnerStudent;
+    StudentOnDeleteAdapter adapterStudents;
+    Button selectedStudent;
     Button btnSave;
     private Integer id_student, numAnonymousBD;
     TextView titleActvity, titleStudent;
+
+    private static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +55,7 @@ public class ClassEditActivity extends AppCompatActivity {
         lessAnonymous = findViewById(R.id.imageViewMenosNovosAnonimos);
         titleStudent = findViewById(R.id.txtVieAlunos);
         editTxtAnonymous = findViewById(R.id.editTextNovosAlunosAnonimos);
-        spinnerStudent = findViewById(R.id.spinnerBuscAlunoNovos);
+        selectedStudent = findViewById(R.id.buscAlunoNovos);
         btnSave = findViewById(R.id.buttonSalvarTurma);
         back = findViewById(R.id.imgBtnVoltaDescola);
         iconHelp = findViewById(R.id.iconHelp);
@@ -57,109 +64,67 @@ public class ClassEditActivity extends AppCompatActivity {
         dataBase = new DataBaseKariti(this);
         studentsRegisteredClass = new ArrayList<>();
 
-        titleActvity.setText(String.format("%s","Atualização"));
+        titleActvity.setText(String.format("%s", "Atualização"));
 
-        id_Class = Objects.requireNonNull(getIntent().getExtras()).getString("id_turma");
-
-        //Lista todos os alunos no Spinner
-        studentsSchool = dataBase.listStudentNames(1);
-        if (studentsSchool == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 1", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        if (!studentsSchool.isEmpty()){
-            studentsSchool.add(0, "Selecionar alunos");
-        } else {
-            spinnerStudent.setVisibility(View.GONE);
-        }
-
-        AdapterSpinner adapterSpinner = new AdapterSpinner(this, studentsSchool);
-        spinnerStudent.setAdapter(adapterSpinner);
-        spinnerStudent.setSelection(0);
+        cs = (ClassSchool) getIntent().getSerializableExtra("classSchool_id");
+        students = (List<Student>) getIntent().getSerializableExtra("students");
 
         //Mostra a turma a ser editada
-
-        nameClassBD = dataBase.getClassName(id_Class);
-        numAnonymousBD = dataBase.getStudentNumber(id_Class, 0);
-
-        if (nameClassBD == null || numAnonymousBD == null){
+        numAnonymousBD = dataBase.getStudentNumber(cs.getClass_id(), 0);
+        if (numAnonymousBD == null) {
             Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 2", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        editTxtClass.setText(nameClassBD);
+        editTxtClass.setText(cs.getName());
         editTxtAnonymous.setText(String.format("%s", numAnonymousBD));
 
         notifyAnonymous(numAnonymousBD);
 
-        //Lista os aluno cadastrados nesta turma.
-        studentsRegisteredClass = dataBase.listStudentNames(id_Class, 1);
-        if (studentsRegisteredClass == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        if (studentsRegisteredClass.isEmpty()){
+        if (students.isEmpty()) {
             titleStudent.setVisibility(View.GONE);
             listViewStudents.setVisibility(View.GONE);
         }
-        adapterStudentsRegistered = new AdapterStudentOnDelete(this, studentsRegisteredClass);
-        listViewStudents.setAdapter(adapterStudentsRegistered);
 
-        //Identifica o aluno selecionado no Spinner e adiciona no listView
-        spinnerStudent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i != 0) {
-                    studentSelected = spinnerStudent.getSelectedItem().toString();
-                    if(studentsRegisteredClass.contains(studentSelected)) {
-                        Toast.makeText(ClassEditActivity.this, "Aluno já selecionado!", Toast.LENGTH_SHORT).show();
-                        spinnerStudent.setSelection(0);
-                        return;
-                    }
-                    studentsRegisteredClass.add(studentSelected);
-                    adapterStudentsRegistered = new AdapterStudentOnDelete(ClassEditActivity.this, studentsRegisteredClass);
-                    listViewStudents.setAdapter(adapterStudentsRegistered);
-                    titleStudent.setVisibility(View.VISIBLE);
-                    listViewStudents.setVisibility(View.VISIBLE);
-                    adapterStudentsRegistered.notifyDataSetChanged();
-                    spinnerStudent.setSelection(0);
-                }
-            }
+        adapterStudents = new StudentOnDeleteAdapter(this, students);
+        listViewStudents.setAdapter(adapterStudents);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
+        selectedStudent.setOnClickListener(v -> {
+            Intent intent = new Intent(this, StudentSelectedActivity.class);
+            intent.putExtra("students", (Serializable) students);
+            startActivityForResult(intent, REQUEST_CODE);
         });
 
         //Remove aluno do listView, após simples click
         listViewStudents.setOnItemClickListener((adapterView, view, i, l) -> {
-                studentsRegisteredClass.remove(i);
-                if (studentsRegisteredClass.isEmpty()){
-                    titleStudent.setVisibility(View.GONE);
-                    listViewStudents.setVisibility(View.GONE);
-                    spinnerStudent.setSelection(0);
-                }
-                adapterStudentsRegistered.notifyDataSetChanged();
-                Toast.makeText(ClassEditActivity.this, "Aluno Removido! ", Toast.LENGTH_SHORT).show();
+            students.remove(i);
+            if (students.isEmpty()) {
+                titleStudent.setVisibility(View.GONE);
+                listViewStudents.setVisibility(View.GONE);
+            }
+            adapterStudents.notifyDataSetChanged();
+            Toast.makeText(ClassEditActivity.this, "Aluno Removido! ", Toast.LENGTH_SHORT).show();
         });
+
         lessAnonymous.setOnClickListener(view -> {
             int numAnonymous = 0;
-            if (!editTxtAnonymous.getText().toString().trim().isEmpty()){
+            if (!editTxtAnonymous.getText().toString().trim().isEmpty()) {
                 numAnonymous = Integer.parseInt(editTxtAnonymous.getText().toString());
             }
-            if(numAnonymous > 0)
-                numAnonymous --;
+            if (numAnonymous > 0)
+                numAnonymous--;
             editTxtAnonymous.setText(String.valueOf(numAnonymous));
         });
 
         moreAnonymous.setOnClickListener(view -> {
             int numAnonymous = 0;
-            if (!editTxtAnonymous.getText().toString().trim().isEmpty()){
+            if (!editTxtAnonymous.getText().toString().trim().isEmpty()) {
                 numAnonymous = Integer.parseInt(editTxtAnonymous.getText().toString());
             }
-            numAnonymous ++;
+            numAnonymous++;
             editTxtAnonymous.setText(String.valueOf(numAnonymous));
         });
+
         btnSave.setOnClickListener(view -> {
             btnSave.setEnabled(false);
             try {
@@ -169,62 +134,55 @@ public class ClassEditActivity extends AppCompatActivity {
                     return;
                 }
                 String numAnonymousCurrent = editTxtAnonymous.getText().toString().trim();
-                if (studentsRegisteredClass.isEmpty() && (numAnonymousCurrent.equals("0") || numAnonymousCurrent.isEmpty())) {
+                if (students.isEmpty() && (numAnonymousCurrent.equals("0") || numAnonymousCurrent.isEmpty())) {
                     notice();
                     return;
                 }
-                if (!nameClassCurrent.equals(nameClassBD)) {
+                if (!nameClassCurrent.equals(cs.getName())) {
                     Boolean checkClassExists = dataBase.checkExistClass(nameClassCurrent);
                     if (checkClassExists == null) {
                         Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente - 3", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (checkClassExists) {
-                        Toast.makeText(this, "Turma já cadastrada! ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Já existe uma turma com esse nome associado a essa escola! ", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (!dataBase.updateClassData(nameClassCurrent, Integer.valueOf(id_Class))) {
+                    if (!dataBase.updateClassData(nameClassCurrent, cs.getClass_id())) {
                         Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
-                if (!dataBase.deleteAnonymous(Integer.valueOf(id_Class))) {  //Deleta todos os alunos Anonimos pertecentes a essa turma da tabela aluno
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                if (!dataBase.deleteStudentsFromClass(cs.getClass_id())) {  //Deleta e todos os alunos pertecentes a essa turma
+                    Toast.makeText(this, "Falha de na atualização dessa turma! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!dataBase.deleteStudentsFromClass(Integer.valueOf(id_Class))) {  //Deleta todos os alunos pertecentes a essa turma
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
-                    return;
+
+                int totAnonymous = 0;
+                if (!numAnonymousCurrent.isEmpty()) {
+                    totAnonymous = Integer.parseInt(numAnonymousCurrent);
                 }
-                if (!studentsRegisteredClass.isEmpty()) {
-                    for (String student : studentsRegisteredClass) {
-                        id_student = dataBase.getStudentId(student);
-                        if (id_student != null && id_student != -1) {
-                            if (!dataBase.linkStudentToClass(Integer.valueOf(id_Class), id_student)) {
-                                Log.e("kariti", "Erro ao tentar vincular o aluno " + student + " a turma com id: " + id_Class);
-                            }
-                        }
-                    }
-                }
-                int anonymousCurrent = 0;
-                if (!numAnonymousCurrent.isEmpty()){
-                    anonymousCurrent = Integer.parseInt(numAnonymousCurrent);
-                }
-                if (anonymousCurrent != 0) {
+                if (totAnonymous != 0){
                     int t = numAnonymousCurrent.length();
-                    for (int x = 1; x <= anonymousCurrent; x++) {
-                        String nameAnonymous = "Aluno " + String.format("%0" + t + "d", x);
-                        Integer id_anonymous = dataBase.insertStudent(nameAnonymous, null, 0);
-                        if (id_anonymous != -1) {
-                            if (!dataBase.linkStudentToClass(Integer.valueOf(id_Class), id_anonymous)) {
-                                Log.e("kariti", "Erro ao tentar vincular o aluno anonimo " + nameAnonymous + " a turma com id: " + id_Class);
-                            }
-                        }
+                    List<Student> studentsAnonymous = new ArrayList<>();
+                    for (int x = 1; x <= totAnonymous; x++) {
+                        String nameAnonymous = "Aluno "+ String.format("%0"+t+"d",x);
+                        Student studentA = new Student(0, nameAnonymous, null);
+                        studentsAnonymous.add(studentA);
+                    }
+                    students.addAll(studentsAnonymous);
+                }
+
+                if (!students.isEmpty()) {
+                    boolean isInsertion = dataBase.insertStudentsInClass_2(students, cs.getClass_id());
+                    if (isInsertion) {
+                        Toast.makeText(this, "Dados alterados com sucesso!", Toast.LENGTH_SHORT).show();
+                        restartDataClass();
+                    } else {
+                        Toast.makeText(this, "Falha de na atualização dessa turma! \n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                Toast.makeText(ClassEditActivity.this, "Dados alterados com sucesso!", Toast.LENGTH_SHORT).show();
-                restartDataClass();
-            } catch (Exception e){
+            } catch (Exception e) {
                 Log.e("kariti", e.toString());
             } finally {
                 btnSave.setEnabled(true);
@@ -269,6 +227,31 @@ public class ClassEditActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK){
+                students.clear();
+                students.addAll((List<Student>) data.getSerializableExtra("students"));
+                adapterStudents.notifyDataSetChanged();
+                Log.e("Testess", String.valueOf(students.size()));
+                if (!students.isEmpty()){
+                    listViewStudents.setVisibility(View.VISIBLE);
+                    titleStudent.setVisibility(View.VISIBLE);
+                }else {
+                    if (listViewStudents.getVisibility() == View.VISIBLE){
+                        listViewStudents.setVisibility(View.GONE);
+                        titleStudent.setVisibility(View.GONE);
+                    }
+                }
+            }else{
+                restartDataClass();
+            }
+        }
+    }
+
     public void restartDataClass(){
         setResult(RESULT_OK);
         finish();

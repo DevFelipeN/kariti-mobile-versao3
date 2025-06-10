@@ -65,7 +65,7 @@ public class StudentSelectedAdapter extends RecyclerView.Adapter<StudentSelected
 
     public List<Student> getStudentsSelected() {
         List<Student> selecteds = new ArrayList<>();
-        for (Student a : students) {
+        for (Student a : studentsFull) {
             if (a.isSelected()) selecteds.add(a);
         }
         return selecteds;

@@ -1,8 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Kariti" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Kariti" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/azul</item>
+        <item name="colorbordergrade">@color/white</item>
     </style>
 
     <style name="BUTTONSFLUTUANTES">

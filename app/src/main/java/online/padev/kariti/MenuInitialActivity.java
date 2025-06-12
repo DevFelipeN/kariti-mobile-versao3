@@ -3,6 +3,8 @@ package online.padev.kariti;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,12 @@ public class MenuInitialActivity extends AppCompatActivity {
     TextView textViewSchool;
     DataBaseKariti dataBase;
     private String nameSchool;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

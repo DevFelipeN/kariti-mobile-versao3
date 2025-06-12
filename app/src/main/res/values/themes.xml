@@ -1,15 +1,15 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Kariti" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Kariti" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/corLinks</item>
+        <item name="colorbordergrade">@color/black</item>
     </style>
-
-    <style name="Theme.Kariti" parent="Base.Theme.Kariti" />
 
     <style name="ICONSENHA">
         <item name="android:tint">@color/cinzaText</item>
     </style>
+
 
     <style name="BUTTONSFLUTUANTES">
         <item name="android:backgroundTint">@color/corLinks</item>

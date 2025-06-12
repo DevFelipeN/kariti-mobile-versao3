@@ -19,6 +19,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".Kariti"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
@@ -31,6 +32,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="26">
+
         <activity
             android:name=".StudentSelectedActivity"
             android:exported="false" />

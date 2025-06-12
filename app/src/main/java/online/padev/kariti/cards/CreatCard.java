@@ -29,7 +29,6 @@ public class CreatCard {
     private double note;
     private String versionName;
     private String className, teacher;
-    //Map<Integer, String> students;
     List<Student> students;
 
     public CreatCard(Exam exam, DataBaseKariti dataBase, Context context){
@@ -168,8 +167,6 @@ public class CreatCard {
                 paintCircle.setColor(Color.LTGRAY);
                 paintCircle.setStyle(Paint.Style.STROKE); // Apenas contorno
 
-
-
                 int questsAtual = 0;
                 if (exam.getNumQuestions() > 20) {
                     questsAtual = 20;
@@ -288,92 +285,13 @@ public class CreatCard {
             DownloadPDF downloadPDF = new DownloadPDF(context);
             downloadPDF.newDownload(pdfDocument, fileName);
 
-            /*
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                // Salvar arquivo
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    pdfDocument.writeTo(fos);
-                    pdfDocument.close();
-                } catch (IOException e) {
-                    Log.e("card", "Erro: " + e);
-                    return false;
-                }
-            } else {
-                ContentResolver resolver = context.getContentResolver(); // Usando o contexto fornecido
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
-                contentValues.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
-                contentValues.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
-
-
-                Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
-
-                try {
-                    if (uri != null) {
-                        OutputStream outputStream = resolver.openOutputStream(uri);
-                        pdfDocument.writeTo(outputStream);
-                        pdfDocument.close();
-                        notifyDownloadComplete(fileName, uri);
-                    }
-                } catch (Exception e) {
-                    Log.e("kariti", e.getMessage());
-                    return false;
-                }
-            }
-           */
             return true;
         }catch (Exception e){
             Log.e("kariti", e.toString());
             return false;
         }
     }
-    /*
-    private void notifyDownloadComplete(String fileName, Uri fileUri) {
-        // Criar um canal de notificação (Android 8.0 e superior)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            String channelId = "download_channel";
-            CharSequence name = "Download Notifications";
-            String description = "Notificações sobre downloads";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(fileUri, "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        // Criar PendingIntent para abrir o arquivo PDF
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-
-        // Criar e exibir a notificação
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "download_channel")
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                .setContentTitle("Download Completo")
-                .setContentText("O arquivo " + fileName + " foi baixado com sucesso!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true).setContentIntent(pendingIntent); // A notificação desaparece quando o usuário a toca
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        notificationManager.notify(1, builder.build());
-    }
-     */
     private String dataHoraAtual(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
         Date date = new Date();

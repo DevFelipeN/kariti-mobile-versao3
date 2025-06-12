@@ -1,7 +1,9 @@
 package online.padev.kariti;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +39,8 @@ public class WelcomeActivity extends AppCompatActivity {
         btnRegistration.setOnClickListener(v -> startRegistrationUser());
         btnLogin.setOnClickListener(v -> startLogin());
         btnDefaultPassword.setOnClickListener(v -> startProvaDefault());
+
+        changeLanguage("pt");
     }
 
     /**
@@ -60,5 +64,13 @@ public class WelcomeActivity extends AppCompatActivity {
     private void startProvaDefault(){
         Intent intent = new Intent(this, ProvaFastDefaultActivity.class);
         startActivity(intent);
+    }
+
+    public void changeLanguage(String languageCode) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString("app_language", languageCode).apply();
+
+        ActivityLocale.setLocale(this, languageCode);
+        //recreate();  // reinicia a Activity para aplicar o idioma
     }
 }

@@ -8,15 +8,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,8 +66,9 @@ public class GabaritoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("idioma",this.getResources().getConfiguration().locale.toString());
+        Log.e("idioma", getBaseContext().getResources().getConfiguration().locale.toString());
         setContentView(R.layout.activity_gabarito);
-
 
         voltar = findViewById(R.id.imgBtnVoltaDescola);
         iconAjuda = findViewById(R.id.iconHelp);
@@ -147,7 +151,6 @@ public class GabaritoActivity extends AppCompatActivity {
                         for (int i = 1; i <= dadosExam.getNumQuestions(); i++) {
                             Integer resp = alternativasEscolhidas.get(i - 1);
                             float notaQuestaoI = notas.get(i - 1);
-                            Log.e("notas", "n1: " + notaQuestaoI);
                             Answer_key g = new Answer_key(i, resp + 1, notaQuestaoI);
                             answerkey.add(g);
                         }
@@ -184,7 +187,7 @@ public class GabaritoActivity extends AppCompatActivity {
 
         int quantidadeQuestoes = dadosExam.getNumQuestions();
         int quantidadeAlternativas = dadosExam.getNumAlternatives();
-        txtViewNotaProva.setText(String.format("%s","Nota total da prova " + quantidadeQuestoes + " pontos."));
+        txtViewNotaProva.setText(String.format("%s","Nota total da prova " + quantidadeQuestoes + " pontos"));
 
         String[] letras = new String[quantidadeAlternativas];
         for (int i = 0; i < quantidadeAlternativas; i++) {
@@ -200,7 +203,9 @@ public class GabaritoActivity extends AppCompatActivity {
             layoutQuestao.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView textViewNumeroQuestao = new TextView(this);
-            textViewNumeroQuestao.setText((i + 1) + " ");
+            textViewNumeroQuestao.setWidth(dpToPx(30));
+            textViewNumeroQuestao.setTextSize(18);
+            textViewNumeroQuestao.setText(String.format("%d", i + 1));
             layoutQuestao.addView(textViewNumeroQuestao);
 
             //Agrupar os RadioButtons
@@ -220,11 +225,10 @@ public class GabaritoActivity extends AppCompatActivity {
             radioGroupAlternativas.setOnCheckedChangeListener((group, checkedId) -> {
                 for (int a = 0; a < listRadioGroups.size(); a++) {
                     if (listRadioGroups.get(a) == group) {
-                        int positionDaQuestao = a;
                         int selectedRadioButtonId = group.getCheckedRadioButtonId();
                         RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                         int position = group.indexOfChild(selectedRadioButton);
-                        alternativasEscolhidas.put(positionDaQuestao, position);
+                        alternativasEscolhidas.put(a, position);
                         break;
                     }
                 }
@@ -232,12 +236,13 @@ public class GabaritoActivity extends AppCompatActivity {
             layoutQuestao.addView(radioGroupAlternativas);
 
             LinearLayout.LayoutParams paramsText = new LinearLayout.LayoutParams(
-                    150,
+                    130,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             EditText editTextPontos = new EditText(this);
             editTextPontos.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            editTextPontos.setText(String.valueOf(1));
+            editTextPontos.setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });
+            editTextPontos.setText(String.valueOf(1.0));
             editTextPontos.setGravity(Gravity.CENTER);
             editTextPontos.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             editTextPontos.setBackground(ContextCompat.getDrawable(this, R.drawable.borda_fina));
@@ -272,7 +277,7 @@ public class GabaritoActivity extends AppCompatActivity {
                 avisoVoltar();
             }
         });
-
+        registrationGradeAll();
     }
     private void dialogProvaSucess(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(GabaritoActivity.this);
@@ -314,8 +319,18 @@ public class GabaritoActivity extends AppCompatActivity {
             float n = Float.parseFloat(nota);
             notas += n;
         }
-        txtViewNotaProva.setText(String.format("%s %.2f %s","Nota total da prova", notas, "pontos."));
+        txtViewNotaProva.setText(String.format(new Locale("pt", "BR"), "Nota total da prova %.2f pontos55."+getString(R.string.acessoSenha), notas));
     }
+
+    private void setGradeAll(float grade) {
+        for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
+            LinearLayout questaoLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
+            EditText pontosEditText = (EditText) questaoLayout.getChildAt(2);
+            pontosEditText.setText(String.valueOf(grade));
+        }
+        txtViewNotaProva.setText(String.format(new Locale("pt", "BR"), "Nota total da prova %.2f pontos44.", (float) dadosExam.getNumQuestions() * grade));
+    }
+
     private boolean notaFinal() {
         try {
             for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
@@ -464,5 +479,68 @@ public class GabaritoActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault());
         Date date = new Date();
         return sdf.format(date);
+    }
+
+    private void registrationGradeAll() {
+        // Inflar o layout customizado
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.grade_all_dialog, null);
+
+        float n = (float) dadosExam.getNumQuestions();
+
+        // Inicializar os elementos do layout
+        EditText editTextGradeAll = dialogView.findViewById(R.id.editTextGradeAll);
+        Button btnRegistrationGrades = dialogView.findViewById(R.id.buttonYesGradeAll);
+        Button btnNotGradeAll = dialogView.findViewById(R.id.buttonNotGradeAll);
+        TextView textViewGradeTotal = dialogView.findViewById(R.id.txtViewGradeExam);
+
+        textViewGradeTotal.setText(String.format(new Locale("pt", "BR"), "Nota total da prova %.2f pontos.", n));
+
+        // Criar o AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(dialogView);
+        // Mostrar o diálogo
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        editTextGradeAll.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String t = s.toString().trim();
+                if (!t.isEmpty() && t.matches("^\\d+(\\.\\d+)?$")){
+                    float notaAux = Float.parseFloat(t);
+                    textViewGradeTotal.setText(String.format(new Locale("pt", "BR"), "Nota total da prova %.2f pontos.", n * notaAux));
+                }
+            }
+        });
+
+        btnNotGradeAll.setOnClickListener(v -> dialog.dismiss());
+
+        btnRegistrationGrades.setOnClickListener(v -> {
+            String t = editTextGradeAll.getText().toString().trim();
+            if (!t.isEmpty() && t.matches("^\\d+(\\.\\d+)?$")){
+                float notaAux = Float.parseFloat(t);
+                setGradeAll(notaAux);
+                dialog.dismiss();
+            }else{
+                Toast.makeText(this, "Formato de nota inválido!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -207,6 +208,11 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
         return simpleDateFormat.format(calendar.getTime());
     }
     private void startGenerateGabarito(){
+        //Configuration c = this.getResources().getConfiguration();
+        //Locale l = new Locale("en");
+        //Locale.setDefault(l);
+        //c.setLocale(l);
+        //c.setLocale(Locale.ROOT);
         Intent intent = new Intent(this, GabaritoActivity.class);
         intent.putExtra("prova", exam);
         intent.putExtra("direcao", "novaProva");
@@ -225,5 +231,6 @@ public class ProvaRegistrationActivity extends AppCompatActivity {
         builder.setTitle("ATENÇÃO");
         builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 6 alternativas!");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

@@ -187,7 +187,7 @@ public class SchoolActivity extends AppCompatActivity {
     private void registrationNewSchool() {
         // Inflar o layout customizado
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.cadastrar_escola_dialog, null);
+        View dialogView = inflater.inflate(R.layout.school_registration_dialog, null);
 
         // Inicializar os elementos do layout
         FloatingActionButton cancelFlut = dialogView.findViewById(R.id.btnvoltarflutuante);

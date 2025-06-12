@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kariti</string>
     <string name="buttonvoltarTela">VOLTAR</string>
-    <string name="nomeCompleto">Nome Completo*</string>
+    <string name="nomeCompleto">Nome Completo</string>
     <string name="email">E-mail</string>
     <string name="emailNoRequired">E-mail</string>
     <string name="InfEmail">Informe seu e-mail</string>
@@ -144,7 +144,12 @@
     <string name="txtViewProva">Prova:</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="txtViewData">Data:</string>
-    <string name="txtViewNotaT">Nota total da exam X pontos.</string>
+    <string name="txtViewGradeAll">Nota:</string>
+    <string name="txtViewGradeAllNumber">1.0</string>
+    <string name="buttonNotGradeAll">Atribuir notas individuais</string>
+    <string name="buttonYesGradeAll">Confirmar nota</string>
+    <string name="txtViewNotaT">Nota total da prova X pontos.</string>
+    <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="btnEnvCartao">Enviar Cartão</string>

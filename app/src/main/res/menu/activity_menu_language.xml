@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/title_group" android:checkableBehavior="none">
+        <item
+            android:id="@+id/lang_title"
+            android:title="@string/language_title"
+            android:checkable="false" />
+    </group>
+    <item
+        android:id="@+id/lang_pt"
+        android:title="@string/language_portuguese" />
+    <item
+        android:id="@+id/lang_en"
+        android:title="@string/language_English" />
+</menu>

@@ -4,6 +4,7 @@
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/azul</item>
         <item name="colorbordergrade">@color/white</item>
+        <item name="colorControlNormal">#FFFFFF</item> <!-- branco -->
     </style>
 
     <style name="BUTTONSFLUTUANTES">

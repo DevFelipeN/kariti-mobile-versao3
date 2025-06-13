@@ -1,36 +1,33 @@
 <resources>
+    <string name="welcome_description">WELCOME TO</string>
     <string name="app_name">Kariti</string>
+    <string name="app_name_capital_letter">KARITI</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
     <string name="click_here_description">Clique aqui </string>
-    <string name="create_account_description">Criar conta</string>
+    <string name="create_account_description">Create Account</string>
     <string name="button_continue">Continuar</string>
     <string name="change_device_description">Mudar de dispositivo</string>
     <string name="if_change_device_description">Mudança de dipositivo? </string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="title_activity_login">LoginActivity</string>
     <string name="yes_description">SIM</string>
     <string name="not_description">NÃO</string>
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
-    <string name="welcome_description">SEJA BEM VINDO AO</string>
-    <string name="app_name_capital_letter">KARITI</string>
-    <string name="textObrigatorio">*obrigatorio</string>
     <string name="optional_description">opcional</string>
     <string name="login_description">Login</string>
     <string name="forgot_password_description">Esqueci Minha Senha</string>
     <string name="enter_your_login_description">Entre com seu Login*</string>
     <string name="enter_your_password_description">Informe Sua Senha*</string>
     <string name="enter_description">Entrar</string>
-    <string name="msg_erro">Dados Incorretos!</string>
-    <string name="voidSchool">Nenhum Dado Cadastrado!</string>
-    <string name="valorZero">0</string>
     <string name="register_description">Cadastrar</string>
+    <string name="register_description_welcome">Register</string>
     <string name="teacher_name_description">Nome do professor</string>
+    <string name="buttonDefaultPassword">Login without password</string>
     <string name="view_description">Visualizar</string>
+    <string name="language_portuguese">Portuguese - Brazil (pt_br)</string>
+    <string name="language_English">English (en)</string>
+    <string name="language_title">Select language</string>
 
     <!--Usuario-->
     <string name="user_name_obg">Nome Completo*</string>
@@ -45,9 +42,6 @@
     <string name="validation_description">Validar</string>
     <string name="cancel_description">Cancelar</string>
     <string name="resend_code_validation">Reenviar código</string>
-    <string name="register_description_welcome">Cadastre-se</string>
-    <string name="descricNovaSenha">Texto Nova Senha</string>
-    <string name="buttonDefaultPassword">Entrar sem senha</string>
 
 
     <!--Escola-->
@@ -95,7 +89,6 @@
     <string name="textViewFiltro">Filtro por turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="editTextNomeTurma">Nome da Turma*</string>
-    <string name="btnTranferirOutraTurma">Transf. de outra Turma</string>
 
 
     <!--    Prova-->

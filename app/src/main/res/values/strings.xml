@@ -1,5 +1,5 @@
 <resources>
-    <string name="welcome_description">SEJA BEM VINDO AO</string>
+    <string name="welcome_description">SEJA BEM VINDO(A) AO</string>
     <string name="app_name">Kariti</string>
     <string name="app_name_capital_letter">KARITI</string>
     <string name="to_go_back_description">Voltar</string>
@@ -23,6 +23,9 @@
     <string name="teacher_name_description">Nome do professor</string>
     <string name="view_description">Visualizar</string>
     <string name="cancel_description">Cancelar</string>
+    <string name="language_portuguese">Português - Brasil (pt_br)</string>
+    <string name="language_English">Inglês (en)</string>
+    <string name="language_title">Selecione o idioma</string>
 
     <!--Usuario-->
     <string name="user_name_obg">Nome Completo*</string>

@@ -102,7 +102,7 @@
                     style="@style/COLORTEXT"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/RespostaEsperada"
+                    android:text="@string/status_description"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="bold" />

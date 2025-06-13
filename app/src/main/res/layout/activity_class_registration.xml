@@ -147,7 +147,7 @@
                 android:ems="4"
                 android:importantForAutofill="no"
                 android:inputType="number"
-                android:text="@string/valorZero"
+                android:text="@string/number_zero"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 

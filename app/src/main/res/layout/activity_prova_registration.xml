@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/buttonGerarProva"
+        android:text="@string/buttonProximo"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -138,7 +138,7 @@
             android:inputType="number"
             android:layout_column="2"
             android:paddingTop="10dp"
-            android:text="@string/buttonQtd"
+            android:text="@string/number_zero"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -186,7 +186,7 @@
             android:layout_marginTop="20dp"
             android:inputType="number"
             android:maxLength="2"
-            android:text="@string/buttonQtd"
+            android:text="@string/number_zero"
             android:textAlignment="center"
             android:textSize="20sp" />
 

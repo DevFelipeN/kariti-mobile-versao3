@@ -8,7 +8,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -319,7 +318,7 @@ public class GabaritoActivity extends AppCompatActivity {
             float n = Float.parseFloat(nota);
             notas += n;
         }
-        txtViewNotaProva.setText(String.format(new Locale("pt", "BR"), "Nota total da prova %.2f pontos55."+getString(R.string.acessoSenha), notas));
+        txtViewNotaProva.setText(String.format(new Locale("pt", "BR"), "Nota total da prova %.2f pontos55."+getString(R.string.password_registration), notas));
     }
 
     private void setGradeAll(float grade) {

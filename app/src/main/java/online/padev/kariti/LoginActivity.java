@@ -2,6 +2,8 @@ package online.padev.kariti;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -23,13 +25,19 @@ public class LoginActivity extends AppCompatActivity {
     EditText EditTextEmail, EditTextPassword;
     private String emailInformed, passwordInformed, codeValidation;
     private Integer id_user;
-    TextView registerNewConta;
+    TextView registerNewAccount;
     Button btnAccess, forgetPassword;
     ImageButton btnHidePassword;
     DataBaseKariti dataBase;
     CodeValidationActivity validationCodeActivity;
     SendCodeValidation sendCode;
     GenerateCodeValidation generateCode;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         btnAccess = findViewById(R.id.buttonEntrarL);
         forgetPassword = findViewById(R.id.buttonEsqueciSenhaL);
-        registerNewConta = findViewById(R.id.textViewCriarConta);
+        registerNewAccount = findViewById(R.id.textViewCriarConta);
         EditTextEmail = findViewById(R.id.editTextLogin);
         EditTextPassword = findViewById(R.id.editTextSenha);
         btnHidePassword = findViewById(R.id.senhaoculta);
@@ -53,20 +61,20 @@ public class LoginActivity extends AppCompatActivity {
                 emailInformed = EditTextEmail.getText().toString().trim();
                 passwordInformed = EditTextPassword.getText().toString().trim();
                 if (emailInformed.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Informe seu e-mail!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.toastRequestEmail), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (passwordInformed.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Informe a senha!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.toastRequestPassword), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!Patterns.EMAIL_ADDRESS.matcher(emailInformed).matches()) {
-                    Toast.makeText(this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInvalidEmail), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 id_user = dataBase.checkAuthentication(emailInformed, passwordInformed);
                 if (id_user == null || id_user == -1) {
-                    Toast.makeText(this, "Usuário e/ou senha inválidos! ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInvalidUserOurPassword), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 DataBaseKariti.USER_ID = id_user;
@@ -81,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             forgetPassword.setEnabled(false);
             try {
                 if (!CheckConnectionInternet.verificaConexao(this)) {
-                    Toast.makeText(this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastNotConnection), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 emailInformed = EditTextEmail.getText().toString().trim();
@@ -90,19 +98,20 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 if (!Patterns.EMAIL_ADDRESS.matcher(emailInformed).matches()) {
-                    Toast.makeText(LoginActivity.this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.toastInvalidEmail), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 id_user = dataBase.checkUserEmail(emailInformed);
                 if (id_user == null || id_user == -1) {
-                    Toast.makeText(this, "E-mail não encontrado!", Toast.LENGTH_SHORT).show();
+                    Log.e("kariti", String.format("%d", id_user));
+                    Toast.makeText(this, getString(R.string.toastEmailNotFound), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 codeValidation = generateCode.gerarVerificador();
                 if (sendCode.enviaCodigo(emailInformed, codeValidation)) {
                     startCodeValidationActivity();
                 } else {
-                    Toast.makeText(this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastEmailNotSent), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e){
                 Log.e("kariti", e.toString());
@@ -125,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
             EditTextPassword.setSelection(EditTextPassword.getText().length());
         });
 
-        registerNewConta.setOnClickListener(v -> startNewUserRegistration());
+        registerNewAccount.setOnClickListener(v -> startNewUserRegistration());
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -146,9 +155,9 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void notifyInformedEmail(){
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Esqueceu sua senha?")
-                .setMessage("Por favor, informe seu e-mail cadastrado no campo E-mail, em seguida pressione 'Esqueci Minha Senha'")
-                .setPositiveButton("Ok", (dialog, which) -> Toast.makeText(LoginActivity.this, "Informe o E-mail! ", Toast.LENGTH_SHORT).show());
+        builder.setTitle(getString(R.string.alertDialogForgotPassword))
+                .setMessage(getString(R.string.longTextEnterEmail))
+                .setPositiveButton("Ok", (dialog, which) -> Toast.makeText(LoginActivity.this, getString(R.string.toastRequestEmail), Toast.LENGTH_SHORT).show());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

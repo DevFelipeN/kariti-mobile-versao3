@@ -16,7 +16,7 @@
     <string name="optional_description">opcional</string>
     <string name="login_description">Login</string>
     <string name="forgot_password_description">Esqueci minha senha</string>
-    <string name="enter_your_login_description">Entre com seu login*</string>
+    <string name="enter_your_login_description">Informe seu e-mail*</string>
     <string name="enter_your_password_description">Informe sua senha*</string>
     <string name="enter_description">Entrar</string>
     <string name="register_description">Cadastrar</string>
@@ -170,7 +170,21 @@
     <string name="iconeAround">Icone de rotacionar câmera</string>
 
 
+    <!-- Toast -->
+    <string name="toastRequestEmail">Informe seu e-mail</string>
+    <string name="toastRequestPassword">Informe sua senha</string>
+    <string name="toastInvalidEmail">O e-mail informado é inválido!</string>
+    <string name="toastInvalidUserOurPassword">Usuário e/ou senha inválidos!</string>
+    <string name="toastNotConnection">Sem conexão de internet!</string>
+    <string name="toastEmailNotFound">E-mail não encontrado!</string>
+    <string name="toastEmailNotSent">E-mail não enviado!</string>
+    <string name="alertDialogForgotPassword">Esqueceu sua senha?</string>
+
+
     <!-- TextLong -->
+    <string name="longTextEnterEmail">Por favor, informe seu e-mail cadastrado no campo de E-mail, em seguida pressione (Esqueci Minha Senha)</string>
+
+
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
     <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>

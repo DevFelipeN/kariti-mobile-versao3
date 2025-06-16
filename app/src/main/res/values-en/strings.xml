@@ -16,10 +16,10 @@
     <string name="number_zero">0</string>
     <string name="optional_description">opcional</string>
     <string name="login_description">Login</string>
-    <string name="forgot_password_description">Esqueci Minha Senha</string>
-    <string name="enter_your_login_description">Entre com seu Login*</string>
-    <string name="enter_your_password_description">Informe Sua Senha*</string>
-    <string name="enter_description">Entrar</string>
+    <string name="forgot_password_description">Forgot Password?</string>
+    <string name="enter_your_login_description">Enter your email*</string>
+    <string name="enter_your_password_description">Enter your password*</string>
+    <string name="enter_description">Sign In</string>
     <string name="register_description">Cadastrar</string>
     <string name="register_description_welcome">Register</string>
     <string name="teacher_name_description">Nome do professor</string>
@@ -31,7 +31,7 @@
 
     <!--Usuario-->
     <string name="user_name_obg">Nome Completo*</string>
-    <string name="user_email_obg">E-mail*</string>
+    <string name="user_email_obg">Email*</string>
     <string name="user_email">E-mail</string>
     <string name="user_enter_your_email">Informe seu e-mail</string>
     <string name="password_registration">Digite sua senha</string>
@@ -167,7 +167,20 @@
     <string name="iconeAround">Icone de rotacionar câmera</string>
 
 
+    <!-- Toast -->
+    <string name="toastRequestEmail">Enter your email</string>
+    <string name="toastRequestPassword">Enter your password</string>
+    <string name="toastInvalidEmail">The email provided is invalid!</string>
+    <string name="toastInvalidUserOurPassword">Invalid username and/or password!</string>
+    <string name="toastNotConnection">No internet connection!</string>
+    <string name="toastEmailNotFound">Email not found!</string>
+    <string name="toastEmailNotSent">Email not sent!</string>
+    <string name="alertDialogForgotPassword">Forgot your password?</string>
+
     <!-- TextLong -->
+    <string name="longTextEnterEmail">Please enter your registered email in the Email field, then press (Forgot Password).</string>
+
+
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
     <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>

@@ -2,10 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/fundo_night"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="online.padev.kariti.LoginActivity">
+    android:background="@drawable/fundo_night"
+    tools:context="online.padev.kariti.LoginActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="18dp">
 
     <TextView
         android:id="@+id/textView6"
@@ -20,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextSenha"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -73,9 +76,9 @@
         android:autofillHints="password"
         android:ems="10"
         android:hint="@string/senhahint"
+        android:inputType="textPassword"
         android:maxLength="16"
         android:textAlignment="center"
-        android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/buttonEntrarL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

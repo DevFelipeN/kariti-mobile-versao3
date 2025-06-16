@@ -25,6 +25,7 @@ public class ActivityLocale {
         return setLocale(context, language);
     }
 
+
     public static Context setLocale(Context context, String language) {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
@@ -41,4 +42,22 @@ public class ActivityLocale {
             return context;
         }
     }
+
+    /*
+
+    public static Context setLocale(Context context, String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+
+        Resources res = context.getResources();
+        Configuration config = res.getConfiguration();
+
+        config.setLocale(locale);
+        res.updateConfiguration(config, res.getDisplayMetrics());
+
+        return context;
+    }
+
+     */
+
 }

@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 app/src/main/res/layout/local.properties
+openCV/build/
+

@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import java.util.Locale;
 
 public class Kariti extends Application {
@@ -20,6 +22,7 @@ public class Kariti extends Application {
         super.onCreate();
         Log.d("idioma", "Application iniciado!");
         ActivityLocale.setLocale(this); // Garante idioma correto ao inicializar o app
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
     /*

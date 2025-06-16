@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -22,6 +23,7 @@ import online.padev.kariti.database.DataBaseKariti;
 public class WelcomeActivity extends AppCompatActivity {
     DataBaseKariti dataBase;
     AppCompatImageView languageIcon;
+    TextView textViewLanguage;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -36,7 +38,19 @@ public class WelcomeActivity extends AppCompatActivity {
         AppCompatButton btnRegistration = findViewById(R.id.buttonCadastroW);
         AppCompatButton btnLogin = findViewById(R.id.buttonLoginW);
         AppCompatButton btnDefaultPassword = findViewById(R.id.buttonDefaultPassword);
+        textViewLanguage = findViewById(R.id.textViewLanguage);
         languageIcon = findViewById(R.id.imageViewLanguage);
+
+        SharedPreferences prefs_initial = getSharedPreferences("settings", MODE_PRIVATE);
+        String currentLang_initial = prefs_initial.getString("language", Locale.getDefault().getLanguage());
+
+        if (currentLang_initial.equals("pt")) {
+            textViewLanguage.setText(String.format("%s", getString(R.string.language_portuguese)));
+        } else if (currentLang_initial.equals("en")) {
+            textViewLanguage.setText(String.format("%s", getString(R.string.language_English)));
+        }
+
+
 
         if (OpenCVLoader.initDebug()) {
             Log.e("opencv","Sucesso na inicialização do openCV");
@@ -73,9 +87,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.lang_pt) {
                     changeLanguage("pt");
+                    textViewLanguage.setText(String.format("%s", getString(R.string.language_portuguese)));
                     return true;
                 } else if (id == R.id.lang_en) {
                     changeLanguage("en");
+                    textViewLanguage.setText(String.format("%s", getString(R.string.language_English)));
                     return true;
                 }
                 return false;

@@ -26,6 +26,7 @@
     <string name="teacher_name_description">Nome do professor</string>
     <string name="buttonDefaultPassword">Login without password</string>
     <string name="view_description">Visualizar</string>
+    <string name="cancel_description">Cancel</string>
     <string name="language_portuguese">Portuguese - Brazil (pt_br)</string>
     <string name="language_English">English (en)</string>
     <string name="language_title">Select language</string>
@@ -41,9 +42,8 @@
     <string name="enter_your_new_password">Informe a nova senha*</string>
     <string name="password_login">Access password*</string>
     <string name="password_registration_check">Confirm password*</string>
-    <string name="validation_description">Validar</string>
-    <string name="cancel_description">Cancelar</string>
-    <string name="resend_code_validation">Reenviar código</string>
+    <string name="validation_description">Validate</string>
+    <string name="resend_code_validation">Resend code</string>
 
 
     <!--Escola-->
@@ -186,12 +186,18 @@
     <string name="toastBackupVersionOld">This backup requires a newer version of the app!</string>
     <string name="toastBackupVersionSuperior">Error. This backup is an older version of the Kariti data!</string>
     <string name="toastBackupRestorationError">Error restoring your data in Kariti!</string>
+    <string name="toastEmailResentSuccess">Code resent successfully</string>
+    <string name="toastRegisterUserSuccess">User registered successfully!</string>
+    <string name="toastRegistrationUserError">User not registered correctly!</string>
+    <string name="toastInvalidCode">Invalid Code!</string>
+    <string name="toastTimeResentCode">Please wait %1$d seconds to resend the code.</string>
 
 
     <!-- TextLong -->
     <string name="longTextEnterEmail">Please enter your registered email in the Email field, then press (Forgot Password).</string>
     <string name="longTextSelectBackup">Select the file sent to your email!</string>
     <string name="longtextSuccessRestoration">Your data has been successfully restored on this device.\n Now just log in to Kariti and continue using it.</string>
+    <string name="longTextEmailSentValidation">Validation code sent to %1$s\n\nPlease check your email inbox.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -189,12 +189,18 @@
     <string name="toastBackupVersionOld">Este backup requer uma versão mais recente do app!</string>
     <string name="toastBackupVersionSuperior">Erro. Este backup é uma versão mais antiga dos dados do Kariti!</string>
     <string name="toastBackupRestorationError">Erro na restauração dos seus dados no Kariti!</string>
+    <string name="toastEmailResentSuccess">Código reenviado com sucesso</string>
+    <string name="toastRegisterUserSuccess">Usuário cadastrado com sucesso!</string>
+    <string name="toastRegistrationUserError">Usuário não cadastrado corretamente!</string>
+    <string name="toastInvalidCode">Código Inválido!</string>
+    <string name="toastTimeResentCode">Aguarde %1$d segundos para reenviar o código.</string>
 
 
     <!-- TextLong -->
     <string name="longTextEnterEmail">Por favor, informe seu e-mail cadastrado no campo de E-mail, em seguida pressione (Esqueci Minha Senha)</string>
     <string name="longTextSelectBackup">Selecione o arquivo enviado para seu email!</string>
     <string name="longtextSuccessRestoration">Seus dados foram restaurados com sucesso neste dispositivo.\n Agora basta realizar login no Kariti e continuar usando.</string>
+    <string name="longTextEmailSentValidation">Código de validação enviado para %1$s.\n\nPor favor, verifique sua caixa de e-mail.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,6 +29,11 @@ public class CodeValidationActivity extends AppCompatActivity {
     private static final long WAITING_TIME = 60000;
     DataBaseKariti dataBase;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,7 @@ public class CodeValidationActivity extends AppCompatActivity {
         email = getIntent().getExtras().getString("email");
         code = getIntent().getExtras().getString("codigo");
 
-        String msg = "Código de validação enviado para " + email +"\n\nPor favor, verifique sua caixa de e-mail.";
+        String msg = getString(R.string.longTextEmailSentValidation, email);
         msgValidation.setText(msg);
 
         startTime(); // Inicia o tempo de 1 minuto
@@ -71,10 +77,10 @@ public class CodeValidationActivity extends AppCompatActivity {
         textViewResendCode.setOnClickListener(v -> {
             code = generateCode.gerarVerificador();
             if (sendCode.enviaCodigo(email, code)){
-                Toast.makeText(this, "Código reenviado com sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastEmailResentSuccess), Toast.LENGTH_SHORT).show();
                 startTime();
             } else {
-                Toast.makeText(this, "Erro: Email não Enviado!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastEmailNotSent), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -92,19 +98,19 @@ public class CodeValidationActivity extends AppCompatActivity {
                     if (identifier == 0) {
                         Boolean insertUserBD = dataBase.insertUser(nameUser, password, email);
                         if (insertUserBD == null) {
-                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (insertUserBD) {
                             startLoginActivity();
                         } else {
-                            Toast.makeText(this, "Erro: Usuário não registrado corretamente! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastRegistrationUserError), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         startUpdatePassword();
                     }
                 } else {
-                    Toast.makeText(this, "Código Inválido!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInvalidCode), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e){
                 Log.e("kariti", e.toString());
@@ -144,7 +150,7 @@ public class CodeValidationActivity extends AppCompatActivity {
      * Este método inicializa a tela de Login
      */
     private void startLoginActivity(){
-        Toast.makeText(this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.toastRegisterUserSuccess), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
@@ -167,8 +173,8 @@ public class CodeValidationActivity extends AppCompatActivity {
         new CountDownTimer(WAITING_TIME, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                long segundosRestantes = millisUntilFinished / 1000;
-                textViewTime.setText(String.format("%s","Aguarde " + segundosRestantes+" segundos para reeviar o código."));
+                long s = millisUntilFinished / 1000;
+                textViewTime.setText(getString(R.string.toastTimeResentCode, s));
             }
 
             public void onFinish() {

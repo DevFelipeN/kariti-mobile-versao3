@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -51,6 +52,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
     TextView textViewBackup;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_registration);
@@ -70,11 +76,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
         sendCode = new SendCodeValidation();
         generateCode = new GenerateCodeValidation();
 
-        btnRegistration.setOnClickListener(v ->{
+        btnRegistration.setOnClickListener(v -> {
             btnRegistration.setEnabled(false);
             try {
                 if (!CheckConnectionInternet.verificaConexao(this)) {
-                    Toast.makeText(UserRegistrationActivity.this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, getString(R.string.toastNotConnection), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 name = editTextName.getText().toString().trim();
@@ -82,15 +88,15 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 password = editTextPassword.getText().toString().trim();
                 confirmPassword = editTextConfirmedPassword.getText().toString().trim();
                 if (name.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
-                    Toast.makeText(this, "Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastFieldsNotFilled), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    Toast.makeText(UserRegistrationActivity.this, "O e-mail informado é inválido!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, getString(R.string.toastInvalidEmail), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!password.equals(confirmPassword)) {
-                    Toast.makeText(UserRegistrationActivity.this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, getString(R.string.toastDivergentPasswords), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Integer checkEmailExistsBD = dataBase.checkUserEmail(email); //verifica se existe este usuario no banco
@@ -99,12 +105,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     if (sendCode.enviaCodigo(email, code)) {
                         startValidationCodeActivity();
                     } else {
-                        Toast.makeText(UserRegistrationActivity.this, "Email não Enviado!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserRegistrationActivity.this, getString(R.string.toastEmailNotSent), Toast.LENGTH_SHORT).show();
                     }
                 } else if (checkEmailExistsBD.equals(-1)) {
-                    Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(UserRegistrationActivity.this, "Já existe um usuário associado a esse e-mail, cadastrado!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, getString(R.string.toastEmailAlreadyUsed), Toast.LENGTH_SHORT).show();
                 }
             }catch (Exception e){
                 Log.e("kariti", e.toString());
@@ -191,7 +197,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
     /**
-     * Dado um arquivo .zip selecionado pelo usuario, reerente ao backup do Kariti
+     * Dado um arquivo ZIP selecionado pelo usuario, reefente ao backup do Kariti
      * este método gerencia todo o processo de restauração do banco de dados no dispositivo atual
      * @param dbUri parâmetro contendo o endereço do arquivo selecionado
      */
@@ -199,13 +205,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
         try {
             File fileBackup = extractDataBase(dbUri);
             if (fileBackup == null) {
-                Toast.makeText(this, "Erro na restauração dos seus dados no Kariti!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastRestoreError), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             JSONObject jsonObject = extrairJson(dbUri);
             if (jsonObject == null) {
-                Toast.makeText(this, "Erro restauração dos seus dados no Kariti!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastRestoreError), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -222,11 +228,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
             int currentVersion = dataBase.getDatabaseVersion();
 
             if (backupVersion > currentVersion) {
-                Toast.makeText(this, "Este backup requer uma versão mais recente do app!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.toastBackupVersionOld), Toast.LENGTH_LONG).show();
                 return;
             }
             if (backupVersion < currentVersion) {
-                Toast.makeText(this, "Inválido, este backup é uma versão mais antiga do app!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.toastBackupVersionSuperior), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -253,14 +259,14 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("kariti", e.toString());
-            Toast.makeText(this, "Erro na restauração dos seus dados no Kariti!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.toastBackupRestorationError), Toast.LENGTH_LONG).show();
         }
     }
     private void selectFileBackupDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI")
-                .setMessage("Selecione o arquivo enviado para seu email!")
-                .setPositiveButton("Selecionar", (dialog, which) -> {
+        builder.setTitle(getString(R.string.app_name_capital_letter))
+                .setMessage(getString(R.string.longTextSelectBackup))
+                .setPositiveButton(getString(R.string.selectDescription), (dialog, which) -> {
                     displayFiles();
                     dialog.dismiss();
                 });
@@ -270,10 +276,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     private void sucessRestoration(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI")
-                .setMessage("Seus dados foram restaurados com sucesso neste dispositivo.\n" +
-                        "Agora basta realizar login no Kariti e continuar usando.")
-                .setPositiveButton("OK", (dialog, which) -> {
+        builder.setTitle(getString(R.string.app_name_capital_letter))
+                .setMessage(getString(R.string.longtextSuccessRestoration))
+                .setPositiveButton(getString(R.string.okDescription), (dialog, which) -> {
                     dialog.dismiss();
                     finish();
                 });

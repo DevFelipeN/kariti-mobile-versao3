@@ -13,6 +13,7 @@
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
+    <string name="okDescription">OK</string>
     <string name="optional_description">opcional</string>
     <string name="login_description">Login</string>
     <string name="forgot_password_description">Esqueci minha senha</string>
@@ -26,13 +27,14 @@
     <string name="language_portuguese">Português - Brasil (pt_br)</string>
     <string name="language_English">Inglês (en)</string>
     <string name="language_title">Selecione o idioma</string>
+    <string name="selectDescription">Selecionar</string>
 
     <!--Usuario-->
     <string name="user_name_obg">Nome Completo*</string>
     <string name="user_email_obg">E-mail*</string>
     <string name="user_email">E-mail</string>
     <string name="user_enter_your_email">Informe seu e-mail</string>
-    <string name="password_registration">Informe uma senha</string>
+    <string name="password_registration">Informe uma senha*</string>
     <string name="password_login">Senha de acesso*</string>
     <string name="password_registration_check">Confirmar senha*</string>
     <string name="validation_description">Validar</string>
@@ -179,10 +181,20 @@
     <string name="toastEmailNotFound">E-mail não encontrado!</string>
     <string name="toastEmailNotSent">E-mail não enviado!</string>
     <string name="alertDialogForgotPassword">Esqueceu sua senha?</string>
+    <string name="toastFieldsNotFilled">Por favor, preencher todos os campos!</string>
+    <string name="toastDivergentPasswords">Senhas divergentes!</string>
+    <string name="toastApplicationError">Fala de comunicação. Por favor, tente novamente!</string>
+    <string name="toastEmailAlreadyUsed">Já existe um usuário associado a esse e-mail, cadastrado!</string>
+    <string name="toastRestoreError">Erro na restauração dos seus dados no Kariti!</string>
+    <string name="toastBackupVersionOld">Este backup requer uma versão mais recente do app!</string>
+    <string name="toastBackupVersionSuperior">Erro. Este backup é uma versão mais antiga dos dados do Kariti!</string>
+    <string name="toastBackupRestorationError">Erro na restauração dos seus dados no Kariti!</string>
 
 
     <!-- TextLong -->
     <string name="longTextEnterEmail">Por favor, informe seu e-mail cadastrado no campo de E-mail, em seguida pressione (Esqueci Minha Senha)</string>
+    <string name="longTextSelectBackup">Selecione o arquivo enviado para seu email!</string>
+    <string name="longtextSuccessRestoration">Seus dados foram restaurados com sucesso neste dispositivo.\n Agora basta realizar login no Kariti e continuar usando.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -4,23 +4,24 @@
     <string name="app_name_capital_letter">KARITI</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
-    <string name="click_here_description">Clique aqui </string>
+    <string name="click_here_description">Click here </string>
     <string name="create_account_description">Create Account</string>
     <string name="button_continue">Continuar</string>
     <string name="change_device_description">Mudar de dispositivo</string>
-    <string name="if_change_device_description">Mudança de dipositivo? </string>
+    <string name="if_change_device_description">Change device?</string>
     <string name="yes_description">SIM</string>
     <string name="not_description">NÃO</string>
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
+    <string name="okDescription">OK</string>
     <string name="optional_description">opcional</string>
     <string name="login_description">Login</string>
     <string name="forgot_password_description">Forgot Password?</string>
     <string name="enter_your_login_description">Enter your email*</string>
     <string name="enter_your_password_description">Enter your password*</string>
     <string name="enter_description">Sign In</string>
-    <string name="register_description">Cadastrar</string>
+    <string name="register_description">Register</string>
     <string name="register_description_welcome">Register</string>
     <string name="teacher_name_description">Nome do professor</string>
     <string name="buttonDefaultPassword">Login without password</string>
@@ -28,17 +29,18 @@
     <string name="language_portuguese">Portuguese - Brazil (pt_br)</string>
     <string name="language_English">English (en)</string>
     <string name="language_title">Select language</string>
+    <string name="selectDescription">Select</string>
 
     <!--Usuario-->
-    <string name="user_name_obg">Nome Completo*</string>
+    <string name="user_name_obg">Full Name*</string>
     <string name="user_email_obg">Email*</string>
     <string name="user_email">E-mail</string>
     <string name="user_enter_your_email">Informe seu e-mail</string>
-    <string name="password_registration">Digite sua senha</string>
+    <string name="password_registration">Enter a password*</string>
     <string name="new_password_description">Nova senha*</string>
     <string name="enter_your_new_password">Informe a nova senha*</string>
-    <string name="password_login">Senha de Acesso*</string>
-    <string name="password_registration_check">Confirmar Senha*</string>
+    <string name="password_login">Access password*</string>
+    <string name="password_registration_check">Confirm password*</string>
     <string name="validation_description">Validar</string>
     <string name="cancel_description">Cancelar</string>
     <string name="resend_code_validation">Reenviar código</string>
@@ -176,9 +178,20 @@
     <string name="toastEmailNotFound">Email not found!</string>
     <string name="toastEmailNotSent">Email not sent!</string>
     <string name="alertDialogForgotPassword">Forgot your password?</string>
+    <string name="toastFieldsNotFilled">Please fill in all fields!</string>
+    <string name="toastDivergentPasswords">Passwords do not match!</string>
+    <string name="toastApplicationError">Communication error. Please try again!</string>
+    <string name="toastEmailAlreadyUsed">A user is already registered with this email address!</string>
+    <string name="toastRestoreError">Error restoring your data in Kariti!</string>
+    <string name="toastBackupVersionOld">This backup requires a newer version of the app!</string>
+    <string name="toastBackupVersionSuperior">Error. This backup is an older version of the Kariti data!</string>
+    <string name="toastBackupRestorationError">Error restoring your data in Kariti!</string>
+
 
     <!-- TextLong -->
     <string name="longTextEnterEmail">Please enter your registered email in the Email field, then press (Forgot Password).</string>
+    <string name="longTextSelectBackup">Select the file sent to your email!</string>
+    <string name="longtextSuccessRestoration">Your data has been successfully restored on this device.\n Now just log in to Kariti and continue using it.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

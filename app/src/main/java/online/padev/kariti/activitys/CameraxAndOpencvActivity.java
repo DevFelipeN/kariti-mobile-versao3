@@ -1,0 +1,616 @@
+package online.padev.kariti.activitys;
+
+import static androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
+
+import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
+import static online.padev.kariti.utils.ImageDirectory.saveBitmapAndGetPath;
+import static online.padev.kariti.utils.MatToBitmap.toBitmap;
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.ImageFormat;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.AspectRatio;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import online.padev.kariti.R;
+import online.padev.kariti.entity.Answer_key;
+import online.padev.kariti.entity.Exam;
+import online.padev.kariti.utils.BitmapLuminanceSource;
+import online.padev.kariti.correction.Circle;
+import online.padev.kariti.correction.CoreKariti;
+import online.padev.kariti.database.DataBaseKariti;
+
+public class CameraxAndOpencvActivity extends AppCompatActivity {
+
+    private PreviewView camera;
+    private ExecutorService cameraExecutor;
+    private ProcessCameraProvider cameraProvider;
+    private ImageView edgeImageView;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    DataBaseKariti dataBase;
+    Exam exam;
+    ImageAnalysis imageAnalysis;
+    Integer id_provaCaptured, id_studentBD;
+    private boolean isActivityFinishing = false; // Garante que não seja realizada mais de uma chamada a proxima activity que exibe a imagem com a correção
+    private boolean isCorrectSucess = false; // Indica que a correção foi ou não bem sucedida
+    private boolean isImageProx = false; //Controla o fluxo de imagens a serem processadas (evita que multiplas imagens sejam processadas por vez)
+    private int typeMessage;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camerax_and_opencv);
+
+        camera = findViewById(R.id.previewCameraX);
+        cameraExecutor = Executors.newSingleThreadExecutor();
+        edgeImageView = findViewById(R.id.edgeImageView);
+
+        dataBase = new DataBaseKariti(this);
+
+        requestCameraPermission();
+        startCamera();
+
+        if (!OpenCVLoader.initDebug()) {
+            Log.e("OpenCV", "Falha ao carregar o OpenCV!");
+        }else{
+            Log.e("OpenCV", "OpenCV carregado com sucesso!");
+        }
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                    finish();
+            }
+        });
+
+    }
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        String msg = "";
+        if (typeMessage == 1) {
+            msg = "Prova não cadastrada. \n\n" +
+                    "Verifique se a escola selecionada é a qual pertence essa prova!";
+        }
+        if (typeMessage == 2){
+            msg = "Para corrigir esta prova você precisa realizar login no Kariti";
+        }
+        if (typeMessage == 3){
+            msg = "Cartão gerado em prova rápida.\n\n" +
+                    "Portanto, só pode ser corrigido na mesma seção!";
+        }
+        if (!Arrays.asList(0,4,5).contains(typeMessage)){
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void startCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                cameraProvider = cameraProviderFuture.get();
+                Preview preview = new Preview.Builder()
+                        //.setTargetResolution(new android.util.Size(1920, 1080))
+                        //.setTargetAspectRatio(AspectRatio.RATIO_16_9)
+
+                        .build();
+                new ImageCapture.Builder()
+                        .setCaptureMode(CAPTURE_MODE_MAXIMIZE_QUALITY)
+                        .build();
+
+                preview.setSurfaceProvider(camera.getSurfaceProvider());
+
+                imageAnalysis = new ImageAnalysis.Builder()
+                        .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        //.setBackpressureStrategy(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
+                        .build();
+                imageAnalysis.setAnalyzer(cameraExecutor, this::processImage);
+
+                CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+                cameraProvider.unbindAll();
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
+                //cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+            } catch (Exception e) {
+                Log.e("CameraX", "Erro ao abrir a câmera: " + e.getMessage());
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void processImage(@NonNull ImageProxy imageProxy) {
+        try {
+            if (!isImageProx) {
+                isImageProx = true;
+                startCorrectCard(imageProxy); //threshold OTSU
+            } else imageProxy.close();
+        }catch(Exception e){
+            Log.e("kariti", e.toString());
+        }
+    }
+
+    public void startCorrectCard(ImageProxy imageProxy){
+        try {
+            Mat mat = imageProxyToMat(imageProxy);
+            if (mat == null) {
+                return;
+            }
+            // Corrige a orientação da imagem
+            int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
+            if (rotationDegrees != 0) {
+                Mat rotatedMat = new Mat();
+                org.opencv.core.Core.rotate(mat, rotatedMat, rotationDegrees == 90 ? org.opencv.core.Core.ROTATE_90_CLOCKWISE :
+                        rotationDegrees == 180 ? org.opencv.core.Core.ROTATE_180 :
+                                rotationDegrees == 270 ? org.opencv.core.Core.ROTATE_90_COUNTERCLOCKWISE :
+                                        org.opencv.core.Core.ROTATE_90_CLOCKWISE);
+                mat.release();
+                mat = rotatedMat;
+            }
+
+            Mat matToWarp = mat.clone();//Imagem para aplicar o corte
+            Mat matAux = mat.clone();//Imagem para ser desenhado os contornos
+
+            //Log.e("matToWarp", "Channels: " + matToWarp.channels() + ", Type: " + matToWarp.type());
+
+            //Aumenta o brilho e contranste da imagem
+            Mat matEnhanced = enhanceImage(matAux);
+            if(matEnhanced == null){
+                return;
+            }
+
+            // Converte para escala de cinza e aplica o desfoque
+            Mat gray = new Mat();
+            Imgproc.cvtColor(matEnhanced, gray, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.GaussianBlur(gray, gray, new Size(5, 5), 0);
+
+            // Binariza a imagem
+            Mat binaryImage = new Mat();
+            Imgproc.threshold(gray, binaryImage, 0, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+
+            // Encontrar contornos na imagem
+            List<MatOfPoint> contours = new ArrayList<>();
+            Mat hierarchy = new Mat();
+            Imgproc.findContours(binaryImage, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+            List<Circle> circulos = new ArrayList<>();
+
+            //Seleciona os circulos encontrados
+            for (MatOfPoint contour : contours) {
+                Point center = new Point();
+                float[] radius = new float[1];
+                Imgproc.minEnclosingCircle(new MatOfPoint2f(contour.toArray()), center, radius);
+
+                double areaContour = Imgproc.contourArea(contour);
+                double areaCircle = Math.PI * Math.pow(radius[0], 2);
+
+                if (areaCircle > 0) {
+                    double circularity = areaContour / areaCircle;
+                    if (circularity >= 0.85) {
+                        Rect boundingRect = Imgproc.boundingRect(contour);
+                        Circle circle = new Circle(center.x, center.y, radius[0], boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height, contour, Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true));
+                        circulos.add(circle);
+                        Imgproc.drawContours(matAux, Collections.singletonList(contour), -1, new Scalar(0, 255, 0), 2);
+                    }
+                }
+            }
+
+            // Ordenar círculos por tamanho do raio em ordem decrescente
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                circulos.sort((a, b) -> Double.compare(b.radius, a.radius));
+            }else{
+                Collections.sort(circulos, (o1, o2) -> {
+                    //return (int) (o2.radius - o1.radius);
+                    return Double.compare(o2.radius, o1.radius);
+                });
+            }
+
+            int circ = 0;
+            List<Point> circlesInterest = new ArrayList<>();
+
+            //Seleciona os circulos de interesse (circulos que possuam outro circulo dentro)
+            boolean[] used = new boolean[circulos.size()];
+            for (int i = 0; i < circulos.size() - 1; i++) {
+                if (used[i]){
+                    continue;
+                }
+                used[i] = true;
+                Circle circExt = circulos.get(i);
+                int contador = 0;
+                for (int j = i + 1; j < circulos.size(); j++){
+                    if (used[j]){
+                        continue;
+                    }
+                    Circle circInt = circulos.get(j);
+                    if (isInside(circExt, circInt)) {
+                        Imgproc.drawContours(matAux, Collections.singletonList(circInt.contour), -1, new Scalar(0, 0, 255), 1);
+                        used[j] = true;
+                        contador++;
+                    }
+                }
+                if (contador >= 1) {
+                    circlesInterest.add(new Point(circExt.x, circExt.y));
+                    circ++;
+                    Imgproc.drawContours(matAux, Collections.singletonList(circExt.contour), -1, new Scalar(255, 0, 0), -1);
+                    //Point center = new Point(circExt.x, circExt.y);
+                    //Imgproc.circle(matToWarp, center, (int) (circExt.radius + circExt.radius * 0.8), new Scalar(255, 255, 255), -1);
+                }
+            }
+
+            List<Point> listOrganized = new ArrayList<>();
+            Mat matWarp = new Mat(); //Objeto para Imagem cortada
+            String filePath = "";
+            String resultQrCode = "";
+            String nameCartao = "";
+
+            //Desenha um retangulo com base nos pontos de interesse encontrados
+            if(circ == 4){
+                listOrganized = organize(circlesInterest);
+                Point previous = listOrganized.get(0);
+                for(Point p : listOrganized){
+                    Point start = new Point(previous.x, previous.y);
+                    Point end = new Point(p.x, p.y);
+                    Imgproc.line(matAux, start, end, new Scalar(0, 0, 255), 1);
+                    previous = p;
+                }
+
+                Point start = new Point(previous.x, previous.y);
+                Point end = new Point(listOrganized.get(0).x, listOrganized.get(0).y);
+                Imgproc.line(matAux, start, end, new Scalar(0, 0, 255), 1);
+            }
+
+            //Converte imagem para ser mostrada na tela
+            Bitmap imgBitmap = toBitmap(matAux);
+            HashMap<Integer, Integer> correction = new HashMap<>();
+            String gabaritoDefault = "";
+
+            if (circ == 4){
+                Bitmap imgToQrCode = toBitmap(mat);
+                String textQrCode = scanQRCodeFromBitmap(imgToQrCode);
+                if(textQrCode != null){
+                    matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
+                    resultQrCode = processeQrCode(textQrCode);
+                    String[] a = resultQrCode.split("_");
+
+                    // Verifica se a prova capaturada é uma prova cujo o QRCode apresente o padrão # (isso indica que essa prova pode estar cadastrada)
+                    if (String.valueOf(textQrCode.charAt(0)).equals("#")){
+                        if (DataBaseKariti.USER_ID != null) { // Isso garante que esse tipo de cartão seja corrigido apenas com o usuário logado
+
+                            id_provaCaptured = Integer.parseInt(a[0]);
+                            id_studentBD = Integer.parseInt(a[1]);
+
+                            if (!dataBase.checkIfExistExam(id_provaCaptured) || !dataBase.checkExistStudent(id_studentBD) ) {
+                                mat.release();
+                                typeMessage = 1;
+                                finish();
+                            }
+
+                            exam = new Exam(id_provaCaptured, dataBase);
+
+                            //Versão 3
+                            CoreKariti core = new CoreKariti(matWarp, exam, dataBase, id_studentBD);
+                            correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                        } else {
+                            mat.release();
+                            typeMessage = 2;
+                            finish();
+                        }
+                    } else { // Entra aqui se a prova capturada não esta cadastrada
+                        if (DataBaseKariti.USER_ID == null) { //Isso garante que esse tipo de cartão seja corrigido apenas em prova rápida
+                                exam = new Exam();
+                                exam.setExam_id(0);
+                                exam.setNumQuestions(Integer.parseInt(a[0]));
+                                exam.setNumAlternatives(Integer.parseInt(a[1]));
+                            if (Answer_key.answerkeyDefault != null && !Answer_key.answerkeyDefault.isEmpty()) {
+                                if (exam.getNumQuestions() == Exam.numQuestsDefault && exam.getNumAlternatives() == Exam.numAlternativesDefault) {
+
+                                    for (Answer_key g : Answer_key.answerkeyDefault){
+                                        gabaritoDefault += g.getResponse();
+                                    }
+
+                                    //Versão 3
+                                    CoreKariti core = new CoreKariti(matWarp, exam, gabaritoDefault);
+                                    correction = core.correctCard(); // Versão 3: corrigindo com o Kariti Mobile
+                                }else {
+                                    //mat.release();
+                                    typeMessage = 4;
+                                    Bitmap imgWarp = toBitmap(matWarp);
+                                    nameCartao = resultQrCode+"_"+dataHoraAtual();
+                                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this);
+                                    startGabaritoDefault(filePath);
+                                }
+                            } else {
+                                //mat.release();
+                                typeMessage  = 5;
+                                Bitmap imgWarp = toBitmap(matWarp);
+                                nameCartao = resultQrCode+"_"+dataHoraAtual();
+                                filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this);
+                                startGabaritoDefault(filePath);
+                            }
+                        }else {
+                            mat.release();
+                            typeMessage = 3;
+                            finish();
+                        }
+                    }
+                }
+                if(correction != null && !correction.isEmpty()){
+                    Bitmap imgWarp = toBitmap(matWarp);
+                    String complement = dataHoraAtual();
+                    nameCartao = resultQrCode+"_"+complement;
+                    filePath = saveBitmapAndGetPath(imgWarp, nameCartao, this); //Salva a imagem cortada
+                    isCorrectSucess = true;
+                }
+            }
+            if(!isActivityFinishing && isCorrectSucess){
+                isActivityFinishing = true;
+                cameraExecutor.shutdown();
+                mat.release();
+                if (exam.getExam_id() == 0){
+                    Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
+                    intent.putExtra("filePath", filePath);
+                    intent.putExtra("status", 1);
+                    intent.putExtra("gabarito", gabaritoDefault);
+                    intent.putExtra("resultGabarito", correction);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Intent intent = new Intent(this, ViewCardCorrectedActivity.class);
+                    intent.putExtra("filePath", filePath);
+                    intent.putExtra("id_prova", exam.getExam_id());
+                    intent.putExtra("status", 0);
+                    intent.putExtra("id_aluno", id_studentBD);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+            runOnUiThread(() -> edgeImageView.setImageBitmap(imgBitmap));
+        }catch (Exception e){
+            Log.e("ERRO", e.toString());
+        }finally {
+            isImageProx = false;
+            imageProxy.close();
+        }
+
+    }
+
+    private boolean isInside(Circle circExt, Circle circInt) {
+        double xInt = circInt.x, yInt = circInt.y;
+        double xExtI = circExt.xR, yExtI = circExt.yR;
+        double xExtF = xExtI + circExt.wR, yExtF = yExtI + circExt.hR;
+
+        return !(xInt < xExtI || xInt > xExtF || yInt < yExtI || yInt > yExtF);
+    }
+
+    private Mat imageProxyToMat(@NonNull ImageProxy image) {
+        try {
+            // Verifica o formato da imagem
+            if (image.getFormat() != ImageFormat.YUV_420_888) {
+                Log.e("ProxToMat", "Formato de imagem não suportado: " + image.getFormat());
+                return null;
+            }
+
+            // Obtém os planos Y, U e V
+            ImageProxy.PlaneProxy yPlane = image.getPlanes()[0];
+            ImageProxy.PlaneProxy uPlane = image.getPlanes()[1];
+            ImageProxy.PlaneProxy vPlane = image.getPlanes()[2];
+
+            // Obtenha dimensões e stride
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            int yRowStride = yPlane.getRowStride();
+            int uvRowStride = uPlane.getRowStride();
+            int uvPixelStride = uPlane.getPixelStride();
+
+            // Buffer NV21 (YUV format)
+            byte[] nv21 = new byte[width * height + (width * height) / 2];
+
+            // Preencha o plano Y
+            ByteBuffer yBuffer = yPlane.getBuffer();
+            for (int row = 0; row < height; row++) {
+                yBuffer.position(row * yRowStride);
+                yBuffer.get(nv21, row * width, width);
+            }
+
+            // Preencha os planos UV (intercalados)
+            ByteBuffer uBuffer = uPlane.getBuffer();
+            ByteBuffer vBuffer = vPlane.getBuffer();
+            int uvHeight = height / 2; // UV é metade da altura de Y
+            for (int row = 0; row < uvHeight; row++) {
+                for (int col = 0; col < width / 2; col++) {
+                    int uvIndex = width * height + row * width + col * 2;
+                    nv21[uvIndex] = vBuffer.get(row * uvRowStride + col * uvPixelStride); // V
+                    nv21[uvIndex + 1] = uBuffer.get(row * uvRowStride + col * uvPixelStride); // U
+                }
+            }
+
+            // Cria um Mat YUV e converte para RGB
+            Mat yuvMat = new Mat(height + height / 2, width, CvType.CV_8UC1);
+            yuvMat.put(0, 0, nv21);
+
+            Mat rgbMat = new Mat();
+            Imgproc.cvtColor(yuvMat, rgbMat, Imgproc.COLOR_YUV2RGB_NV21);
+            yuvMat.release();
+
+            return rgbMat;
+
+        } catch (Exception e) {
+            Log.e("ProxToMat", "Erro ao converter ImageProxy para Mat: " + e.getMessage());
+            return null;
+        }
+    }
+    private String processeQrCode(String qrCode){
+        String qrCodeConteudo = qrCode.replaceAll("[#$]", "");
+        String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
+        String id_prova = partes[0];
+        String id_aluno = partes[1];
+        return id_prova+"_"+id_aluno;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cameraExecutor.shutdown();
+        shutdownExecutorService();
+    }
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.CAMERA}, 101);
+        } else {
+            startCamera();
+        }
+    }
+    private void shutdownExecutorService() {
+        // Chama shutdown para não aceitar novas tarefas
+        executor.shutdown();
+        try {
+            // Aguarda a finalização das tarefas em execução
+            if (!executor.awaitTermination(60, TimeUnit.SECONDS)){
+                executor.shutdownNow(); // Força o encerramento se não terminar no tempo especificado
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow(); // Força o encerramento se a espera for interrompida
+            Thread.currentThread().interrupt(); // Restaura o estado de interrupção
+        }
+    }
+    private double distance(Point p1, Point p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    }
+
+    private List<Point> organize(List<Point> listaInteresse){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            listaInteresse.sort((a, b) -> Double.compare(b.y, a.y));
+        }else{
+            Collections.sort(listaInteresse, new Comparator<Point>() {
+                @Override
+                public int compare(Point o1, Point o2) {
+                    return (int) (o2.y - o1.y);
+                }
+            });
+        }
+        if(listaInteresse.get(0).x < listaInteresse.get(1).x){
+            Collections.swap(listaInteresse, 0, 1);
+        }
+        if(listaInteresse.get(2).x > listaInteresse.get(3).x){
+            Collections.swap(listaInteresse, 2, 3);
+        }
+        return listaInteresse;
+    }
+
+    private Mat warp(Mat imgMat, List<Point> pontosInteresse){
+        Point[] pointsOrigin = new Point[] {
+                new Point(pontosInteresse.get(2).x, pontosInteresse.get(2).y),  // canto superior esquerdo
+                new Point(pontosInteresse.get(3).x, pontosInteresse.get(3).y),  // canto superior direito
+                new Point(pontosInteresse.get(1).x, pontosInteresse.get(1).y),  // canto inferior esquerdo
+                new Point(pontosInteresse.get(0).x, pontosInteresse.get(0).y)   // canto inferior direito
+        };
+
+        double width = distance(pointsOrigin[0], pointsOrigin[1]); // Distância entre o ponto superior esquerdo e superior direito
+        double height = distance(pointsOrigin[0], pointsOrigin[2]); // Distância entre o ponto superior esquerdo e inferior esquerdo
+
+        Point[] pointsDestin = new Point[] {
+                new Point(0, 0),       // canto superior esquerdo na nova imagem
+                new Point(width, 0),      // canto superior direito
+                new Point(0, height),     // canto inferior esquerdo
+                new Point(width, height)     // canto inferior direito
+        };
+
+        MatOfPoint2f matOrigin = new MatOfPoint2f(pointsOrigin);
+        MatOfPoint2f matDestin = new MatOfPoint2f(pointsDestin);
+
+        Mat transfPerspective = Imgproc.getPerspectiveTransform(matOrigin, matDestin);
+
+        Mat outPutImgMat = new Mat();
+
+        Imgproc.warpPerspective(imgMat, outPutImgMat, transfPerspective, new Size(width, height));
+
+
+        return outPutImgMat;
+    }
+
+    private String scanQRCodeFromBitmap(Bitmap bitmap) {
+        String qrCodeResult = null;
+        try {
+            // Converte o Bitmap para um BinaryBitmap
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BitmapLuminanceSource(bitmap)));
+
+            // Inicializa o leitor de QR Code
+            MultiFormatReader reader = new MultiFormatReader();
+            Result result = reader.decode(binaryBitmap);
+
+            // Extrai o texto do QR Code, caso encontrado
+            qrCodeResult = result.getText();
+
+        } catch (Exception e) {
+            Log.e("QRcode", e.toString());
+            return null;
+        }
+        return qrCodeResult;
+    }
+    private void startGabaritoDefault(String filePath){
+        if (!isActivityFinishing) {
+            isActivityFinishing = true; //Isso garante que a próxima activity seja invocada apenas uma vez
+            Intent intent = new Intent(this, AnswerKeyActivity.class);
+            intent.putExtra("direcao", "cardDefault");
+            intent.putExtra("typeMessage", typeMessage);
+            intent.putExtra("filePath", filePath);
+            intent.putExtra("prova", exam);
+            startActivity(intent);
+            finish();
+        }
+    }
+    private String dataHoraAtual(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault());
+        Date date = new Date();
+        return sdf.format(date);
+    }
+}

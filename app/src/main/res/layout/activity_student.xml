@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fundo_night"
-    tools:context=".StudentActivity">
+    tools:context=".activitys.StudentActivity">
 
     <include
         android:id="@+id/include"

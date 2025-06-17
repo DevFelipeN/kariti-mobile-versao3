@@ -19,7 +19,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".Kariti"
+        android:name=".languageSetting.Kariti"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
@@ -34,30 +34,30 @@
         tools:targetApi="26">
 
         <activity
-            android:name=".StudentSelectedActivity"
+            android:name=".activitys.StudentSelectedActivity"
             android:exported="false" />
         <activity
-            android:name=".ProvaGenerateCardDefaultActivity"
+            android:name=".activitys.ExamGenerateCardDefaultActivity"
             android:exported="false" />
         <activity
-            android:name=".ProvaFastDefaultActivity"
+            android:name=".activitys.ExamFastDefaultActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewCardCorrectedActivity"
+            android:name=".activitys.ViewCardCorrectedActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraxAndOpencvActivity"
+            android:name=".activitys.CameraxAndOpencvActivity"
             android:exported="false" />
         <activity
-            android:name=".AnimationCorrectionActivity"
+            android:name=".activitys.AnimationCorrectionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaEditActivity"
+            android:name=".activitys.ExamEditActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaCorrectedStudentActivity"
+            android:name=".activitys.ExamCorrectedStudentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -66,83 +66,83 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
         <activity
-            android:name=".ProvaCorrectedActivity"
+            android:name=".activitys.ExamCorrectedActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaViewActivity"
+            android:name=".activitys.ExamViewActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaGenerateCardRegisteredActivity"
+            android:name=".activitys.ExamGenerateCardRegisteredActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GabaritoActivity"
+            android:name=".activitys.AnswerKeyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaRegistrationActivity"
+            android:name=".activitys.ExamRegistrationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".StudentEditActivity"
+            android:name=".activitys.StudentEditActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ClassEditActivity"
+            android:name=".activitys.ClassEditActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ClassDetailsActivity"
+            android:name=".activitys.ClassDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ClassActivity"
+            android:name=".activitys.ClassActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ClassRegistrationActivity"
+            android:name=".activitys.ClassRegistrationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SchoolDisabledActivity"
+            android:name=".activitys.SchoolDisabledActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProvaActivity"
+            android:name=".activitys.ExamActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UpdatePasswordActivity"
+            android:name=".activitys.UpdatePasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".StudentActivity"
+            android:name=".activitys.StudentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".StudentRegistrationActivity"
+            android:name=".activitys.StudentRegistrationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MenuInitialActivity"
+            android:name=".activitys.MenuInitialActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SchoolActivity"
+            android:name=".activitys.SchoolActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activitys.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CodeValidationActivity"
+            android:name=".activitys.CodeValidationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".activitys.WelcomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
@@ -153,7 +153,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserRegistrationActivity"
+            android:name=".activitys.UserRegistrationActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
 

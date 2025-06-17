@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/fundo_night"
     android:theme="@style/Theme.Kariti"
-    tools:context=".SchoolActivity"
+    tools:context=".activitys.SchoolActivity"
     tools:ignore="VisualLintBounds">
 
     <include

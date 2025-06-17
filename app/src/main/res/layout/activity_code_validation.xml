@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fundo_night"
-    tools:context="online.padev.kariti.CodeValidationActivity">
+    tools:context="online.padev.kariti.activitys.CodeValidationActivity">
 
     <TextView
         android:id="@+id/textViewMsgValidacao"

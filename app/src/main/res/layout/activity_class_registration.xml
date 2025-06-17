@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fundo_night"
-    tools:context="online.padev.kariti.ClassRegistrationActivity">
+    tools:context="online.padev.kariti.activitys.ClassRegistrationActivity">
 
     <include
         android:id="@+id/include"

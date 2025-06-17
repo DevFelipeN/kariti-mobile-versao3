@@ -1,5 +1,6 @@
 package online.padev.kariti;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -22,6 +23,11 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
     GifImageView gifLoading;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prova_fast_default);
@@ -33,7 +39,7 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
         btnCorrect = findViewById(R.id.buttonCorrigi);
         gifLoading = findViewById(R.id.loadingId);
 
-        textViewTitle.setText(String.format("%s", "Prova Rápida"));
+        textViewTitle.setText(getString(R.string.textTitleQuickTest));
 
         btnNewCard.setOnClickListener(v -> startNewCard());
         btnCorrect.setOnClickListener(v -> controllerCorrection());
@@ -69,17 +75,16 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
     private void outputController(){
         if (Answer_key.answerkeyDefault != null && !Answer_key.answerkeyDefault.isEmpty()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("ATENÇÃO!")
-                    .setMessage("Você possui um gabarito criado, ao confirmar essa ação o gabarito será perdido!\n\n" +
-                            "Deseja realmente sair?")
-                    .setPositiveButton("SIM", (dialog, which) -> {
+            builder.setTitle(getString(R.string.titleAttention))
+                    .setMessage(getString(R.string.longTextAnswerKeyRegister))
+                    .setPositiveButton(getString(R.string.yes_description), (dialog, which) -> {
                         dialog.dismiss();
                         Answer_key.answerkeyDefault.clear();
                         Exam.numQuestsDefault = 0;
                         Exam.numAlternativesDefault = 0;
                         finish();
                     })
-                    .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+                    .setNegativeButton(getString(R.string.not_description), (dialog, which) -> dialog.dismiss());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }else
@@ -88,36 +93,33 @@ public class ProvaFastDefaultActivity extends AppCompatActivity {
 
     private void help() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("Bem vindo(a) ao menu inicial de prova rápida. \n Aqui você pode gerar cartões respostas e corrigir seus cartões de maneira fácil e prática! \n\n" +
-                "• Na primeira opção você pode gerar um cartão, informando a quantidade de questões e alternativas da sua prova, em seguida imprimir a quantidade necessária para os alunos.\n\n" +
-                "• Na segunda opção você pode realizar a correção do cartão gerado na opção anterior, apenas apontando a câmera do Kariti para o cartão que por sua vez realiza a correção e exibe o resultado na sua tela.\n\n" +
-                "• Ao início de cada seção de correção será solicitado o preenchimento do gabarito da sua prova, com ele preenchido todos os cartões referentes a ele podem ser corrigidos sequencialmente. ");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp));
+        builder.setMessage(getString(R.string.longTextHelpQuickTest));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     private void notifyCorrectionOrganization(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Capture a imagem do cartão de cima, sobre superfície plana e com boa luminosidade");
-        builder.setPositiveButton("OK", (dialog, which) -> startCorrection());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextOrientationCapture));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> startCorrection());
         builder.show();
     }
 
     private void notifyGabaritoSave(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Você pussui um gabarito cadastrado. Deseja manter ou alterar o gabarito?");
-        builder.setPositiveButton("Alterar", (dialog, which) -> {
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextAnswerKeyIfAlter));
+        builder.setPositiveButton(getString(R.string.alterarDescription), (dialog, which) -> {
             Answer_key.answerkeyDefault.clear();
             Exam.numQuestsDefault = 0;
             Exam.numAlternativesDefault = 0;
-            Toast.makeText(this, "Capture o novo cartão!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastCaptureNewCard), Toast.LENGTH_SHORT).show();
             startCorrection();
         });
-        builder.setNegativeButton("Manter", ((dialog, which) -> startCorrection()));
+        builder.setNegativeButton(getString(R.string.manterDescription), ((dialog, which) -> startCorrection()));
         builder.show();
     }
 }

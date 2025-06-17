@@ -2,6 +2,8 @@
     <string name="welcome_description">WELCOME TO</string>
     <string name="app_name">Kariti</string>
     <string name="app_name_capital_letter">KARITI</string>
+    <string name="titleAttention">ATTENTION</string>
+    <string name="titleHelp">Help</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
     <string name="click_here_description">Click here </string>
@@ -9,13 +11,15 @@
     <string name="button_continue">Continuar</string>
     <string name="change_device_description">Mudar de dispositivo</string>
     <string name="if_change_device_description">Change device?</string>
-    <string name="yes_description">SIM</string>
-    <string name="not_description">NÃO</string>
+    <string name="yes_description">Yes</string>
+    <string name="not_description">N0</string>
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
     <string name="okDescription">OK</string>
     <string name="optional_description">opcional</string>
+    <string name="alterarDescription">Change</string>
+    <string name="manterDescription">Keep</string>
     <string name="login_description">Login</string>
     <string name="forgot_password_description">Forgot Password?</string>
     <string name="enter_your_login_description">Enter your email*</string>
@@ -95,11 +99,12 @@
 
     <!--    Prova-->
     <string name="textViewProva">Prova</string>
+    <string name="textTitleQuickTest">Quick Test</string>
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
-    <string name="buttonGerarCartao">Gerar Cartões</string>
-    <string name="buttonGerarCartaoRap">Gerar Cartão</string>
-    <string name="buttonCorrigirProva">Corrigir Prova</string>
+    <string name="buttonGerarCartao">Generate Cards</string>
+    <string name="buttonGerarCartaoRap">Generate Card</string>
+    <string name="buttonCorrigirProva">Grade Exam</string>
     <string name="buttonVisuProva">Visualizar Provas</string>
     <string name="textViewEditProva">Mais Opções </string>
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
@@ -144,7 +149,6 @@
     <string name="imgProfessor">Imagem Professor</string>
     <string name="imgBtnSeta">Icone Seta Prox</string>
     <string name="imgDelete">Botão de Deletar</string>
-    <string name="textAjuda">Ajuda</string>
     <string name="descritionScroll">Bloco do Gabarito</string>
     <string name="iconeTurma">Icone de Turma</string>
     <string name="iconeSearch">Icone de Pesquisa</string>
@@ -191,6 +195,7 @@
     <string name="toastRegistrationUserError">User not registered correctly!</string>
     <string name="toastInvalidCode">Invalid Code!</string>
     <string name="toastTimeResentCode">Please wait %1$d seconds to resend the code.</string>
+    <string name="toastCaptureNewCard">Capture the new card</string>
 
 
     <!-- TextLong -->
@@ -198,6 +203,13 @@
     <string name="longTextSelectBackup">Select the file sent to your email!</string>
     <string name="longtextSuccessRestoration">Your data has been successfully restored on this device.\n Now just log in to Kariti and continue using it.</string>
     <string name="longTextEmailSentValidation">Validation code sent to %1$s\n\nPlease check your email inbox.</string>
+    <string name="longTextAnswerKeyRegister">You have an answer key created. If you confirm this action, the answer key will be lost! \n\nDo you really want to exit?</string>
+    <string name="longTextOrientationCapture">Capture the image of the top card on a flat surface and with good lighting.</string>
+    <string name="longTextAnswerKeyIfAlter">You have an answer key registered. Do you want to keep or change the answer key?</string>
+    <string name="longTextHelpQuickTest">Welcome to the Quick Exam main menu. \n Here, you can generate answer sheets and correct them easily and conveniently! \n\n
+        • In the first option, you can generate an answer sheet by entering the number of questions and answer choices for your exam. Then, print as many copies as needed for your students.\n\n
+        • In the second option, you can correct the answer sheet generated in the previous step by simply pointing the Kariti camera at it. The app will automatically correct it and display the result on your screen.\n\n
+        • At the beginning of each correction session, you’ll be asked to fill in the answer key for your exam. Once completed, all answer sheets based on that key can be corrected in sequence.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

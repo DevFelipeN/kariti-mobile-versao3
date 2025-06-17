@@ -39,7 +39,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="7dp"
             android:background="@color/tranparente"
-            android:contentDescription="@string/textAjuda"
+            android:contentDescription="@string/titleHelp"
             android:src="@mipmap/question" />
 
     </LinearLayout>

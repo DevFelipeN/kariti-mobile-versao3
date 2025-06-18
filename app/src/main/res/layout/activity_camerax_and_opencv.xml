@@ -15,8 +15,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
-        android:text="Scannear Prova"
-        android:textSize="20sp" />
+        android:text="@string/titleCaptureCard"
+        android:textSize="24sp" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewCameraX"

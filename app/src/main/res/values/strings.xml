@@ -109,6 +109,7 @@
     <string name="buttonGerarCartao">Gerar Cartões</string>
     <string name="buttonGerarCartaoRap">Gerar Cartão</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
+    <string name="titleCaptureCard">Capturar Cartão</string>
     <string name="buttonVisuProva">Visualizar Provas</string>
     <string name="titleCardGenerateSuccess">Cartão de resposta gerado com sucesso</string>
     <string name="textViewEditProva">Mais Opções </string>
@@ -205,6 +206,9 @@
     <string name="toastInfoNumberQuestions">Informe o número de questões!</string>
     <string name="toastInfoNumberAlternatives">Informe o número de alternativas!</string>
     <string name="toastPermissionGranted">Permisão concedida com sucesso</string>
+    <string name="toastMsg1">Prova não cadastrada.\n\n Verifique se essa prova pertence a escola selecionada!</string>
+    <string name="toastMsg2">Para corrigir esta prova você precisa realizar login no Kariti!</string>
+    <string name="toastMsg3">Cartão gerado em prova rápida.\n\n Portanto, só pode ser corrigido na mesma seção!</string>
 
 
 

@@ -6,6 +6,7 @@ import static online.padev.kariti.utils.EnhanceImage.enhanceImage;
 import static online.padev.kariti.utils.ImageDirectory.saveBitmapAndGetPath;
 import static online.padev.kariti.utils.MatToBitmap.toBitmap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -64,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 import online.padev.kariti.R;
 import online.padev.kariti.entity.Answer_key;
 import online.padev.kariti.entity.Exam;
+import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.utils.BitmapLuminanceSource;
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
@@ -84,6 +86,11 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
     private boolean isCorrectSucess = false; // Indica que a correção foi ou não bem sucedida
     private boolean isImageProx = false; //Controla o fluxo de imagens a serem processadas (evita que multiplas imagens sejam processadas por vez)
     private int typeMessage;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,15 +124,13 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
         super.onDetachedFromWindow();
         String msg = "";
         if (typeMessage == 1) {
-            msg = "Prova não cadastrada. \n\n" +
-                    "Verifique se a escola selecionada é a qual pertence essa prova!";
+            msg = getString(R.string.toastMsg1);
         }
         if (typeMessage == 2){
-            msg = "Para corrigir esta prova você precisa realizar login no Kariti";
+            msg = getString(R.string.toastMsg2);
         }
         if (typeMessage == 3){
-            msg = "Cartão gerado em prova rápida.\n\n" +
-                    "Portanto, só pode ser corrigido na mesma seção!";
+            msg = getString(R.string.toastMsg3);
         }
         if (!Arrays.asList(0,4,5).contains(typeMessage)){
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();

@@ -27,7 +27,7 @@
         style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cadEscola"
+        android:text="@string/registerSchool"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/editTextNomeEscolaDialog"
         app:layout_constraintEnd_toEndOf="parent"

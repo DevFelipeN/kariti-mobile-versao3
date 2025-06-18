@@ -55,10 +55,11 @@
 
     <!--Escola-->
     <string name="buttonCadastroEscola">Cadastrar escola</string>
+    <string name="titleAccessSchool">Acessar com:</string>
     <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
     <string name="EditTextInfoEscola">Informe o nome da escola</string>
     <string name="nomeEscola">Nome da Escola</string>
-    <string name="cadEscola">Cadastrar Escola</string>
+    <string name="registerSchool">Cadastrar Escola</string>
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>
     <string name="escolaArquivada">Escolas arquivadas</string>
@@ -68,6 +69,7 @@
     <string name="selecionarEsc">Selecionar Escola</string>
     <string name="btnEscolaDesativada">Escolas desativadas</string>
     <string name="escolaTeste">Escola Teste</string>
+    <string name="titleDisableSchool">Deseja desativar essa escola?</string>
 
     <!--    Aluno-->
     <string name="buttonCadAluno">Cadastrar Aluno(A)</string>
@@ -191,9 +193,11 @@
     <string name="alertDialogForgotPassword">Esqueceu sua senha?</string>
     <string name="toastFieldsNotFilled">Por favor, preencher todos os campos!</string>
     <string name="toastDivergentPasswords">Senhas divergentes!</string>
-    <string name="toastApplicationError">Fala de comunicação. Por favor, tente novamente!</string>
+    <string name="toastApplicationError">Falha de comunicação. Por favor, tente novamente!</string>
     <string name="toastEmailAlreadyUsed">Já existe um usuário associado a esse e-mail, cadastrado!</string>
     <string name="toastRestoreError">Erro na restauração dos seus dados no Kariti!</string>
+    <string name="toastSuccessBackup">Backup realizado com sucesso!</string>
+    <string name="toastFailedBackup">Falha na realização do backup!</string>
     <string name="toastBackupVersionOld">Este backup requer uma versão mais recente do app!</string>
     <string name="toastBackupVersionSuperior">Erro. Este backup é uma versão mais antiga dos dados do Kariti!</string>
     <string name="toastBackupRestorationError">Erro na restauração dos seus dados no Kariti!</string>
@@ -209,6 +213,14 @@
     <string name="toastMsg1">Prova não cadastrada.\n\n Verifique se essa prova pertence a escola selecionada!</string>
     <string name="toastMsg2">Para corrigir esta prova você precisa realizar login no Kariti!</string>
     <string name="toastMsg3">Cartão gerado em prova rápida.\n\n Portanto, só pode ser corrigido na mesma seção!</string>
+    <string name="toastSchoolDeactivated">Escola desativada</string>
+    <string name="toastSchoolDeactivatedFailed">Falha na desativação da escola!</string>
+    <string name="toastUserDisconnected">Usuário desconectado</string>
+    <string name="toastNoSchoolsDeactivate">Você não possui escolas desativadas até o momento!</string>
+    <string name="toastSuccessRegisterSchool">Escola cadastrada com sucesso!</string>
+    <string name="toastFailedRegisterSchool">Falha no cadastro dessa escola!</string>
+    <string name="toastSchoolExist">Essa escola já esta cadastrada!</string>
+    <string name="toastEnterNameSchool">Informe o nome da escola!</string>
 
 
 
@@ -238,6 +250,16 @@
         • Para gerar um cartão de resposta basta informar a quantidade de questões e alternativas de sua prova.\n\n
         • Informações como nome da prova, nome da turma, nome do professor e data, são opcionais.\n\n
         • Após solicitada a ação de Gerar Cartão, o Kariti realiza o download do cartão de resposta na pasta de downlods do dispositivo.</string>
+    <string name="longTextHelpSchool">• Para continuar navegando nas funcionalidades do Kariti, selecione a escola desejada. \n\n
+        • Cada escola possui suas informações que são restritas a outras. \n\n
+        • Para desativar uma escola, basta selecionar a escola desejada e confirmar a ação.\n\n
+        Posteriormente, você poderá encontrar suas escolas desativadas clicando no botão "'Escolas Desativadas'".
+    </string>
+    <string name="longTextBackupSendEmail">Seus dados do Kariti foram enviados para seu e-mail \n\n
+        Para utilizar seus dados do Kariti em outro dispositivo siga as orientações do e-mail\n\n
+        Certifique-se de receber o e-mail antes de desinstalar o Kariti desse dispositivo.
+    </string>
+
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -10,7 +10,7 @@
     <string name="click_here_description">Click here </string>
     <string name="create_account_description">Create Account</string>
     <string name="button_continue">Continuar</string>
-    <string name="change_device_description">Mudar de dispositivo</string>
+    <string name="change_device_description">Switch device</string>
     <string name="if_change_device_description">Change device?</string>
     <string name="yes_description">Yes</string>
     <string name="not_description">N0</string>
@@ -52,11 +52,12 @@
 
 
     <!--Escola-->
-    <string name="buttonCadastroEscola">Cadastrar escola</string>
+    <string name="buttonCadastroEscola">Register school</string>
+    <string name="titleAccessSchool">Access with:</string>
     <string name="buttonVisualizarEscolas">Visualizar Escolas</string>
-    <string name="EditTextInfoEscola">Informe o nome da escola</string>
+    <string name="EditTextInfoEscola">Enter the name of the school</string>
     <string name="nomeEscola">Nome da Escola</string>
-    <string name="cadEscola">Cadastrar Escola</string>
+    <string name="registerSchool">Register School</string>
     <string name="menuExcluir">Excluir Escola</string>
     <string name="menuAtivar">Ativar Escola</string>
     <string name="escolaArquivada">Escolas arquivadas</string>
@@ -64,8 +65,9 @@
     <string name="nomeSchool">Nome da Escola*</string>
     <string name="senhahint">********</string>
     <string name="selecionarEsc">Selecionar Escola</string>
-    <string name="btnEscolaDesativada">Escolas desativadas</string>
+    <string name="btnEscolaDesativada">Deactivated Schools</string>
     <string name="escolaTeste">Escola Teste</string>
+    <string name="titleDisableSchool">Do you want to deactivate this school?</string>
 
     <!--    Aluno-->
     <string name="buttonCadAluno">Cadastrar Aluno(A)</string>
@@ -191,6 +193,8 @@
     <string name="toastApplicationError">Communication error. Please try again!</string>
     <string name="toastEmailAlreadyUsed">A user is already registered with this email address!</string>
     <string name="toastRestoreError">Error restoring your data in Kariti!</string>
+    <string name="toastSuccessBackup">Backup completed successfully!</string>
+    <string name="toastFailedBackup">Backup failed!</string>
     <string name="toastBackupVersionOld">This backup requires a newer version of the app!</string>
     <string name="toastBackupVersionSuperior">Error. This backup is an older version of the Kariti data!</string>
     <string name="toastBackupRestorationError">Error restoring your data in Kariti!</string>
@@ -206,6 +210,15 @@
     <string name="toastMsg1">Exam not registered.\n\n Please check if this exam belongs to the selected school!</string>
     <string name="toastMsg2">To grade this exam, you need to log in to Kariti!</string>
     <string name="toastMsg3">Card generated in quick test mode.\n\n Therefore, it can only be graded within the same session!</string>
+    <string name="toastSchoolDeactivated">School deactivated</string>
+    <string name="toastSchoolDeactivatedFailed">Failed to deactivate the school!</string>
+    <string name="toastUserDisconnected">User disconnected</string>
+    <string name="toastNoSchoolsDeactivate">You "don't" have any deactivated schools at the moment!</string>
+    <string name="toastSuccessRegisterSchool">School registered successfully!</string>
+    <string name="toastFailedRegisterSchool">Failed to register this school!</string>
+    <string name="toastSchoolExist">This school is already registered!</string>
+    <string name="toastEnterNameSchool">Please enter the name of the school!</string>
+
 
 
 
@@ -221,20 +234,32 @@
         • In the first option, you can generate an answer sheet by entering the number of questions and answer choices for your exam. Then, print as many copies as needed for your students.\n\n
         • In the second option, you can correct the answer sheet generated in the previous step by simply pointing the Kariti camera at it. The app will automatically correct it and display the result on your screen.\n\n
         • At the beginning of each correction session, you’ll be asked to fill in the answer key for your exam. Once completed, all answer sheets based on that key can be corrected in sequence.</string>
-    <string name="longTextLimitQuestions">Kariti currently supports answer sheets with a maximum of %1$d questions!</string>
+    <string name="longTextLimitQuestions">Kariti currently supports answer sheets with a maximum of %1$d questions!    </string>
     <string name="longTextLimitAlternatives">Kariti currently supports answer sheets with a maximum of %1$d options!</string>
     <string name="longTextDownloadNoNotify">Kariti will not be able to notify you about completed downloads!</string>
     <string name="longTextRequestPermission">To download the answer sheets to your device, you need to grant permission to Kariti!</string>
     <string name="longTextDownloadNotifyCard">The answer sheet has been generated and is available in your "device's" Downloads folder.\n\n
-        You can print as many copies as needed from the sheet that was just created!</string>
+        You can print as many copies as needed from the sheet that was just created!
+    </string>
     <string name="longTextGenerateCardError">An error occurred while trying to generate the answer sheet. If the issue persists: \n
         1 - Check if there is enough storage available for downloads.\n
-        2 - Restart Kariti!</string>
+        2 - Restart Kariti!
+    </string>
     <string name="longTextGuidanceMarkedCards">The answer sheet must be filled out using a dark-colored pen, preferably black.</string>
     <string name="longTextHelpGenerateCards">In this section, you can generate answer sheets.\n\n
         • To generate an answer sheet, simply provide the number of questions and answer choices for your test.\n\n
         • Information such as the exam name, class name, teacher name, and date is optional.\n\n
-        • Once you click on "Generate Card," Kariti will download the answer sheet to your "device's" Downloads folder.</string>
+        • Once you click on "Generate Card," Kariti will download the answer sheet to your "device's" Downloads folder.
+    </string>
+    <string name="longTextHelpSchool">• To continue using Kariti features, select the desired school. \n\n
+        • Each school has its own information that is restricted from others. \n\n
+        • To deactivate a school, simply select the desired school and confirm the action.\n\n
+        Later, you can find your deactivated schools by clicking the Deactivated Schools button.
+    </string>
+    <string name="longTextBackupSendEmail">Your Kariti data has been sent to your email.\n\n
+        To use your Kariti data on another device, follow the instructions in the email.\n\n
+        Make sure you receive the email before uninstalling Kariti from this device.
+    </string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

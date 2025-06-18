@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import online.padev.kariti.R;
 import online.padev.kariti.adapters.AdapterClickableSchool;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.SendBackup;
+import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.utils.CheckConnectionInternet;
 
 public class SchoolActivity extends AppCompatActivity {
@@ -50,6 +52,11 @@ public class SchoolActivity extends AppCompatActivity {
     DataBaseKariti dataBase;
     private static final int REQUEST_CODE = 1;
     private Integer id_school;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +75,11 @@ public class SchoolActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
 
-        titleActivity.setText(String.format("%s","Acessar com:"));
+        titleActivity.setText(getString(R.string.titleAccessSchool));
 
         listSchoolsBD = dataBase.listSchoolNames(1); //carrega todas as escolas ativadas para o usuario logado
         if(listSchoolsBD == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
         if(listSchoolsBD.isEmpty()){
@@ -88,7 +95,7 @@ public class SchoolActivity extends AppCompatActivity {
         listViewSchools.setOnItemClickListener((parent, view, position, id) -> {
             DataBaseKariti.ID_ESCOLA = dataBase.getSchoolId(adapterSchool.getItem(position));
             if (DataBaseKariti.ID_ESCOLA == null) {
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
             startMenuInitial();
@@ -96,12 +103,12 @@ public class SchoolActivity extends AppCompatActivity {
         listViewSchools.setOnItemLongClickListener((parent, view, position, id) -> {
             // Exibir a caixa de diálogo
             AlertDialog.Builder builder = new AlertDialog.Builder(SchoolActivity.this);
-            builder.setTitle("Atenção!")
-                    .setMessage("Deseja desativar essa escola?")
-                    .setPositiveButton("SIM", (dialog, which) -> {
+            builder.setTitle(getString(R.string.titleAttention))
+                    .setMessage(getString(R.string.titleDisableSchool))
+                    .setPositiveButton(getString(R.string.yes_description), (dialog, which) -> {
                         id_school = dataBase.getSchoolId(adapterSchool.getItem(position));
                         if (id_school == null){
-                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if(dataBase.updateSchool(id_school,0)){
@@ -110,11 +117,11 @@ public class SchoolActivity extends AppCompatActivity {
                             if(listSchoolsBD.isEmpty()) {
                                 finish();
                             }
-                            Toast.makeText(SchoolActivity.this, "Escola desativada", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastSchoolDeactivated), Toast.LENGTH_SHORT).show();
                         }else
-                            Toast.makeText(SchoolActivity.this, "Erro: escola não desativada!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastSchoolDeactivatedFailed), Toast.LENGTH_SHORT).show();
                     })
-                    .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+                    .setNegativeButton(getString(R.string.not_description), (dialog, which) -> dialog.dismiss());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
@@ -161,16 +168,13 @@ public class SchoolActivity extends AppCompatActivity {
     private void exit(){
         DataBaseKariti.USER_ID = null;
         finish();
-        Toast.makeText(SchoolActivity.this, "Usuário desconectado", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.toastUserDisconnected), Toast.LENGTH_SHORT).show();
     }
     private void help() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("• Para continuar navegando nas funcionalidades do app, clique no campo com a escola desejada. \n\n" +
-                "• Cada escola possui suas informações que são restritas a outras. \n\n" +
-                "• Para desativar uma escola, basta selecionar a escola desejada e confirmar a ação. " +
-                "Posteriormente, você poderá encontrar suas escolas desativadas clicando no botão 'Escolas Desativadas'.");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp));
+        builder.setMessage(getString(R.string.longTextHelpSchool));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     private void startMenuInitial(){
@@ -208,7 +212,7 @@ public class SchoolActivity extends AppCompatActivity {
             if (!nameSchool.isEmpty()){
                 Boolean checkExistsSchool = dataBase.checkSchool(nameSchool);
                 if(checkExistsSchool == null){
-                    Toast.makeText(this, "Falha na comunicação, tente novamente!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!checkExistsSchool){
@@ -217,15 +221,15 @@ public class SchoolActivity extends AppCompatActivity {
                         Collections.sort(listSchoolsBD);
                         adapterSchool.notifyDataSetChanged();
                         dialog.dismiss();
-                        Toast.makeText(this, "Escola cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.toastSuccessRegisterSchool), Toast.LENGTH_SHORT).show();
                     }else{
-                        Toast.makeText(this, "Erro: Escola não cadastrada!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.toastFailedRegisterSchool), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "Atenção: Escola já cadastrada!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastSchoolExist), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, "Informe o nome da escola!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastEnterNameSchool), Toast.LENGTH_SHORT).show();
             }
         });
         cancelFlut.setOnClickListener(v -> {
@@ -235,10 +239,9 @@ public class SchoolActivity extends AppCompatActivity {
     }
     private void notifySchoolDisabledNonExistent() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI");
-        builder.setMessage("Aqui você encontra todas as suas escolas desativas.\n\n" +
-                "Obs. Você não possui escolas desativadas até o momento!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.app_name_capital_letter));
+        builder.setMessage(getString(R.string.toastNoSchoolsDeactivate));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         // Criando o diálogo
         AlertDialog dialog = builder.create();
 
@@ -268,15 +271,15 @@ public class SchoolActivity extends AppCompatActivity {
 
         buttonYes.setOnClickListener(v -> {
             if (!CheckConnectionInternet.verificaConexao(this)) {
-                Toast.makeText(this, "Sem conexão de internet!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastNotConnection), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
             if (startBackup()){
-                Toast.makeText(this, "Backup realizado com sucesso!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastSuccessBackup), Toast.LENGTH_SHORT).show();
                 backupGuidance();
                 dialog.dismiss();
             } else {
-                Toast.makeText(this, "Falha na realização do backup!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastFailedBackup), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -345,7 +348,7 @@ public class SchoolActivity extends AppCompatActivity {
      * Este método adiciona arquivos a um zip
      * @param file caminho do arquivo a ser adicionado no zip
      * @param nomeNoZip nome do arquivo no zip
-     * @param zipOut saida onde será criado o zip
+     * @param zipOut diretorio onde será criado o zip
      * @throws IOException
      */
     private void addFileInZip(File file, String nomeNoZip, ZipOutputStream zipOut) throws IOException {
@@ -433,11 +436,9 @@ public class SchoolActivity extends AppCompatActivity {
 
     private void backupGuidance(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI")
-                .setMessage("Seus dados do Kariti foram enviados para seu e-mail \n\n" +
-                        "Para utilizar seus dados do Kariti em outro dispositivo siga as orientações do e-mail\n\n" +
-                        "Certifique-se de receber o e-mail antes de desinstalar o Kariti desse dispositivo.")
-                .setPositiveButton("Ok", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.app_name_capital_letter))
+                .setMessage(getString(R.string.longTextBackupSendEmail))
+                .setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

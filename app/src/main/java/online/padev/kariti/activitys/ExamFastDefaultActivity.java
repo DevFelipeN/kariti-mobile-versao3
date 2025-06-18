@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import online.padev.kariti.R;
-import online.padev.kariti.languageSetting.ActivityLocale;
+import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.entity.Answer_key;
 import online.padev.kariti.entity.Exam;
 import pl.droidsonroids.gif.GifImageView;

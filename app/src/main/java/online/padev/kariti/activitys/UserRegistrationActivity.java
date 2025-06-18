@@ -35,7 +35,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import online.padev.kariti.R;
-import online.padev.kariti.languageSetting.ActivityLocale;
+import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.SendCodeValidation;
 import online.padev.kariti.utils.GenerateCodeValidation;

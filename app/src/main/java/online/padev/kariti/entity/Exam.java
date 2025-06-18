@@ -12,6 +12,9 @@ public class Exam implements Serializable {
     private String nameExam, dateExam;
     private int numQuestions, numAlternatives;
 
+    public static final int MAX_QUESTIONS = 20;
+    public static final int MAX_ALTERNATIVES = 6;
+
     public static int numQuestsDefault; //Essa variável serve como controle da correção de prova rápida
     public static int numAlternativesDefault; //Essa variável serve como controle da correção de prova rápida
 

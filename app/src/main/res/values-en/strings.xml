@@ -3,6 +3,7 @@
     <string name="app_name">Kariti</string>
     <string name="app_name_capital_letter">KARITI</string>
     <string name="titleAttention">ATTENTION</string>
+    <string name="titleGuidance">GUIDANCE</string>
     <string name="titleHelp">Help</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
@@ -27,7 +28,7 @@
     <string name="enter_description">Sign In</string>
     <string name="register_description">Register</string>
     <string name="register_description_welcome">Register</string>
-    <string name="teacher_name_description">Nome do professor</string>
+    <string name="teacher_name_description">Teacher name</string>
     <string name="buttonDefaultPassword">Login without password</string>
     <string name="view_description">Visualizar</string>
     <string name="cancel_description">Cancel</string>
@@ -89,7 +90,7 @@
     <!--    Turma-->
     <string name="textViewTurma">Turma</string>
     <string name="txtViewTurma">Turma:</string>
-    <string name="editTextNameClass">Nome da turma</string>
+    <string name="editTextNameClass">Class name</string>
     <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonSalvTurma">Salvar Turma</string>
     <string name="textViewFiltro">Filtro por turma</string>
@@ -100,12 +101,14 @@
     <!--    Prova-->
     <string name="textViewProva">Prova</string>
     <string name="textTitleQuickTest">Quick Test</string>
+    <string name="titleNewExam">New Exam</string>
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="buttonGerarCartao">Generate Cards</string>
     <string name="buttonGerarCartaoRap">Generate Card</string>
     <string name="buttonCorrigirProva">Grade Exam</string>
     <string name="buttonVisuProva">Visualizar Provas</string>
+    <string name="titleCardGenerateSuccess">Answer sheet generated successfully</string>
     <string name="textViewEditProva">Mais Opções </string>
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
     <string name="textInstrucao">Aqui você pode editar ou apagar uma prova!</string>
@@ -117,13 +120,13 @@
     <string name="Detalhes">Detalhes</string>
     <string name="time">00:00:00</string>
     <string name="editTextNomeProva">Informe o nome  da prova*</string>
-    <string name="editTextNomeProvaDefault">Nome  da prova</string>
-    <string name="textViewDataProva">Data da Prova</string>
-    <string name="textViewQuantQuestoes">Quant. de Questões</string>
-    <string name="textViewQuantAltern">Quant. de Alternativas</string>
+    <string name="editTextExamNameDefault">Exam name</string>
+    <string name="textViewDataExam">Exam Data</string>
+    <string name="textViewQuantQuestions">Number of Questions</string>
+    <string name="textViewQuantAlternatives">Number of Alternatives</string>
     <string name="Questao">Questão </string>
     <string name="Gabarito">Gabarito </string>
-    <string name="buttonData">Selecionar Data</string>
+    <string name="buttonData">Select Date</string>
     <string name="txtViewProva">Prova:</string>
     <string name="txtViewData">Data:</string>
     <string name="Nota"> Nota </string>
@@ -196,6 +199,10 @@
     <string name="toastInvalidCode">Invalid Code!</string>
     <string name="toastTimeResentCode">Please wait %1$d seconds to resend the code.</string>
     <string name="toastCaptureNewCard">Capture the new card</string>
+    <string name="toastInfoNumberQuestions">Enter the number of questions!</string>
+    <string name="toastInfoNumberAlternatives">Enter the number of alternatives!</string>
+    <string name="toastPermissionGranted">Permission granted successfully</string>
+
 
 
     <!-- TextLong -->
@@ -210,6 +217,20 @@
         • In the first option, you can generate an answer sheet by entering the number of questions and answer choices for your exam. Then, print as many copies as needed for your students.\n\n
         • In the second option, you can correct the answer sheet generated in the previous step by simply pointing the Kariti camera at it. The app will automatically correct it and display the result on your screen.\n\n
         • At the beginning of each correction session, you’ll be asked to fill in the answer key for your exam. Once completed, all answer sheets based on that key can be corrected in sequence.</string>
+    <string name="longTextLimitQuestions">Kariti currently supports answer sheets with a maximum of %1$d questions!</string>
+    <string name="longTextLimitAlternatives">Kariti currently supports answer sheets with a maximum of %1$d options!</string>
+    <string name="longTextDownloadNoNotify">Kariti will not be able to notify you about completed downloads!</string>
+    <string name="longTextRequestPermission">To download the answer sheets to your device, you need to grant permission to Kariti!</string>
+    <string name="longTextDownloadNotifyCard">The answer sheet has been generated and is available in your "device's" Downloads folder.\n\n
+        You can print as many copies as needed from the sheet that was just created!</string>
+    <string name="longTextGenerateCardError">An error occurred while trying to generate the answer sheet. If the issue persists: \n
+        1 - Check if there is enough storage available for downloads.\n
+        2 - Restart Kariti!</string>
+    <string name="longTextGuidanceMarkedCards">The answer sheet must be filled out using a dark-colored pen, preferably black.</string>
+    <string name="longTextHelpGenerateCards">In this section, you can generate answer sheets.\n\n
+        • To generate an answer sheet, simply provide the number of questions and answer choices for your test.\n\n
+        • Information such as the exam name, class name, teacher name, and date is optional.\n\n
+        • Once you click on "Generate Card," Kariti will download the answer sheet to your "device's" Downloads folder.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

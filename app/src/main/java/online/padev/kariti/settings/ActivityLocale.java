@@ -1,4 +1,4 @@
-package online.padev.kariti.languageSetting;
+package online.padev.kariti.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;

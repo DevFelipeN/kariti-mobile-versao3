@@ -2,6 +2,7 @@ package online.padev.kariti.activitys;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,11 +27,12 @@ import java.util.Locale;
 import online.padev.kariti.R;
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.entity.Exam;
+import online.padev.kariti.settings.ActivityLocale;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
 
-    EditText qtdQuest, qtdAlter, provaName, className, teacherName;
+    EditText qtdQuest, qtdAlter, examName, className, teacherName;
     Calendar calendar;
     Button datePickerButton, btnGenerateCard;
     ImageButton btnVoltar, questMenos, questMais, altMais, altMenos, iconHelp;
@@ -38,6 +40,10 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
     Exam exam;
     GifImageView gifLoading;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,7 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.imgBtnVoltaDescola);
         iconHelp = findViewById(R.id.iconHelp);
-        provaName = findViewById(R.id.editTextNameProva);
+        examName = findViewById(R.id.editTextNameProva);
         className = findViewById(R.id.editTextNameClass);
         teacherName = findViewById(R.id.editTextNameTeacher);
         datePickerButton = findViewById(R.id.datePickerNewCard);
@@ -60,7 +66,7 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
         textViewTitle = findViewById(R.id.toolbar_title);
         gifLoading = findViewById(R.id.loadingId);
 
-        textViewTitle.setText(String.format("%s", "Nova Prova"));
+        textViewTitle.setText(getString(R.string.titleNewExam));
 
         btnVoltar.setOnClickListener(v -> finish());
         iconHelp.setOnClickListener(v -> help());
@@ -70,7 +76,7 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
             if (!qtdQuest.getText().toString().trim().isEmpty()){
                 quest = Integer.parseInt(qtdQuest.getText().toString());
             }
-            if(quest < 20)
+            if(quest < Exam.MAX_QUESTIONS)
                 quest ++;
             qtdQuest.setText(String.valueOf(quest));
         });
@@ -88,7 +94,7 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
             if (!qtdAlter.getText().toString().trim().isEmpty()) {
                 alter = Integer.parseInt(qtdAlter.getText().toString());
             }
-            if(alter < 6)
+            if(alter < Exam.MAX_ALTERNATIVES)
                 alter ++;
             qtdAlter.setText(String.valueOf(alter));
         });
@@ -127,20 +133,20 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
             solicitaPermissaoNotificacao();
             btnGenerateCard.setEnabled(false);
             try {
-                if (qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals("0")) {
-                    Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                if (qtdQuest.getText().toString().trim().isEmpty() || qtdQuest.getText().toString().equals(getString(R.string.number_zero))) {
+                    Toast.makeText(this, getString(R.string.toastInfoNumberQuestions), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals("0")) {
-                    Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                if (qtdAlter.getText().toString().trim().isEmpty() || qtdAlter.getText().toString().equals(getString(R.string.number_zero))) {
+                    Toast.makeText(this, getString(R.string.toastInfoNumberAlternatives), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (Integer.parseInt(qtdQuest.getText().toString()) > 20) {
+                if (Integer.parseInt(qtdQuest.getText().toString()) > Exam.MAX_QUESTIONS) {
                     dialogLimitMaxQuest();
                     return;
                 }
-                if (Integer.parseInt(qtdAlter.getText().toString()) > 6) {
+                if (Integer.parseInt(qtdAlter.getText().toString()) > Exam.MAX_ALTERNATIVES) {
                     dialogLimitMaxAlter();
                     return;
                 }
@@ -164,11 +170,11 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 exam = new Exam();
-                exam.setNameExam(provaName.getText().toString().trim());
+                exam.setNameExam(examName.getText().toString().trim());
                 exam.setExam_id(Integer.parseInt(qtdQuest.getText().toString()));
                 exam.setNumQuestions(Integer.parseInt(qtdQuest.getText().toString()));
                 exam.setNumAlternatives(Integer.parseInt(qtdAlter.getText().toString()));
-                if (!datePickerButton.getText().toString().equals("Selecionar Data")) {
+                if (!datePickerButton.getText().toString().equals(getString(R.string.buttonData))) {
                     exam.setDateExam(datePickerButton.getText().toString());
                 }
                 CreatCard creatCard = new CreatCard(exam, teacherName.getText().toString(), className.getText().toString(), this);
@@ -197,17 +203,17 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
 
     private void dialogLimitMaxQuest(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 20 questões!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextLimitQuestions, Exam.MAX_QUESTIONS));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
     private void dialogLimitMaxAlter(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 6 alternativas!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextLimitAlternatives, Exam.MAX_ALTERNATIVES));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -223,7 +229,7 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) { // Verifica se o código de solicitação é o esperado
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permisão concedida com sucesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastPermissionGranted), Toast.LENGTH_SHORT).show();
                 Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE concedida.");
                 generateCard();
             } else {
@@ -235,7 +241,7 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
         }
         if (requestCode == 101){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permissão concedida!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastPermissionGranted), Toast.LENGTH_SHORT).show();
             } else {
                 // Permissão negada, exiba uma mensagem explicativa ao usuário
                 permissaoDNotificacaoNegada();
@@ -245,17 +251,17 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
 
     private void permissaoDNotificacaoNegada(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("O Kariti não será capaz de notifica-lo sobre os downloads realizados!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextDownloadNoNotify));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
     private void permissaoNegada(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Para realizar o download dos cartões resposta em seu dispositivo, é necessário que conceda a permissão ao Kariti!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextRequestPermission));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -272,10 +278,9 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
         if(!isFinishing() && !isDestroyed()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("Cartão gerado com sucesso");
-            builder.setMessage("O cartão resposta foi gerado e está disponível na pasta de downloads do seu dispositvo.\n\n" +
-                    "Você pode realizar impressão da quantidade de cartões necessários a partir do cartão que acabou de ser gerado!");
-            builder.setPositiveButton("OK", (dialog, which) -> {
+            builder.setTitle(getString(R.string.titleCardGenerateSuccess));
+            builder.setMessage(getString(R.string.longTextDownloadNotifyCard));
+            builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> {
                 dialog.dismiss();
                 orientation();
             });
@@ -285,11 +290,9 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
     private void notifyFailureDownload(){
         if(!isFinishing() && !isDestroyed()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("KARITI");
-            builder.setMessage("Ocorreu uma falha ao tentar gerar o cartão resposta, se a falha persistir: \n" +
-                    "1 - Verifique se possui armazenamento diponível para realização de downloads" +
-                    "2 - Reinicie o Kariti!");
-            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+            builder.setTitle(getString(R.string.app_name_capital_letter));
+            builder.setMessage(getString(R.string.longTextGenerateCardError));
+            builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
             builder.show();
         }
     }
@@ -297,9 +300,9 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
         if(!isFinishing() && !isDestroyed()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("ORIENTAÇÃO!");
-            builder.setMessage("O preenchimento dos cartões-respostas deve ser feito com caneta de cor escura, preferencialmente de cor preta.");
-            builder.setPositiveButton("OK", (dialog, which) -> {
+            builder.setTitle(getString(R.string.titleGuidance));
+            builder.setMessage(getString(R.string.longTextGuidanceMarkedCards));
+            builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> {
                 dialog.dismiss();
                 finish();
             });
@@ -310,12 +313,9 @@ public class ExamGenerateCardDefaultActivity extends AppCompatActivity {
 
     private void help() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("Nessa sessão você pode gerar cartões de resposta. \n\n" +
-                "• Para gerar um cartão de resposta basta informar a quantidade de questões e alternativas de sua prova.\n\n" +
-                "• Informações como nome da prova, nome da turma, nome do professor e data, são opcionais.\n\n" +
-                "• Após solicitada a ação de Gerar Cartão, o Kariti realiza o download do cartão de resposta na pasta de downlods do dispositivo.");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp));
+        builder.setMessage(getString(R.string.longTextHelpGenerateCards));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

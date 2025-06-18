@@ -3,6 +3,7 @@
     <string name="app_name">Kariti</string>
     <string name="app_name_capital_letter">KARITI</string>
     <string name="titleAttention">ATENÇÃO</string>
+    <string name="titleGuidance">ORIENTAÇÃO</string>
     <string name="titleHelp">Ajuda</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
@@ -102,12 +103,14 @@
     <!--    Prova-->
     <string name="textViewProva">Prova</string>
     <string name="textTitleQuickTest">Prova Rápida</string>
+    <string name="titleNewExam">Nova Prova</string>
     <string name="buttonCadProva">Cadastrar Prova</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="buttonGerarCartao">Gerar Cartões</string>
     <string name="buttonGerarCartaoRap">Gerar Cartão</string>
     <string name="buttonCorrigirProva">Corrigir Prova</string>
     <string name="buttonVisuProva">Visualizar Provas</string>
+    <string name="titleCardGenerateSuccess">Cartão de resposta gerado com sucesso</string>
     <string name="textViewEditProva">Mais Opções </string>
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
     <string name="textInstrucao">Aqui você pode editar ou apagar uma prova!</string>
@@ -120,10 +123,10 @@
     <string name="Detalhes">Detalhes</string>
     <string name="time">00:00:00</string>
     <string name="editTextNomeProva">Informe o nome  da prova*</string>
-    <string name="editTextNomeProvaDefault">Nome  da prova</string>
-    <string name="textViewDataProva">Data da Prova</string>
-    <string name="textViewQuantQuestoes">Quant. de Questões</string>
-    <string name="textViewQuantAltern">Quant. de Alternativas</string>
+    <string name="editTextExamNameDefault">Nome  da prova</string>
+    <string name="textViewDataExam">Data da Prova</string>
+    <string name="textViewQuantQuestions">Quant. de Questões</string>
+    <string name="textViewQuantAlternatives">Quant. de Alternativas</string>
     <string name="Questao">Questão </string>
     <string name="Gabarito">Gabarito </string>
     <string name="buttonData">Selecionar Data</string>
@@ -199,6 +202,10 @@
     <string name="toastInvalidCode">Código Inválido!</string>
     <string name="toastTimeResentCode">Aguarde %1$d segundos para reenviar o código.</string>
     <string name="toastCaptureNewCard">Capture o novo cartão</string>
+    <string name="toastInfoNumberQuestions">Informe o número de questões!</string>
+    <string name="toastInfoNumberAlternatives">Informe o número de alternativas!</string>
+    <string name="toastPermissionGranted">Permisão concedida com sucesso</string>
+
 
 
     <!-- TextLong -->
@@ -210,9 +217,23 @@
     <string name="longTextOrientationCapture">Capture a imagem do cartão de cima, sobre superfície plana e com boa luminosidade.</string>
     <string name="longTextAnswerKeyIfAlter">Você pussui um gabarito cadastrado. Deseja manter ou alterar o gabarito?</string>
     <string name="longTextHelpQuickTest">Bem vindo(a) ao menu inicial de prova rápida. \n Aqui você pode gerar cartões respostas e corrigir seus cartões de maneira fácil e prática! \n\n
-                "• Na primeira opção você pode gerar um cartão, informando a quantidade de questões e alternativas da sua prova, em seguida imprimir a quantidade necessária para os alunos.\n\n
-                "• Na segunda opção você pode realizar a correção do cartão gerado na opção anterior, apenas apontando a câmera do Kariti para o cartão que por sua vez realiza a correção e exibe o resultado na sua tela.\n\n
-                "• Ao início de cada seção de correção será solicitado o preenchimento do gabarito da sua prova, com ele preenchido todos os cartões referentes a ele podem ser corrigidos sequencialmente.</string>
+        • Na primeira opção você pode gerar um cartão, informando a quantidade de questões e alternativas da sua prova, em seguida imprimir a quantidade necessária para os alunos.\n\n
+        • Na segunda opção você pode realizar a correção do cartão gerado na opção anterior, apenas apontando a câmera do Kariti para o cartão que por sua vez realiza a correção e exibe o resultado na sua tela.\n\n
+        • Ao início de cada seção de correção será solicitado o preenchimento do gabarito da sua prova, com ele preenchido todos os cartões referentes a ele podem ser corrigidos sequencialmente.</string>
+    <string name="longTextLimitQuestions">Atualmente o Kariti oferece suporte para cartões repostas com no máximo %1$d questões!</string>
+    <string name="longTextLimitAlternatives">Atualmente o Kariti oferece suporte para cartões repostas com no máximo %1$d alternativas!</string>
+    <string name="longTextDownloadNoNotify">O Kariti não será capaz de notifica-lo sobre os downloads realizados!</string>
+    <string name="longTextRequestPermission">Para realizar o download dos cartões resposta em seu dispositivo, é necessário que conceda a permissão ao Kariti!</string>
+    <string name="longTextDownloadNotifyCard">O cartão resposta foi gerado e está disponível na pasta de downloads do seu dispositvo.\n\n
+        Você pode realizar impressão da quantidade de cartões necessários a partir do cartão que acabou de ser gerado!</string>
+    <string name="longTextGenerateCardError">Ocorreu uma falha ao tentar gerar o cartão resposta, se a falha persistir: \n
+        1 - Verifique se possui armazenamento diponível para realização de downloads. \n
+        2 - Reinicie o Kariti!</string>
+    <string name="longTextGuidanceMarkedCards">O preenchimento do cartão-resposta deve ser feito com caneta de cor escura, preferencialmente de cor preta.</string>
+    <string name="longTextHelpGenerateCards">Nessa sessão você pode gerar cartões de resposta. \n\n
+        • Para gerar um cartão de resposta basta informar a quantidade de questões e alternativas de sua prova.\n\n
+        • Informações como nome da prova, nome da turma, nome do professor e data, são opcionais.\n\n
+        • Após solicitada a ação de Gerar Cartão, o Kariti realiza o download do cartão de resposta na pasta de downlods do dispositivo.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -18,7 +18,7 @@ import org.opencv.android.OpenCVLoader;
 import java.util.Locale;
 
 import online.padev.kariti.R;
-import online.padev.kariti.languageSetting.ActivityLocale;
+import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.database.DataBaseKariti;
 
 public class WelcomeActivity extends AppCompatActivity {

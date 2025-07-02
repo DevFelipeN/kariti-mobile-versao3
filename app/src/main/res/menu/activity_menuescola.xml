@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/menuExcluirEscola"
-        android:title="@string/menuExcluir" />
+        android:title="@string/menuDelete" />
     <item
         android:id="@+id/menuAtivarEscola"
-        android:title="@string/menuAtivar" />
+        android:title="@string/menuActivate" />
 </menu>

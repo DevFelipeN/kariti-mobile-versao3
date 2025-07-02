@@ -3,9 +3,9 @@ package online.padev.kariti.activitys;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
+
+import android.content.Context;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,8 +16,9 @@ import java.util.List;
 import online.padev.kariti.R;
 import online.padev.kariti.adapters.ListNotActionAdapter;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 
-public class SchoolDisabledActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
+public class SchoolDisabledActivity extends AppCompatActivity{
     ImageButton back, iconHelp;
     DataBaseKariti dataBase;
     List<String> listDisabledBD;
@@ -25,6 +26,12 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
     ListNotActionAdapter adapterDisabled;
     ListView listViewDisabled;
     private Integer id_school;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +44,13 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
 
         dataBase = new DataBaseKariti(this);
 
-        textViewTitle.setText(String.format("%s","Desativadas"));
+        textViewTitle.setText(getString(R.string.titleSchoolDeactivated));
 
-        iconHelp.setOnClickListener(v -> ajuda());
+        iconHelp.setOnClickListener(v -> help());
 
         listDisabledBD = dataBase.listSchoolNames(0);
         if (listDisabledBD == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -54,21 +61,21 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
             // Exibir a caixa de diálogo
             id_school = dataBase.getSchoolId(adapterDisabled.getItem(position));
             if (id_school == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(SchoolDisabledActivity.this);
-            builder.setTitle("Atenção!")
-                    .setMessage("Qual operação deseja realizar com essa escola? ")
-                    .setPositiveButton("Ativar", (dialog, which) -> {
+            builder.setTitle(getString(R.string.titleAttention))
+                    .setMessage(getString(R.string.longTextOperationSchool))
+                    .setPositiveButton(getString(R.string.menuActivate), (dialog, which) -> {
                         if(dataBase.updateSchool(id_school, 1)){
                             listDisabledBD.remove(position);
                             adapterDisabled.notifyDataSetChanged();
-                            Toast.makeText(SchoolDisabledActivity.this, "Escola reativada com sucesso!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastSchoolReactivatedSuccess), Toast.LENGTH_SHORT).show();
                             restartVisualSchool();
-                        }else Toast.makeText(this, "Erro de ativação!", Toast.LENGTH_SHORT).show();
+                        }else Toast.makeText(this, getString(R.string.toastSchoolReactivatedError), Toast.LENGTH_SHORT).show();
                     })
-                    .setNegativeButton("Excluir", (dialog, which) -> {
+                    .setNegativeButton(getString(R.string.menuDelete), (dialog, which) -> {
                         //Implementar verificação, se possui dados como alunos turmas e provas ligadas a essa escola.................................
                         notifyIfDelete(position);
                     });
@@ -89,44 +96,30 @@ public class SchoolDisabledActivity extends AppCompatActivity implements PopupMe
         finish();
     }
 
-    private void ajuda() {
+    private void help() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("Para ATIVAR ou EXCLUIR uma escola, basta pressionar sobre a escola desejada por alguns segundos e selecionar a ação desejada. ");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp));
+        builder.setMessage(getString(R.string.longTextReactivatedOrDelete));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
-    }
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menuExcluirEscola) {
-            Toast.makeText(SchoolDisabledActivity.this, "Excluir Escola selecionado: ", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (id == R.id.menuAtivarEscola) {
-            Toast.makeText(SchoolDisabledActivity.this, "Ativar Escola selecionado", Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return false;
-        }
     }
     private void notifyIfDelete(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Deseja realmente excluir essa escola?");
-        builder.setMessage("Caso confirme essa ação, todos os dados pertencentes a essa escola, serão perdidos!");
-        builder.setPositiveButton("SIM", (dialog, which) -> {
-            boolean deletaEscola = dataBase.deleteSchool(id_school);
-            if (deletaEscola){
+        builder.setTitle(getString(R.string.longTitleSchoolDelete));
+        builder.setMessage(getString(R.string.longTextInfoIfDelete));
+        builder.setPositiveButton(getString(R.string.yes_description), (dialog, which) -> {
+            if (dataBase.deleteSchool(id_school)){
                 listDisabledBD.remove(position);
                 adapterDisabled.notifyDataSetChanged();
-                Toast.makeText(SchoolDisabledActivity.this, "Escola excluida com sucesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SchoolDisabledActivity.this, getString(R.string.toastSchoolSuccessDelete), Toast.LENGTH_SHORT).show();
                 if(listDisabledBD.isEmpty()){
                     restartVisualSchool();
                 }
             }else{
-                Toast.makeText(this, "Erro ao tentar excluir escola!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastSchoolFailedDelete), Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(getString(R.string.not_description), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

@@ -12,8 +12,8 @@
     <string name="button_continue">Continuar</string>
     <string name="change_device_description">Switch device</string>
     <string name="if_change_device_description">Change device?</string>
-    <string name="yes_description">Yes</string>
-    <string name="not_description">N0</string>
+    <string name="yes_description">YES</string>
+    <string name="not_description">NO</string>
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
@@ -58,8 +58,8 @@
     <string name="EditTextInfoEscola">Enter the name of the school</string>
     <string name="nomeEscola">Nome da Escola</string>
     <string name="registerSchool">Register School</string>
-    <string name="menuExcluir">Excluir Escola</string>
-    <string name="menuAtivar">Ativar Escola</string>
+    <string name="menuDelete">Delete</string>
+    <string name="menuActivate">Activate</string>
     <string name="escolaArquivada">Escolas arquivadas</string>
     <string name="maisEscola">Mais Escolas</string>
     <string name="nomeSchool">Nome da Escola*</string>
@@ -68,6 +68,8 @@
     <string name="btnEscolaDesativada">Deactivated Schools</string>
     <string name="escolaTeste">Escola Teste</string>
     <string name="titleDisableSchool">Do you want to deactivate this school?</string>
+    <string name="titleSchoolDeactivated">Deactivated Schools</string>
+    <string name="longTitleSchoolDelete">Do you really want to delete this school?</string>
 
     <!--    Aluno-->
     <string name="buttonCadAluno">Cadastrar Aluno(A)</string>
@@ -218,6 +220,10 @@
     <string name="toastFailedRegisterSchool">Failed to register this school!</string>
     <string name="toastSchoolExist">This school is already registered!</string>
     <string name="toastEnterNameSchool">Please enter the name of the school!</string>
+    <string name="toastSchoolReactivatedSuccess">School successfully reactivated!</string>
+    <string name="toastSchoolReactivatedError">Failed to reactivate this school!</string>
+    <string name="toastSchoolSuccessDelete">School deleted successfully!</string>
+    <string name="toastSchoolFailedDelete">Failed to delete school!</string>
 
 
 
@@ -260,6 +266,9 @@
         To use your Kariti data on another device, follow the instructions in the email.\n\n
         Make sure you receive the email before uninstalling Kariti from this device.
     </string>
+    <string name="longTextOperationSchool">Which operation would you like to perform with this school?</string>
+    <string name="longTextReactivatedOrDelete">To REACTIVATE or DELETE a school, simply press and hold the desired school option for a few seconds and select the action.</string>
+    <string name="longTextInfoIfDelete">If you confirm this action, all data belonging to this school will be permanently lost!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -60,8 +60,8 @@
     <string name="EditTextInfoEscola">Informe o nome da escola</string>
     <string name="nomeEscola">Nome da Escola</string>
     <string name="registerSchool">Cadastrar Escola</string>
-    <string name="menuExcluir">Excluir Escola</string>
-    <string name="menuAtivar">Ativar Escola</string>
+    <string name="menuDelete">Excluir</string>
+    <string name="menuActivate">Ativar</string>
     <string name="escolaArquivada">Escolas arquivadas</string>
     <string name="maisEscola">Mais Escolas</string>
     <string name="nomeSchool">Nome da Escola*</string>
@@ -70,6 +70,9 @@
     <string name="btnEscolaDesativada">Escolas desativadas</string>
     <string name="escolaTeste">Escola Teste</string>
     <string name="titleDisableSchool">Deseja desativar essa escola?</string>
+    <string name="titleSchoolDeactivated">Escolas Desativadas</string>
+    <string name="longTitleSchoolDelete">Deseja realmente excluir essa escola?</string>
+
 
     <!--    Aluno-->
     <string name="buttonCadAluno">Cadastrar Aluno(A)</string>
@@ -221,6 +224,10 @@
     <string name="toastFailedRegisterSchool">Falha no cadastro dessa escola!</string>
     <string name="toastSchoolExist">Essa escola já esta cadastrada!</string>
     <string name="toastEnterNameSchool">Informe o nome da escola!</string>
+    <string name="toastSchoolReactivatedSuccess">Escola reativada com sucesso!</string>
+    <string name="toastSchoolReactivatedError">Falha na reativação dessa escola!</string>
+    <string name="toastSchoolSuccessDelete">Escola excluida com sucesso!</string>
+    <string name="toastSchoolFailedDelete">Falha em excluir escola!</string>
 
 
 
@@ -259,7 +266,9 @@
         Para utilizar seus dados do Kariti em outro dispositivo siga as orientações do e-mail\n\n
         Certifique-se de receber o e-mail antes de desinstalar o Kariti desse dispositivo.
     </string>
-
+    <string name="longTextOperationSchool">Qual operação deseja realizar com essa escola?</string>
+    <string name="longTextReactivatedOrDelete">Para REATIVAR ou EXCLUIR uma escola, basta pressionar sobre a opção com a escola desejada por alguns segundos e selecionar a ação.</string>
+    <string name="longTextInfoIfDelete">Caso confirme essa ação, todos os dados pertencentes a essa escola, serão perdidos!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

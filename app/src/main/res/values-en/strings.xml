@@ -232,6 +232,9 @@
     <string name="toastEmailAlreadyLinkStudent">This email is already associated with a registered student!</string>
     <string name="toastStudentSuccessRegistration">Student registered successfully!</string>
     <string name="toastStudentFailedRegistration">Student registration failed!</string>
+    <string name="toastNotChange">No modifications were made.</string>
+    <string name="toastStudentSuccessUpdate">Information updated successfully!</string>
+    <string name="toastStudentFailedUpdate">Data update failed!</string>
 
 
 
@@ -284,6 +287,7 @@
     </string>
     <string name="longTextNotifyDeleteStudent">Do you really want to delete this student?</string>
     <string name="longTextImpossibleDeleteStudent">This student is linked to one or more registered classes and cannot be deleted!</string>
+    <string name="longTextNotifyIfEdit">Hello, if you wish to update this student\'s information, simply enter the new data in the fields and click save.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

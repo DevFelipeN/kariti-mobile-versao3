@@ -4,6 +4,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import online.padev.kariti.R;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.entity.Student;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class StudentEditActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     ImageButton back;
@@ -23,6 +26,12 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
     Button btnSave;
     Student student;
     DataBaseKariti dataBase;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,40 +55,40 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
             String nameStudentCurrent = editTxtNameStudent.getText().toString().trim();
             String emailCurrent = editTxtEmail.getText().toString().trim();
             if (nameStudentCurrent.equals(student.getNameStudent()) && emailCurrent.equals(student.getEmail())){
-                Toast.makeText(this, "Sem alterações realizadas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastNotChange), Toast.LENGTH_SHORT).show();
                 return;
             }
             if(nameStudentCurrent.isEmpty()){
-                Toast.makeText(StudentEditActivity.this, "Informe o nome do aluno!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentEditActivity.this, getString(R.string.toastInfoNameStudent), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!student.getNameStudent().equals(nameStudentCurrent)){
                 Boolean checkStudentExists = dataBase.checkExistStudent(nameStudentCurrent);
                 if (checkStudentExists == null) {
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (checkStudentExists) {
-                    Toast.makeText(this, "Já existe um aluno com esse nome, cadastrado nesta escola!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastStudentAlreadyRegister), Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
             if (!emailCurrent.equals(student.getEmail()) && !emailCurrent.isEmpty()) {
                 if (!Patterns.EMAIL_ADDRESS.matcher(emailCurrent).matches()) {
-                    Toast.makeText(this, "E-mail inválido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInvalidEmail), Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
             Boolean updateStudentBD = dataBase.updateStudentData(nameStudentCurrent, emailCurrent, student.getId_student());
             if (updateStudentBD == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (updateStudentBD) {
-                Toast.makeText(StudentEditActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentEditActivity.this, getString(R.string.toastStudentSuccessUpdate), Toast.LENGTH_SHORT).show();
                 restartStudentActivity();
             } else {
-                Toast.makeText(StudentEditActivity.this, "Erro: alteração não realizada!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentEditActivity.this, getString(R.string.toastStudentFailedUpdate), Toast.LENGTH_SHORT).show();
             }
         });
         back.setOnClickListener(view -> restartStudentActivity());
@@ -106,19 +115,18 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
         int id = item.getItemId();
         if (id == R.id.menuExcluirAluno) {
             AlertDialog.Builder builder = new AlertDialog.Builder(StudentEditActivity.this);
-            builder.setTitle("Atenção!")
-                    .setMessage("Deseja realmente excluir o aluno?")
-                    .setPositiveButton("Sim", (dialog, which) -> {
-                        boolean deletarAluno = dataBase.deleteStudent(student.getId_student());
-                        if (deletarAluno) {
-                            Toast.makeText(this, "Aluno excluido com sucesso", Toast.LENGTH_SHORT).show();
+            builder.setTitle(getString(R.string.titleAttention))
+                    .setMessage(getString(R.string.longTextNotifyDeleteStudent))
+                    .setPositiveButton(getString(R.string.yes_description), (dialog, which) -> {
+                        if (dataBase.deleteStudent(student.getId_student())) {
+                            Toast.makeText(this, getString(R.string.toastStudentDelete), Toast.LENGTH_SHORT).show();
                             restartStudentActivity();
                         }else{
-                            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     })
-                    .setNegativeButton("Não", (dialog, which) -> {
+                    .setNegativeButton(getString(R.string.not_description), (dialog, which) -> {
                         dialog.dismiss();
                     });
             AlertDialog alertDialog = builder.create();
@@ -130,9 +138,9 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
     }
     private void noticeEdit(){
         AlertDialog.Builder builder = new AlertDialog.Builder(StudentEditActivity.this);
-        builder.setTitle("Ajuda")
-                .setMessage("Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp))
+                .setMessage(getString(R.string.longTextNotifyIfEdit));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

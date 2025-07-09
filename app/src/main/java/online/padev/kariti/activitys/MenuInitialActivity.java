@@ -19,10 +19,9 @@ import online.padev.kariti.database.DataBaseKariti;
 
 public class MenuInitialActivity extends AppCompatActivity {
     ImageButton back, iconHelp;
-    Button btnClass, btnStudent, btnProva;
+    Button btnClass, btnStudent, btnExam;
     TextView textViewSchool;
     DataBaseKariti dataBase;
-    private String nameSchool;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -40,14 +39,14 @@ public class MenuInitialActivity extends AppCompatActivity {
 
         btnClass = findViewById(R.id.btnTurma);
         btnStudent = findViewById(R.id.buttonAluno);
-        btnProva = findViewById(R.id.btnProva);
+        btnExam = findViewById(R.id.btnProva);
         textViewSchool = findViewById(R.id.toolbar_title);
 
         dataBase = new DataBaseKariti(this);
 
-        nameSchool = dataBase.getSchoolName();
+        String nameSchool = dataBase.getSchoolName();
         if (nameSchool == null){ //vericação caso ocorra exceções no Banco
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -55,7 +54,7 @@ public class MenuInitialActivity extends AppCompatActivity {
 
         btnClass.setOnClickListener(v -> startClass());
         btnStudent.setOnClickListener(v -> startStudent());
-        btnProva.setOnClickListener(v -> startProva());
+        btnExam.setOnClickListener(v -> startExam());
         iconHelp.setOnClickListener(v -> help());
 
         back.setOnClickListener(v -> {
@@ -78,18 +77,16 @@ public class MenuInitialActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StudentActivity.class);
         startActivity(intent);
     }
-    private void startProva(){
+    private void startExam(){
         Intent intent = new Intent(this, ExamActivity.class);
         startActivity(intent);
     }
 
     public void help() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("• Clique na opção \"Aluno\" para cadastrar seus estudantes, independentemente das turmas às quais eles pertencem. Caso não deseje cadastrar os alunos, será possível cadastrar estudantes anônimos (sem definição de nome) em etapa posterior.\n\n\n" +
-                "• Clique na opção \"Turma\" para cadastrar as turmas de estudantes e para vincular os estudantes correspondentes (podendo também ser inseridos alunos anônimos nesta etapa).\n\n" +
-                "• Após cadastrada a turma e vinculados os alunos correspondentes, clique em \"Prova\" para cadastrar as informações sobre uma prova a ser aplicada, incluindo suas informações básicas e seu gabarito.\n");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp));
+        builder.setMessage(getString(R.string.longTextHelpMenu));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

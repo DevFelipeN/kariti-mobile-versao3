@@ -269,11 +269,15 @@
     <string name="longTextOperationSchool">Qual operação deseja realizar com essa escola?</string>
     <string name="longTextReactivatedOrDelete">Para REATIVAR ou EXCLUIR uma escola, basta pressionar sobre a opção com a escola desejada por alguns segundos e selecionar a ação.</string>
     <string name="longTextInfoIfDelete">Caso confirme essa ação, todos os dados pertencentes a essa escola, serão perdidos!</string>
+    <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>
+    <string name="longTextHelpMenu">• Clique na opção \"Aluno\" para cadastrar seus estudantes, independentemente das turmas às quais eles pertencem. Caso não deseje cadastrar os alunos, será possível cadastrar estudantes anônimos (sem definição de nome) em etapa posterior.\n\n\n
+        • Clique na opção \"Turma\" para cadastrar as turmas de estudantes e para vincular os estudantes correspondentes (podendo também ser inseridos alunos anônimos nesta etapa).\n\n
+        • Após cadastrada a turma e vinculados os alunos correspondentes, clique em \"Prova\" para cadastrar as informações sobre uma prova a ser aplicada, incluindo suas informações básicas e seu gabarito.\n
+    </string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
-    <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>
     <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
 
 

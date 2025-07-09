@@ -269,11 +269,15 @@
     <string name="longTextOperationSchool">Which operation would you like to perform with this school?</string>
     <string name="longTextReactivatedOrDelete">To REACTIVATE or DELETE a school, simply press and hold the desired school option for a few seconds and select the action.</string>
     <string name="longTextInfoIfDelete">If you confirm this action, all data belonging to this school will be permanently lost!</string>
+    <string name="textBackupBD">Do you want to transfer your Kariti account to another device?</string>
+    <string name="longTextHelpMenu">• Click on the "Student" option to register your students, regardless of the classes to which they belong. If you do not wish to register the students at this stage, it will be possible to add anonymous students (without a defined name) later.\n\n\n
+        • Click on the "Class" option to register student classes and link the corresponding students (anonymous students can also be added at this stage).\n\n
+        • After registering the class and linking the corresponding students, click on "Test" to enter the information about a test to be applied, including its basic details and answer key.
+    </string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
-    <string name="textBackupBD">Deseja mudar sua conta do Kariti para outro dispositivo?</string>
     <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
 
 

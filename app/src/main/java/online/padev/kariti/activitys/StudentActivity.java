@@ -6,6 +6,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +27,7 @@ import online.padev.kariti.R;
 import online.padev.kariti.adapters.StudentsClickableAdapter;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.entity.Student;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class StudentActivity extends AppCompatActivity {
     ImageButton back;
@@ -32,12 +35,16 @@ public class StudentActivity extends AppCompatActivity {
     List<Student> students;
     FloatingActionButton btnRegistration;
     StudentsClickableAdapter adapterStudent;
-    TextView titleActivity, textViewNumStudents, descritionAddStudent;
+    TextView titleActivity, textViewNumStudents, descriptionAddStudent;
     RecyclerView recyclerView;
     private static final int REQUEST_CODE = 1;
     private Integer id_student;
-
     DataBaseKariti dataBase;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +58,21 @@ public class StudentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         dataBase = new DataBaseKariti(this);
         textViewNumStudents = findViewById(R.id.totalAlunos);
-        descritionAddStudent = findViewById(R.id.txtDescricaoAddAluno);
+        descriptionAddStudent = findViewById(R.id.txtDescricaoAddAluno);
 
         titleActivity = findViewById(R.id.toolbar_title);
-        titleActivity.setText(String.format("%s","Alunos"));
+        titleActivity.setText(getString(R.string.textViewStudents));
 
         students = dataBase.listStudentsData(1);
         if (students == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
         if(students.isEmpty()){
             startRegistrationStudent();
         }
 
-        textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ students.size()));
+        textViewNumStudents.setText(getString(R.string.textViewTotalStudents, students.size()));
 
         adapterStudent = new StudentsClickableAdapter(this, students, this::onItemClick, this::onItemLongClick);
         recyclerView.setAdapter(adapterStudent);
@@ -83,15 +90,15 @@ public class StudentActivity extends AppCompatActivity {
             }
         });
         //Exibir o texto sobre o botão
-        descritionAddStudent.setVisibility(View.VISIBLE);
-        descritionAddStudent.setVisibility(View.VISIBLE);
+        descriptionAddStudent.setVisibility(View.VISIBLE);
+        descriptionAddStudent.setVisibility(View.VISIBLE);
         // Ocultar o texto após 3 segundos
-        new Handler().postDelayed(() -> descritionAddStudent.setVisibility(View.INVISIBLE), 10000);
-        new Handler().postDelayed(() -> descritionAddStudent.setVisibility(View.INVISIBLE), 10000);
+        new Handler().postDelayed(() -> descriptionAddStudent.setVisibility(View.INVISIBLE), 10000);
+        new Handler().postDelayed(() -> descriptionAddStudent.setVisibility(View.INVISIBLE), 10000);
 
         btnRegistration.setOnClickListener(v -> {
-            descritionAddStudent.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(() -> descritionAddStudent.setVisibility(View.INVISIBLE), 3000);
+            descriptionAddStudent.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() -> descriptionAddStudent.setVisibility(View.INVISIBLE), 3000);
             startRegistrationStudent();
         });
         back.setOnClickListener(view -> {
@@ -111,13 +118,13 @@ public class StudentActivity extends AppCompatActivity {
     }
     public void onItemLongClick(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(StudentActivity.this);
-        builder.setTitle("Atenção!")
-                .setMessage("Deseja realmente excluir esse aluno?")
-                .setPositiveButton("Sim", (dialog, which) -> {
+        builder.setTitle(getString(R.string.titleAttention))
+                .setMessage(getString(R.string.longTextNotifyDeleteStudent))
+                .setPositiveButton(getString(R.string.yes_description), (dialog, which) -> {
                     id_student = students.get(position).getId_student();
                     Boolean checkStudentExists = dataBase.checkIfStudentInClass(id_student);
                     if(checkStudentExists == null){
-                        Toast.makeText(StudentActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(!checkStudentExists){
@@ -129,13 +136,13 @@ public class StudentActivity extends AppCompatActivity {
                             if(students.isEmpty()){
                                 finish();
                             }
-                            textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ students.size()));
-                            Toast.makeText(StudentActivity.this, "Aluno Excluido! ", Toast.LENGTH_SHORT).show();
+                            textViewNumStudents.setText(getString(R.string.textViewTotalStudents, students.size()));
+                            Toast.makeText(StudentActivity.this, getString(R.string.toastStudentDelete), Toast.LENGTH_SHORT).show();
                         }else
-                            Toast.makeText(StudentActivity.this, "Erro: aluno não excluido!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StudentActivity.this, getString(R.string.toastStudentNoDeleted), Toast.LENGTH_SHORT).show();
                     }else notifyImpossibleDelete();
                 })
-                .setNegativeButton("Não", (dialog, which) -> {
+                .setNegativeButton(getString(R.string.not_description), (dialog, which) -> {
                     dialog.dismiss();
                 });
         AlertDialog alertDialog = builder.create();
@@ -148,7 +155,7 @@ public class StudentActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 List<Student> studentsAux = dataBase.listStudentsData(1);
                 adapterStudent.updateData(studentsAux);
-                textViewNumStudents.setText(String.format("%s","Total de Alunos: "+ students.size()));
+                textViewNumStudents.setText(getString(R.string.textViewTotalStudents, students.size()));
             }else{
                 finish();
             }
@@ -156,9 +163,9 @@ public class StudentActivity extends AppCompatActivity {
     }
     private void notifyImpossibleDelete(){
         AlertDialog.Builder builder = new AlertDialog.Builder(StudentActivity.this);
-        builder.setTitle("Atenção!")
-                .setMessage("Este aluno possui vínculo com uma ou mais turma(s) cadastrada(s), não sendo possível excluir!.");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention))
+                .setMessage(getString(R.string.longTextImpossibleDeleteStudent));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

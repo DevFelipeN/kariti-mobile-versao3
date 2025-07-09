@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/textViewAlunos"
+        android:text="@string/textViewStudents"
         android:textSize="16sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/listViewCadTurma"

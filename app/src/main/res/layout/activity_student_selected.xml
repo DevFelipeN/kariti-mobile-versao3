@@ -23,7 +23,7 @@
         android:autofillHints="name"
         android:background="@drawable/border_radio"
         android:ems="16"
-        android:hint="@string/buscNameAluno"
+        android:hint="@string/searchStudent"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"

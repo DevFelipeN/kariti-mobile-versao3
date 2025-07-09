@@ -38,7 +38,7 @@
         style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textViewAlunos"
+        android:text="@string/textViewStudents"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/listViewDados"
         app:layout_constraintEnd_toEndOf="@id/listViewDados"

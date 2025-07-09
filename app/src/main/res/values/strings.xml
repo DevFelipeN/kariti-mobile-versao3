@@ -75,17 +75,17 @@
 
 
     <!--    Aluno-->
-    <string name="buttonCadAluno">Cadastrar Aluno(A)</string>
-    <string name="buscNameAluno">Pesquisar aluno</string>
+    <string name="buttonCadStudent">Cadastrar aluno(a)</string>
+    <string name="searchStudent">Pesquisar aluno</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
-    <string name="testeTotalAlunos">Total de Alunos: 14</string>
+    <string name="textViewTotalStudents">Total de alunos: %1$d</string>
     <string name="btnSelectStudents"> Selecionar Alunos(A) >>>> </string>
     <string name="btnIncluir">Incluir</string>
     <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnIncluirAluno">Incluir Alunos</string>
-    <string name="textViewAluno"> Aluno (A) </string>
-    <string name="textViewAlunos">Alunos (A)</string>
+    <string name="textViewStudent"> Aluno(a) </string>
+    <string name="textViewStudents">Alunos (as)</string>
     <string name="buttonEditar"> Editar </string>
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
@@ -95,7 +95,7 @@
     <string name="menuExclAlun">Excluir Aluno</string>
 
     <!--    Turma-->
-    <string name="textViewTurma">Turma</string>
+    <string name="textViewClass">Turma</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNomeTurma">Nome da Turma*</string>
@@ -106,7 +106,7 @@
 
 
     <!--    Prova-->
-    <string name="textViewProva">Prova</string>
+    <string name="textViewExam">Prova</string>
     <string name="textTitleQuickTest">Prova Rápida</string>
     <string name="titleNewExam">Nova Prova</string>
     <string name="buttonCadProva">Cadastrar Prova</string>
@@ -228,6 +228,8 @@
     <string name="toastSchoolReactivatedError">Falha na reativação dessa escola!</string>
     <string name="toastSchoolSuccessDelete">Escola excluida com sucesso!</string>
     <string name="toastSchoolFailedDelete">Falha em excluir escola!</string>
+    <string name="toastStudentDelete">Aluno excluido!</string>
+    <string name="toastStudentNoDeleted">Falha em excluir aluno!</string>
 
 
 
@@ -274,6 +276,8 @@
         • Clique na opção \"Turma\" para cadastrar as turmas de estudantes e para vincular os estudantes correspondentes (podendo também ser inseridos alunos anônimos nesta etapa).\n\n
         • Após cadastrada a turma e vinculados os alunos correspondentes, clique em \"Prova\" para cadastrar as informações sobre uma prova a ser aplicada, incluindo suas informações básicas e seu gabarito.\n
     </string>
+    <string name="longTextNotifyDeleteStudent">Deseja realmente excluir esse aluno?</string>
+    <string name="longTextImpossibleDeleteStudent">Este aluno possui vínculo com uma ou mais turmas cadastradas, não sendo possível excluir!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

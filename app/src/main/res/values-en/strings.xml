@@ -72,17 +72,17 @@
     <string name="longTitleSchoolDelete">Do you really want to delete this school?</string>
 
     <!--    Aluno-->
-    <string name="buttonCadAluno">Cadastrar Aluno(A)</string>
-    <string name="buscNameAluno">Pesquisar aluno</string>
+    <string name="buttonCadStudent">Register Student</string>
+    <string name="searchStudent">Search student</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
-    <string name="testeTotalAlunos">Total de Alunos: 14</string>
+    <string name="textViewTotalStudents">Total students: %1$d</string>
     <string name="btnSelectStudents"> Selecionar Alunos(A) >>>> </string>
     <string name="btnIncluir">Incluir</string>
     <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnIncluirAluno">Incluir Alunos</string>
-    <string name="textViewAluno"> Aluno (A) </string>
-    <string name="textViewAlunos">Alunos (A)</string>
+    <string name="textViewStudent">Student</string>
+    <string name="textViewStudents">Students</string>
     <string name="buttonEditar"> Editar </string>
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
@@ -92,7 +92,7 @@
     <string name="menuExclAlun">Excluir Aluno</string>
 
     <!--    Turma-->
-    <string name="textViewTurma">Turma</string>
+    <string name="textViewClass">Class</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="editTextNameClass">Class name</string>
     <string name="buttonCadTurma">Cadastrar Turma</string>
@@ -103,7 +103,7 @@
 
 
     <!--    Prova-->
-    <string name="textViewProva">Prova</string>
+    <string name="textViewExam">Exam</string>
     <string name="textTitleQuickTest">Quick Test</string>
     <string name="titleNewExam">New Exam</string>
     <string name="buttonCadProva">Cadastrar Prova</string>
@@ -224,6 +224,8 @@
     <string name="toastSchoolReactivatedError">Failed to reactivate this school!</string>
     <string name="toastSchoolSuccessDelete">School deleted successfully!</string>
     <string name="toastSchoolFailedDelete">Failed to delete school!</string>
+    <string name="toastStudentDelete">Student deleted!</string>
+    <string name="toastStudentNoDeleted">Failed to delete student!</string>
 
 
 
@@ -274,6 +276,8 @@
         • Click on the "Class" option to register student classes and link the corresponding students (anonymous students can also be added at this stage).\n\n
         • After registering the class and linking the corresponding students, click on "Test" to enter the information about a test to be applied, including its basic details and answer key.
     </string>
+    <string name="longTextNotifyDeleteStudent">Do you really want to delete this student?</string>
+    <string name="longTextImpossibleDeleteStudent">This student is linked to one or more registered classes and cannot be deleted!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

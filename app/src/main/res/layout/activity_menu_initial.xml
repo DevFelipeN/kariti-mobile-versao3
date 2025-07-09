@@ -44,7 +44,7 @@
             style="@style/BUTTONSTYLE"
             android:layout_width="match_parent"
             android:layout_marginEnd="70dp"
-            android:text="@string/textViewAluno"
+            android:text="@string/textViewStudent"
             android:textSize="16sp" />
 
         <ImageView
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="70dp"
-            android:text="@string/textViewTurma"
+            android:text="@string/textViewClass"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonAluno" />
@@ -90,7 +90,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="70dp"
-            android:text="@string/textViewProva"
+            android:text="@string/textViewExam"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnTurma"

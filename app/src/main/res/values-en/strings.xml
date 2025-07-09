@@ -74,6 +74,7 @@
     <!--    Aluno-->
     <string name="buttonCadStudent">Register Student</string>
     <string name="searchStudent">Search student</string>
+    <string name="studentEmail">Email</string>
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
     <string name="textViewTotalStudents">Total students: %1$d</string>
@@ -226,6 +227,11 @@
     <string name="toastSchoolFailedDelete">Failed to delete school!</string>
     <string name="toastStudentDelete">Student deleted!</string>
     <string name="toastStudentNoDeleted">Failed to delete student!</string>
+    <string name="toastInfoNameStudent">Please enter the student\'s name</string>
+    <string name="toastStudentAlreadyRegister">This student is already registered at this school!</string>
+    <string name="toastEmailAlreadyLinkStudent">This email is already associated with a registered student!</string>
+    <string name="toastStudentSuccessRegistration">Student registered successfully!</string>
+    <string name="toastStudentFailedRegistration">Student registration failed!</string>
 
 
 

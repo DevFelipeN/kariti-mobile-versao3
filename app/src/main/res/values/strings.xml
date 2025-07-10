@@ -97,6 +97,7 @@
 
     <!--    Turma-->
     <string name="textViewClass">Turma</string>
+    <string name="textViewTitle">Turmas</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNomeTurma">Nome da Turma*</string>
@@ -239,6 +240,8 @@
     <string name="toastNotChange">Sem alterações realizadas!</string>
     <string name="toastStudentSuccessUpdate">Dados atualizados com sucesso!</string>
     <string name="toastStudentFailedUpdate">Falha na alteração dos dados!</string>
+    <string name="toastClassDelete">Turma excluida!</string>
+    <string name="toastClassNoDeleted">Falha em excluir turma!</string>
 
 
 
@@ -288,6 +291,8 @@
     <string name="longTextNotifyDeleteStudent">Deseja realmente excluir esse aluno?</string>
     <string name="longTextImpossibleDeleteStudent">Este aluno possui vínculo com uma ou mais turmas cadastradas, não sendo possível excluir!</string>
     <string name="longTextNotifyIfEdit">Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.</string>
+    <string name="longTextNotifyDeleteClass">Deseja excluir essa turma?</string>
+    <string name="longTextImpossibleDeletedClass">Esta turma possui vínculo com uma ou mais provas cadastradas, não sendo possível excluir!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

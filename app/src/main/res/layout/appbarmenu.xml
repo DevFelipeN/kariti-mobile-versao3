@@ -22,7 +22,7 @@
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:contentDescription="@string/iconeMenuPontos"
-            android:onClick="popMenuAluno"
+            android:onClick="popMenuStudent"
             android:padding="8dp"
             android:src="@mipmap/menuptn" />
 

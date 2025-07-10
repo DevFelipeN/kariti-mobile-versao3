@@ -104,7 +104,7 @@ public class StudentEditActivity extends AppCompatActivity implements PopupMenu.
         finish();
     }
 
-    public void popMenuAluno(View v){
+    public void popMenuStudent(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
         popupMenu.inflate(R.menu.activity_menualuno);

@@ -94,6 +94,7 @@
 
     <!--    Turma-->
     <string name="textViewClass">Class</string>
+    <string name="textViewTitle">Classes</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="editTextNameClass">Class name</string>
     <string name="buttonCadTurma">Cadastrar Turma</string>
@@ -235,6 +236,8 @@
     <string name="toastNotChange">No modifications were made.</string>
     <string name="toastStudentSuccessUpdate">Information updated successfully!</string>
     <string name="toastStudentFailedUpdate">Data update failed!</string>
+    <string name="toastClassDelete">Class deleted!</string>
+    <string name="toastClassNoDeleted">Failed to delete class!</string>
 
 
 
@@ -288,6 +291,8 @@
     <string name="longTextNotifyDeleteStudent">Do you really want to delete this student?</string>
     <string name="longTextImpossibleDeleteStudent">This student is linked to one or more registered classes and cannot be deleted!</string>
     <string name="longTextNotifyIfEdit">Hello, if you wish to update this student\'s information, simply enter the new data in the fields and click save.</string>
+    <string name="longTextNotifyDeleteClass">Do you want to delete this class?</string>
+    <string name="longTextImpossibleDeletedClass">This class is linked to one or more registered exams and cannot be deleted!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

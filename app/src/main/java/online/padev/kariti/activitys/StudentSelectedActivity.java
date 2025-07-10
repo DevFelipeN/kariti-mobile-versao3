@@ -1,5 +1,6 @@
 package online.padev.kariti.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,8 +23,14 @@ import online.padev.kariti.R;
 import online.padev.kariti.adapters.StudentSelectedAdapter;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.entity.Student;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class StudentSelectedActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +38,7 @@ public class StudentSelectedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_selected);
 
         TextView titleActivity = findViewById(R.id.toolbar_title);
-        titleActivity.setText(String.format("%s","Alunos"));
+        titleActivity.setText(getString(R.string.textViewStudents));
 
 
         ImageButton back = findViewById(R.id.imgBtnVoltar);

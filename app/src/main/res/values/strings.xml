@@ -81,12 +81,13 @@
     <string name="editTextBuscAluno">Buscar Alunos</string>
     <string name="buscNameAlunoLupa">Lupa de pesquisa</string>
     <string name="textViewTotalStudents">Total de alunos: %1$d</string>
-    <string name="btnSelectStudents"> Selecionar Alunos(A) >>>> </string>
+    <string name="btnSelectStudents"> Selecionar Alunos(a) >>> </string>
     <string name="btnIncluir">Incluir</string>
     <string name="textViewAlunoAnonim">Incluir Alunos Anônimos</string>
     <string name="btnIncluirAluno">Incluir Alunos</string>
     <string name="textViewStudent"> Aluno(a) </string>
     <string name="textViewStudents">Alunos (as)</string>
+    <string name="textAnonymous">Aluno(a) %1$s</string>
     <string name="buttonEditar"> Editar </string>
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
@@ -98,6 +99,7 @@
     <!--    Turma-->
     <string name="textViewClass">Turma</string>
     <string name="textViewTitle">Turmas</string>
+    <string name="textViewTitleNewClass">Nova Turma</string>
     <string name="txtViewTurma">Turma:</string>
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNomeTurma">Nome da Turma*</string>
@@ -242,6 +244,11 @@
     <string name="toastStudentFailedUpdate">Falha na alteração dos dados!</string>
     <string name="toastClassDelete">Turma excluida!</string>
     <string name="toastClassNoDeleted">Falha em excluir turma!</string>
+    <string name="toastStudentRemoved">Aluno removido</string>
+    <string name="toastEnterNameClass">Informe o nome da turma!</string>
+    <string name="toastClassAlreadyRegister">Já existe uma turma cadastrada com esse nome associado a essa escola. Informe um nome diferente para essa turma!</string>
+    <string name="toastSuccessRegisterClass">Turma cadastrada com sucesso!</string>
+    <string name="toastClassFailedRegister">Falha no cadastro da turma!</string>
 
 
 
@@ -293,6 +300,7 @@
     <string name="longTextNotifyIfEdit">Olá, caso deseje alterar as informações desse aluno, basta informar os novos dados nos campos e clicar em salvar.</string>
     <string name="longTextNotifyDeleteClass">Deseja excluir essa turma?</string>
     <string name="longTextImpossibleDeletedClass">Esta turma possui vínculo com uma ou mais provas cadastradas, não sendo possível excluir!</string>
+    <string name="longTextClassNoStudent">Não é possível cadastrar uma turma sem alunos. Por favor, selecione os alunos para essa turma ou, caso preferir, informe a quantidade de alunos anônimos!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

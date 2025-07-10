@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import online.padev.kariti.R;
 import online.padev.kariti.adapters.StudentOnDeleteAdapter;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.entity.Student;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class ClassRegistrationActivity extends AppCompatActivity{
     ImageButton back, iconHelp;
@@ -40,6 +42,11 @@ public class ClassRegistrationActivity extends AppCompatActivity{
     private static final int REQUEST_CODE = 1;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_registration);
@@ -50,7 +57,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
         titleActivity = findViewById(R.id.toolbar_title);
         titleStudents = findViewById(R.id.textViewAlunos);
 
-        titleActivity.setText(String.format("%s","Nova Turma"));
+        titleActivity.setText(getString(R.string.textViewTitleNewClass));
 
         editTextNameClass = findViewById(R.id.editTextTurmaCad);
         btnRegistration = findViewById(R.id.buttonCadastrarTurma);
@@ -76,7 +83,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 titleStudents.setVisibility(View.GONE);
             }
             adapterStudents.notifyDataSetChanged();
-            Toast.makeText(this, "Aluno removido! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastStudentRemoved), Toast.LENGTH_SHORT).show();
         });
 
         btnSelectStudents.setOnClickListener(v -> {
@@ -108,7 +115,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
             try {
                 String className = editTextNameClass.getText().toString().trim();
                 if(className.isEmpty()) {
-                    Toast.makeText(ClassRegistrationActivity.this, "Informe o nome da turma!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ClassRegistrationActivity.this, getString(R.string.toastEnterNameClass), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String numAnonymous = editTextStudentAnonymous.getText().toString().trim();
@@ -118,17 +125,16 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 }
                 Boolean checkClassExists = dataBase.checkExistClass(className);
                 if (checkClassExists == null){
-                    Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (checkClassExists) {
-                    Toast.makeText(ClassRegistrationActivity.this, "Já existe uma turma cadastrada com esse nome associado a essa escola. " +
-                            "Informe um nome diferente para essa turma! ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastClassAlreadyRegister), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Integer class_id = dataBase.insertClass(className);
                 if (class_id == null || class_id == -1) {
-                    Toast.makeText(ClassRegistrationActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -140,7 +146,7 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                     int t = numAnonymous.length();
                     List<Student> studentsAnonymous = new ArrayList<>();
                     for (int x = 1; x <= totAnonymous; x++) {
-                        String nameAnonymous = "Aluno "+ String.format("%0"+t+"d",x);
+                        String nameAnonymous = getString(R.string.textAnonymous, String.format("%0"+t+"d",x));
                         Student studentA = new Student(0, nameAnonymous, null);
                         studentsAnonymous.add(studentA);
                     }
@@ -150,14 +156,14 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 if (!students.isEmpty()){
                     boolean isInsertion = dataBase.insertStudentsInClass_2(students, class_id);
                     if(isInsertion) {
-                        Toast.makeText(this, "Turma cadastrada com Sucesso", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.toastSuccessRegisterClass), Toast.LENGTH_SHORT).show();
                         restartVisualClass();
                     } else {
-                        Toast.makeText(this, "Falha no cadastro da turma \n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.toastClassFailedRegister), Toast.LENGTH_SHORT).show();
                     }
                 }
             }catch (Exception e){
-                Toast.makeText(this, "Falha no cadastro da turma \n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 restartVisualClass();
             } finally {
                 btnRegistration.setEnabled(true);
@@ -180,7 +186,6 @@ public class ClassRegistrationActivity extends AppCompatActivity{
                 students.clear();
                 students.addAll((List<Student>) data.getSerializableExtra("students"));
                 adapterStudents.notifyDataSetChanged();
-                Log.e("Testess", String.valueOf(students.size()));
                 if (!students.isEmpty()){
                     listViewStudents.setVisibility(View.VISIBLE);
                     titleStudents.setVisibility(View.VISIBLE);
@@ -206,22 +211,22 @@ public class ClassRegistrationActivity extends AppCompatActivity{
     }
     public void notice(){
         AlertDialog.Builder builder = new AlertDialog.Builder(ClassRegistrationActivity.this);
-        builder.setTitle("Atenção!")
-                .setMessage("Não é possível cadastrar uma turma sem alunos. Por favor, selecione os alunos para essa turma ou, caso preferir, informe a quantidade de alunos anônimos! ")
-                .setPositiveButton("OK", (dialog, which) -> Toast.makeText(ClassRegistrationActivity.this, "Selecione os alunos!", Toast.LENGTH_SHORT).show());
+        builder.setTitle(getString(R.string.titleAttention))
+                .setMessage(getString(R.string.longTextClassNoStudent))
+                .setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
     public void dialogHelp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
+        builder.setTitle(getString(R.string.titleHelp));
         builder.setMessage("Bem vindo(a) ao cadastro de turma! \n\n" +
                 "Nesta tela são solicitados alguns dados para cadastrar um nova turma.\n\n" +
                 "1 - Nome: deve ser informado o nome da turma *obrigatório* \n\n" +
                 "2 - Alunos: podem ser incluídos alunos para essa turma selecionando-os no campo 'Selecione os Alunos', os quais antecipadamente já devem estar cadastrados no KARITI na tela de cadastro de alunos. Todos os alunos selecionados são listados no campo 'Alunos'. Caso selecione algum aluno errado, basta clicar no nome do aluno para remove-lo da lista. \n\n" +
                 "3 - Anônimos: caso não deseje cadastrar alunos para essa turma, podem ser incluidos alunos anônimos no campo 'Incluir Alunos Anônimos', informando a quantidade no campo sugerido, sem a necessidade de cadastrar todos ou nenhum aluno como descrito na opção 2. \n\n" +
                 "Obs. A Turma não pode ser cadastrada sem alunos.");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

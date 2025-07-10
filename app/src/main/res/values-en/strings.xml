@@ -105,6 +105,7 @@
     <string name="titleEditClass">Edit Class</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="editTextNomeTurma">Class Name*</string>
+    <string name="infoStudentsInClass">Students identified: %1$d \nAnonymous students: %2$d \n\nTotal number of students: %3$d</string>
 
 
     <!--    Prova-->
@@ -309,6 +310,7 @@
         3 - Anonymous: If you prefer not to register individual students, you can add anonymous students by entering the desired number in the \'Add Anonymous Students\' field, without needing to register any students as described in option 2.\n\n
         Note: A class cannot be registered without students.
     </string>
+    <string name="longTextClassInExam">This class is linked to one or more exams that have already been graded and cannot be edited!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

@@ -108,6 +108,7 @@
     <string name="titleEditClass">Editar Turma</string>
     <string name="textViewFiltro">Filtro por turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
+    <string name="infoStudentsInClass">Alunos Identificados: %1$d \nAlunos Anônimos: %2$d \n\nTotal de Alunos: %3$d</string>
 
 
     <!--    Prova-->
@@ -309,6 +310,7 @@
         3 - Anônimos: caso não deseje cadastrar alunos para essa turma, podem ser incluidos alunos anônimos no campo \'Incluir Alunos Anônimos\', informando a quantidade no campo sugerido, sem a necessidade de cadastrar todos ou nenhum aluno como descrito na opção 2. \n\n
         Obs. A Turma não pode ser cadastrada sem alunos.
     </string>
+    <string name="longTextClassInExam">Esta turma possui vínculo com uma ou mais prova(s) já corrigidas, não sendo possível editar!</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

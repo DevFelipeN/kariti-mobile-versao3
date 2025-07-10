@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,7 @@ import online.padev.kariti.adapters.StudentOnDeleteAdapter;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.entity.ClassSchool;
 import online.padev.kariti.entity.Student;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class ClassEditActivity extends AppCompatActivity {
     ImageButton back, iconHelp;
@@ -43,6 +45,11 @@ public class ClassEditActivity extends AppCompatActivity {
     TextView titleActivity, titleStudent;
 
     private static final int REQUEST_CODE = 1;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +117,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 listViewStudents.setVisibility(View.GONE);
             }
             adapterStudents.notifyDataSetChanged();
-            Toast.makeText(ClassEditActivity.this, getString(R.string.toastStudentRemoved), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastStudentRemoved), Toast.LENGTH_SHORT).show();
         });
 
         lessAnonymous.setOnClickListener(view -> {

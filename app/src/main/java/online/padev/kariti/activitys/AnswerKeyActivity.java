@@ -162,7 +162,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
                                 avisoErroDeCadastro("no cadastro");
                             }
                         } else if (!dadosExam.getExam_id().equals(0)) {
-                            if (dataBaseKariti.upadateExamData(dadosExam, answerkey, statusEdition)) {
+                            if (dataBaseKariti.updateExamData(dadosExam, answerkey, statusEdition)) {
                                 dialogProvaSucess("alterada");
                             } else {
                                 avisoErroDeCadastro("na alteração");

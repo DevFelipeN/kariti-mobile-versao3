@@ -104,7 +104,8 @@
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNomeTurma">Nome da Turma*</string>
     <string name="buttonCadTurma">Cadastrar Turma</string>
-    <string name="buttonSalvTurma">Salvar Turma</string>
+    <string name="buttonSaveClass">Salvar Turma</string>
+    <string name="titleEditClass">Editar Turma</string>
     <string name="textViewFiltro">Filtro por turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
 
@@ -246,7 +247,7 @@
     <string name="toastClassNoDeleted">Falha em excluir turma!</string>
     <string name="toastStudentRemoved">Aluno removido</string>
     <string name="toastEnterNameClass">Informe o nome da turma!</string>
-    <string name="toastClassAlreadyRegister">Já existe uma turma cadastrada com esse nome associado a essa escola. Informe um nome diferente para essa turma!</string>
+    <string name="toastClassAlreadyRegister">Já existe uma turma cadastrada com esse nome associado a escola atual. Informe um nome diferente para essa turma!</string>
     <string name="toastSuccessRegisterClass">Turma cadastrada com sucesso!</string>
     <string name="toastClassFailedRegister">Falha no cadastro da turma!</string>
 
@@ -301,6 +302,13 @@
     <string name="longTextNotifyDeleteClass">Deseja excluir essa turma?</string>
     <string name="longTextImpossibleDeletedClass">Esta turma possui vínculo com uma ou mais provas cadastradas, não sendo possível excluir!</string>
     <string name="longTextClassNoStudent">Não é possível cadastrar uma turma sem alunos. Por favor, selecione os alunos para essa turma ou, caso preferir, informe a quantidade de alunos anônimos!</string>
+    <string name="longTextNumAnonymousInClass">Esta turma possui %1$d alunos anônimos cadastrados, caso deseje alterar essa quantidade, basta informar um novo valor no campo referente \'Incluir Alunos Anônimos\'.</string>
+    <string name="longTextHelpRegisterClass">Nesta tela os dados da turma podem ser alterados, seguindo o mesmo padrão de cadastro de turma.\n\n
+        1 - Nome: caso deseje alterar o nome, basta informar um novo\n\n
+        2 - Alunos: podem ser incluídos novos alunos para essa turma selecionando-os no campo \'Selecione os Alunos\', os quais antecipadamente já devem estar cadastrados no KARITI na tela de cadastro de alunos. Caso deseje remover, basta clicar no nome do aluno para remove-lo da turma. \n\n
+        3 - Anônimos: caso não deseje cadastrar alunos para essa turma, podem ser incluidos alunos anônimos no campo \'Incluir Alunos Anônimos\', informando a quantidade no campo sugerido, sem a necessidade de cadastrar todos ou nenhum aluno como descrito na opção 2. \n\n
+        Obs. A Turma não pode ser cadastrada sem alunos.
+    </string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

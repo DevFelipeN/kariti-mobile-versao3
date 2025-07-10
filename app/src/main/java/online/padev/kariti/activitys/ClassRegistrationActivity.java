@@ -71,6 +71,13 @@ public class ClassRegistrationActivity extends AppCompatActivity{
 
         dataBase = new DataBaseKariti(this);
 
+        Boolean studentExist = dataBase.checkExistStudent();
+        if (studentExist != null){
+            if(!studentExist){
+                btnSelectStudents.setVisibility(View.GONE);
+            }
+        } else Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
+
         students = new ArrayList<>();
 
         adapterStudents = new StudentOnDeleteAdapter(this, students);

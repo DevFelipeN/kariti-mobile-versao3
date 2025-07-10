@@ -647,7 +647,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
         }
     }
 
-    public boolean upadateExamData(Exam exam, List<Answer_key> answer_key, int status){
+    public boolean updateExamData(Exam exam, List<Answer_key> answer_key, int status){
         SQLiteDatabase base_dado = null;
         SQLiteStatement stmtUpdateExam = null;
         SQLiteStatement stmtDeleteAnswer_key = null;

@@ -109,6 +109,7 @@
     <string name="textViewFiltro">Filtro por turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="infoStudentsInClass">Alunos Identificados: %1$d \nAlunos Anônimos: %2$d \n\nTotal de Alunos: %3$d</string>
+    <string name="textClassRegistered">turmas cadastrada</string>
 
 
     <!--    Prova-->
@@ -156,6 +157,8 @@
     <string name="encerrar">Encerrar</string>
     <string name="Ver">Ver</string>
     <string name="aguardeCorrecao">Aguarde a correção</string>
+    <string name="textExamRegister">provas cadastradas</string>
+    <string name="titleCorrectionFinish">Correção Finalizada</string>
 
 
     <!--    Descrição de Icons-->
@@ -311,6 +314,14 @@
         Obs. A Turma não pode ser cadastrada sem alunos.
     </string>
     <string name="longTextClassInExam">Esta turma possui vínculo com uma ou mais prova(s) já corrigidas, não sendo possível editar!</string>
+    <string name="longTextNotRegistered">Não encontramos %1$s para essa escola. Para acesso a essa opção é necessário ter %1$s.</string>
+    <string name="longTextHelpExamMenu">Menu de prova.\n\n" +
+        • Cadastrar Prova - Selecionando essa opção, será derecionado a tela que solicita as informações necessárias para elaboração da prova e, em seguida solicita o preenchimento do gabarito.\n\n
+        • Gerar Cartões - Nesta opção é realizado o download dos cartões resposta de uma prova já cadastrada na opção anterior.\n\n
+        • Corrigir Provas - Após selecionada essa opção, basta realizar os passos sugeridos pelo KARITI, apontar a câmera para o cartão de resposta e aguradar a correção.\n\n
+        • Visualizar Provas - Nesta opção podem ser visualizadas as provas e o resultado da correção de cada uma, caso já corridas.
+    </string>
+    <string name="longTextCorrectionFinish">O Resultado da correção pode ser visualizado na opção \'Visualizar Provas\'</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

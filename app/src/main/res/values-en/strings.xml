@@ -106,19 +106,20 @@
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="editTextNomeTurma">Class Name*</string>
     <string name="infoStudentsInClass">Students identified: %1$d \nAnonymous students: %2$d \n\nTotal number of students: %3$d</string>
+    <string name="textClassRegistered">registered classes</string>
 
 
     <!--    Prova-->
     <string name="textViewExam">Exam</string>
     <string name="textTitleQuickTest">Quick Test</string>
     <string name="titleNewExam">New Exam</string>
-    <string name="buttonCadProva">Cadastrar Prova</string>
+    <string name="buttonCadProva">Register Exam</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
     <string name="buttonGerarCartao">Generate Cards</string>
     <string name="buttonGerarCartaoRap">Generate Card</string>
     <string name="buttonCorrigirProva">Grade Exam</string>
     <string name="titleCaptureCard">Capture Card</string>
-    <string name="buttonVisuProva">Visualizar Provas</string>
+    <string name="buttonVisuProva">View Exams</string>
     <string name="titleCardGenerateSuccess">Answer sheet generated successfully</string>
     <string name="textViewEditProva">Mais Opções </string>
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
@@ -152,6 +153,8 @@
     <string name="encerrar">Encerrar</string>
     <string name="Ver">Ver</string>
     <string name="aguardeCorrecao">Aguarde a correção</string>
+    <string name="textExamRegister">registered exams</string>
+    <string name="titleCorrectionFinish">Grading Completed</string>
 
 
     <!--    Descrição de Icons-->
@@ -311,6 +314,14 @@
         Note: A class cannot be registered without students.
     </string>
     <string name="longTextClassInExam">This class is linked to one or more exams that have already been graded and cannot be edited!</string>
+    <string name="longTextNotRegistered">We couldn\'t find any %1$s for this school. To access this option, you need to have %1$s.</string>
+    <string name="longTextHelpExamMenu">Exam Menu\n\n
+        • Register Exam – By selecting this option, you will be redirected to a screen that requests the necessary information for creating the exam, followed by the answer key setup.\n\n
+        • Generate Answer Sheets – This option allows you to download the answer sheets for an exam previously registered using the option above.\n\n
+        • Grade Exams – After selecting this option, simply follow the steps suggested by KARITI, point the camera at the answer sheet, and wait for the grading to be completed.\n\n
+        • View Exams – In this option, you can view the exams and the grading results for each one, if they have already been graded.
+    </string>
+    <string name="longTextCorrectionFinish">The grading result can be viewed under the \'View Exams\' option.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

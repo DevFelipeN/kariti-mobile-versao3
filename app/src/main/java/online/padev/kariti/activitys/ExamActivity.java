@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +17,6 @@ import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
@@ -44,9 +44,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -58,6 +56,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import online.padev.kariti.R;
+import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.utils.BitmapLuminanceSource;
 import online.padev.kariti.correction.Circle;
 import online.padev.kariti.correction.CoreKariti;
@@ -67,10 +66,16 @@ import online.padev.kariti.database.DataBaseKariti;
 public class ExamActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 100;
     ImageButton back, iconHelp;
-    Button btnRegistrationProva, btnGenerateCard, btnToCorrectProva, btnViewProvas, btnEditProva;
+    Button btnRegistrationExam, btnGenerateCard, btnToCorrectExam, btnViewExams, btnEditExam;
     DataBaseKariti dataBaseKariti;
     TextView textViewTitle;
-    Integer id_provaCaptured;
+    Integer examCaptured_id;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,39 +83,40 @@ public class ExamActivity extends AppCompatActivity {
 
         back = findViewById(R.id.imgBtnVoltaDescola);
         iconHelp = findViewById(R.id.iconHelp);
-        btnRegistrationProva = findViewById(R.id.buttonCadProva);
+        btnRegistrationExam = findViewById(R.id.buttonCadProva);
         btnGenerateCard = findViewById(R.id.buttonGerarCatao);
-        btnToCorrectProva = findViewById(R.id.buttonCorrigirProva);
-        btnViewProvas = findViewById(R.id.buttonVisuProva);
-        btnEditProva = findViewById(R.id.buttonEdicaoProva);
+        btnToCorrectExam = findViewById(R.id.buttonCorrigirProva);
+        btnViewExams = findViewById(R.id.buttonVisuProva);
+        btnEditExam = findViewById(R.id.buttonEdicaoProva);
         textViewTitle = findViewById(R.id.toolbar_title);
 
         dataBaseKariti = new DataBaseKariti(this);
 
-        textViewTitle.setText(String.format("%s","Prova"));
+        textViewTitle.setText(getString(R.string.textViewExam));
 
         iconHelp.setOnClickListener(v -> dialogHelp());
-        btnRegistrationProva.setOnClickListener(v -> startRegistrationProva());
+        btnRegistrationExam.setOnClickListener(v -> startRegistrationExam());
         btnGenerateCard.setOnClickListener(v -> startGenerateCard());
-        btnViewProvas.setOnClickListener(v -> startViewProvas());
+        btnViewExams.setOnClickListener(v -> startViewExams());
 
-        btnToCorrectProva.setOnClickListener(v -> {
-            btnToCorrectProva.setEnabled(false);
+        btnToCorrectExam.setOnClickListener(v -> {
+            btnToCorrectExam.setEnabled(false);
             try {
-                Boolean checkExistsProva = dataBaseKariti.checkIfExistExams();
-                if (checkExistsProva == null) {
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Boolean checkExistsExam = dataBaseKariti.checkIfExistExams();
+                if (checkExistsExam == null) {
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (checkExistsProva) {
+                if (checkExistsExam) {
                     displayOptionsToCorrect();
                 } else {
-                    notice("provas cadastradas");
+                    notice(getString(R.string.textExamRegister));
                 }
             } catch (Exception e){
                 Log.e("kariti", e.toString());
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             } finally {
-                btnToCorrectProva.setEnabled(true);
+                btnToCorrectExam.setEnabled(true);
             }
         });
         back.setOnClickListener(v -> finish());
@@ -121,38 +127,38 @@ public class ExamActivity extends AppCompatActivity {
             }
         });
     }
-    private void startRegistrationProva(){
-        btnRegistrationProva.setEnabled(false);
+    private void startRegistrationExam(){
+        btnRegistrationExam.setEnabled(false);
         try {
             Boolean checkExistsClass = dataBaseKariti.checkExistClass();
             if (checkExistsClass == null) {
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (checkExistsClass) {
                 Intent intent = new Intent(this, ExamRegistrationActivity.class);
                 startActivity(intent);
-            } else notice("turmas cadastradas");
+            } else notice(getString(R.string.textClassRegistered));
         } catch (Exception e) {
             Log.e("kariti", e.toString());
         } finally {
-            btnRegistrationProva.setEnabled(true);
+            btnRegistrationExam.setEnabled(true);
         }
     }
     private void startGenerateCard(){
         btnGenerateCard.setEnabled(false);
         try {
-            Boolean checkExistsProva = dataBaseKariti.checkIfExistExams();
-            if (checkExistsProva == null) {
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Boolean checkExistsExam = dataBaseKariti.checkIfExistExams();
+            if (checkExistsExam == null) {
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (checkExistsProva) {
+            if (checkExistsExam) {
                 Intent intent = new Intent(this, ExamGenerateCardRegisteredActivity.class);
                 intent.putExtra("endereco", 2);
                 startActivity(intent);
             } else {
-                notice("provas cadastradas");
+                notice(getString(R.string.textExamRegister));
             }
         } catch (Exception e){
             Log.e("kariti", e.toString());
@@ -160,38 +166,34 @@ public class ExamActivity extends AppCompatActivity {
             btnGenerateCard.setEnabled(true);
         }
     }
-    private void startViewProvas(){
-        btnViewProvas.setEnabled(false);
+    private void startViewExams(){
+        btnViewExams.setEnabled(false);
         try {
-            Boolean checkExistsProva = dataBaseKariti.checkIfExistExams();
-            if (checkExistsProva) {
+            Boolean checkExistsExam = dataBaseKariti.checkIfExistExams();
+            if (checkExistsExam) {
                 Intent intent = new Intent(this, ExamViewActivity.class);
                 startActivity(intent);
             } else {
-                notice("provas cadastradas");
+                notice(getString(R.string.textExamRegister));
             }
         } catch (Exception e){
             Log.e("kariti", e.toString());
         } finally {
-            btnViewProvas.setEnabled(true);
+            btnViewExams.setEnabled(true);
         }
     }
-    private void notice(String descricao){
+    private void notice(String description){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Atenção!");
-        builder.setMessage("Não encontramos "+descricao+" para essa escola. Para ter acesso a essa opção é necessário ter "+descricao+".");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextNotRegistered, description));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     private void dialogHelp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajuda");
-        builder.setMessage("Tela principal de prova.\n\n" +
-                "• Cadastrar Prova - Selecionando essa opção, será derecionado a tela que solicita as informações necessárias para elaboração da prova e, em seguida solicita o preenchimento do gabarito.\n\n" +
-                "• Gerar Cartões - Nesta opção é realizado o download dos cartões resposta de uma prova já cadastrada na opção anterior.\n\n" +
-                "• Corrigir Prova - Após selecionada essa opção, basta realizar os passos sugeriodos pelo KARITI, iniciar correção clicando no botão 'Scannear Cartão', capturar o QrCode da prova e capturar a imagem do cartão resposta, em seguida são listadas as provas capuradas na próxima tela, onde, são sugeridas duas opções, continuar capturando mais provas ou finalizar a correção.\n\n" +
-                "• Visualizar Prova - Nesta opção pode ser visualizado o resultado da correção das provas informando a quantidade de acertos e nota de cada aluno.");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleHelp));
+        builder.setMessage(getString(R.string.longTextHelpExamMenu));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     private void displayOptionsToCorrect() {
@@ -237,19 +239,17 @@ public class ExamActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             startActivityForResult(intent, REQUEST_CODE_OPEN_DOCUMENT);
         }catch (Exception e){
-            Log.e("ERRO", "ERRO AQUI11!!: "+e.toString());
+            Log.e("ERRO", e.toString());
         }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("tempo", "Inicio");
         Handler handler = new Handler(Looper.getMainLooper());
         new Thread(){
             @Override
             public void run() {
                 super.run();
-                //mensagem(handler, "Correção em andamento...");
                 processFiles(requestCode, resultCode, data, handler);
             }
         }.start();
@@ -280,7 +280,7 @@ public class ExamActivity extends AppCompatActivity {
             }else{
                 return;
             }
-            AnimationCorrectionActivity.encerra("Correcao finalizada");
+            AnimationCorrectionActivity.close();
             notifyFinallyCorrection(handler);
         }catch (Exception e){
             Log.e("ERRO", "ERRO AQUI44!!: "+e);
@@ -292,9 +292,9 @@ public class ExamActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ExamActivity.this);
-                    builder.setTitle("Correção Finalizada");
-                    builder.setMessage("O Resultado da correção pode ser visualizado na opção 'Visualizar Provas'");
-                    builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+                    builder.setTitle(getString(R.string.titleCorrectionFinish));
+                    builder.setMessage(getString(R.string.longTextCorrectionFinish));
+                    builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
                     builder.show();
                 }
             });
@@ -412,17 +412,16 @@ public class ExamActivity extends AppCompatActivity {
                 String textQrCode = scanQRCodeFromBitmap(bitmap);
                 if(textQrCode != null && String.valueOf(textQrCode.charAt(0)).equals("#")){
                     Mat matWarp = warp(matToWarp, listOrganized); //realiza o corte da imagem
-                    resultQrCode = processeQrCode(textQrCode);
+                    resultQrCode = processQrCode(textQrCode);
                     String[] a = resultQrCode.split("_");
-                    id_provaCaptured = Integer.parseInt(a[0]);
+                    examCaptured_id = Integer.parseInt(a[0]);
 
-                    if(!dataBaseKariti.checkIfExistExam(id_provaCaptured)){
+                    if(!dataBaseKariti.checkIfExistExam(examCaptured_id)){
                         //runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Prova não cadastrada!", Toast.LENGTH_SHORT).show());
-                        Log.e("kariti","Prova não cadastrada!!");
                         return;
                     }
 
-                    Exam exam = new Exam(id_provaCaptured, dataBaseKariti);
+                    Exam exam = new Exam(examCaptured_id, dataBaseKariti);
 
                     //Versão 3
                     CoreKariti core = new CoreKariti(matWarp, exam, dataBaseKariti, Integer.parseInt(a[1]));
@@ -521,7 +520,7 @@ public class ExamActivity extends AppCompatActivity {
         return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 
-    private String processeQrCode(String qrCode){
+    private String processQrCode(String qrCode){
         String qrCodeConteudo = qrCode.replaceAll("[#$]", "");
         String[] partes = qrCodeConteudo.split("\\."); // partes do valor do QRCODE
         String id_prova = partes[0];
@@ -529,68 +528,9 @@ public class ExamActivity extends AppCompatActivity {
         return id_prova+"_"+id_aluno;
     }
 
-    public String saveBitmapAndGetPath(Bitmap bitmap, String name) {
-        File externalDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CameraXopenCV");
-
-        // Cria o diretório se não existir
-        if (!externalDir.exists()) {
-            externalDir.mkdirs();
-        }
-
-        File imageFile = new File(externalDir, name+".png");
-        try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            outputStream.flush();
-            return imageFile.getAbsolutePath();
-        } catch (IOException e) {
-            Log.e("ERRO", "ERRO AQUI!!000: "+e.toString());
-            return null;
-        }
-
-    }
-
     private void startAnimationCorrect(){
         Intent intent = new Intent(getApplicationContext(), AnimationCorrectionActivity.class);
         startActivity(intent);
-    }
-
-    private File getOutputJson(File dir){
-        File fileJson = new File(dir, "json.json");
-        if (!fileJson.exists()) {
-            try {
-                // Tenta criar o arquivo
-                if (fileJson.createNewFile()) {
-                    Log.e("kariti","Diretorio criado");
-                } else {
-                    Log.i("kariti", "Arquivo já existe.");
-                }
-            } catch (IOException e) {
-                Log.e("kariti", "Erro ao criar diretorio!");
-            }
-        }
-        return fileJson;
-    }
-
-    public File creatDirectoreZip() {
-        try {
-            File fileZip = new File(getCacheDir(), "saida.zip");
-            if (!fileZip.exists()){
-                try {
-                    // Tenta criar o arquivo
-                    if (fileZip.createNewFile()) {
-                        Log.e("kariti","Diretorio criado");
-                    } else {
-                        Log.i("kariti", "Arquivo já existe.");
-                    }
-                } catch (IOException e) {
-                    Log.e("kariti", "Erro ao criar diretorio!");
-                }
-            }
-            return fileZip;
-        }catch (Exception e){
-            Log.e("circles", e.toString());
-            return null;
-        }
     }
 
     private void getImage(Uri uri){
@@ -701,11 +641,6 @@ public class ExamActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap matToBitmap(Mat mat) {
-        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
-        org.opencv.android.Utils.matToBitmap(mat, bitmap);
-        return bitmap;
-    }
     private boolean isImageFile(String fileName) {
         String[] imageExtensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp"};
         for (String extension : imageExtensions) {
@@ -719,9 +654,9 @@ public class ExamActivity extends AppCompatActivity {
     private void notifyCorrectionOrganization(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Capture a imagem do cartão de cima, sobre superfície plana e com boa luminosidade\n");
-        builder.setPositiveButton("OK", (dialog, which) -> startCamera());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextOrientationCapture));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> startCamera());
         builder.show();
     }
     private void startCamera(){

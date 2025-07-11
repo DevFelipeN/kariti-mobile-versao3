@@ -215,7 +215,7 @@ public class ClassEditActivity extends AppCompatActivity {
     public void notifyAnonymous(int an) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.app_name_capital_letter));
-        builder.setMessage(getString(R.string.longTextNumAnonymousInClass));
+        builder.setMessage(getString(R.string.longTextNumAnonymousInClass, an));
         builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }

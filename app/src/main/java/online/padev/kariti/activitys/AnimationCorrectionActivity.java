@@ -44,7 +44,7 @@ public class AnimationCorrectionActivity extends AppCompatActivity {
         instanciaEncerra = null;
     }
 
-    public static void encerra(String status) {
+    public static void close() {
         if (instanciaEncerra != null) {
             instanciaEncerra.finish();
         }

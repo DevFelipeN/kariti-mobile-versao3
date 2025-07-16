@@ -538,7 +538,6 @@ public class ExamActivity extends AppCompatActivity {
         try {
             inputStream = getContentResolver().openInputStream(uri);
         } catch (FileNotFoundException e) {
-            Log.e("ERRO", "ERRO: "+e.toString());
             return;
         }
         if (inputStream != null) {
@@ -569,7 +568,6 @@ public class ExamActivity extends AppCompatActivity {
                     page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
                 }catch (Exception e){
                     page.close();
-                    Log.e("ERRO", "ERRO AQUI!!99999: "+e.toString());
                     continue;
                 }
                 processImage(bitmap);

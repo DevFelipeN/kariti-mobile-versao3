@@ -110,19 +110,20 @@
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="infoStudentsInClass">Alunos Identificados: %1$d \nAlunos Anônimos: %2$d \n\nTotal de Alunos: %3$d</string>
     <string name="textClassRegistered">turmas cadastrada</string>
+    <string name="titleSelectClass">Selecione a Turma</string>
 
 
     <!--    Prova-->
     <string name="textViewExam">Prova</string>
     <string name="textTitleQuickTest">Prova Rápida</string>
     <string name="titleNewExam">Nova Prova</string>
-    <string name="buttonCadProva">Cadastrar Prova</string>
+    <string name="buttonCadExam">Cadastrar Prova</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
-    <string name="buttonGerarCartao">Gerar Cartões</string>
+    <string name="buttonGenerateCard">Gerar Cartões</string>
     <string name="buttonGerarCartaoRap">Gerar Cartão</string>
-    <string name="buttonCorrigirProva">Corrigir Prova</string>
+    <string name="buttonCorrectionExam">Corrigir Prova</string>
     <string name="titleCaptureCard">Capturar Cartão</string>
-    <string name="buttonVisuProva">Visualizar Provas</string>
+    <string name="buttonViewExam">Visualizar Provas</string>
     <string name="titleCardGenerateSuccess">Cartão de resposta gerado com sucesso</string>
     <string name="textViewEditProva">Mais Opções </string>
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
@@ -130,12 +131,12 @@
     <string name="textViewCalendar">Calendário</string>
     <string name="buttonCameraOpenCV">Capturar Agora</string>
     <string name="CorrectOpenCv">Como deseja corrigir sua prova</string>
-    <string name="buttonProximo"> Próximo </string>
+    <string name="buttonNext"> Próximo </string>
     <string name="button_continue">Continuar</string>
     <string name="NotaDetalhe">Peso </string>
     <string name="Detalhes">Detalhes</string>
     <string name="time">00:00:00</string>
-    <string name="editTextNomeProva">Informe o nome  da prova*</string>
+    <string name="editTextNomeExam">Informe o nome  da prova*</string>
     <string name="editTextExamNameDefault">Nome  da prova</string>
     <string name="textViewDataExam">Data da Prova</string>
     <string name="textViewQuantQuestions">Quant. de Questões</string>
@@ -254,6 +255,11 @@
     <string name="toastClassAlreadyRegister">Já existe uma turma cadastrada com esse nome associado a escola atual. Informe um nome diferente para essa turma!</string>
     <string name="toastSuccessRegisterClass">Turma cadastrada com sucesso!</string>
     <string name="toastClassFailedRegister">Falha no cadastro da turma!</string>
+    <string name="toastSelectAclass">Por favor, selecione uma turma!</string>
+    <string name="toastSelectDate">Selecione uma data!</string>
+    <string name="toastInfoNumQuestions">Informe a quantidade de questões!</string>
+    <string name="toastInfoNumAlternatives">Informe a quantidade de alternativas!</string>
+    <string name="toastExistExamInClass">Já existe uma prova cadastrada com o nome %1$s nessa turma!</string>
 
 
 

@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,12 +23,13 @@ import online.padev.kariti.R;
 import online.padev.kariti.adapters.AdapterSpinner;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class ExamRegistrationActivity extends AppCompatActivity {
     Button datePickerButton;
     Calendar calendar;
-    EditText editTextNameProva, editTextNumQuestion, editTextNumAlternative;
-    Button btnRegistrationProva;
+    EditText editTextNameExam, editTextNumQuestion, editTextNumAlternative;
+    Button btnRegistrationExam;
     Spinner spinnerClass;
     DataBaseKariti dataBaseKariti;
     Exam exam;
@@ -35,6 +37,12 @@ public class ExamRegistrationActivity extends AppCompatActivity {
     ImageButton back, lessQuestions, moreQuestions, moreAlternatives, lessAlternatives;
     private String dateFormatting;
     TextView title;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +50,8 @@ public class ExamRegistrationActivity extends AppCompatActivity {
 
         datePickerButton = findViewById(R.id.datePickerButton);
         back = findViewById(R.id.imgBtnVoltar);
-        btnRegistrationProva = findViewById(R.id.btnGerarProva);
-        editTextNameProva = findViewById(R.id.editTextNomeProva);
+        btnRegistrationExam = findViewById(R.id.btnGerarProva);
+        editTextNameExam = findViewById(R.id.editTextNomeProva);
         editTextNumQuestion = findViewById(R.id.editTextQtdQuests);
         editTextNumAlternative = findViewById(R.id.editTextQtdAlter);
         moreQuestions = findViewById(R.id.imageButtonMaisQuest);
@@ -56,14 +64,14 @@ public class ExamRegistrationActivity extends AppCompatActivity {
         dataBaseKariti = new DataBaseKariti(this);
         exam = new Exam();
 
-        title.setText(String.format("%s","Nova Prova"));
+        title.setText(getString(R.string.titleNewExam));
 
         listClass = dataBaseKariti.listClassNames(); //Obtem a lista das turmas delimitadas pertecentes a escola atual
         if(listClass == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
-        listClass.add(0, "Selecione a Turma");
+        listClass.add(0, getString(R.string.titleSelectClass));
         AdapterSpinner adapterClass = new AdapterSpinner(this, listClass);
         spinnerClass.setAdapter(adapterClass);
 
@@ -103,34 +111,34 @@ public class ExamRegistrationActivity extends AppCompatActivity {
                 alter --;
             editTextNumAlternative.setText(String.valueOf(alter));
         });
-        btnRegistrationProva.setOnClickListener(v -> {
-            btnRegistrationProva.setEnabled(false);
+        btnRegistrationExam.setOnClickListener(v -> {
+            btnRegistrationExam.setEnabled(false);
             try {
-                exam.setNameExam(editTextNameProva.getText().toString());
+                exam.setNameExam(editTextNameExam.getText().toString());
 
                 if (exam.getNameExam().trim().isEmpty()) {
-                    Toast.makeText(ExamRegistrationActivity.this, "Informe o nome da prova!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.editTextNomeExam), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (spinnerClass.getSelectedItem() == "Selecione a Turma") {
-                    Toast.makeText(ExamRegistrationActivity.this, "Selecione uma turma!", Toast.LENGTH_SHORT).show();
+                if (spinnerClass.getSelectedItem() == getString(R.string.titleSelectClass)) {
+                    Toast.makeText(this, getString(R.string.toastSelectAclass), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String nameClass = spinnerClass.getSelectedItem().toString();
                 exam.setClass_id(dataBaseKariti.getClassId(nameClass));
 
-                if (datePickerButton.getText().toString().equals("Selecionar Data")) {
-                    Toast.makeText(ExamRegistrationActivity.this, "Selecione uma data!", Toast.LENGTH_SHORT).show();
+                if (datePickerButton.getText().toString().equals(getString(R.string.buttonData))) {
+                    Toast.makeText(this, getString(R.string.toastSelectDate), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 exam.setDateExam(datePickerButton.getText().toString());
 
                 if (editTextNumQuestion.getText().toString().trim().isEmpty() || editTextNumQuestion.getText().toString().equals("0")) {
-                    Toast.makeText(this, "Informe a quantidade de questões!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInfoNumQuestions), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (editTextNumAlternative.getText().toString().trim().isEmpty() || editTextNumAlternative.getText().toString().equals("0")) {
-                    Toast.makeText(this, "Informe a quantidade de alternativas!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInfoNumAlternatives), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -147,25 +155,25 @@ public class ExamRegistrationActivity extends AppCompatActivity {
                 exam.setNumAlternatives(Integer.parseInt(editTextNumAlternative.getText().toString()));
 
                 if (exam.getClass_id() == null) {
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Boolean checkExistsProva = dataBaseKariti.checkIfExistExam(exam.getNameExam(), exam.getClass_id().toString());
-                if (checkExistsProva == null) {
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Boolean checkExistsExam = dataBaseKariti.checkIfExistExam(exam.getNameExam(), exam.getClass_id().toString());
+                if (checkExistsExam == null) {
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (checkExistsProva) {
-                    Toast.makeText(ExamRegistrationActivity.this, "Esta turma já pussui uma prova cadastrada com o nome, " + exam.getNameExam(), Toast.LENGTH_SHORT).show();
+                if (checkExistsExam) {
+                    Toast.makeText(this, getString(R.string.toastExistExamInClass, exam.getNameExam()), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                startGenerateGabarito();
+                startGenerateAnswerKey();
             }catch (Exception e){
                 Log.e("kariti", e.toString());
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             } finally {
-                btnRegistrationProva.setEnabled(true);
+                btnRegistrationExam.setEnabled(true);
             }
         });
         // Obtém a instância do calendário com a data atual
@@ -207,12 +215,7 @@ public class ExamRegistrationActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
     }
-    private void startGenerateGabarito(){
-        //Configuration c = this.getResources().getConfiguration();
-        //Locale l = new Locale("en");
-        //Locale.setDefault(l);
-        //c.setLocale(l);
-        //c.setLocale(Locale.ROOT);
+    private void startGenerateAnswerKey(){
         Intent intent = new Intent(this, AnswerKeyActivity.class);
         intent.putExtra("prova", exam);
         intent.putExtra("direcao", "novaProva");
@@ -221,16 +224,16 @@ public class ExamRegistrationActivity extends AppCompatActivity {
     }
     private void notifyLimitMaxQuestions(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 20 questões!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextLimitQuestions, Exam.MAX_QUESTIONS));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     private void notifyLimitMaxAlternatives(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Atualmente o Kariti oferece suporte para cartões repostas com no máximo 6 alternativas!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextLimitAlternatives, Exam.MAX_ALTERNATIVES));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 }

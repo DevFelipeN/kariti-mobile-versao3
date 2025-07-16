@@ -64,7 +64,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
-            android:text="@string/buttonCorrigirProva"
+            android:text="@string/buttonCorrectionExam"
             android:textSize="24sp"
             tools:layout_editor_absoluteX="96dp"
             tools:layout_editor_absoluteY="595dp" />

@@ -107,19 +107,20 @@
     <string name="editTextNomeTurma">Class Name*</string>
     <string name="infoStudentsInClass">Students identified: %1$d \nAnonymous students: %2$d \n\nTotal number of students: %3$d</string>
     <string name="textClassRegistered">registered classes</string>
+    <string name="titleSelectClass">Select the Class</string>
 
 
     <!--    Prova-->
     <string name="textViewExam">Exam</string>
     <string name="textTitleQuickTest">Quick Test</string>
     <string name="titleNewExam">New Exam</string>
-    <string name="buttonCadProva">Register Exam</string>
+    <string name="buttonCadExam">Register Exam</string>
     <string name="btnBaixCartao">Baixar Cartão</string>
-    <string name="buttonGerarCartao">Generate Cards</string>
+    <string name="buttonGenerateCard">Generate Cards</string>
     <string name="buttonGerarCartaoRap">Generate Card</string>
-    <string name="buttonCorrigirProva">Grade Exam</string>
+    <string name="buttonCorrectionExam">Grade Exam</string>
     <string name="titleCaptureCard">Capture Card</string>
-    <string name="buttonVisuProva">View Exams</string>
+    <string name="buttonViewExam">View Exams</string>
     <string name="titleCardGenerateSuccess">Answer sheet generated successfully</string>
     <string name="textViewEditProva">Mais Opções </string>
     <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
@@ -127,11 +128,11 @@
     <string name="textViewCalendar">Calendário</string>
     <string name="buttonCameraOpenCV">Capturar Agora</string>
     <string name="CorrectOpenCv">Como deseja corrigir sua prova</string>
-    <string name="buttonProximo"> Próximo </string>
+    <string name="buttonNext"> Next </string>
     <string name="NotaDetalhe">Peso </string>
     <string name="Detalhes">Detalhes</string>
     <string name="time">00:00:00</string>
-    <string name="editTextNomeProva">Informe o nome  da prova*</string>
+    <string name="editTextNomeExam">Enter the test name*</string>
     <string name="editTextExamNameDefault">Exam name</string>
     <string name="textViewDataExam">Exam Data</string>
     <string name="textViewQuantQuestions">Number of Questions</string>
@@ -250,6 +251,11 @@
     <string name="toastClassAlreadyRegister">A class with this name is already registered for this school. Please enter a different name for the class!</string>
     <string name="toastSuccessRegisterClass">Class registered successfully!</string>
     <string name="toastClassFailedRegister">Class registration failed!</string>
+    <string name="toastSelectAclass">Please select a class!</string>
+    <string name="toastSelectDate">Select a date!</string>
+    <string name="toastInfoNumQuestions">Enter the number of questions!</string>
+    <string name="toastInfoNumAlternatives">Enter the number of alternatives!</string>
+    <string name="toastExistExamInClass">A test with the name %1$s already exists in this class!</string>
 
 
 

@@ -15,6 +15,7 @@
     <string name="if_change_device_description">Change device?</string>
     <string name="yes_description">YES</string>
     <string name="not_description">NO</string>
+    <string name="descriptionExit">Exit</string>
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
@@ -37,6 +38,7 @@
     <string name="language_English">English (en)</string>
     <string name="language_title">Select language</string>
     <string name="selectDescription">Select</string>
+    <string name="titleDialogTeacher">Dear Teacher</string>
 
     <!--Usuario-->
     <string name="user_name_obg">Full Name*</string>
@@ -90,7 +92,7 @@
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
-    <string name="btnSalvaAluno">Salvar</string>
+    <string name="btnSave">Save</string>
     <string name="menuEditarAlun">Editar Aluno</string>
     <string name="menuExclAlun">Excluir Aluno</string>
 
@@ -98,7 +100,7 @@
     <string name="textViewClass">Class</string>
     <string name="textViewTitle">Classes</string>
     <string name="textViewTitleNewClass">New Class</string>
-    <string name="txtViewTurma">Turma:</string>
+    <string name="txtViewClass">Class: %1$s</string>
     <string name="editTextNameClass">Class name</string>
     <string name="buttonCadTurma">Register Class</string>
     <string name="buttonSaveClass">Save Class</string>
@@ -113,6 +115,7 @@
 
     <!--    Prova-->
     <string name="textViewExam">Exam</string>
+    <string name="textViewTitleExam">Exam: %1$s</string>
     <string name="textViewExams">Exams</string>
     <string name="textTitleQuickTest">Quick Test</string>
     <string name="titleNewExam">New Exam</string>
@@ -126,11 +129,11 @@
     <string name="buttonViewExam">View Exams</string>
     <string name="titleCardGenerateSuccess">Answer sheet generated successfully</string>
     <string name="textViewEditProva">Mais Opções </string>
-    <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
+    <string name="buttonDeviceFiles">Select Images from Device</string>
     <string name="textInstrucao">Aqui você pode editar ou apagar uma prova!</string>
     <string name="textViewCalendar">Calendário</string>
-    <string name="buttonCameraOpenCV">Capturar Agora</string>
-    <string name="CorrectOpenCv">Como deseja corrigir sua prova</string>
+    <string name="buttonCameraOpenCV">Capture Now</string>
+    <string name="correctOpenCv">How would you like to grade your exam?</string>
     <string name="buttonNext"> Next </string>
     <string name="NotaDetalhe">Peso </string>
     <string name="Detalhes">Detalhes</string>
@@ -141,15 +144,14 @@
     <string name="textViewQuantQuestions">Number of Questions</string>
     <string name="textViewQuantAlternatives">Number of Alternatives</string>
     <string name="Questao">Questão </string>
-    <string name="Gabarito">Gabarito </string>
+    <string name="titleAnswerKey">Answer Key</string>
     <string name="buttonData">Select Date</string>
-    <string name="txtViewProva">Prova:</string>
-    <string name="txtViewData">Data:</string>
+    <string name="txtViewDate">Date: %1$s</string>
     <string name="Nota"> Nota </string>
-    <string name="txtViewGradeAll">Nota:</string>
+    <string name="txtViewGradeAll">Grade:</string>
     <string name="txtViewGradeAllNumber">1.0</string>
-    <string name="buttonNotGradeAll">Atribuir notas individuais</string>
-    <string name="buttonYesGradeAll">Confirmar nota</string>
+    <string name="buttonNotGradeAll">Assign individual grades</string>
+    <string name="buttonYesGradeAll">Confirm grade</string>
     <string name="btnBaixarProva">Gerar Relatório</string>
     <string name="txtAcertos">Acertos</string>
     <string name="txtErros">Erros</string>
@@ -159,6 +161,12 @@
     <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">registered exams</string>
     <string name="titleCorrectionFinish">Grading Completed</string>
+    <string name="descriptionRegister">registered</string>
+    <string name="descriptionInTheRegister">in the registration</string>
+    <string name="descriptionChanged">changed</string>
+    <string name="descriptionInTheChanged">in the update</string>
+    <string name="titleDialogSuccessExam">Exam %1$s successfully</string>
+    <string name="titleDialogSuccessAnswerKey">Answer key completed</string>
 
 
     <!--    Descrição de Icons-->
@@ -260,6 +268,10 @@
     <string name="toastInfoNumAlternatives">Enter the number of alternatives!</string>
     <string name="toastExistExamInClass">A test with the name %1$s already exists in this class!</string>
     <string name="toastSelectDataS">Select the data</string>
+    <string name="toastSelectResponseQuestionsAll">Please select an answer for all questions!</string>
+    <string name="toastInfoScoresQuestionsAll">Please enter the scores for the questions!</string>
+    <string name="toastPreviousAnswerKey">Your previous answer key has still been kept!</string>
+    <string name="toastFormatScoreInvalid">Invalid grade format!</string>
 
 
 
@@ -335,11 +347,29 @@
     <string name="longTextRequestsPermission">To download the answer sheets to your device, you need to grant permission to Kariti!</string>
     <string name="longTextNoNotifyDownload">Kariti will not be able to notify you about completed downloads!</string>
     <string name="longTextSuccessDownload">The answer sheets have been successfully generated and are available in your device’s downloads folder.</string>
+    <string name="txtViewNotaTotal">Total grade of the exam: %1$.2f points.</string>
+    <string name="longTextInfoToDownload">You can download it on the next screen or later from the main exam menu under the \'Generate Cards\' option.</string>
+    <string name="longTextFailedExecExam">Failed to %1$s the exam, please try again!</string>
+    <string name="longTextHelpAnswerKey">Hello, it\'s time to fill in the answer key for your exam.\n
+        • Mark the answers corresponding to each exam question\n
+        • Enter the weight of each question in the suggested fields\n
+        • Before finishing the registration, make sure to review all the information!
+    </string>
+    <string name="longTextNoticeBack">By confirming this action, the exam data will be lost!\n\n
+        Do you really want to go back?
+    </string>
+    <string name="longTextAnswerKeyCompleted">Now you can grade all the exams that apply to this answer key!</string>
+    <string name="longTextCardDifferentAnswerKey">This card differs from the answer key model you have created.\n
+        To grade this card, you need to create another answer key specific to this card model.\n
+        Would you like to keep or change the answer key?
+    </string>
+    <string name="longTextInitCorrectionDefault">Before starting the grading process, please fill in the answer key for the exam(s) you wish to grade!\n\n
+        You only need to complete the answer key once to grade all of your exams.
+    </string>
+    <string name="txtViewGradeAllDescription">If you want to assign the same grade to all questions of this exam, enter the grade in the field below and confirm!</string>
 
 
-    <string name="txtViewNotaT">Nota total da prova X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
-    <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
 
 
 </resources>

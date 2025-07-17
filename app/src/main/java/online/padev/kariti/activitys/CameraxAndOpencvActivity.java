@@ -106,11 +106,13 @@ public class CameraxAndOpencvActivity extends AppCompatActivity {
         requestCameraPermission();
         startCamera();
 
+        /*
         if (!OpenCVLoader.initDebug()) {
             Log.e("OpenCV", "Falha ao carregar o OpenCV!");
         }else{
             Log.e("OpenCV", "OpenCV carregado com sucesso!");
         }
+         */
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

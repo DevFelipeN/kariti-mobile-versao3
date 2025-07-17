@@ -90,7 +90,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
-        android:text="@string/txtViewNotaT"
+        android:text="@string/txtViewNotaTotal"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonYesGradeAll"
         app:layout_constraintEnd_toEndOf="parent"

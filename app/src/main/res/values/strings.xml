@@ -14,6 +14,7 @@
     <string name="if_change_device_description">Mudança de dipositivo? </string>
     <string name="yes_description">SIM</string>
     <string name="not_description">NÃO</string>
+    <string name="descriptionExit">Sair</string>
     <string name="symbol_mais">+</string>
     <string name="symbol_menos">-</string>
     <string name="number_zero">0</string>
@@ -34,6 +35,7 @@
     <string name="language_English">Inglês (en)</string>
     <string name="language_title">Selecione o idioma</string>
     <string name="selectDescription">Selecionar</string>
+    <string name="titleDialogTeacher">Caro(a) professor(a)</string>
 
     <!--Usuario-->
     <string name="user_name_obg">Nome Completo*</string>
@@ -93,7 +95,7 @@
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
-    <string name="btnSalvaAluno">Salvar</string>
+    <string name="btnSave">Salvar</string>
     <string name="menuEditarAlun">Editar Aluno</string>
     <string name="menuExclAlun">Excluir Aluno</string>
 
@@ -101,7 +103,7 @@
     <string name="textViewClass">Turma</string>
     <string name="textViewTitle">Turmas</string>
     <string name="textViewTitleNewClass">Nova Turma</string>
-    <string name="txtViewTurma">Turma:</string>
+    <string name="txtViewClass">Turma: %1$s</string>
     <string name="editTextNameClass">Nome da turma</string>
     <string name="editTextNomeTurma">Nome da Turma*</string>
     <string name="buttonCadTurma">Cadastrar Turma</string>
@@ -116,6 +118,7 @@
 
     <!--    Prova-->
     <string name="textViewExam">Prova</string>
+    <string name="textViewTitleExam">Prova: %1$s</string>
     <string name="textViewExams">Provas</string>
     <string name="textTitleQuickTest">Prova Rápida</string>
     <string name="titleNewExam">Nova Prova</string>
@@ -129,11 +132,11 @@
     <string name="buttonViewExam">Visualizar Provas</string>
     <string name="titleCardGenerateSuccess">Cartão de resposta gerado com sucesso</string>
     <string name="textViewEditProva">Mais Opções </string>
-    <string name="buttonDispositivo">Selecionar Imagens do Dispositivo</string>
+    <string name="buttonDeviceFiles">Selecionar Imagens do Dispositivo</string>
     <string name="textInstrucao">Aqui você pode editar ou apagar uma prova!</string>
     <string name="textViewCalendar">Calendário</string>
     <string name="buttonCameraOpenCV">Capturar Agora</string>
-    <string name="CorrectOpenCv">Como deseja corrigir sua prova</string>
+    <string name="correctOpenCv">Como deseja corrigir sua prova?</string>
     <string name="buttonNext"> Próximo </string>
     <string name="button_continue">Continuar</string>
     <string name="NotaDetalhe">Peso </string>
@@ -145,10 +148,9 @@
     <string name="textViewQuantQuestions">Quant. de Questões</string>
     <string name="textViewQuantAlternatives">Quant. de Alternativas</string>
     <string name="Questao">Questão </string>
-    <string name="Gabarito">Gabarito </string>
+    <string name="titleAnswerKey">Gabarito </string>
     <string name="buttonData">Selecionar Data</string>
-    <string name="txtViewProva">Prova:</string>
-    <string name="txtViewData">Data:</string>
+    <string name="txtViewDate">Data: %1$s</string>
     <string name="Nota"> Nota </string>
     <string name="txtViewGradeAll">Nota:</string>
     <string name="txtViewGradeAllNumber">1.0</string>
@@ -163,6 +165,12 @@
     <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">provas cadastradas</string>
     <string name="titleCorrectionFinish">Correção Finalizada</string>
+    <string name="descriptionRegister">cadastrada</string>
+    <string name="descriptionInTheRegister">no cadastro</string>
+    <string name="descriptionChanged">alterada</string>
+    <string name="descriptionInTheChanged">na alteração</string>
+    <string name="titleDialogSuccessExam">Prova %1$s com sucesso</string>
+    <string name="titleDialogSuccessAnswerKey">Gabarito preenchido</string>
 
 
     <!--    Descrição de Icons-->
@@ -264,6 +272,10 @@
     <string name="toastInfoNumAlternatives">Informe a quantidade de alternativas!</string>
     <string name="toastExistExamInClass">Já existe uma prova cadastrada com o nome %1$s nessa turma!</string>
     <string name="toastSelectDataS">Selecione os dados</string>
+    <string name="toastSelectResponseQuestionsAll">Por favor, selecione uma resposta para todas as questões!</string>
+    <string name="toastInfoScoresQuestionsAll">Por favor, informe as notas para as questões!</string>
+    <string name="toastPreviousAnswerKey">Seu gabarito anterior ainda foi mantido!</string>
+    <string name="toastFormatScoreInvalid">Formato de nota inválido!</string>
 
 
 
@@ -335,9 +347,29 @@
     <string name="longTextRequestsPermission">Para realizar o download dos cartões resposta em seu dispositivo, é necessário que conceda a permissão ao Kariti!</string>
     <string name="longTextNoNotifyDownload">O Kariti não será capaz de notifica-lo sobre os downloads realizados!</string>
     <string name="longTextSuccessDownload">Os cartões de respostas foram gerados com sucesso e estão disponíveis na pasta de downloads do seu dispositivo.</string>
+    <string name="txtViewNotaTotal">Nota total da prova: %1$.2f pontos.</string>
+    <string name="longTextInfoToDownload">Você pode realizar o download na tela a seguir ou em outro momento pelo menu inicial de provas na opção \'Gerar Cartões\'.</string>
+    <string name="longTextFailedExecExam">Falha %1$s da prova, por favor tente novamente!</string>
+    <string name="longTextHelpAnswerKey">Olá, agora é hora de preencher o gabarito da sua prova.\n
+        • Marque as respostas correspondentes as questões da prova\n
+        • Informe o peso de cada questão nos campos sugeridos \n
+        • Antes de finalizar o cadastro confira todos os dados!
+    </string>
+    <string name="longTextNoticeBack">Ao confirmar essa ação, os dados dessa prova serão perdidos!\n\n
+        Deseja realmente voltar?
+    </string>
+    <string name="longTextAnswerKeyCompleted">Agora você pode realizar a correção de todas as provas que se aplicam a esse gabarito!</string>
+    <string name="longTextCardDifferentAnswerKey">Este cartão é diferente do modelo de gabarito que você tem criado!\n
+        Para corrigir este cartão, você deve criar outro gabarito referente a esse modelo de cartão.\n
+        Deseja manter ou alterar o gabarito?
+    </string>
+    <string name="longTextInitCorrectionDefault">Antes de iniciar a correção, por favor, preencha o gabarito da(s) prova(s) que deseja corrigir!\n\n"
+        Você só precisa preencher o gabarito uma vez para corrigir todas as suas provas.
+    </string>
+
+    
 
 
-    <string name="txtViewNotaT">Nota total da prova X pontos.</string>
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
     <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
 

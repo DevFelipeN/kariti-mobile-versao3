@@ -136,7 +136,7 @@
     <string name="correctOpenCv">How would you like to grade your exam?</string>
     <string name="buttonNext"> Next </string>
     <string name="NotaDetalhe">Peso </string>
-    <string name="Detalhes">Detalhes</string>
+    <string name="descriptionDetails">Details</string>
     <string name="time">00:00:00</string>
     <string name="editTextNomeExam">Enter the test name*</string>
     <string name="editTextExamNameDefault">Exam name</string>
@@ -147,17 +147,17 @@
     <string name="titleAnswerKey">Answer Key</string>
     <string name="buttonData">Select Date</string>
     <string name="txtViewDate">Date: %1$s</string>
-    <string name="Nota"> Nota </string>
+    <string name="Nota"> Grade </string>
     <string name="txtViewGradeAll">Grade:</string>
     <string name="txtViewGradeAllNumber">1.0</string>
     <string name="buttonNotGradeAll">Assign individual grades</string>
     <string name="buttonYesGradeAll">Confirm grade</string>
-    <string name="btnBaixarProva">Gerar Relatório</string>
-    <string name="txtAcertos">Acertos</string>
+    <string name="btnGenerateReport">Generate Report</string>
+    <string name="txtHits">Hits</string>
     <string name="txtErros">Erros</string>
     <string name="Marcada">Marcada </string>
     <string name="encerrar">Encerrar</string>
-    <string name="Ver">Ver</string>
+    <string name="descriptionView">View</string>
     <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">registered exams</string>
     <string name="titleCorrectionFinish">Grading Completed</string>
@@ -167,6 +167,11 @@
     <string name="descriptionInTheChanged">in the update</string>
     <string name="titleDialogSuccessExam">Exam %1$s successfully</string>
     <string name="titleDialogSuccessAnswerKey">Answer key completed</string>
+    <string name="titleCorrected">Graded</string>
+    <string name="titleDialogReport">Report Generated</string>
+    <string name="titleDialogTypeReport">Do you want to generate the grading report for:</string>
+    <string name="itemAllStudentsReport">All students</string>
+    <string name="itemWithCorrection">Only for students with graded exams</string>
 
 
     <!--    Descrição de Icons-->
@@ -367,6 +372,12 @@
         You only need to complete the answer key once to grade all of your exams.
     </string>
     <string name="txtViewGradeAllDescription">If you want to assign the same grade to all questions of this exam, enter the grade in the field below and confirm!</string>
+    <string name="longTextDialogReport">A grading report for this exam has been generated and is available in the Downloads folder on your device!</string>
+    <string name="longTextExamNotCorrected">This exam has not been graded. Here are some possible reasons that may have contributed to this result:\n\n
+        • Low lighting conditions\n\n
+        • Blurry or unclear image\n\n
+        • Scratched or marked answer sheet.
+    </string>
 
 
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>

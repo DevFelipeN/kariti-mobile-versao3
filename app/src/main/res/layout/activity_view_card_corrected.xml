@@ -121,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="@string/txtAcertos"
+        android:text="@string/txtHits"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonEncerrar"
         app:layout_constraintEnd_toStartOf="@+id/textViewErrosAluno"

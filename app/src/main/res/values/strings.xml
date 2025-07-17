@@ -140,7 +140,7 @@
     <string name="buttonNext"> Próximo </string>
     <string name="button_continue">Continuar</string>
     <string name="NotaDetalhe">Peso </string>
-    <string name="Detalhes">Detalhes</string>
+    <string name="descriptionDetails">Detalhes</string>
     <string name="time">00:00:00</string>
     <string name="editTextNomeExam">Informe o nome  da prova*</string>
     <string name="editTextExamNameDefault">Nome  da prova</string>
@@ -156,12 +156,12 @@
     <string name="txtViewGradeAllNumber">1.0</string>
     <string name="buttonNotGradeAll">Atribuir notas individuais</string>
     <string name="buttonYesGradeAll">Confirmar nota</string>
-    <string name="btnBaixarProva">Gerar Relatório</string>
-    <string name="txtAcertos">Acertos</string>
+    <string name="btnGenerateReport">Gerar Relatório</string>
+    <string name="txtHits">Acertos</string>
     <string name="txtErros">Erros</string>
     <string name="Marcada">Marcada </string>
     <string name="encerrar">Encerrar</string>
-    <string name="Ver">Ver</string>
+    <string name="descriptionView">Ver</string>
     <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">provas cadastradas</string>
     <string name="titleCorrectionFinish">Correção Finalizada</string>
@@ -171,6 +171,11 @@
     <string name="descriptionInTheChanged">na alteração</string>
     <string name="titleDialogSuccessExam">Prova %1$s com sucesso</string>
     <string name="titleDialogSuccessAnswerKey">Gabarito preenchido</string>
+    <string name="titleCorrected">Correções</string>
+    <string name="titleDialogReport">Relatório Gerado</string>
+    <string name="titleDialogTypeReport">Deseja gerar o relatório de correção de:</string>
+    <string name="itemAllStudentsReport">Todos os alunos</string>
+    <string name="itemWithCorrection">Somente de alunos com prova corrigida</string>
 
 
     <!--    Descrição de Icons-->
@@ -365,6 +370,12 @@
     </string>
     <string name="longTextInitCorrectionDefault">Antes de iniciar a correção, por favor, preencha o gabarito da(s) prova(s) que deseja corrigir!\n\n"
         Você só precisa preencher o gabarito uma vez para corrigir todas as suas provas.
+    </string>
+    <string name="longTextDialogReport">Um relatório de correção dessa prova foi gerado e está disponível na pasta de downloads do seu dispositivo!</string>
+    <string name="longTextExamNotCorrected">Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n
+        • Ambiente com pouca luminosidade\n\n
+        • Imagem ofuscada\n\n
+        • Cartão resposta Rasurado.
     </string>
 
     

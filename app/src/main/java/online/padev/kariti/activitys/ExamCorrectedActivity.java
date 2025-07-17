@@ -1,6 +1,7 @@
 package online.padev.kariti.activitys;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -10,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
@@ -33,18 +33,24 @@ import online.padev.kariti.entity.Answer_key;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.entity.Student;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class ExamCorrectedActivity extends AppCompatActivity {
     ImageButton toGoBack;
     Button btnGenerateCorrectionReport;
     List<String> answersGiven;
-    String className, filePdf;
-    TextView txtViewProva;
-    List<Answer_key> answerkey;
+    String className;
+    TextView txtViewExam;
+    List<Answer_key> answerKey;
     List<Student> students;
     Exam exam;
     TextView title;
     DataBaseKariti dataBase;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +59,24 @@ public class ExamCorrectedActivity extends AppCompatActivity {
 
         toGoBack = findViewById(R.id.imgBtnVoltar);
         btnGenerateCorrectionReport = findViewById(R.id.buttonBaixarResultado);
-        txtViewProva = findViewById(R.id.textViewProvaResult);
+        txtViewExam = findViewById(R.id.textViewProvaResult);
         title = findViewById(R.id.toolbar_title);
 
         dataBase = new DataBaseKariti(this);
 
-        title.setText(String.format("%s","Provas Corrigidas"));
+        title.setText(getString(R.string.titleCorrected));
 
         exam = (Exam) getIntent().getSerializableExtra("prova");
 
         className = dataBase.getClassName(exam.getClass_id().toString());
 
-        txtViewProva.setText(String.format("%s","Prova: "+ exam.getNameExam()));
+        txtViewExam.setText(getString(R.string.textViewTitleExam, exam.getNameExam()));
 
-        answerkey = dataBase.listAnswerKeyData(exam.getExam_id());
+        answerKey = dataBase.listAnswerKeyData(exam.getExam_id());
         students = dataBase.listStudentExamCorrected(exam.getClass_id());
 
-        if (answerkey == null || students == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 7", Toast.LENGTH_SHORT).show();
+        if (answerKey == null || students == null){
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -84,14 +90,14 @@ public class ExamCorrectedActivity extends AppCompatActivity {
             int acertos = 0;
             Boolean checkStatusCorrection = dataBase.checkSituationCorrected(exam.getExam_id(), student.getId_student(), -1);
             if(checkStatusCorrection == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 finish();
             }
             answersGiven = dataBase.listAnswerGivenString(exam.getExam_id(), student.getId_student()); // lista as respostas dos alunos em formato de letras
             incrementResponse(); //caso quantidade de respostadas dadas, menor que o esperado, incrementa!
             if(!checkStatusCorrection) {
                 for (int i = 0; i < exam.getNumQuestions(); i++) {
-                    Answer_key g = answerkey.get(i);
+                    Answer_key g = answerKey.get(i);
                     char correctResponse = (char) ('A' + g.getResponse() - 1);
                     if (String.valueOf(correctResponse).equals(answersGiven.get(i))) {
                         nota += g.getNote();
@@ -111,8 +117,8 @@ public class ExamCorrectedActivity extends AppCompatActivity {
 
             // Cria uma célula para a nova linha para armazenar nome do aluno
             TextView cell1 = new TextView(this);
-            String nomeAlunoEdit = editNameStudent(student.getNameStudent());
-            cell1.setText(String.format("  %s", nomeAlunoEdit));
+            String nameStudentEdit = editNameStudent(student.getNameStudent());
+            cell1.setText(String.format("  %s", nameStudentEdit));
             //cell1.setGravity(Gravity.CENTER);
             row.addView(cell1);
 
@@ -140,7 +146,7 @@ public class ExamCorrectedActivity extends AppCompatActivity {
             // Cria outra célula para a nova linha com botão para exibir detalhamento da nota do aluno
             Button cell4 = new Button(this);
             cell4.setId(student.getId_student());
-            cell4.setText(String.format("%s","VER"));
+            cell4.setText(getString(R.string.descriptionView));
             cell4.setGravity(Gravity.CENTER);
             cell4.setPadding(0,0,0,0);
             TableRow.LayoutParams params = new TableRow.LayoutParams(
@@ -156,7 +162,7 @@ public class ExamCorrectedActivity extends AppCompatActivity {
             cell4.setOnClickListener(v -> {
                 Boolean checkStatusCorrection2 = dataBase.checkSituationCorrected(exam.getExam_id(), v.getId(), -1);
                 if(checkStatusCorrection2 == null){
-                    Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(!checkStatusCorrection2){
@@ -181,7 +187,7 @@ public class ExamCorrectedActivity extends AppCompatActivity {
                 }
 
             }catch (Exception e) {
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 8", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             } finally {
                 btnGenerateCorrectionReport.setEnabled(true);
             }
@@ -200,8 +206,8 @@ public class ExamCorrectedActivity extends AppCompatActivity {
     private void dialogGenerateReport(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Deseja gerar o relatório de correção de:")
-                .setItems(new String[]{"Todos os alunos", "Somente de alunos com prova corrigida"}, (dialog, which) -> {
+        builder.setTitle(getString(R.string.titleDialogTypeReport))
+                .setItems(new String[]{getString(R.string.itemAllStudentsReport), getString(R.string.itemWithCorrection)}, (dialog, which) -> {
                     if (which == 0){
                        generateCorrectionReport(0);
                     } else if (which == 1){
@@ -212,25 +218,23 @@ public class ExamCorrectedActivity extends AppCompatActivity {
         builder.show();
     }
 
-
-
     private void generateCorrectionReport(int typeReport){
         CorrectionReportCard createReport = new CorrectionReportCard(this, dataBase, exam.getExam_id());
         boolean requestStatus = createReport.generateCorrectionReport(typeReport);
         if (requestStatus){
-            notifySucessDownload();
+            notifySuccessDownload();
         } else {
             notifyFailureDownload();
         }
 
     }
-    private String editNameStudent(String aluno){
-        String[] separa = aluno.trim().split("\\s+");
+    private String editNameStudent(String student){
+        String[] separa = student.trim().split("\\s+");
         //String novoNome = "";
         if(separa.length > 2) {
             return separa[0] + " " + separa[separa.length - 1];
         }else{
-            return aluno;
+            return student;
         }
     }
     private void incrementResponse(){
@@ -241,19 +245,12 @@ public class ExamCorrectedActivity extends AppCompatActivity {
             }
         }
     }
-    public void PopMenu(View v){
-        v.setOnClickListener(view -> Toast.makeText(ExamCorrectedActivity.this, "Preparado para implementação", Toast.LENGTH_SHORT).show());
-    }
-
 
     public void notifyCorrectionNonExistent(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n" +
-                "• Ambiente com pouca luminosidade\n\n" +
-                "• Imagem ofuscada\n\n" +
-                "• Cartão resposta Rasurado");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.app_name_capital_letter));
+        builder.setMessage(getString(R.string.longTextExamNotCorrected));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     @Override
@@ -261,19 +258,19 @@ public class ExamCorrectedActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) { // Verifica se o código de solicitação é o esperado
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permisão concedida com sucesso", Toast.LENGTH_SHORT).show();
-                Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE concedida.");
+                Toast.makeText(this, getString(R.string.toastPermissionGranted), Toast.LENGTH_SHORT).show();
+                //Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE concedida.");
                 dialogGenerateReport();
             } else {
                 // Permissão negada
-                Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE negada.");
+                //Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE negada.");
                 notifyPermissionStorageDenied();
                 // Informe ao usuário que a permissão é necessária ou tome uma ação adequada
             }
         }
         if (requestCode == 101){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permissão concedida!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastPermissionGranted), Toast.LENGTH_SHORT).show();
             } else {
                 // Permissão negada, exiba uma mensagem explicativa ao usuário
                 notifyPermissionToNotifyDenied();
@@ -282,16 +279,16 @@ public class ExamCorrectedActivity extends AppCompatActivity {
     }
     public void notifyPermissionStorageDenied(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Para realizar o download do resultado de correção em seu dispositivo, é necessário que conceda permissão ao Kariti! .");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.app_name_capital_letter));
+        builder.setMessage(getString(R.string.longTextRequestsPermission));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     public void notifyPermissionToNotifyDenied(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("O Kariti não será capaz de notifica-lo sobre os downloads realizados! .");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.app_name_capital_letter));
+        builder.setMessage(getString(R.string.longTextNoNotifyDownload));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
     private void requestPermissionNotify(){
@@ -311,18 +308,16 @@ public class ExamCorrectedActivity extends AppCompatActivity {
     }
     private void notifyFailureDownload(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("KARITI");
-        builder.setMessage("Ocorreu uma falha ao tentar gerar o relatório dessa prova, se a falha persistir: \n\n" +
-                "1 - Verifique se possui armazenamento diponível para realização de downloads \n\n" +
-                "2 - Reinicie o Kariti");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.app_name_capital_letter));
+        builder.setMessage(getString(R.string.longTextGenerateCardError));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    private void notifySucessDownload(){
+    private void notifySuccessDownload(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Relatório Gerado");
-        builder.setMessage("Um relatório de correção dessa prova foi gerado e está disponível na pasta de downloads do seu dispositivo!");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleDialogReport));
+        builder.setMessage(getString(R.string.longTextDialogReport));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

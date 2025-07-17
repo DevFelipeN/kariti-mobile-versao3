@@ -5,6 +5,7 @@
     <string name="titleAttention">ATENÇÃO</string>
     <string name="titleGuidance">ORIENTAÇÃO</string>
     <string name="titleHelp">Ajuda</string>
+    <string name="descriptionAll">Todos</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
     <string name="click_here_description">Clique aqui </string>
@@ -115,10 +116,12 @@
 
     <!--    Prova-->
     <string name="textViewExam">Prova</string>
+    <string name="textViewExams">Provas</string>
     <string name="textTitleQuickTest">Prova Rápida</string>
     <string name="titleNewExam">Nova Prova</string>
     <string name="buttonCadExam">Cadastrar Prova</string>
-    <string name="btnBaixCartao">Baixar Cartão</string>
+    <string name="btnDownloadCads">Baixar Cartão</string>
+    <string name="titleDownloadCards">Cartões</string>
     <string name="buttonGenerateCard">Gerar Cartões</string>
     <string name="buttonGerarCartaoRap">Gerar Cartão</string>
     <string name="buttonCorrectionExam">Corrigir Prova</string>
@@ -260,6 +263,7 @@
     <string name="toastInfoNumQuestions">Informe a quantidade de questões!</string>
     <string name="toastInfoNumAlternatives">Informe a quantidade de alternativas!</string>
     <string name="toastExistExamInClass">Já existe uma prova cadastrada com o nome %1$s nessa turma!</string>
+    <string name="toastSelectDataS">Selecione os dados</string>
 
 
 
@@ -328,6 +332,9 @@
         • Visualizar Provas - Nesta opção podem ser visualizadas as provas e o resultado da correção de cada uma, caso já corridas.
     </string>
     <string name="longTextCorrectionFinish">O Resultado da correção pode ser visualizado na opção \'Visualizar Provas\'</string>
+    <string name="longTextRequestsPermission">Para realizar o download dos cartões resposta em seu dispositivo, é necessário que conceda a permissão ao Kariti!</string>
+    <string name="longTextNoNotifyDownload">O Kariti não será capaz de notifica-lo sobre os downloads realizados!</string>
+    <string name="longTextSuccessDownload">Os cartões de respostas foram gerados com sucesso e estão disponíveis na pasta de downloads do seu dispositivo.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

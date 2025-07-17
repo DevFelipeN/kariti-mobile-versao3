@@ -1,6 +1,7 @@
 package online.padev.kariti.activitys;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,19 +29,26 @@ import online.padev.kariti.adapters.AdapterSpinner;
 import online.padev.kariti.cards.CreatCard;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
     ImageButton toGoBack;
     Button btnGenerateCard;
-    Integer id_ClassBD, address, id_provaBD;
-    String nameProva, nameClass;
-    List<String> listProva, listClass, listStudent;
+    Integer id_ClassBD, address, exam_idBD;
+    String nameExam, nameClass;
+    List<String> listExams, listClass, listStudent;
     DataBaseKariti dataBaseKariti;
-    Spinner spinnerClass, spinnerProva, spinnerStudent;
-    AdapterSpinner adapterClass, adapterProva, adapterStudent;
+    Spinner spinnerClass, spinnerExam, spinnerStudent;
+    AdapterSpinner adapterClass, adapterExam, adapterStudent;
     TextView title;
     Exam exam;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,23 +56,23 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
 
         toGoBack = findViewById(R.id.imgBtnVoltar);
         spinnerClass = findViewById(R.id.spinnerTurma);
-        spinnerProva = findViewById(R.id.spinnerProva);
+        spinnerExam = findViewById(R.id.spinnerProva);
         spinnerStudent = findViewById(R.id.spinnerAlunos);
         btnGenerateCard = findViewById(R.id.baixarcatoes);
         title = findViewById(R.id.toolbar_title);
 
         dataBaseKariti = new DataBaseKariti(this);
 
-        title.setText(String.format("%s","Cartões"));
+        title.setText(getString(R.string.titleDownloadCards));
 
         address = Objects.requireNonNull(getIntent().getExtras()).getInt("endereco");
 
         listClass = dataBaseKariti.listClassByExam();
         if(listClass == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             return;
         }
-        listClass.add(0,"Selecione a turma");
+        listClass.add(0,getString(R.string.titleSelectClass));
 
         if(address.equals(2)){ //para quando a activity que a chamou foi ProvaActivity
             adapterClass = new AdapterSpinner(this, listClass);
@@ -73,32 +81,32 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
         }else if(address.equals(1)) { //para quando a activity que chamou for Gabarito
             id_ClassBD = getIntent().getExtras().getInt("id_turma");
             nameClass = dataBaseKariti.getClassName(String.valueOf(id_ClassBD));
-            nameProva = getIntent().getExtras().getString("prova");
+            nameExam = getIntent().getExtras().getString("prova");
             if (nameClass == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            int indexTurma = listClass.indexOf(nameClass); // Identifica a posicão da turma na lista
+            int indexClass = listClass.indexOf(nameClass); // Identifica a posicão da turma na lista
             adapterClass = new AdapterSpinner(this, listClass);
             spinnerClass.setAdapter(adapterClass);
-            if (indexTurma != -1){
-                spinnerClass.setSelection(indexTurma);
+            if (indexClass != -1){
+                spinnerClass.setSelection(indexClass);
             }
 
             //============ Lista todas provas pertecentes a turma selecionada =======================
-            listProva = dataBaseKariti.listExamNames(String.valueOf(id_ClassBD));
-            if (listProva == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+            listExams = dataBaseKariti.listExamNames(String.valueOf(id_ClassBD));
+            if (listExams == null){
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            int indexProva = listProva.indexOf(nameProva);
-            adapterProva = new AdapterSpinner(this, listProva);
-            spinnerProva.setAdapter(adapterProva);
-            spinnerProva.postDelayed(() -> {
-                if (indexProva != -1) {
-                    spinnerProva.setSelection(indexProva);
+            int indexExam = listExams.indexOf(nameExam);
+            adapterExam = new AdapterSpinner(this, listExams);
+            spinnerExam.setAdapter(adapterExam);
+            spinnerExam.postDelayed(() -> {
+                if (indexExam != -1) {
+                    spinnerExam.setSelection(indexExam);
                 }
             }, 200);
 
@@ -106,10 +114,10 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
             // ============ Lista todos os alunos pertencentes a turma selecionada =======================================
             listStudent = dataBaseKariti.listStudentNames(id_ClassBD.toString());
             if (listStudent == null){
-                Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 return;
             }
-            listStudent.add(0, "Todos");
+            listStudent.add(0, getString(R.string.descriptionAll));
             adapterStudent = new AdapterSpinner(this, listStudent);
             spinnerStudent.setAdapter(adapterStudent);
         }
@@ -122,28 +130,28 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
                         nameClass = spinnerClass.getSelectedItem().toString();
                         id_ClassBD = dataBaseKariti.getClassId(nameClass);
                         if (id_ClassBD == null) {
-                            Toast.makeText(ExamGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ExamGenerateCardRegisteredActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        listProva = dataBaseKariti.listExamNames(String.valueOf(id_ClassBD));
-                        if (listProva == null) {
-                            Toast.makeText(ExamGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        listExams = dataBaseKariti.listExamNames(String.valueOf(id_ClassBD));
+                        if (listExams == null) {
+                            Toast.makeText(ExamGenerateCardRegisteredActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        adapterProva = new AdapterSpinner(ExamGenerateCardRegisteredActivity.this, listProva);
-                        spinnerProva.setAdapter(adapterProva);
+                        adapterExam = new AdapterSpinner(ExamGenerateCardRegisteredActivity.this, listExams);
+                        spinnerExam.setAdapter(adapterExam);
 
                         listStudent = dataBaseKariti.listStudentNames(id_ClassBD.toString());
                         if (listStudent == null) {
-                            Toast.makeText(ExamGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ExamGenerateCardRegisteredActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        listStudent.add(0, "Todos");
+                        listStudent.add(0, getString(R.string.descriptionAll));
                         adapterStudent = new AdapterSpinner(ExamGenerateCardRegisteredActivity.this, listStudent);
                         spinnerStudent.setAdapter(adapterStudent);
                     } catch (Exception e){
                         Log.e("kariti", e.toString());
-                        Toast.makeText(ExamGenerateCardRegisteredActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ExamGenerateCardRegisteredActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {
@@ -159,20 +167,20 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
             btnGenerateCard.setEnabled(false);
             try {
                 requestsPermissionNotify();
-                if(spinnerProva.getSelectedItem() != null) {
-                    nameProva = spinnerProva.getSelectedItem().toString();
+                if(spinnerExam.getSelectedItem() != null) {
+                    nameExam = spinnerExam.getSelectedItem().toString();
                     //String aluno = spinnerAluno.getSelectedItem().toString();
-                    id_provaBD = dataBaseKariti.getExamId(nameProva, id_ClassBD);
+                    exam_idBD = dataBaseKariti.getExamId(nameExam, id_ClassBD);
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
-                        solicitaPermissao();
+                        requestsPermission();
                     }else {
                         generateCard();
                     }
 
-                }else Toast.makeText(this, "Selecione os dados", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(this, getString(R.string.toastSelectDataS), Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Log.e("kariti",e.getMessage());
-                Toast.makeText(this, "Ocorreu uma falha de comunicação no Kariti! \n\n Por favor, tente novamente.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -192,7 +200,7 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
         gifLoading.setVisibility(View.VISIBLE);
         new Thread(() -> {
             try {
-                exam = new Exam(id_provaBD, dataBaseKariti);
+                exam = new Exam(exam_idBD, dataBaseKariti);
                 CreatCard creatCard = new CreatCard(exam, dataBaseKariti, this);
                 if (creatCard.creatPdfCard()) {
                     runOnUiThread(this::infoDownloadCard);
@@ -224,41 +232,41 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) { // Verifica se o código de solicitação é o esperado
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permisão concedida com sucesso", Toast.LENGTH_SHORT).show();
-                Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE concedida.");
+                Toast.makeText(this, getString(R.string.toastPermissionGranted), Toast.LENGTH_SHORT).show();
+                //Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE concedida.");
                 generateCard();
             } else {
                 // Permissão negada
-                Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE negada.");
-                permissaoNegada();
+                //Log.d("Permissão", "Permissão WRITE_EXTERNAL_STORAGE negada.");
+                permissionDenied();
                 // Informe ao usuário que a permissão é necessária ou tome uma ação adequada
             }
         }
         if (requestCode == 101){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permissão concedida!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toastPermissionGranted), Toast.LENGTH_SHORT).show();
             } else {
                 // Permissão negada, exiba uma mensagem explicativa ao usuário
-                permissaoDNotificacaoNegada();
+                permissionNotifyDenied();
             }
         }
     }
-    public void permissaoNegada(){
+    public void permissionDenied(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("Para realizar o download dos cartões resposta em seu dispositivo, é necessário que conceda a permissão ao Kariti! .");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextRequestsPermission));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
-    public void permissaoDNotificacaoNegada(){
+    public void permissionNotifyDenied(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO");
-        builder.setMessage("O Kariti não será capaz de notifica-lo sobre os downloads realizados! .");
-        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention));
+        builder.setMessage(getString(R.string.longTextNoNotifyDownload));
+        builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
-    private void solicitaPermissao(){
+    private void requestsPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -270,9 +278,9 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
         if(!isFinishing() && !isDestroyed()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("Cartões gerados com sucesso");
-            builder.setMessage("Os cartões respostas foram gerados e estão disponíveis na pasta de downloads do seu dispositivo.");
-            builder.setPositiveButton("OK", (dialog, which) -> {
+            builder.setTitle(getString(R.string.app_name_capital_letter));
+            builder.setMessage(getString(R.string.longTextSuccessDownload));
+            builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> {
                 dialog.dismiss();
                 orientation();
             });
@@ -284,11 +292,9 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
         if(!isFinishing() && !isDestroyed()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("KARITI");
-            builder.setMessage("Ocorreu uma falha ao tentar gerar os cartões dessa prova, se a falha persistir: \n" +
-                    "1 - Verifique se possui armazenamento diponível para realização de downloads" +
-                    "2 - Reinicie o Kariti!");
-            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+            builder.setTitle(getString(R.string.app_name_capital_letter));
+            builder.setMessage(getString(R.string.longTextGenerateCardError));
+            builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
             builder.show();
         }
     }
@@ -296,13 +302,12 @@ public class ExamGenerateCardRegisteredActivity extends AppCompatActivity {
         if(!isFinishing() && !isDestroyed()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("ORIENTAÇÃO!");
-            builder.setMessage("O preenchimento dos cartões-respostas deve ser feito com caneta de cor escura, preferencialmente de cor preta.");
-            builder.setPositiveButton("OK", (dialog, which) -> {
+            builder.setTitle(getString(R.string.titleGuidance));
+            builder.setMessage(getString(R.string.longTextGuidanceMarkedCards));
+            builder.setPositiveButton(getString(R.string.okDescription), (dialog, which) -> {
                 dialog.dismiss();
                 finish();
             });
-
             builder.show();
         }
     }

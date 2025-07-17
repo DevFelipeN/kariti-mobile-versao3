@@ -5,6 +5,7 @@
     <string name="titleAttention">ATTENTION</string>
     <string name="titleGuidance">GUIDANCE</string>
     <string name="titleHelp">Help</string>
+    <string name="descriptionAll">All</string>
     <string name="to_go_back_description">Voltar</string>
     <string name="status_description"> Status </string>
     <string name="click_here_description">Click here </string>
@@ -112,10 +113,12 @@
 
     <!--    Prova-->
     <string name="textViewExam">Exam</string>
+    <string name="textViewExams">Exams</string>
     <string name="textTitleQuickTest">Quick Test</string>
     <string name="titleNewExam">New Exam</string>
     <string name="buttonCadExam">Register Exam</string>
-    <string name="btnBaixCartao">Baixar Cartão</string>
+    <string name="btnDownloadCads">Download Card</string>
+    <string name="titleDownloadCards">Cards</string>
     <string name="buttonGenerateCard">Generate Cards</string>
     <string name="buttonGerarCartaoRap">Generate Card</string>
     <string name="buttonCorrectionExam">Grade Exam</string>
@@ -256,6 +259,7 @@
     <string name="toastInfoNumQuestions">Enter the number of questions!</string>
     <string name="toastInfoNumAlternatives">Enter the number of alternatives!</string>
     <string name="toastExistExamInClass">A test with the name %1$s already exists in this class!</string>
+    <string name="toastSelectDataS">Select the data</string>
 
 
 
@@ -328,6 +332,9 @@
         • View Exams – In this option, you can view the exams and the grading results for each one, if they have already been graded.
     </string>
     <string name="longTextCorrectionFinish">The grading result can be viewed under the \'View Exams\' option.</string>
+    <string name="longTextRequestsPermission">To download the answer sheets to your device, you need to grant permission to Kariti!</string>
+    <string name="longTextNoNotifyDownload">Kariti will not be able to notify you about completed downloads!</string>
+    <string name="longTextSuccessDownload">The answer sheets have been successfully generated and are available in your device’s downloads folder.</string>
 
 
     <string name="txtViewNotaT">Nota total da prova X pontos.</string>

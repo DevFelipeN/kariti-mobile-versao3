@@ -20,7 +20,7 @@
         style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textViewClass"
+        android:text="@string/textViewTitle"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/spinnerTurma"
         app:layout_constraintEnd_toEndOf="@+id/spinnerTurma"
@@ -34,7 +34,7 @@
         style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textViewExam"
+        android:text="@string/textViewExams"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/spinnerProva"
         app:layout_constraintEnd_toEndOf="@+id/spinnerProva"
@@ -48,7 +48,7 @@
         style="@style/COLORTEXT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textViewStudent"
+        android:text="@string/textViewStudents"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/spinnerAlunos"
         app:layout_constraintEnd_toEndOf="@+id/spinnerAlunos"
@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/btnBaixCartao"
+        android:text="@string/buttonGenerateCard"
         android:textAlignment="textEnd"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -113,7 +113,10 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <View
             android:id="@+id/overlayView"
@@ -126,9 +129,9 @@
             android:id="@+id/loadingId"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:src="@drawable/loading"
-            android:visibility="gone"
-            android:layout_gravity="center" />
+            android:visibility="gone" />
 
     </FrameLayout>
 

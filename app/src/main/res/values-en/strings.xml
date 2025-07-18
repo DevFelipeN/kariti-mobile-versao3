@@ -164,7 +164,6 @@
     <string name="descriptionCorrect">CORRECT</string>
     <string name="descriptionIncorrect">INCORRECT</string>
     <string name="descriptionView">View</string>
-    <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">registered exams</string>
     <string name="titleCorrectionFinish">Grading Completed</string>
     <string name="descriptionRegister">registered</string>
@@ -180,6 +179,7 @@
     <string name="itemWithCorrection">Only for students with graded exams</string>
     <string name="optionsEditOrDelete">Do you want to delete or edit this exam?</string>
     <string name="titleGradedExam">Graded Exam</string>
+    <string name="titleGrading">Grading</string>
 
 
     <!--    Descrição de Icons-->
@@ -393,6 +393,10 @@
         Editing graded exams is not allowed!
     </string>
     <string name="longTextIfDeleteExam">If you confirm this action, all data related to this exam, including its grading, will be permanently deleted.</string>
+    <string name="longTextPleaseWait">Grading in progress…\n\n
+        After grading is complete, go to \'View Exams\' and select the desired exam.\n\n
+        Please wait…
+    </string>
 
 
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>

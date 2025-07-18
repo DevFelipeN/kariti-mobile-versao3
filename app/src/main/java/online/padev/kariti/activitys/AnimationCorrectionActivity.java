@@ -1,5 +1,6 @@
 package online.padev.kariti.activitys;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -7,28 +8,29 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import online.padev.kariti.R;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class AnimationCorrectionActivity extends AppCompatActivity {
-    TextView titleActivity, informativo;
-    static AnimationCorrectionActivity instanciaEncerra;
+    TextView titleActivity;
+    public static AnimationCorrectionActivity instanceClosed;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animation_correction);
 
-        instanciaEncerra = this;
+        instanceClosed = this;
 
-        ImageButton btnVoltar = findViewById(R.id.imgBtnVoltar);
+        ImageButton btnBack = findViewById(R.id.imgBtnVoltar);
         titleActivity = findViewById(R.id.toolbar_title);
-        informativo = findViewById(R.id.textViewInformativo);
 
-        informativo.setText(String.format(" %s ","Correção em andamento...\n\n" +
-                "Após a correção, acesse 'Visualizar Provas', em seguida selecione a prova desejada!\n\n" +
-                "Por favor, aguarde..."));
-
-        titleActivity.setText(String.format("%s","Corrigindo..."));
-        btnVoltar.setOnClickListener(v -> {
+        titleActivity.setText(getString(R.string.titleGrading));
+        btnBack.setOnClickListener(v -> {
             getOnBackPressedDispatcher();
             finish();
         });
@@ -41,12 +43,12 @@ public class AnimationCorrectionActivity extends AppCompatActivity {
     }
     protected void onDestroy() {
         super.onDestroy();
-        instanciaEncerra = null;
+        instanceClosed = null;
     }
 
     public static void close() {
-        if (instanciaEncerra != null) {
-            instanciaEncerra.finish();
+        if (instanceClosed != null) {
+            instanceClosed.finish();
         }
     }
 }

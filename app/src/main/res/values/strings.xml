@@ -168,7 +168,6 @@
     <string name="descriptionCorrect">CERTA</string>
     <string name="descriptionIncorrect">ERRADA</string>
     <string name="descriptionView">Ver</string>
-    <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">provas cadastradas</string>
     <string name="titleCorrectionFinish">Correção Finalizada</string>
     <string name="descriptionRegister">cadastrada</string>
@@ -184,6 +183,8 @@
     <string name="itemWithCorrection">Somente de alunos com prova corrigida</string>
     <string name="optionsEditOrDelete">Deseja excluir ou editar esta prova?</string>
     <string name="titleGradedExam">Prova Corrigida</string>
+    <string name="titleGrading">Corrigindo</string>
+    
 
 
     <!--    Descrição de Icons-->
@@ -393,6 +394,10 @@
     </string>
     <string name="longTextIfDeleteExam">Caso confirme essa ação todos os dados dessa prova incluindo correção, serão excluidos permanentemente! \n\n
         Deseja realmente excluir essa prova?
+    </string>
+    <string name="longTextPleaseWait">Correção em andamento…\n\n
+        Após a correção, acesse \'Visualizar Provas\', em seguida selecione a prova desejada!\n\n
+        Por favor, aguarde…
     </string>
 
     

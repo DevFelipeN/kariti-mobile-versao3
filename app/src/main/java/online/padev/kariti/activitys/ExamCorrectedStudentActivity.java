@@ -1,5 +1,6 @@
 package online.padev.kariti.activitys;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
@@ -18,18 +19,24 @@ import java.util.Objects;
 
 import online.padev.kariti.R;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class ExamCorrectedStudentActivity extends AppCompatActivity {
 
     ImageButton back;
-    String StudentName, status;
-    Integer id_student, id_prova, numQuestions;
+    String studentName, status;
+    Integer id_student, exam_id, numQuestions;
     DataBaseKariti dataBaseKariti;
     TextView textViewStudent, textViewNote;
-    List<String> responseStudent, gabarito;
+    List<String> responseStudent, answerKey;
     List<Float> peso;
     TextView title;
     float note = 0;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,26 +50,26 @@ public class ExamCorrectedStudentActivity extends AppCompatActivity {
 
         dataBaseKariti = new DataBaseKariti(this);
 
-        title.setText(String.format("%s","Detalhes"));
+        title.setText(getString(R.string.descriptionDetails));
 
         id_student = Objects.requireNonNull(getIntent().getExtras()).getInt("id_aluno");
-        id_prova = getIntent().getExtras().getInt("id_prova");
-        StudentName = dataBaseKariti.getStudentName(id_student);
-        numQuestions = dataBaseKariti.getNumberQuestions(id_prova.toString());
+        exam_id = getIntent().getExtras().getInt("id_prova");
+        studentName = dataBaseKariti.getStudentName(id_student);
+        numQuestions = dataBaseKariti.getNumberQuestions(exam_id.toString());
 
-        if (StudentName == null || numQuestions == null){ //vericação caso ocorra exceções no Banco
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+        if (studentName == null || numQuestions == null){ //vericação caso ocorra exceções no Banco
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        textViewStudent.setText(String.format("%s","Aluno: "+ StudentName));
+        textViewStudent.setText(getString(R.string.descriptionStudent, studentName));
         //Carrega todas as respostas ordenadas por questao
-        responseStudent = dataBaseKariti.listAnswerGivenString(id_prova, id_student); // lista as respostas dos alunos em formato de letras
-        gabarito = dataBaseKariti.listAnswerKeyString(id_prova); // lista as respostas do gabarito em formato de letras
-        peso = dataBaseKariti.listGradeByQuestion(id_prova);
+        responseStudent = dataBaseKariti.listAnswerGivenString(exam_id, id_student); // lista as respostas dos alunos em formato de letras
+        answerKey = dataBaseKariti.listAnswerKeyString(exam_id); // lista as respostas do gabarito em formato de letras
+        peso = dataBaseKariti.listGradeByQuestion(exam_id);
 
-        if (responseStudent == null || gabarito == null || peso == null){ //vericação caso ocorra exceções no Banco
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente", Toast.LENGTH_SHORT).show();
+        if (responseStudent == null || answerKey == null || peso == null){ //vericação caso ocorra exceções no Banco
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -79,10 +86,10 @@ public class ExamCorrectedStudentActivity extends AppCompatActivity {
         }
 
         for(int x = 1; x <= numQuestions; x++) {
-            if(gabarito.get(x-1).equals(responseStudent.get(x-1))){
+            if(answerKey.get(x-1).equals(responseStudent.get(x-1))){
                 note += peso.get(x-1);
-                status = "CERTA";
-            }else {status = "ERRADA";}
+                status = getString(R.string.descriptionCorrect);
+            }else {status = getString(R.string.descriptionIncorrect);}
 
             TableLayout tableLayout = findViewById(R.id.tableLayoutDetalheCorrecao);
             TableRow row = new TableRow(this);
@@ -106,7 +113,7 @@ public class ExamCorrectedStudentActivity extends AppCompatActivity {
 
             // Cria uma célula para a nova linha para armazenar a resposta do gabarito
             TextView cell3 = new TextView(this);
-            cell3.setText(gabarito.get(x-1));
+            cell3.setText(answerKey.get(x-1));
             cell3.setGravity(Gravity.CENTER);
             cell3.setTextSize(16);
             row.addView(cell3);
@@ -128,7 +135,7 @@ public class ExamCorrectedStudentActivity extends AppCompatActivity {
             // Adiciona a nova linha à tabela
             tableLayout.addView(row);
         }
-        textViewNote.setText(String.format("Nota total obtida: %.2f pontos", note));
+        textViewNote.setText(getString(R.string.txtViewNotaTotal, note));
 
 
         back.setOnClickListener(view -> {

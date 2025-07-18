@@ -78,6 +78,7 @@
 
 
     <!--    Aluno-->
+    <string name="descriptionStudent">Aluno(a): %1$s</string>
     <string name="buttonCadStudent">Cadastrar aluno(a)</string>
     <string name="searchStudent">Pesquisar aluno</string>
     <string name="studentEmail">E-mail</string>
@@ -139,7 +140,7 @@
     <string name="correctOpenCv">Como deseja corrigir sua prova?</string>
     <string name="buttonNext"> Próximo </string>
     <string name="button_continue">Continuar</string>
-    <string name="NotaDetalhe">Peso </string>
+    <string name="NotaDetails">Peso </string>
     <string name="descriptionDetails">Detalhes</string>
     <string name="time">00:00:00</string>
     <string name="editTextNomeExam">Informe o nome  da prova*</string>
@@ -147,7 +148,7 @@
     <string name="textViewDataExam">Data da Prova</string>
     <string name="textViewQuantQuestions">Quant. de Questões</string>
     <string name="textViewQuantAlternatives">Quant. de Alternativas</string>
-    <string name="Questao">Questão </string>
+    <string name="descriptionQuestion">Questão </string>
     <string name="titleAnswerKey">Gabarito </string>
     <string name="buttonData">Selecionar Data</string>
     <string name="txtViewDate">Data: %1$s</string>
@@ -159,8 +160,10 @@
     <string name="btnGenerateReport">Gerar Relatório</string>
     <string name="txtHits">Acertos</string>
     <string name="txtErros">Erros</string>
-    <string name="Marcada">Marcada </string>
+    <string name="descriptionMarked">Marcada </string>
     <string name="encerrar">Encerrar</string>
+    <string name="descriptionCorrect">CERTA</string>
+    <string name="descriptionIncorrect">ERRADA</string>
     <string name="descriptionView">Ver</string>
     <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">provas cadastradas</string>

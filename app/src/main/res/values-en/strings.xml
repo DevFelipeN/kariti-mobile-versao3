@@ -7,7 +7,7 @@
     <string name="titleHelp">Help</string>
     <string name="descriptionAll">All</string>
     <string name="to_go_back_description">Voltar</string>
-    <string name="status_description"> Status </string>
+    <string name="status_description">Status</string>
     <string name="click_here_description">Click here </string>
     <string name="create_account_description">Create Account</string>
     <string name="button_continue">Continuar</string>
@@ -75,6 +75,7 @@
     <string name="longTitleSchoolDelete">Do you really want to delete this school?</string>
 
     <!--    Aluno-->
+    <string name="descriptionStudent">Student: %1$s</string>
     <string name="buttonCadStudent">Register Student</string>
     <string name="searchStudent">Search student</string>
     <string name="studentEmail">Email</string>
@@ -135,7 +136,7 @@
     <string name="buttonCameraOpenCV">Capture Now</string>
     <string name="correctOpenCv">How would you like to grade your exam?</string>
     <string name="buttonNext"> Next </string>
-    <string name="NotaDetalhe">Peso </string>
+    <string name="NotaDetails">Weight</string>
     <string name="descriptionDetails">Details</string>
     <string name="time">00:00:00</string>
     <string name="editTextNomeExam">Enter the test name*</string>
@@ -143,7 +144,7 @@
     <string name="textViewDataExam">Exam Data</string>
     <string name="textViewQuantQuestions">Number of Questions</string>
     <string name="textViewQuantAlternatives">Number of Alternatives</string>
-    <string name="Questao">Questão </string>
+    <string name="descriptionQuestion">Question </string>
     <string name="titleAnswerKey">Answer Key</string>
     <string name="buttonData">Select Date</string>
     <string name="txtViewDate">Date: %1$s</string>
@@ -155,8 +156,10 @@
     <string name="btnGenerateReport">Generate Report</string>
     <string name="txtHits">Hits</string>
     <string name="txtErros">Erros</string>
-    <string name="Marcada">Marcada </string>
+    <string name="descriptionMarked">Marked</string>
     <string name="encerrar">Encerrar</string>
+    <string name="descriptionCorrect">CORRECT</string>
+    <string name="descriptionIncorrect">INCORRECT</string>
     <string name="descriptionView">View</string>
     <string name="aguardeCorrecao">Aguarde a correção</string>
     <string name="textExamRegister">registered exams</string>

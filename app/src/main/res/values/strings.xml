@@ -92,7 +92,7 @@
     <string name="textViewStudent"> Aluno(a) </string>
     <string name="textViewStudents">Alunos (as)</string>
     <string name="textAnonymous">Aluno(a) %1$s</string>
-    <string name="buttonEditar"> Editar </string>
+    <string name="buttonEdit"> Editar </string>
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
@@ -110,7 +110,7 @@
     <string name="buttonCadTurma">Cadastrar Turma</string>
     <string name="buttonSaveClass">Salvar Turma</string>
     <string name="titleEditClass">Editar Turma</string>
-    <string name="textViewFiltro">Filtro por turma</string>
+    <string name="textViewFilter">Filtro por turma</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="infoStudentsInClass">Alunos Identificados: %1$d \nAlunos Anônimos: %2$d \n\nTotal de Alunos: %3$d</string>
     <string name="textClassRegistered">turmas cadastrada</string>
@@ -179,6 +179,7 @@
     <string name="titleDialogTypeReport">Deseja gerar o relatório de correção de:</string>
     <string name="itemAllStudentsReport">Todos os alunos</string>
     <string name="itemWithCorrection">Somente de alunos com prova corrigida</string>
+    <string name="optionsEditOrDelete">Deseja excluir ou editar esta prova?</string>
 
 
     <!--    Descrição de Icons-->
@@ -284,6 +285,9 @@
     <string name="toastInfoScoresQuestionsAll">Por favor, informe as notas para as questões!</string>
     <string name="toastPreviousAnswerKey">Seu gabarito anterior ainda foi mantido!</string>
     <string name="toastFormatScoreInvalid">Formato de nota inválido!</string>
+    <string name="toastExamNoCorrected">Prova não corrigida</string>
+    <string name="toastSuccessDeleteExam">Prova excluida com sucesso!</string>
+    <string name="toastFailedDeleteExam">Falha ao tentar excluir essa prova!</string>
 
 
 
@@ -379,6 +383,12 @@
         • Ambiente com pouca luminosidade\n\n
         • Imagem ofuscada\n\n
         • Cartão resposta Rasurado.
+    </string>
+    <string name="longTextExamCorrected">Esta prova já foi corrigida.\n
+        Não é possivel editar provas já corrigidas!
+    </string>
+    <string name="longTextIfDeleteExam">Caso confirme essa ação todos os dados dessa prova incluindo correção, serão excluidos permanentemente! \n\n
+        Deseja realmente excluir essa prova?
     </string>
 
     

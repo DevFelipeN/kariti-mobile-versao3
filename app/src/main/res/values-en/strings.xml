@@ -89,7 +89,7 @@
     <string name="textViewStudent">Student</string>
     <string name="textAnonymous">Student %1$s</string>
     <string name="textViewStudents">Students</string>
-    <string name="buttonEditar"> Editar </string>
+    <string name="buttonEdit">Edit</string>
     <string name="buttonApagar"> Apagar </string>
     <string name="buttonVisuAluno">Visualizar Aluno</string>
     <string name="EditTextIdAluno">ID do aluno</string>
@@ -105,7 +105,7 @@
     <string name="editTextNameClass">Class name</string>
     <string name="buttonCadTurma">Register Class</string>
     <string name="buttonSaveClass">Save Class</string>
-    <string name="textViewFiltro">Filtro por turma</string>
+    <string name="textViewFilter">Filter by class</string>
     <string name="titleEditClass">Edit Class</string>
     <string name="buttonVisuTurma">Visualizar Turma</string>
     <string name="editTextNomeTurma">Class Name*</string>
@@ -175,6 +175,7 @@
     <string name="titleDialogTypeReport">Do you want to generate the grading report for:</string>
     <string name="itemAllStudentsReport">All students</string>
     <string name="itemWithCorrection">Only for students with graded exams</string>
+    <string name="optionsEditOrDelete">Do you want to delete or edit this exam?</string>
 
 
     <!--    Descrição de Icons-->
@@ -280,6 +281,9 @@
     <string name="toastInfoScoresQuestionsAll">Please enter the scores for the questions!</string>
     <string name="toastPreviousAnswerKey">Your previous answer key has still been kept!</string>
     <string name="toastFormatScoreInvalid">Invalid grade format!</string>
+    <string name="toastExamNoCorrected">Exam not graded</string>
+    <string name="toastSuccessDeleteExam">Exam successfully deleted!</string>
+    <string name="toastFailedDeleteExam">Failed to delete this exam!</string>
 
 
 
@@ -381,6 +385,10 @@
         • Blurry or unclear image\n\n
         • Scratched or marked answer sheet.
     </string>
+    <string name="longTextExamCorrected">This exam has already been graded.
+        Editing graded exams is not allowed!
+    </string>
+    <string name="longTextIfDeleteExam">If you confirm this action, all data related to this exam, including its grading, will be permanently deleted.</string>
 
 
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>

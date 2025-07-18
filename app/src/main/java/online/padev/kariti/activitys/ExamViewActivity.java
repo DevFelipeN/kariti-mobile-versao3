@@ -1,5 +1,6 @@
 package online.padev.kariti.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,18 +22,25 @@ import online.padev.kariti.adapters.AdapterClickableList;
 import online.padev.kariti.adapters.AdapterSpinner;
 import online.padev.kariti.entity.Exam;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class ExamViewActivity extends AppCompatActivity {
     ImageButton back;
-    private String className, nameProva;
-    private Integer id_class, id_prova;
-    private List<String> listProva, listClass;
+    private String className, examName;
+    private Integer id_class, exam_id;
+    private List<String> listExams, listClass;
     RecyclerView recyclerView;
-    AdapterClickableList adapterProva;
+    AdapterClickableList adapterExam;
     AdapterSpinner adapterSpinnerClass;
     TextView title;
     Spinner spinnerClass;
     DataBaseKariti dataBaseKariti;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +51,13 @@ public class ExamViewActivity extends AppCompatActivity {
         spinnerClass = findViewById(R.id.spinnerTurma2);
         title = findViewById(R.id.toolbar_title);
 
-        title.setText(String.format("%s","Provas"));
+        title.setText(getString(R.string.textViewExams));
 
         dataBaseKariti = new DataBaseKariti(this);
 
         listClass = dataBaseKariti.listClassByExam();
         if (listClass == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -60,33 +68,33 @@ public class ExamViewActivity extends AppCompatActivity {
         className = spinnerClass.getSelectedItem().toString();
         id_class = dataBaseKariti.getClassId(className);
         if (id_class == null){
-            Toast.makeText(ExamViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExamViewActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        listProva = dataBaseKariti.listExamNames(id_class.toString());
-        if (listProva == null){
-            Toast.makeText(this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
+        listExams = dataBaseKariti.listExamNames(id_class.toString());
+        if (listExams == null){
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             finish();
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterProva = new AdapterClickableList(this, listProva, this::onItemClick, this::onItemLongClick);
-        recyclerView.setAdapter(adapterProva);
+        adapterExam = new AdapterClickableList(this, listExams, this::onItemClick, this::onItemLongClick);
+        recyclerView.setAdapter(adapterExam);
 
         spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 className = spinnerClass.getSelectedItem().toString();
                 id_class = dataBaseKariti.getClassId(className);
-                listProva.clear();
-                listProva = dataBaseKariti.listExamNames(id_class.toString());
-                if (listProva == null){
-                    Toast.makeText(ExamViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 1", Toast.LENGTH_SHORT).show();
+                listExams.clear();
+                listExams = dataBaseKariti.listExamNames(id_class.toString());
+                if (listExams == null){
+                    Toast.makeText(ExamViewActivity.this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(ExamViewActivity.this));
-                adapterProva = new AdapterClickableList(ExamViewActivity.this, listProva, ExamViewActivity.this::onItemClick, ExamViewActivity.this::onItemLongClick);
-                recyclerView.setAdapter(adapterProva);
+                adapterExam = new AdapterClickableList(ExamViewActivity.this, listExams, ExamViewActivity.this::onItemClick, ExamViewActivity.this::onItemLongClick);
+                recyclerView.setAdapter(adapterExam);
             }
 
             @Override
@@ -106,84 +114,82 @@ public class ExamViewActivity extends AppCompatActivity {
         });
     }
     public void onItemClick(int position) {
-        nameProva = listProva.get(position);
-        id_prova = dataBaseKariti.getExamId(nameProva, id_class);
-        if (id_prova == null){
-            Toast.makeText(ExamViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 5", Toast.LENGTH_SHORT).show();
+        examName = listExams.get(position);
+        exam_id = dataBaseKariti.getExamId(examName, id_class);
+        if (exam_id == null){
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             return;
         }
-        startCorrectionProva();
+        startCorrectionExam();
     }
     public void onItemLongClick(int position) {
-        nameProva = listProva.get(position);
-        id_prova = dataBaseKariti.getExamId(nameProva, id_class);
+        examName = listExams.get(position);
+        exam_id = dataBaseKariti.getExamId(examName, id_class);
         displayEditOrDelete(position);
     }
-    private void startCorrectionProva(){
-        Boolean checkIsCorrected = dataBaseKariti.checkIfExamCorrected(id_prova.toString());
+    private void startCorrectionExam(){
+        Boolean checkIsCorrected = dataBaseKariti.checkIfExamCorrected(exam_id.toString());
         if (checkIsCorrected == null){
-            Toast.makeText(ExamViewActivity.this, "Falha de comunicação! \n\n Por favor, tente novamente 6", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
             return;
         }
         if(checkIsCorrected){
-            Exam exam = new Exam(id_prova, dataBaseKariti);
+            Exam exam = new Exam(exam_id, dataBaseKariti);
             Intent intent = new Intent(this, ExamCorrectedActivity.class);
             intent.putExtra("prova", exam);
             startActivity(intent);
         }else {
-            Toast.makeText(this, "Prova não corrigida!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastExamNoCorrected), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void displayEditOrDelete(int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Deseja excluir ou editar esta prova?")
-                .setPositiveButton("EXCLUIR", (dialog, which) -> noticeIfDelete(position))
-                .setNegativeButton("EDITAR", (dialog, which) -> editProva());
+        builder.setTitle(getString(R.string.optionsEditOrDelete))
+                .setPositiveButton(getString(R.string.menuDelete), (dialog, which) -> noticeIfDelete(position))
+                .setNegativeButton(getString(R.string.buttonEdit), (dialog, which) -> editExam());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    private void editProva(){
-        if(dataBaseKariti.checkIfExamCorrected(id_prova.toString())){
+    private void editExam(){
+        if(dataBaseKariti.checkIfExamCorrected(exam_id.toString())){
             noticeImpossibleEdit();
         }else {
             Intent intent = new Intent(this, ExamEditActivity.class);
-            intent.putExtra("id_prova", id_prova);
+            intent.putExtra("id_prova", exam_id);
             startActivity(intent);
         }
     }
     private void noticeImpossibleEdit(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO")
-                .setMessage("Esta prova já foi corrigida.\n\n" +
-                        "Não é possivel editar provas já corrigidas!")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention))
+                .setMessage(getString(R.string.longTextExamCorrected))
+                .setPositiveButton(getString(R.string.okDescription), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
     private void noticeIfDelete(int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ATENÇÃO")
-                .setMessage("Caso confirme essa ação todos os dados dessa prova incluindo correção, serão excluidos permanentemente! \n\n" +
-                        "Deseja realmente excluir essa prova? ")
-                .setPositiveButton("SIM", (dialog, which) -> deleteProva(position))
-                .setNegativeButton("NÃO", (dialog, which) -> dialog.dismiss());
+        builder.setTitle(getString(R.string.titleAttention))
+                .setMessage(getString(R.string.longTextIfDeleteExam))
+                .setPositiveButton(getString(R.string.yes_description), (dialog, which) -> deleteExam(position))
+                .setNegativeButton(getString(R.string.not_description), (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    private void deleteProva(int position){
-        if (dataBaseKariti.deleteExamData(id_prova)){
-            listProva.remove(nameProva);
-            notifyProvaDeleted(position);
+    private void deleteExam(int position){
+        if (dataBaseKariti.deleteExamData(exam_id)){
+            listExams.remove(examName);
+            notifyExamDeleted(position);
         }else{
-            Toast.makeText(this, "Falha ao tentar excluir essa prova!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toastFailedDeleteExam), Toast.LENGTH_SHORT).show();
         }
 
     }
-    private void notifyProvaDeleted(int position){
-        Toast.makeText(this, "Prova excluida com sucesso!", Toast.LENGTH_SHORT).show();
-        if(!listProva.isEmpty()){
-            adapterProva.notifyItemRemoved(position);
+    private void notifyExamDeleted(int position){
+        Toast.makeText(this, getString(R.string.toastSuccessDeleteExam), Toast.LENGTH_SHORT).show();
+        if(!listExams.isEmpty()){
+            adapterExam.notifyItemRemoved(position);
         }else{
             finish();
         }

@@ -46,8 +46,9 @@
     <string name="user_email">E-mail</string>
     <string name="user_enter_your_email">Informe seu e-mail</string>
     <string name="password_registration">Enter a password*</string>
-    <string name="new_password_description">Nova senha*</string>
-    <string name="enter_your_new_password">Informe a nova senha*</string>
+    <string name="titleNewPassword">New Password</string>
+    <string name="new_password_description">New Password*</string>
+    <string name="enter_your_new_password">Enter the new password*</string>
     <string name="password_login">Access password*</string>
     <string name="password_registration_check">Confirm password*</string>
     <string name="validation_description">Validate</string>
@@ -288,6 +289,8 @@
     <string name="toastExamNoCorrected">Exam not graded</string>
     <string name="toastSuccessDeleteExam">Exam successfully deleted!</string>
     <string name="toastFailedDeleteExam">Failed to delete this exam!</string>
+    <string name="toastInformPasswords">Please enter the password in both fields!</string>
+    <string name="toastPasswordSuccessUpdate">Password changed successfully!</string>
 
 
 
@@ -397,6 +400,7 @@
         After grading is complete, go to \'View Exams\' and select the desired exam.\n\n
         Please wait…
     </string>
+    <string name="longTextNewPassword">Hello, %1$s! Please enter a secure password to access KARITI.</string>
 
 
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>

@@ -2,6 +2,8 @@ package online.padev.kariti.activitys;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import online.padev.kariti.R;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 
 public class UpdatePasswordActivity extends AppCompatActivity{
     private Integer id_user;
@@ -23,6 +26,11 @@ public class UpdatePasswordActivity extends AppCompatActivity{
     Button btnUpdate;
     DataBaseKariti dataBase;
     ImageButton hidePassword, hidePassword2, back;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +52,8 @@ public class UpdatePasswordActivity extends AppCompatActivity{
         nameUser = getIntent().getExtras().getString("nome");
         email = getIntent().getExtras().getString("email");
 
-        titleActivity.setText(String.format("%s","Nova senha"));
-        textViewDescription.setText(String.format("Olá, %s!\n Informe uma senha segura para acesso ao KARITI.", nameUser));
+        titleActivity.setText(getString(R.string.titleNewPassword));
+        textViewDescription.setText(getString(R.string.longTextNewPassword, nameUser));
 
         btnUpdate.setOnClickListener(v -> {
             btnUpdate.setEnabled(false);
@@ -53,17 +61,17 @@ public class UpdatePasswordActivity extends AppCompatActivity{
                 newPassword = editTextNewPassword.getText().toString().trim();
                 confirmedNewPassword = editTextConfirmedNewPassword.getText().toString().trim();
                 if (newPassword.isEmpty() || confirmedNewPassword.isEmpty()) {
-                    Toast.makeText(this, "Informe a senha nos dois campos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastInformPasswords), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!newPassword.equals(confirmedNewPassword)) {
-                    Toast.makeText(this, "Senhas divergentes!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastDivergentPasswords), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (dataBase.updatePassword(newPassword, id_user)) {
                     startLoginActivity();
                 } else {
-                    Toast.makeText(this, "Erro de comunicação!\n\n Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e){
                 Log.e("kariti", e.toString());
@@ -112,7 +120,7 @@ public class UpdatePasswordActivity extends AppCompatActivity{
      * Método usado para inicializar a tela de login.
      */
     private void startLoginActivity(){
-        Toast.makeText(this, "Senha alterada com sucesso!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.toastPasswordSuccessUpdate), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

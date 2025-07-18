@@ -51,6 +51,7 @@
     <string name="buttonDefaultPassword">Entrar sem senha</string>
 
     <!--Update Password-->
+    <string name="titleNewPassword">Nova Senha</string>
     <string name="new_password_description">Nova senha*</string>
     <string name="enter_your_new_password">Informe a nova senha*</string>
 
@@ -293,6 +294,8 @@
     <string name="toastExamNoCorrected">Prova não corrigida</string>
     <string name="toastSuccessDeleteExam">Prova excluida com sucesso!</string>
     <string name="toastFailedDeleteExam">Falha ao tentar excluir essa prova!</string>
+    <string name="toastInformPasswords">Por favor, informe a senha nos dois campos!</string>
+    <string name="toastPasswordSuccessUpdate">Senha alterada com sucesso!</string>
 
 
 
@@ -383,6 +386,7 @@
     <string name="longTextInitCorrectionDefault">Antes de iniciar a correção, por favor, preencha o gabarito da(s) prova(s) que deseja corrigir!\n\n"
         Você só precisa preencher o gabarito uma vez para corrigir todas as suas provas.
     </string>
+    <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
     <string name="longTextDialogReport">Um relatório de correção dessa prova foi gerado e está disponível na pasta de downloads do seu dispositivo!</string>
     <string name="longTextExamNotCorrected">Esta prova não foi corrigida. Veja algumas das causas que podem ter colaborado para este resultado:\n\n
         • Ambiente com pouca luminosidade\n\n
@@ -399,12 +403,12 @@
         Após a correção, acesse \'Visualizar Provas\', em seguida selecione a prova desejada!\n\n
         Por favor, aguarde…
     </string>
+    <string name="longTextNewPassword">Olá, %1$s! Por favor, informe uma senha segura para acesso ao KARITI.</string>
 
     
 
 
     <string name="txtConfimProva">Prova cadastrada com Sucesso!</string>
-    <string name="txtViewGradeAllDescription">Caso deseje atribuir a mesma nota para todas as questões dessa prova. Informe a nota no campo abaixo e confirme!</string>
 
 
 </resources>

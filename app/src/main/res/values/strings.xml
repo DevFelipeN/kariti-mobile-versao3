@@ -154,12 +154,15 @@
     <string name="txtViewDate">Data: %1$s</string>
     <string name="Nota"> Nota </string>
     <string name="txtViewGradeAll">Nota:</string>
+    <string name="txtViewGradeReceived">Nota: %1$.2f</string>
     <string name="txtViewGradeAllNumber">1.0</string>
     <string name="buttonNotGradeAll">Atribuir notas individuais</string>
     <string name="buttonYesGradeAll">Confirmar nota</string>
     <string name="btnGenerateReport">Gerar Relatório</string>
     <string name="txtHits">Acertos</string>
     <string name="txtErros">Erros</string>
+    <string name="txtCorrectAnswers">Acertos: %1$d</string>
+    <string name="txtMistakes">Erros: %1$d</string>
     <string name="descriptionMarked">Marcada </string>
     <string name="encerrar">Encerrar</string>
     <string name="descriptionCorrect">CERTA</string>
@@ -180,6 +183,7 @@
     <string name="itemAllStudentsReport">Todos os alunos</string>
     <string name="itemWithCorrection">Somente de alunos com prova corrigida</string>
     <string name="optionsEditOrDelete">Deseja excluir ou editar esta prova?</string>
+    <string name="titleGradedExam">Prova Corrigida</string>
 
 
     <!--    Descrição de Icons-->

@@ -1,5 +1,6 @@
 package online.padev.kariti.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,19 +24,25 @@ import java.util.Map;
 import online.padev.kariti.R;
 import online.padev.kariti.entity.Answer_key;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.settings.ActivityLocale;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ViewCardCorrectedActivity extends AppCompatActivity {
 
     ImageView imageViewCorrected;
     Button btnClose, btnContinue;
-    TextView textViewNameStudent, textViewNameProva, textViewNote, textViewNumCorrect, textViewNumIncorrect, titleActivity;
-    private Integer id_prova, id_student;
+    TextView textViewNameStudent, textViewExamName, textViewNote, textViewNumCorrect, textViewNumIncorrect, titleActivity;
+    private Integer exam_id, id_student;
     float noteStudent;
     int numCorrect, numIncorrect;
-    private String nameStudent, nameProva;
+    private String nameStudent, examName;
     private DataBaseKariti dataBase;
     GifImageView gifLoading;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ActivityLocale.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +51,7 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
 
         imageViewCorrected = findViewById(R.id.ImagemProcessada);
         ImageButton back = findViewById(R.id.imgBtnVoltar);
-        textViewNameProva = findViewById(R.id.textViewNomeProva);
+        textViewExamName = findViewById(R.id.textViewNomeProva);
         textViewNameStudent = findViewById(R.id.textViewNomeAluno);
         textViewNote = findViewById(R.id.textViewNotaAluno);
         textViewNumCorrect = findViewById(R.id.textViewAcertosAluno);
@@ -56,24 +63,24 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
 
         dataBase = new DataBaseKariti(this);
 
-        titleActivity.setText(String.format("%s", "Prova Corrigida"));
+        titleActivity.setText(getString(R.string.titleGradedExam));
 
         int status = getIntent().getExtras().getInt("status");
 
         if (status == 0){ // Entra nesta estrutura caso o resultado do cartão a ser mostrado, seja de uma prova cadastrada
 
-            id_prova = getIntent().getExtras().getInt("id_prova");
+            exam_id = getIntent().getExtras().getInt("id_prova");
             id_student = getIntent().getExtras().getInt("id_aluno");
 
-            nameProva = dataBase.getExamName(id_prova);
+            examName = dataBase.getExamName(exam_id);
             nameStudent = dataBase.getStudentName(id_student);
 
-            if (nameProva == null || nameStudent == null || nameProva.isEmpty() || nameStudent.isEmpty()){
-                Toast.makeText(this, "Falha ao mostrar correção!", Toast.LENGTH_SHORT).show();
+            if (examName == null || nameStudent == null || examName.isEmpty() || nameStudent.isEmpty()){
+                Toast.makeText(this, getString(R.string.toastApplicationError), Toast.LENGTH_SHORT).show();
                 finish();
             }
-            textViewNameProva.setText(String.format("%s", "Prova: "+ nameProva));
-            textViewNameStudent.setText(String.format("%s","Aluno: "+ nameStudent));
+            textViewExamName.setText(getString(R.string.textViewTitleExam, examName));
+            textViewNameStudent.setText(getString(R.string.descriptionStudent, nameStudent));
 
             resultCorrectedBD();
 
@@ -85,9 +92,9 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
         if (filePath != null){
             Bitmap bitmap = BitmapFactory.decodeFile(filePath);
             imageViewCorrected.setImageBitmap(bitmap);
-            textViewNote.setText(String.format("%s", "Nota: "+ noteStudent));
-            textViewNumCorrect.setText(String.format("%s", "Acertos: "+ numCorrect));
-            textViewNumIncorrect.setText(String.format("%s","Erros: "+ numIncorrect));
+            textViewNote.setText(getString(R.string.txtViewGradeReceived, noteStudent));
+            textViewNumCorrect.setText(getString(R.string.txtCorrectAnswers, numCorrect));
+            textViewNumIncorrect.setText(getString(R.string.txtMistakes, numIncorrect));
         }else{
             startCamera();
         }
@@ -120,11 +127,11 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
 
     private void resultCorrectedBD(){
         try {
-            List<Answer_key> listAnswerkey = dataBase.listAnswerKeyData(id_prova);
-            List<String> responseStudent = dataBase.listAnswerGivenString(id_prova, id_student);
+            List<Answer_key> listAnswerKey = dataBase.listAnswerKeyData(exam_id);
+            List<String> responseStudent = dataBase.listAnswerGivenString(exam_id, id_student);
 
-            for (int i = 0; i < listAnswerkey.size(); i++) {
-                Answer_key g = listAnswerkey.get(i); // g contém questao, resposta e nota, respectivamente
+            for (int i = 0; i < listAnswerKey.size(); i++) {
+                Answer_key g = listAnswerKey.get(i); // g contém questao, resposta e nota, respectivamente
                 char r = (char) ('A' + Integer.parseInt(String.valueOf(g.getResponse())) - 1);
                 if (responseStudent.get(i).equals(String.valueOf(r))) {
                     noteStudent += g.getNote();
@@ -140,13 +147,13 @@ public class ViewCardCorrectedActivity extends AppCompatActivity {
 
     private void resultCorrectedDefault(){
         try {
-            HashMap<Integer, Integer> gabaritoResult = (HashMap<Integer, java.lang.Integer>) getIntent().getSerializableExtra("resultGabarito");
-            String gabarito = getIntent().getExtras().getString("gabarito");
+            HashMap<Integer, Integer> answerKeyResult = (HashMap<Integer, java.lang.Integer>) getIntent().getSerializableExtra("resultGabarito");
+            String answerKey = getIntent().getExtras().getString("gabarito");
 
-            for (Map.Entry<Integer, Integer> entry : gabaritoResult.entrySet()) {
+            for (Map.Entry<Integer, Integer> entry : answerKeyResult.entrySet()) {
                 int responseStudent = entry.getValue();
-                int responseGabarito = gabarito.charAt(entry.getKey() - 1) - '0';
-                if (responseStudent == responseGabarito) {
+                int responseAnswerKey = answerKey.charAt(entry.getKey() - 1) - '0';
+                if (responseStudent == responseAnswerKey) {
                     noteStudent += 1;
                     numCorrect += 1;
                 } else {

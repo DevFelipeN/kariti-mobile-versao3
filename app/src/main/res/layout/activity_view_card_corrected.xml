@@ -108,7 +108,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/Nota"
+        android:text=""
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.061"
@@ -121,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="@string/txtHits"
+        android:text="@string/txtCorrectAnswers"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonEncerrar"
         app:layout_constraintEnd_toStartOf="@+id/textViewErrosAluno"
@@ -134,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="@string/txtErros"
+        android:text="@string/txtMistakes"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonContinuar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +143,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <View
             android:id="@+id/overlayView"
@@ -156,9 +158,9 @@
             android:id="@+id/loadingId"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:src="@drawable/loading"
-            android:visibility="gone"
-            android:layout_gravity="center" />
+            android:visibility="gone" />
 
     </FrameLayout>
 

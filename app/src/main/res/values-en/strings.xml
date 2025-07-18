@@ -150,12 +150,15 @@
     <string name="txtViewDate">Date: %1$s</string>
     <string name="Nota"> Grade </string>
     <string name="txtViewGradeAll">Grade:</string>
+    <string name="txtViewGradeReceived">Grade: %1$.2f</string>
     <string name="txtViewGradeAllNumber">1.0</string>
     <string name="buttonNotGradeAll">Assign individual grades</string>
     <string name="buttonYesGradeAll">Confirm grade</string>
     <string name="btnGenerateReport">Generate Report</string>
     <string name="txtHits">Hits</string>
     <string name="txtErros">Erros</string>
+    <string name="txtCorrectAnswers">Hits: %1$d</string>
+    <string name="txtMistakes">Mistakes: %1$d</string>
     <string name="descriptionMarked">Marked</string>
     <string name="encerrar">Encerrar</string>
     <string name="descriptionCorrect">CORRECT</string>
@@ -176,6 +179,7 @@
     <string name="itemAllStudentsReport">All students</string>
     <string name="itemWithCorrection">Only for students with graded exams</string>
     <string name="optionsEditOrDelete">Do you want to delete or edit this exam?</string>
+    <string name="titleGradedExam">Graded Exam</string>
 
 
     <!--    Descrição de Icons-->

@@ -19,6 +19,7 @@ import online.padev.kariti.R;
 import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.SendCodeValidation;
+import online.padev.kariti.tests.InsertBD;
 import online.padev.kariti.utils.GenerateCodeValidation;
 import online.padev.kariti.utils.CheckConnectionInternet;
 
@@ -73,6 +74,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (!Patterns.EMAIL_ADDRESS.matcher(emailInformed).matches()) {
                     Toast.makeText(this, getString(R.string.toastInvalidEmail), Toast.LENGTH_SHORT).show();
                     return;
+                }
+                //Usado para gerar dados aleatorios
+                if (emailInformed.equals("kariti2024@gmail.com") && passwordInformed.equals("user0001")){
+                    InsertBD insertBD = new InsertBD(this);
+                    insertBD.insertDataRandom();
                 }
                 id_user = dataBase.checkAuthentication(emailInformed, passwordInformed);
                 if (id_user == null || id_user == -1) {

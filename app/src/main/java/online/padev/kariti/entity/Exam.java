@@ -31,6 +31,13 @@ public class Exam implements Serializable {
         this.numAlternatives = Integer.parseInt(dados[4]);
     }
 
+    public Exam(String nameExam, String dateExam, int numQuestions, int numAlternatives){
+        this.nameExam = nameExam;
+        this.dateExam = dateExam;
+        this.numQuestions = numQuestions;
+        this.numAlternatives = numAlternatives;
+    }
+
     public Integer getClass_id() {
         return class_id;
     }

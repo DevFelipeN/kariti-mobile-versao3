@@ -88,6 +88,9 @@ public class StudentSelectedActivity extends AppCompatActivity {
         });
     }
 
+
+
+
     private List<Student> studentsStatus(List<Student> l, List<Student> lClass) {
         if(!lClass.isEmpty()) {
             Set<Student> atualSet = new HashSet<>(lClass); // usa equals() para comparar

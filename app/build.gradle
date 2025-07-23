@@ -3,11 +3,11 @@ plugins {
 }
 android {
     namespace 'online.padev.kariti'
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "online.padev.kariti"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 11
         versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

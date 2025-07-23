@@ -20,9 +20,9 @@ import java.util.Locale;
 import online.padev.kariti.R;
 import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.database.DataBaseKariti;
+import online.padev.kariti.tests.InsertBD;
 
 public class WelcomeActivity extends AppCompatActivity {
-    DataBaseKariti dataBase;
     AppCompatImageView languageIcon;
     TextView textViewLanguage;
 
@@ -59,11 +59,6 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.e("opencv","Erro ao tentar executar openCV");
         }
 
-        dataBase = new DataBaseKariti(this);
-
-        if(dataBase.checkUserEmail("karitimobile@gmail.com") == null) {
-            dataBase.insertUser("Master user", "user1", "karitimobile@gmail.com");
-        }
         btnRegistration.setOnClickListener(v -> startRegistrationUser());
         btnLogin.setOnClickListener(v -> startLogin());
         btnDefaultPassword.setOnClickListener(v -> startProvaDefault());

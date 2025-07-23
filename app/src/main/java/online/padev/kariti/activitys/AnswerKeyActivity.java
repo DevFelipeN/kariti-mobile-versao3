@@ -192,7 +192,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
 
         int qtdQuestions = dadosExam.getNumQuestions();
         int qtdAlternatives = dadosExam.getNumAlternatives();
-        txtViewNotaExam.setText(getString(R.string.txtViewNotaTotal,qtdQuestions));
+        txtViewNotaExam.setText(getString(R.string.txtViewNotaTotal, (float) qtdQuestions));
 
         String[] letters = new String[qtdAlternatives];
         for (int i = 0; i < qtdAlternatives; i++) {

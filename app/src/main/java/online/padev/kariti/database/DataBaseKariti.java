@@ -21,6 +21,7 @@ import java.util.Map;
 import online.padev.kariti.entity.Answer_key;
 import online.padev.kariti.entity.ClassSchool;
 import online.padev.kariti.entity.Exam;
+import online.padev.kariti.entity.School;
 import online.padev.kariti.entity.Student;
 
 public class DataBaseKariti extends SQLiteOpenHelper {
@@ -222,7 +223,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                     contentValues2.put("grade", g.getNote());
                     Integer insert = Math.toIntExact(base_dados.insert("answer_key", null, contentValues2));
                     if(!insert.equals(-1)){
-                        Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                        Log.e("kariti", "Prova inserida com sucesso");
                     }else{
                         Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
                         throw new Exception();
@@ -272,10 +273,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 contentValues.put("question", question);
                 contentValues.put("answer_given", answer_given);
                 long resultInsertion = base_dados.insert("result", null, contentValues);
-                if(resultInsertion != -1){
-                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
-                }else{
-                    Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
+                if(resultInsertion == -1) {
                     throw new Exception();
                 }
             }
@@ -326,7 +324,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 contentValues.put("class_id", class_id);
                 long resultInsertion = base_dados.insert("student_class", null, contentValues);
                 if(resultInsertion != -1){
-                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                    Log.e("kariti", "Aluno inserido em turma com sucesso");
                 }else{
                     throw new Exception("Erro ao inserir aluno " + student.getNameStudent());
                 }
@@ -686,7 +684,7 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 contentValues.put("grade", g.getNote());
                 Integer insertAnswer_key = Math.toIntExact(base_dado.insert("answer_key", null, contentValues));
                 if(!insertAnswer_key.equals(-1)){
-                    Log.e("kariti", "Resultado de correção cadastrado com sucesso");
+                    Log.e("kariti", "Prova Atualizada com sucesso");
                 }else{
                     Log.e("kariti", "Erro ao tentar inserir resultado de correção no banco!");
                     throw new Exception();
@@ -1098,6 +1096,30 @@ public class DataBaseKariti extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
+    }
+
+    public Integer getUserId(String email){
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        Integer user_id = null;
+        try {
+            base_dados = this.getWritableDatabase();
+            cursor = base_dados.rawQuery("SELECT user_id FROM user WHERE email = ?", new String[]{email});
+            if (cursor != null && cursor.moveToFirst()){
+                user_id = cursor.getInt(0);
+            }
+        }catch (Exception e){
+            Log.e("kariti","Erro ao tentar pegar nome do usuario! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return user_id;
     }
 
     public String getUserName() {
@@ -1758,6 +1780,31 @@ public class DataBaseKariti extends SQLiteOpenHelper {
             }
         }
         return schoolNames;
+    }
+    public List<School> listSchools(int status) {
+        List<School> schools = new ArrayList<>();
+        SQLiteDatabase base_dados = null;
+        Cursor cursor = null;
+        try {
+            base_dados = this.getReadableDatabase();
+            cursor = base_dados.rawQuery("SELECT school_id, name FROM school WHERE user_id = ? AND status = ?  ORDER BY name ASC", new String[]{DataBaseKariti.USER_ID.toString(), String.valueOf(status)});
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    schools.add(new School(cursor.getInt(0), cursor.getString(1)));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.e("kariti","Erro ao tentar listar escolas! "+e.getMessage());
+            return null;
+        } finally {
+            if(base_dados != null && base_dados.isOpen()){
+                base_dados.close();
+            }
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return schools;
     }
 
     public List<String> listAnswerKeyString(Integer exam_id) {

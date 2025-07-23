@@ -103,11 +103,11 @@ android {
     }
 
     namespace 'org.opencv'
-    compileSdkVersion 34
+    compileSdkVersion 35
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         versionCode openCVersionCode
         versionName openCVersionName

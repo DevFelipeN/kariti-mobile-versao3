@@ -16,6 +16,10 @@ public class Student implements Serializable {
         this.email = email;
         this.selected = false;
     }
+    public Student(String nameStudent, String email){
+        this.nameStudent = nameStudent;
+        this.email = email;
+    }
 
     public Integer getId_student() {
         return id_student;

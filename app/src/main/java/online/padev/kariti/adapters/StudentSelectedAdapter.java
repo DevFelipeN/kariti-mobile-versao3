@@ -54,11 +54,15 @@ public class StudentSelectedAdapter extends RecyclerView.Adapter<StudentSelected
         holder.textNome.setText(student.getNameStudent());
 
         holder.checkBox.setOnCheckedChangeListener(null);
-
         holder.checkBox.setChecked(student.isSelected());
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             student.setSelected(isChecked);
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            boolean novoEstado = !holder.checkBox.isChecked();
+            holder.checkBox.setChecked(novoEstado); // Isso já chama o listener acima
         });
 
     }

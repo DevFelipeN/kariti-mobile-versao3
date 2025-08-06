@@ -30,7 +30,7 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <!-- Componente alinhado à direita -->
         <ImageButton

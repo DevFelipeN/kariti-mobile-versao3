@@ -8,7 +8,7 @@ android {
         applicationId "online.padev.kariti"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 11
+        versionCode 12
         versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -27,7 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '34.0.0'
+    //buildToolsVersion '35.0.0'
     packagingOptions {
         resources {
             excludes += ['META-INF/NOTICE.md', 'META-INF/LICENSE.md', 'META-INF/DEPENDENCIES']

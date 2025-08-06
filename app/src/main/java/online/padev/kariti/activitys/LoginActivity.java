@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,12 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import online.padev.kariti.R;
+import online.padev.kariti.cards.CreatCard;
+import online.padev.kariti.entity.Exam;
 import online.padev.kariti.settings.ActivityLocale;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.emails.SendCodeValidation;
 import online.padev.kariti.tests.InsertBD;
 import online.padev.kariti.utils.GenerateCodeValidation;
 import online.padev.kariti.utils.CheckConnectionInternet;
+import pl.droidsonroids.gif.GifImageView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -76,10 +80,11 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 //Usado para gerar dados aleatorios
-                if (emailInformed.equals("kariti2024@gmail.com") && passwordInformed.equals("user0001")){
-                    InsertBD insertBD = new InsertBD(this);
-                    insertBD.insertDataRandom();
+                if (emailInformed.equals("kariti2024@gmail.com") && passwordInformed.equals("001") && dataBase.checkUserEmail("kariti2024@gmail.com") == null) {
+                    insertDataAutomatic();
+                    return;
                 }
+
                 id_user = dataBase.checkAuthentication(emailInformed, passwordInformed);
                 if (id_user == null || id_user == -1) {
                     Toast.makeText(this, getString(R.string.toastInvalidUserOurPassword), Toast.LENGTH_SHORT).show();
@@ -147,7 +152,10 @@ public class LoginActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
+                View overlayView = findViewById(R.id.overlayViewLogin);
+                if (overlayView.getVisibility() == View.VISIBLE){
+                    Toast.makeText(LoginActivity.this, getString(R.string.toastPleaseWait), Toast.LENGTH_SHORT).show();
+                }else finish();
             }
         });
     }
@@ -180,5 +188,31 @@ public class LoginActivity extends AppCompatActivity {
         proxima.putExtra("codigo", codeValidation);
         startActivity(proxima);
         finish();
+    }
+    private void insertDataAutomatic(){
+        View overlayView = findViewById(R.id.overlayViewLogin);
+        GifImageView gifLoading = findViewById(R.id.loadingIdLogin);
+        TextView description = findViewById(R.id.descriptionOverLayLogin);
+        overlayView.setVisibility(View.VISIBLE);
+        gifLoading.setVisibility(View.VISIBLE);
+        description.setVisibility(View.VISIBLE);
+        btnAccess.setVisibility(View.GONE);
+        new Thread(() -> {
+            try {
+                Log.d("testando", "Início do insertDataRandom()");
+                InsertBD insertBD = new InsertBD(this);
+                insertBD.insertDataRandom();
+                Log.d("testando", "Fim do insertDataRandom()");
+            } catch (Exception e) {
+                Log.e("testando", e.toString());
+            } finally {
+                runOnUiThread(() -> {
+                    gifLoading.setVisibility(View.GONE);
+                    overlayView.setVisibility(View.GONE);
+                    description.setVisibility(View.GONE);
+                    btnAccess.setVisibility(View.VISIBLE);
+                });
+            }
+        }).start();
     }
 }

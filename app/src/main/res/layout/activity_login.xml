@@ -152,4 +152,40 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewCriarConta"
             app:layout_constraintVertical_bias="0.0" />
     </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <View
+            android:id="@+id/overlayViewLogin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#AA000000"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/descriptionOverLayLogin"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/descriptionOverlayLogin"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"/>
+
+
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/loadingIdLogin"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/loading"
+            android:visibility="gone" />
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

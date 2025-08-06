@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import online.padev.kariti.R;
 import online.padev.kariti.database.DataBaseKariti;
 import online.padev.kariti.download.DownloadPDF;
 import online.padev.kariti.entity.Exam;
@@ -81,14 +82,14 @@ public class CreatCard {
                 paint.setTextSize(24);
 
                 // ================ Monta o Cabeçalho da Prova ====================================================================
-                canvas.drawText("Aluno(a): " + student.getNameStudent(), 80, 85, paint);
-                canvas.drawText("Professor(a): " + teacher, 80, 115, paint);
-                canvas.drawText("Prova: " + exam.getNameExam(), 80, 145, paint);
-                canvas.drawText("Turma: " + className, 80, 175, paint);
+                canvas.drawText(context.getString(R.string.descriptionStudent, student.getNameStudent()), 80, 85, paint);
+                canvas.drawText(context.getString(R.string.descriptionTeacher, teacher), 80, 115, paint);
+                canvas.drawText(context.getString(R.string.textViewTitleExam, exam.getNameExam()), 80, 145, paint);
+                canvas.drawText(context.getString(R.string.txtViewClass, className), 80, 175, paint);
                 if(exam.getDateExam() != null) {
-                    canvas.drawText("Data: " + exam.dateToDisplay(), 80, 205, paint);
+                    canvas.drawText(context.getString(R.string.txtViewDate, exam.dateToDisplay()), 80, 205, paint);
                 } else {
-                    canvas.drawText("Data: ", 80, 205, paint);
+                    canvas.drawText(context.getString(R.string.txtViewDate,""), 80, 205, paint);
                 }
 
                 // ================== fonte das linhas =============================================
@@ -104,21 +105,21 @@ public class CreatCard {
                 canvas.drawLine(80, 560, 1160, 560, paintLine);
 
                 // ======================== Adiciona 'Peso Total' abaixo do primeiro retângulo =================
-                canvas.drawText("Peso total da prova", 330, 475, paint);
+                canvas.drawText(context.getString(R.string.descGradeTotalCard), 330, 475, paint);
 
                 // ======================== Adiciona 'Nota do Aluno' abaixo do segundo retângulo =================
-                canvas.drawText("Nota do Aluno", 660, 475, paint);
+                canvas.drawText(context.getString(R.string.descGradeStudentCard), 660, 475, paint);
 
                 // ========================= Adiciona o texto abaixo da primeira linha =========================
                 paint.setTextSize(16);
-                canvas.drawText("Nome do Aluno", 80, 300, paint);
+                canvas.drawText(context.getString(R.string.descNameStudentCard), 80, 300, paint);
 
                 // ========================= Adiciona texto no final da pagina ==================================
-                canvas.drawText("Gerado por: Kariti "+"v."+versionName, 60, 1720, paint);
+                canvas.drawText(context.getString(R.string.descVersionKaritiCard, versionName), 60, 1720, paint);
 
                 // ======================== Adiciona mensagens de atenção ========================================
-                canvas.drawText("ATENÇÃO: Não rasure este cartão", 80, 530, paint);
-                canvas.drawText("Preencha os circulos completamente desta forma -> ", 158, 550, paint);
+                canvas.drawText(context.getString(R.string.descObsAttentionCard), 80, 530, paint);
+                canvas.drawText(context.getString(R.string.descObsOrientation), 158, 550, paint);
 
                 // ===================== fonte dos retângulos ==================================================
                 Paint paintRectangle = new Paint();

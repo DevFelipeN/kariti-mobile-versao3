@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -58,7 +59,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
     private List<Float> notas = new ArrayList<>();
     private List<RadioGroup> listRadioGroups;
     private Map<Integer, Integer> alternativesSelected;
-    private List<Answer_key> answerkey = new ArrayList<>();
+    private List<Answer_key> answerKey = new ArrayList<>();
 
     private DataBaseKariti dataBaseKariti;
     private Exam dadosExam;
@@ -84,6 +85,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
         txtViewData = findViewById(R.id.textViewData);
         txtViewNotaExam = findViewById(R.id.txtViewNotaProva);
         layoutHorizontal = findViewById(R.id.layoutHorizontalAlternat);
+        GridLayout gridLayoutEditGrade = findViewById(R.id.gridLayoutEditGrad);
 
         dataBaseKariti = new DataBaseKariti(this);
         dadosExam = new Exam();
@@ -157,23 +159,23 @@ public class AnswerKeyActivity extends AppCompatActivity {
                             Integer resp = alternativesSelected.get(i - 1);
                             float notaQuestaoI = notas.get(i - 1);
                             Answer_key g = new Answer_key(i, resp + 1, notaQuestaoI);
-                            answerkey.add(g);
+                            answerKey.add(g);
                         }
 
                         if (dadosExam.getExam_id() == null) {
-                            if (dataBaseKariti.insertExam(dadosExam, answerkey)) {
+                            if (dataBaseKariti.insertExam(dadosExam, answerKey)) {
                                 dialogExamSuccess(getString(R.string.descriptionRegister));
                             } else {
                                 noticeRegisterFailed(getString(R.string.descriptionInTheRegister));
                             }
                         } else if (!dadosExam.getExam_id().equals(0)) {
-                            if (dataBaseKariti.updateExamData(dadosExam, answerkey, statusEdition)) {
+                            if (dataBaseKariti.updateExamData(dadosExam, answerKey, statusEdition)) {
                                 dialogExamSuccess(getString(R.string.descriptionChanged));
                             } else {
                                 noticeRegisterFailed(getString(R.string.descriptionInTheChanged));
                             }
                         } else { // Entra nessa estrutura quando o gabarito pertencer a uma prova rápida
-                            Answer_key.answerkeyDefault = answerkey;
+                            Answer_key.answerkeyDefault = answerKey;
                             Exam.numQuestsDefault = dadosExam.getNumQuestions();
                             Exam.numAlternativesDefault = dadosExam.getNumAlternatives();
                             dialogHelpCorrectDefault();
@@ -266,13 +268,14 @@ public class AnswerKeyActivity extends AppCompatActivity {
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    calculateScoreCurrent();
+                    float gradeCurrent = calculateScoreCurrent();
+                    txtViewNotaExam.setText(getString(R.string.txtViewNotaTotal, gradeCurrent));
                 }
             });
 
             layoutHorizontal.addView(layoutQuestion);
-            calculateScoreCurrent();
-
+            float gradeCurrent = calculateScoreCurrent();
+            txtViewNotaExam.setText(getString(R.string.txtViewNotaTotal, gradeCurrent));
         }
         iconHelp.setOnClickListener(v -> dialogHelpDetails());
         back.setOnClickListener(view -> noticeBack());
@@ -282,7 +285,8 @@ public class AnswerKeyActivity extends AppCompatActivity {
                 noticeBack();
             }
         });
-        registrationGradeAll();
+        registrationGradeAll(0);
+        gridLayoutEditGrade.setOnClickListener(v -> registrationGradeAll(1));
     }
     private void dialogExamSuccess(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(AnswerKeyActivity.this);
@@ -312,7 +316,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    private void calculateScoreCurrent() {
+    private float calculateScoreCurrent() {
         float notas = 0;
         for (int j = 0; j < layoutHorizontal.getChildCount(); j++) {
             LinearLayout questionLayout = (LinearLayout) layoutHorizontal.getChildAt(j);
@@ -324,7 +328,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
             float n = Float.parseFloat(nota);
             notas += n;
         }
-        txtViewNotaExam.setText(getString(R.string.txtViewNotaTotal, notas));
+        return notas;
     }
 
     private void setGradeAll(float grade) {
@@ -478,20 +482,24 @@ public class AnswerKeyActivity extends AppCompatActivity {
         return sdf.format(date);
     }
 
-    private void registrationGradeAll() {
+    private void registrationGradeAll(int identifier) {
         // Inflar o layout customizado
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.grade_all_dialog, null);
 
-        float n = (float) dadosExam.getNumQuestions();
-
+        float totalGrade = 0;
+        if (identifier == 0){
+            totalGrade = (float) dadosExam.getNumQuestions();
+        } else if (identifier == 1){
+            totalGrade = calculateScoreCurrent();
+        }
         // Inicializar os elementos do layout
         EditText editTextGradeAll = dialogView.findViewById(R.id.editTextGradeAll);
         Button btnRegistrationGrades = dialogView.findViewById(R.id.buttonYesGradeAll);
         Button btnNotGradeAll = dialogView.findViewById(R.id.buttonNotGradeAll);
         TextView textViewGradeTotal = dialogView.findViewById(R.id.txtViewGradeExam);
 
-        textViewGradeTotal.setText(getString(R.string.txtViewNotaTotal, n));
+        textViewGradeTotal.setText(getString(R.string.txtViewNotaTotal, totalGrade));
 
         // Criar o AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -517,7 +525,7 @@ public class AnswerKeyActivity extends AppCompatActivity {
                 String t = s.toString().trim();
                 if (!t.isEmpty() && t.matches("^\\d+(\\.\\d+)?$")){
                     float notaAux = Float.parseFloat(t);
-                    textViewGradeTotal.setText(getString(R.string.txtViewNotaTotal, n * notaAux));
+                    textViewGradeTotal.setText(getString(R.string.txtViewNotaTotal, dadosExam.getNumQuestions() * notaAux));
                 }
             }
         });

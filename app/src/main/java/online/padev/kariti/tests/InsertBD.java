@@ -25,63 +25,62 @@ public class InsertBD {
     public void insertDataRandom(){
         try {
             //Cadastra um usuario no Kariti
-            if(db.checkUserEmail("kariti2024@gmail.com") == null) {
-                db.insertUser("Master user", "user0001", "kariti2024@gmail.com");
 
-                //Cadastra escolas ao usuario atual
-                List<String> schoolsRandom = RandomDataGenerator.nameSchools;
-                DataBaseKariti.USER_ID = db.getUserId("kariti2024@gmail.com");
-                schoolsRandom.forEach(name -> db.insertSchool(name));
+            db.insertUser("Master user", "001", "kariti2024@gmail.com");
 
-                List<School> schoolsDb = db.listSchools(1);
-                List<Student> studentsRandom = RandomDataGenerator.students;
+            //Cadastra escolas ao usuario atual
+            List<String> schoolsRandom = RandomDataGenerator.nameSchools;
+            DataBaseKariti.USER_ID = db.getUserId("kariti2024@gmail.com");
+            schoolsRandom.forEach(name -> db.insertSchool(name));
 
-                //Itera sob cada escola cadastrada
-                schoolsDb.forEach(school -> {
-                    DataBaseKariti.ID_ESCOLA = school.getSchool_id();
+            List<School> schoolsDb = db.listSchools(1);
+            List<Student> studentsRandom = RandomDataGenerator.students;
 
-                    //Cadastra alunos na escola atual
-                    studentsRandom.forEach(student -> db.insertStudent(student.getNameStudent(), student.getEmail(), 1));
+            //Itera sob cada escola cadastrada
+            schoolsDb.forEach(school -> {
+                DataBaseKariti.ID_ESCOLA = school.getSchool_id();
 
-                    //lista com os alunos cadastrados no banco de dados
-                    List<Student> studentsDb = db.listStudentsData(1);
+                //Cadastra alunos na escola atual
+                studentsRandom.forEach(student -> db.insertStudent(student.getNameStudent(), student.getEmail(), 1));
 
-                    //Seleciona alguns turmas
-                    List<String> classRandom = randomClassS();
+                //lista com os alunos cadastrados no banco de dados
+                List<Student> studentsDb = db.listStudentsData(1);
 
-                    //Cadastra turmas na escola atual
-                    classRandom.forEach(name -> {
-                        //Seleciona alguns alunos cadastrados no banco e cadastra na turma atual
-                        List<Student> studentList = randomStudents(studentsDb);
-                        Integer class_id = db.insertClass(name);
-                        db.insertStudentsInClass_2(studentList, class_id);
+                //Seleciona alguns turmas
+                List<String> classRandom = randomClassS();
 
-                        //Lista os alunos cadastrados na turma atual
-                        List<Student> studentsClassDb = db.listStudentsData(class_id);
+                //Cadastra turmas na escola atual
+                classRandom.forEach(name -> {
+                    //Seleciona alguns alunos cadastrados no banco e cadastra na turma atual
+                    List<Student> studentList = randomStudents(studentsDb);
+                    Integer class_id = db.insertClass(name);
+                    db.insertStudentsInClass_2(studentList, class_id);
 
-                        //Cadastra algumas provas na turma atual
-                        List<Exam> exams = randomExams();
-                        exams.forEach(exam -> {
-                            exam.setClass_id(class_id);
-                            List<Answer_key> answerKey = answerKeyGenerate(exam);
-                            db.insertExam(exam, answerKey);
-                        });
+                    //Lista os alunos cadastrados na turma atual
+                    List<Student> studentsClassDb = db.listStudentsData(class_id);
 
-                        exams.forEach(exam -> {
-                            //Cadastra uma correção aleatória para cada prova
-                            Integer exam_id = db.getExamId(exam.getNameExam(), class_id);
-                            studentsClassDb.forEach(student -> {
-                                Map<Integer, Integer> resp = answerKeyResponse(exam);
-                                db.insertCorrected(resp, exam_id, student.getId_student());
-                            });
+                    //Cadastra algumas provas na turma atual
+                    List<Exam> exams = randomExams();
+                    exams.forEach(exam -> {
+                        exam.setClass_id(class_id);
+                        List<Answer_key> answerKey = answerKeyGenerate(exam);
+                        db.insertExam(exam, answerKey);
+                    });
+
+                    exams.forEach(exam -> {
+                        //Cadastra uma correção aleatória para cada prova
+                        Integer exam_id = db.getExamId(exam.getNameExam(), class_id);
+                        studentsClassDb.forEach(student -> {
+                            Map<Integer, Integer> resp = answerKeyResponse(exam);
+                            db.insertCorrected(resp, exam_id, student.getId_student());
                         });
                     });
-                    DataBaseKariti.ID_ESCOLA = null;
                 });
-                DataBaseKariti.USER_ID = null;
-            }
+                DataBaseKariti.ID_ESCOLA = null;
+            });
+            DataBaseKariti.USER_ID = null;
         }catch (Exception e){
-            Log.e("testing", "Erro no cadastro de dados! -> "+e.getMessage());
+            Log.e("testando", "Erro no cadastro de dados! -> "+e.getMessage());
         }
     }
 
@@ -97,7 +96,7 @@ public class InsertBD {
                 studentsRandom.add(st.get(i));
             }
 
-            int totAnonymous = random.nextInt(50) + 1;
+            int totAnonymous = random.nextInt(20) + 1;
             int t = String.valueOf(totAnonymous).length();
             for (int x = 1; x <= totAnonymous; x++) {
                 String nameAnonymous = "Student"+String.format("%0"+t+"d",x);
@@ -105,7 +104,7 @@ public class InsertBD {
             }
             studentsRandom.addAll(studentsAnonymous);
         }catch (Exception e){
-            Log.e("testing", "Erro na geração de alunos! -> "+e.getMessage());
+            Log.e("testando", "Erro na geração de alunos! -> "+e.getMessage());
         }
         return studentsRandom;
     }
@@ -120,7 +119,7 @@ public class InsertBD {
                 exams.add(examsRandom.get(i));
             }
         }catch (Exception e){
-            Log.e("testing", "Erro em random de provas! -> "+e.getMessage());
+            Log.e("testando", "Erro em random de provas! -> "+e.getMessage());
         }
         return exams;
     }
@@ -135,7 +134,7 @@ public class InsertBD {
                 classS.add(classRandom.get(i));
             }
         }catch (Exception e){
-            Log.e("testing", "Erro em random de provas! -> "+e.getMessage());
+            Log.e("testando", "Erro em random de provas! -> "+e.getMessage());
         }
         return classS;
     }

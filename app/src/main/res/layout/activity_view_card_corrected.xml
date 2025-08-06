@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/encerrar"
+        android:text="@string/btnFinish"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonContinuar"
         app:layout_constraintHorizontal_bias="0.5"
@@ -144,6 +144,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 

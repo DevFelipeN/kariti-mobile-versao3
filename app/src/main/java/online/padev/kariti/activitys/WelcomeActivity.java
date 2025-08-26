@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.PopupMenu;
+
+import com.google.android.play.core.splitinstall.SplitInstallManager;
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory;
+
 import org.opencv.android.OpenCVLoader;
 
 import java.util.Locale;
@@ -94,7 +98,9 @@ public class WelcomeActivity extends AppCompatActivity {
             });
             popup.show();
         });
+
     }
+
 
     /**
      *Este método carrega a tela de cadastro de usuário
@@ -122,8 +128,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public void changeLanguage(String languageCode) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString("app_language", languageCode).apply();
-
-        ActivityLocale.setLocale(this, languageCode);
+        //ActivityLocale.setLocale(this, languageCode);
         recreate();  // reinicia a Activity para aplicar o idioma
     }
 

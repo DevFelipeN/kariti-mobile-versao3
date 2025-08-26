@@ -14,21 +14,6 @@ public class Kariti extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d("idioma", "Application iniciado!");
-        ActivityLocale.setLocale(this); // Garante idioma correto ao inicializar o app
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        ActivityLocale.wrap(this); // Garante idioma correto ao inicializar o app
     }
-
-    /*
-    @Override
-    protected void attachBaseContext(Context base) {
-        Configuration c = base.getResources().getConfiguration();
-        Locale l = new Locale("en");
-        Locale.setDefault(l);
-        c.setLocale(l);
-        //c.setLocale(Locale.ROOT);
-        Log.e("idioma","PASSEI AQUIIIII");
-        super.attachBaseContext(base.createConfigurationContext(c));
-    }
-
-     */
 }

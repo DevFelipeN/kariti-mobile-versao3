@@ -8,3 +8,4 @@ Este repositório destina-se ao código fonte do Kariti Mobile. O Kariti foi des
 * Cadastro de Provas - Uma das funcionalidades principais do aplicativo, o usuário informa informações como: Nome da exam, turma, data de aplicação, quantidade de questões, quantidade de alternativas e answerkey.
 * Download de Cartões - Após a exam cadastrada, será disponibilizado para download os cartões respostas dessa exam com a quantidade equivalente a quantidade de alunos pertencentes a turma selecionada. 
 
+OBS: Esta versão do Kariti-Mobile utiliza a versão 4.6.0 do OpenCV 
